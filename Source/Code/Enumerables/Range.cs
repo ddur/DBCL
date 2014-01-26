@@ -7,30 +7,42 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 
 namespace DD.Enumerables {
 
     public struct Range : IEnumerable<int> {
 
-        public readonly int Start;
-        public readonly int Final;
-        public int Step;
-        IEnumerator<int> e;
+        public readonly int First;
+        public readonly int Last;
+        private int step;
+        private IEnumerator<int> e;
 
+        public int Step {
+            get {
+                return this.step;
+            }
+            set {
+                Contract.Requires<ArgumentException> (value != 0);
+                this.step = value;
+            }
+        }
         public Range (int start, int final) {
-            this.Start = start;
-            this.Final = final;
-            if ( this.Start <= this.Final ) {
-                this.Step = 1;
+            this.First = start;
+            this.Last = final;
+            if ( this.First <= this.Last ) {
+                this.step = 1;
             }
             else {
-                this.Step = -1;
+                this.step = -1;
             }
             this.e = null;
         }
 
-        public Range By (int step) {
-            this.Step = step;
+        public Range By (int value) {
+            Contract.Requires<ArgumentException> (value != 0);
+            
+            this.step = value;
             return this;
         }
 
@@ -53,28 +65,30 @@ namespace DD.Enumerables {
         IEnumerator IEnumerable.GetEnumerator () {
             return this.GetEnumerator ();
         }
+
         public IEnumerator<int> GetEnumerator () {
-            long value = this.Start;
-            if ( this.Step == 0 ) {
-                yield return (int)value;
-            }
-            else {
-                while ( int.MinValue <= value && value <= int.MaxValue
-                       && ((int)value).InRange (this.Start, this.Final) ) {
+            long value = this.First;
+            int start = this.First <= this.Last? this.First : this.Last;
+            int final = this.First <= this.Last? this.Last : this.First;
+
+            while ( start <= value && value <= final ) {
                     yield return (int)value;
                     value += this.Step;
-                }
             }
             yield break;
         }
 
         public static implicit operator Loop (Range range) {
-            if ( range.Start <= range.Final ) {
-                return new Loop ((1 + range.Final - range.Start) / range.Step, range.Start, range.Step);
+
+            Contract.Assume (range.Step != 0);
+
+            int span = 1 + (range.First <= range.Last? range.Last - range.First : range.First - range.Last);
+            int step = Math.Abs (range.Step);
+
+            if (step.InRange (1, span)) {
+                return new Loop ( span/step, range.First, range.Step);
             }
-            else {
-                return new Loop ((1 + range.Start - range.Final) / Math.Abs (range.Step), range.Start, range.Step);
-            }
+            return new Loop (1, range.First, range.Step);
         }
     }
 }

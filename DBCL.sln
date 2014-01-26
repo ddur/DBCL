@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnit.Extensions", "Source\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnit.Diagnostics", "Source\Test\NUnit.Diagnostics\NUnit.Diagnostics.csproj", "{22D971E9-9879-4783-893E-881F16918E88}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnit.Enumerables", "Source\Test\NUnit.Enumerables\NUnit.Enumerables.csproj", "{85D31930-0D0E-427E-8F72-011FF14213F3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,5 +34,9 @@ Global
 		{22D971E9-9879-4783-893E-881F16918E88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{22D971E9-9879-4783-893E-881F16918E88}.Release|Any CPU.Build.0 = Release|Any CPU
 		{22D971E9-9879-4783-893E-881F16918E88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85D31930-0D0E-427E-8F72-011FF14213F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85D31930-0D0E-427E-8F72-011FF14213F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85D31930-0D0E-427E-8F72-011FF14213F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85D31930-0D0E-427E-8F72-011FF14213F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 EndGlobal

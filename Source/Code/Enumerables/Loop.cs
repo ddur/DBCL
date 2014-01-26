@@ -14,14 +14,23 @@ namespace DD.Enumerables {
     public struct Loop : IEnumerable<int> {
 
         public readonly int Times;
-        public int Start;
+        public int First;
         public int Step;
         IEnumerator<int> e;
+        
+        public int Last {
+            get {
+                if (this.Times == 1) {
+                    return this.First;
+                }
+                return (int)((long)this.First + (((long)this.Times - 1) * (long)this.Step));
+            }
+        }
 
         public Loop (int times, int start = 0, int step = 1) {
             Contract.Requires<ArgumentException> (Loop.IsValid (times, start, step));
             this.Times = times;
-            this.Start = start;
+            this.First = start;
             this.Step = step;
             this.e = null;
         }
@@ -30,27 +39,23 @@ namespace DD.Enumerables {
         public static bool IsValid (int times, int start, int step) {
             if ( times <= 0 )
                 return false;
-            if ( step == 0 )
-                return false;
-            try {
-                checked {
-                    int check = start + ((times - 1) * step);
-                }
+            if ( times == 1 )
+                return true;
+            long last = (long)start + (((long)times-1) * (long)step);
+            if (int.MinValue <= last && last <= int.MaxValue) {
                 return true;
             }
-            catch ( OverflowException ) {
-                return false;
-            }
+            return false;
         }
 
         public Loop From (int start) {
             Contract.Requires<ArgumentException> (Loop.IsValid (this.Times, start, this.Step));
-            this.Start = start;
+            this.First = start;
             return this;
         }
 
         public Loop By (int step) {
-            Contract.Requires<ArgumentException> (Loop.IsValid (this.Times, this.Start, step));
+            Contract.Requires<ArgumentException> (Loop.IsValid (this.Times, this.First, step));
             this.Step = step;
             return this;
         }
@@ -76,8 +81,8 @@ namespace DD.Enumerables {
         }
         public IEnumerator<int> GetEnumerator () {
             int count = this.Times;
-            long value = Start;
-            while ( count > 0 && int.MinValue <= value && value <= int.MaxValue ) {
+            long value = First;
+            while (count > 0) {
                 yield return (int)value;
                 value += this.Step;
                 --count;
@@ -86,7 +91,14 @@ namespace DD.Enumerables {
         }
 
         public static implicit operator Range (Loop loop) {
-            return (new Range (loop.Start, loop.Start + ((loop.Times - 1) * loop.Step)).By (loop.Step));
+            long times = loop.Times;
+            long start = loop.First;
+            long step  = loop.Step;
+
+            long final = start + ((times - 1) * step);
+            Contract.Assert (int.MinValue <= final && final <= int.MaxValue);
+
+            return (new Range (loop.First, (int)final).By (loop.Step));
         }
     }
 }
