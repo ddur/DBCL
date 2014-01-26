@@ -146,6 +146,10 @@ namespace DD.Enumerables
 	        Assert.True (last == loop.First + (loop.Times * loop.Step));
 	        Assert.True (step == loop.Step);
 
+	        // Cover Set properties 
+	        loop.First = init;
+	        loop.Step = step;
+
 	        // Cast Range to Loop
 	        loop = 20.To(10);//.By(2);
 	        time = 20;

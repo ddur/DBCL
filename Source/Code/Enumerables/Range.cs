@@ -13,11 +13,20 @@ namespace DD.Enumerables {
 
     public struct Range : IEnumerable<int> {
 
+        /// <summary>First item in (IEnumerable&lt;int&gt;)this
+        /// </summary>
         public readonly int First;
+
+        /// <summary>Last item in (IEnumerable&lt;int&gt;)this
+        /// </summary>
         public readonly int Last;
+
         private int step;
         private IEnumerator<int> e;
 
+        /// <summary>Get/Set Step&lt;int&gt;
+        /// <remarks>If First+Step is not inside Range (IEnumerable&lt;int&gt;)this will return only one item, First item</remarks>
+        /// </summary>
         public int Step {
             get {
                 return this.step;
@@ -27,6 +36,12 @@ namespace DD.Enumerables {
                 this.step = value;
             }
         }
+        
+        /// <summary>Creates IEnumerable&lt;int&gt; Range(start, final) inclusive
+        /// <remarks>Default Step is 1/-1 depending on start&amp;final</remarks>
+        /// </summary>
+        /// <param name="start">First item in IEnumerable&lt;int&gt;</param>
+        /// <param name="final">Last item in IEnumerable&lt;int&gt;</param>
         public Range (int start, int final) {
             this.First = start;
             this.Last = final;
@@ -39,13 +54,20 @@ namespace DD.Enumerables {
             this.e = null;
         }
 
-        public Range By (int value) {
-            Contract.Requires<ArgumentException> (value != 0);
+        /// <summary>Fluent set Step
+        /// </summary>
+        /// <param name="step">-&gt; Step</param>
+        /// <returns>this</returns>
+        public Range By (int step) {
+            Contract.Requires<ArgumentException> (step != 0);
             
-            this.step = value;
+            this.step = step;
             return this;
         }
 
+        /// <summary>Returns true 1+(Last-First/First-Last) Times
+        /// <para><code>ie: while(range.Do) {}</code></para> 
+        /// </summary>
         public bool Do {
             get {
                 if ( this.e.IsNull () ) {
@@ -80,7 +102,7 @@ namespace DD.Enumerables {
 
         public static implicit operator Loop (Range range) {
 
-            Contract.Assume (range.Step != 0);
+            Contract.Assume (range.step != 0);
 
             int span = 1 + (range.First <= range.Last? range.Last - range.First : range.First - range.Last);
             int step = Math.Abs (range.Step);
