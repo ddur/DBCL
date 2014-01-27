@@ -13,16 +13,34 @@ namespace DD.Enumerables {
 
     public struct Range : IEnumerable<int> {
 
-        /// <summary>First item in (IEnumerable&lt;int&gt;)this
-        /// </summary>
-        public readonly int First;
-
-        /// <summary>Last item in (IEnumerable&lt;int&gt;)this
-        /// </summary>
-        public readonly int Last;
+        private readonly int start;
+        private readonly int final;
 
         private int step;
         private IEnumerator<int> e;
+
+        /// <summary>Get First item in (IEnumerable&lt;int&gt;)this
+        /// </summary>
+        public int First {
+            get {
+                return this.start;
+            }
+        }
+
+        /// <summary>Get Last item in (IEnumerable&lt;int&gt;)this
+        /// <remarks>Value depends on Step</remarks>
+        /// </summary>
+        public int Last {
+            get {
+                int span = 1 + Math.Abs(this.final - this.start);
+                int step = Math.Abs (this.step);
+    
+                if (step.InRange (1, span)) {
+                    return this.start + (((span/step)-1)*this.step);
+                }
+                return this.start;
+            }
+        }
 
         /// <summary>Get/Set Step&lt;int&gt;
         /// <remarks>If First+Step is not inside Range (IEnumerable&lt;int&gt;)this will return only one item, First item</remarks>
@@ -38,14 +56,14 @@ namespace DD.Enumerables {
         }
         
         /// <summary>Creates IEnumerable&lt;int&gt; Range(start, final) inclusive
-        /// <remarks>Default Step is 1/-1 depending on start&amp;final</remarks>
+        /// <remarks>Default Step is 1/-1 depending on start&lt;=/&gt;final</remarks>
         /// </summary>
         /// <param name="start">First item in IEnumerable&lt;int&gt;</param>
         /// <param name="final">Last item in IEnumerable&lt;int&gt;</param>
         public Range (int start, int final) {
-            this.First = start;
-            this.Last = final;
-            if ( this.First <= this.Last ) {
+            this.start = start;
+            this.final = final;
+            if ( this.start <= this.final ) {
                 this.step = 1;
             }
             else {
@@ -104,13 +122,13 @@ namespace DD.Enumerables {
 
             Contract.Assume (range.step != 0);
 
-            int span = 1 + (range.First <= range.Last? range.Last - range.First : range.First - range.Last);
-            int step = Math.Abs (range.Step);
+            int span = 1 + Math.Abs(range.final - range.start);
+            int step = Math.Abs (range.step);
 
             if (step.InRange (1, span)) {
-                return new Loop ( span/step, range.First, range.Step);
+                return new Loop ( span/step, range.start, range.step);
             }
-            return new Loop (1, range.First, range.Step);
+            return new Loop (1, range.start, range.step);
         }
     }
 }

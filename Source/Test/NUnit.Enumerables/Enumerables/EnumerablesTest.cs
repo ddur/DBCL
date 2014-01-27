@@ -24,7 +24,6 @@ namespace DD.Enumerables
 	        Assert.Throws<ArgumentException> (delegate {loop = new Loop(2, int.MaxValue, int.MaxValue);});
 	        Assert.Throws<ArgumentException> (delegate {loop = new Loop(3, 0, int.MaxValue);});
 	        Assert.Throws<ArgumentException> (delegate {loop = new Loop(3, 0, int.MinValue);});
-	        //Assert.Throws<ArgumentException> (delegate {loop = new Loop(3, 0, 0);});
 
 	        // One time loop cannot fail
 	        loop = new Loop(1, int.MaxValue);
@@ -45,7 +44,7 @@ namespace DD.Enumerables
 	        loop = 1.Times().From(int.MinValue).By(int.MinValue);
 	        Assert.True (loop.Last == int.MinValue);
 	        
-	        
+	        // two times
 	        loop = 2.Times().From(0).By(int.MaxValue);
 	        Assert.True (loop.Last == int.MaxValue);
 
@@ -69,7 +68,8 @@ namespace DD.Enumerables
 
 	        loop = 2.Times().From(int.MinValue).By(int.MaxValue);
 	        Assert.True (loop.Last == -1);
-	        
+
+	        // 3 times
 	        loop = new Loop (3, int.MaxValue, int.MinValue+1);
 	        Assert.True (loop.Last == int.MinValue+1);
 
@@ -79,93 +79,108 @@ namespace DD.Enumerables
 	        loop = 3.Times().From(int.MinValue).By(int.MaxValue);
 	        Assert.True (loop.Last == int.MaxValue-1);
 
-	        int test = 0;
-	        int time = 0;
-	        int step = 0;
-	        int init = 0;
-	        int last = 0;
+	        // prepare
+	        int timesLoop = 0;
+	        int timesCount = 0;
+	        int loopStep = 0;
+	        int loopStart = 0;
+	        int loopFinal = 0;
 	        
 	        // begin test
-	        test = 23;
-	        init = 100;
-	        last = init;
-	        step = 10;
-	        time = 0;
-	        loop = test.Times().From(init).By(step);
+	        timesLoop = 23;
+	        loopStart = 100;
+	        loopFinal = loopStart;
+	        loopStep = 10;
+	        timesCount = 0;
+	        loop = timesLoop.Times().From(loopStart).By(loopStep);
 	        foreach (var i in loop) {
-	            Assert.True (i == last);
-	            last += loop.Step;
-	            ++time;
+	            Assert.True (i == loopFinal);
+	            loopFinal += loop.Step;
+	            ++timesCount;
 	        }
-	        Assert.True (time == test);
-	        Assert.True (last == init + (time * step));
+            loopFinal -= loop.Step;
+	        Assert.True (timesCount == timesLoop);
+	        Assert.True (loopFinal == loopStart + ((timesCount-1) * loopStep));
 
-	        init = 100;
-	        last = init;
-	        time = 0;
+	        loopStart = 100;
+	        loopFinal = loopStart;
+	        timesCount = 0;
 	        foreach (var i in loop as IEnumerable) {
-	            Assert.True ((int)i == last);
-	            last += loop.Step;
-	            ++time;
+	            Assert.True ((int)i == loopFinal);
+	            loopFinal += loop.Step;
+	            ++timesCount;
 	        }
-	        Assert.True (time == test);
-	        Assert.True (last == init + (time * step));
+            loopFinal -= loop.Step;
+	        Assert.True (timesCount == timesLoop);
+	        Assert.True (loopFinal == loopStart + ((timesCount-1) * loopStep));
 
 	        // loop
-	        time = 0;
+	        timesCount = 0;
 	        while (loop.Do) {
-	            ++time;
+	            ++timesCount;
 	        }
-	        Assert.True (time == test);
+	        Assert.True (timesCount == timesLoop);
 
 	        // loop again
-	        time = 0;
+	        timesCount = 0;
 	        while (loop.Do) {
-	            ++time;
+	            ++timesCount;
 	        }
-	        Assert.True (time == test);
+	        Assert.True (timesCount == timesLoop);
 
-	        time = 0;
+	        timesCount = 0;
 	        var e = loop.GetEnumerator();
 	        while (e.MoveNext()) {
-	            ++time;
+	            ++timesCount;
 	        }
-	        Assert.True (time == test);
+	        Assert.True (timesCount == timesLoop);
 
-	        init = 20;
-	        last = init;
-	        step = 5;
-	        loop = test.Times().From(init).By(step);
-	        time = 0;
+	        loopStart = 20;
+	        loopFinal = loopStart;
+	        loopStep = 5;
+	        loop = timesLoop.Times().From(loopStart).By(loopStep);
+	        timesCount = 0;
 	        while (loop.Do) {
-	            last += step;
-	            ++time;
+	            loopFinal += loopStep;
+	            ++timesCount;
 	        }
-	        Assert.True (time == loop.Times);
-	        Assert.True (init == loop.First);
-	        Assert.True (last == loop.First + (loop.Times * loop.Step));
-	        Assert.True (step == loop.Step);
+            loopFinal -= loop.Step;
+	        Assert.True (timesCount == timesLoop);
+	        Assert.True (timesCount == loop.Times);
+	        Assert.True (loopStart == loop.First);
+	        Assert.True (loopFinal == loopStart + ((timesCount-1) * loopStep));
+	        Assert.True (loopFinal == loop.First + ((loop.Times-1) * loop.Step));
+	        Assert.True (loopStep == loop.Step);
 
 	        // Cover Set properties 
-	        loop.First = init;
-	        loop.Step = step;
+	        loop.First = loopStart;
+	        loop.Step = loopStep;
 
 	        // Cast Range to Loop
 	        loop = 20.To(10);//.By(2);
-	        time = 20;
-	        last = loop.First;
+	        timesCount = 20;
+	        loopFinal = loop.First;
 	        while (loop.Do) {
-	            --time;
-	            last += loop.Step;
+	            --timesCount;
+	            loopFinal += loop.Step;
 	        }
-	        Assert.True (loop.Times == 11);
+            loopFinal -= loop.Step;
+
+            Assert.True (loop.Times == 11);
 	        Assert.True (loop.First == 20);
 	        Assert.True (loop.Step == -1);
-	        Assert.True (last == loop.First+(loop.Times*loop.Step));
-	        Assert.True (time == 20 - loop.Times);
+	        Assert.True (loopFinal == loop.First+((loop.Times-1)*loop.Step));
+	        Assert.True (timesCount == 20 - loop.Times);
 	        
 	        // Cast Loop to Range
 	        Range r = loop;
+	        Assert.True (r.First == loop.First);
+	        Assert.True (r.Last == loop.First+((loop.Times-1)*loop.Step));
+	        Assert.True (r.Step == loop.Step);
+
+	        // Cast Range to Loop to Range
+	        loop = 20.To(-10);
+	        r = loop;
 	        Assert.True (r.First == loop.First);
 	        Assert.True (r.Last == loop.First+((loop.Times-1)*loop.Step));
 	        Assert.True (r.Step == loop.Step);
@@ -202,68 +217,68 @@ namespace DD.Enumerables
 	        range = new Range (int.MaxValue, 0);
 	        range = new Range (int.MinValue, 0);
 	        
-	        int times = 0;
-	        int start = 0;
-	        int final = 0;
+	        int timesCount = 0;
+	        int rangeStart = 0;
+	        int rangeFinal = 0;
             IEnumerator e;
 
 	        // test loop
-	        start = -10;
-	        final = 20;
-	        range = start.To(final);
+	        rangeStart = -10;
+	        rangeFinal = 20;
+	        range = rangeStart.To(rangeFinal);
 	        Assert.True (range.Step == 1);
 
-	        times = 0;
-	        final = start;
+	        timesCount = 0;
+	        rangeFinal = rangeStart;
 	        foreach (var item in range) {
-	            Assert.True (final == item);
-	            ++times;
-	            final += range.Step;
+	            Assert.True (rangeFinal == item);
+	            ++timesCount;
+	            rangeFinal += range.Step;
 	        }
-            final -= range.Step;
+            rangeFinal -= range.Step;
             
-	        Assert.True (times == 31);
-	        Assert.True (times == 1 + Math.Abs (range.Last - range.First));
-	        Assert.True (final == range.Last);
+	        Assert.True (timesCount == 31);
+	        Assert.True (timesCount == 1 + Math.Abs (range.Last - range.First));
+	        Assert.True (rangeFinal == range.Last);
 	        
-	        times = 0;
-	        final = start;
+	        timesCount = 0;
+	        rangeFinal = rangeStart;
 	        while (range.Do) {
-	            ++times;
-	            final += range.Step;
+	            ++timesCount;
+	            rangeFinal += range.Step;
 	        }
-            final -= range.Step;
+            rangeFinal -= range.Step;
             
-	        Assert.True (times == 31);
-	        Assert.True (times == 1 + Math.Abs (range.Last - range.First));
-	        Assert.True (final == range.Last);
+	        Assert.True (timesCount == 31);
+	        Assert.True (timesCount == 1 + Math.Abs (range.Last - range.First));
+	        Assert.True (rangeFinal == range.Last);
             
 	        // Do again
-	        times = 0;
-	        final = start;
+	        timesCount = 0;
+	        rangeFinal = rangeStart;
 	        while (range.Do) {
-	            ++times;
-	            final += range.Step;
+	            ++timesCount;
+	            rangeFinal += range.Step;
 	        }
-            final -= range.Step;
+            rangeFinal -= range.Step;
             
-	        Assert.True (times == 31);
-	        Assert.True (times == 1 + Math.Abs (range.Last - range.First));
-	        Assert.True (final == range.Last);
+	        Assert.True (timesCount == 31);
+	        Assert.True (timesCount == 1 + Math.Abs (range.Last - range.First));
+	        Assert.True (rangeFinal == range.Last);
 
             // enumerate	        
             e = ((IEnumerable)range).GetEnumerator();
-	        times = 0;
-	        final = start;
+	        timesCount = 0;
+	        rangeFinal = rangeStart;
 	        while (e.MoveNext()) {
-	            ++times;
-	            final += range.Step;
+	            ++timesCount;
+	            rangeFinal += range.Step;
 	        }
-            final -= range.Step;
+            rangeFinal -= range.Step;
 
-            Assert.True (times == 31);
-	        Assert.True (times == 1 + Math.Abs (range.Last - range.First));
-	        Assert.True (final == range.Last);
+            Assert.True (timesCount == 31);
+	        Assert.True (timesCount == 1 + Math.Abs (range.Last - range.First));
+	        Assert.True (rangeFinal == range.Last);
 
 	        // Cast Range to Loop
 	        Loop loop = range;
@@ -271,49 +286,49 @@ namespace DD.Enumerables
 
 
             // reverse	        
-	        start = 20;
-	        final = -10;
-	        range = start.To(final);
+	        rangeStart = 20;
+	        rangeFinal = -10;
+	        range = rangeStart.To(rangeFinal);
 	        Assert.True (range.Step == -1);
 
-	        times = 0;
-	        final = start;
+	        timesCount = 0;
+	        rangeFinal = rangeStart;
 	        foreach (var item in range) {
-	            Assert.True (final == item);
-	            ++times;
-	            final += range.Step;
+	            Assert.True (rangeFinal == item);
+	            ++timesCount;
+	            rangeFinal += range.Step;
 	        }
-            final -= range.Step;
+            rangeFinal -= range.Step;
             
-	        Assert.True (times == 31);
-	        Assert.True (times == 1 + Math.Abs (range.Last - range.First));
-	        Assert.True (final == range.Last);
+	        Assert.True (timesCount == 31);
+	        Assert.True (timesCount == 1 + Math.Abs (range.Last - range.First));
+	        Assert.True (rangeFinal == range.Last);
 	        
-	        times = 0;
-	        final = start;
+	        timesCount = 0;
+	        rangeFinal = rangeStart;
 	        while (range.Do) {
-	            ++times;
-	            final += range.Step;
+	            ++timesCount;
+	            rangeFinal += range.Step;
 	        }
-            final -= range.Step;
+            rangeFinal -= range.Step;
 
-	        Assert.True (times == 31);
-	        Assert.True (times == 1 + Math.Abs (range.Last - range.First));
-	        Assert.True (final == range.Last);
+	        Assert.True (timesCount == 31);
+	        Assert.True (timesCount == 1 + Math.Abs (range.Last - range.First));
+	        Assert.True (rangeFinal == range.Last);
             
             // enumerate	        
             e = ((IEnumerable)range).GetEnumerator();
-	        times = 0;
-	        final = start;
+	        timesCount = 0;
+	        rangeFinal = rangeStart;
 	        while (e.MoveNext()) {
-	            ++times;
-	            final += range.Step;
+	            ++timesCount;
+	            rangeFinal += range.Step;
 	        }
-            final -= range.Step;
+            rangeFinal -= range.Step;
 
-            Assert.True (times == 31);
-	        Assert.True (times == 1 + Math.Abs (range.Last - range.First));
-	        Assert.True (final == range.Last);
+            Assert.True (timesCount == 31);
+	        Assert.True (timesCount == 1 + Math.Abs (range.Last - range.First));
+	        Assert.True (rangeFinal == range.Last);
 
 	        // Cast Range to Loop
 	        loop = range;
@@ -321,6 +336,7 @@ namespace DD.Enumerables
 
 	        // Cast Range to Loop with step outside range
 	        range.Step = 32;
+	        Assert.True (range.Last == range.First);
 	        loop = range;
 	        Assert.True (loop.Times == 1);
 	        
