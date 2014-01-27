@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
-namespace DD.Collections.Specialized
+namespace DD.Collections
 {
     /// <summary>Produces ICodeSet's
     /// <para>If OutputDictionary is not null, methods in this class never return duplicate ICodeSet</para>  
@@ -26,45 +26,47 @@ namespace DD.Collections.Specialized
         
         #region ToICodeSet Factory
 
-        public static ICodeSet ToICodeSet (this string coded) {
+        public static ICodeSet From (this string coded) {
             Contract.Requires<ArgumentNullException> (!coded.Is(null));
             Contract.Requires<ArgumentException> (coded != string.Empty);
 
             Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
             Contract.Ensures (OutputDictionary.Is(null) || OutputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
 
-            return ToICodeSet (coded.Decode());
+            return From (coded.Decode());
         }
 
-        public static ICodeSet ToICodeSet (char req, params char[] opt) {
+        public static ICodeSet From (char req, params char[] opt) {
             Contract.Requires<ArgumentNullException> (ThisMethodHandlesNull);
 
             Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
             Contract.Ensures (OutputDictionary.Is(null) || OutputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
 
-            List<char> charList;
+            List<Code> codeList;
             if (opt.Length > 0) { // keyword "params" is never null
-                charList = new List<char>(1 + opt.Length);
-                charList.Add (req);
-                charList.AddRange (opt);
+                codeList = new List<Code>(1 + opt.Length);
+                codeList.Add (req);
+                foreach (Code code in opt) {
+                    codeList.Add (code);
+                }
             } else { // type char is never null
-                charList = new List<char>(1);
-                charList.Add (req);
+                codeList = new List<Code>(1);
+                codeList.Add (req);
             }
-            return ToICodeSet (charList);
+            return From (codeList);
         }
 
-        public static ICodeSet ToICodeSet (this IEnumerable<char> chars) {
+        public static ICodeSet From (this IEnumerable<char> chars) {
             Contract.Requires<ArgumentNullException> (!chars.Is(null));
             Contract.Requires<ArgumentException> (!chars.IsEmpty());
 
             Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
             Contract.Ensures (OutputDictionary.Is(null) || OutputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
 
-            return ToICodeSet (chars.Cast<Code>());
+            return From (chars.Cast<Code>());
         }
 
-        public static ICodeSet ToICodeSet (Code req, params Code[] opt) {
+        public static ICodeSet From (Code req, params Code[] opt) {
             Contract.Requires<ArgumentNullException> (ThisMethodHandlesNull);
 
             Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
@@ -79,10 +81,10 @@ namespace DD.Collections.Specialized
                 codeList = new List<Code>(1);
                 codeList.Add (req);
             }
-            return ToICodeSet (codeList);
+            return From (codeList);
         }
 
-        public static ICodeSet ToICodeSet (IEnumerable<Code> codes) {
+        public static ICodeSet From (IEnumerable<Code> codes) {
             Contract.Requires<ArgumentNullException> (!codes.Is(null));
             Contract.Requires<ArgumentException> (!codes.IsEmpty());
             Contract.Requires<ArgumentOutOfRangeException> (InputDictionary.Is(null) || !(codes is ICodeSet) || InputDictionary.ContainsKey((ICodeSet)codes));
@@ -90,10 +92,10 @@ namespace DD.Collections.Specialized
             Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
             Contract.Ensures (OutputDictionary.Is(null) || OutputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
 
-            return ToICodeSet (new CodeSetBits (codes));
+            return From (new CodeSetBits (codes));
         }
 
-        public static ICodeSet ToICodeSet (this BitSetArray bits) {
+        public static ICodeSet From (this BitSetArray bits) {
             Contract.Requires<ArgumentNullException> (!bits.Is(null));
             Contract.Requires<ArgumentException> (bits.Count != 0);
             Contract.Requires<ArgumentException> (bits.Last <= Code.MaxCount);
@@ -101,21 +103,21 @@ namespace DD.Collections.Specialized
             Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
             Contract.Ensures (OutputDictionary.Is(null) || OutputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
 
-            return ToICodeSet (new CodeSetBits(bits));;
+            return From (new CodeSetBits(bits));;
         }
 
-        private static ICodeSet ToICodeSet (CodeSetBits codeSet) {
+        private static ICodeSet From (CodeSetBits codeSet) {
             Contract.Requires<ArgumentNullException> (ThisMethodHandlesNull);
 
             Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
             Contract.Ensures (OutputDictionary.Is(null) || OutputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
 
             if (OutputDictionary.Is(null)) {
-                //return codeSet.Optimal();
+                return codeSet.Optimal();
             }
             ICodeSet key = codeSet;
             if (!OutputDictionary.Find(ref key)) {
-                //key = codeSet.Optimal();
+                key = codeSet.Optimal();
                 OutputDictionary.Add (key);
             }
             return key;
@@ -125,98 +127,98 @@ namespace DD.Collections.Specialized
 
         #region Optimization
 
-//        [Pure] private static ICodeSet OptimalPartOne (this CodeSetBits bitSet) {
-//            Contract.Requires<ArgumentNullException> (ThisMethodHandlesNull);
-//            
-//            Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
-//
-//            #region Null
-//            if (bitSet.Is(null) || bitSet.Count == 0) {
-//                return CodeSetNull.Singleton;
-//            }
-//            #endregion
-//
-//            #region Unit
-//            else if (bitSet.Count == UnitCount) {
-//                return new Code (bitSet.First);
-//            }
-//            #endregion
-//
-//            #region Pair
-//            else if (bitSet.Count == PairCount) {
-//                return new CodeSetPair (bitSet.First, bitSet.Last);
-//            }
-//            #endregion
-//
-//            #region Full
-//            else if (bitSet.Count == bitSet.Length) {
-//                return new CodeSetFull (bitSet.First, bitSet.Last);
-//            }
-//            #endregion
-//
-//            #region List
-//            else if (bitSet.Count < ListMaxCount) {
-//                // List space less than Bits/4 space (bitSet.Length/8)*4
-//                if ((bitSet.Count * sizeof(int)) < (bitSet.Length/2)) {
-//                    return new CodeSetList (bitSet);
-//                }
-//            }
-//            #endregion
-//            
-//            return bitSet;
-//
-//        }
-//
-//        [Pure] private static ICodeSet OptimalPartTwo(this CodeSetBits bitSet) {
-//            Contract.Requires<ArgumentNullException> (!bitSet.Is(null));
-//
-//            Contract.Ensures (!(Contract.Result<ICodeSet>() is CodeSetBits));
-//
-//            if (bitSet.First.UnicodePlane == bitSet.Last.UnicodePlane) {
-//                return new CodeSetPage(bitSet);
-//            } else {
-//                Contract.Assert(bitSet.First.UnicodePlane != bitSet.Last.UnicodePlane);
-//                return new CodeSetWide(bitSet);
-//            }
-//        }
-//        
-//        [Pure] internal static ICodeSet Optimal (this CodeSetBits bitSet) {
-//            Contract.Requires<ArgumentNullException> (ThisMethodHandlesNull);
-//
-//            Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
-//            Contract.Ensures (!(Contract.Result<ICodeSet>() is CodeSetBits));
-//            
-//            ICodeSet optimal = OptimalPartOne (bitSet);
-//
-//            if (!(optimal is CodeSetBits)) {
-//                return optimal;
-//            }
-//            
-//            Contract.Assert ((bitSet.Length - bitSet.Count) > 0 ); // has complement items
-//            
-//            if (((bitSet.Length - bitSet.Count) < (bitSet.Length / 4))) {
-//                // possible more than 3/4 space saving
-//                
-//                // get complement and offset
-//                BitSetArray bitsComplement = new BitSetArray (bitSet.Length);
-//                int offset = bitSet.Complement.First();
-//                foreach (var item in bitSet.Complement) {
-//                    bitsComplement.Set (item - offset);
-//                }
-//                bitsComplement.TrimExcess();
-//                if ((bitsComplement.Length < (bitSet.Length / 4)) ||
-//                    (bitsComplement.Count <= ListMaxCount)) {
-//                    // Can save at least 3/4 of space
-//                    CodeSetFull fullSet = new CodeSetFull(bitSet.First, bitSet.Last);
-//                    ICodeSet diffSet = OptimalPartOne (new CodeSetBits (FromCompact (bitsComplement, offset)));
-//                    if (diffSet is CodeSetBits) diffSet = OptimalPartTwo (diffSet as CodeSetBits);
-//                    return new CodeSetDiff (fullSet, diffSet);
-//                }
-//            }
-//            // final choice
-//            return OptimalPartTwo(bitSet);
-//        }
-//
+        [Pure] private static ICodeSet OptimalPartOne (this CodeSetBits bitSet) {
+            Contract.Requires<ArgumentNullException> (ThisMethodHandlesNull);
+            
+            Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
+
+            #region Null
+            if (bitSet.Is(null) || bitSet.Count == 0) {
+                return CodeSetNull.Singleton;
+            }
+            #endregion
+
+            #region Unit
+            else if (bitSet.Count == ICodeSetService.UnitCount) {
+                return new Code (bitSet.First);
+            }
+            #endregion
+
+            #region Pair
+            else if (bitSet.Count == ICodeSetService.PairCount) {
+                return new CodeSetPair (bitSet.First, bitSet.Last);
+            }
+            #endregion
+
+            #region Full
+            else if (bitSet.Count == bitSet.Length) {
+                return new CodeSetFull (bitSet.First, bitSet.Last);
+            }
+            #endregion
+
+            #region List
+            else if (bitSet.Count < ICodeSetService.ListMaxCount) {
+                // List space less than Bits/4 space (bitSet.Length/8)*4
+                if ((bitSet.Count * sizeof(int)) < (bitSet.Length/2)) {
+                    return new CodeSetList (bitSet);
+                }
+            }
+            #endregion
+            
+            return bitSet;
+
+        }
+
+        [Pure] private static ICodeSet OptimalPartTwo(this CodeSetBits bitSet) {
+            Contract.Requires<ArgumentNullException> (!bitSet.Is(null));
+
+            Contract.Ensures (!(Contract.Result<ICodeSet>() is CodeSetBits));
+
+            if (bitSet.First.UnicodePlane == bitSet.Last.UnicodePlane) {
+                return new CodeSetPage(bitSet);
+            } else {
+                Contract.Assert(bitSet.First.UnicodePlane != bitSet.Last.UnicodePlane);
+                return new CodeSetWide(bitSet);
+            }
+        }
+        
+        [Pure] internal static ICodeSet Optimal (this CodeSetBits bitSet) {
+            Contract.Requires<ArgumentNullException> (ThisMethodHandlesNull);
+
+            Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
+            Contract.Ensures (!(Contract.Result<ICodeSet>() is CodeSetBits));
+            
+            ICodeSet optimal = OptimalPartOne (bitSet);
+
+            if (!(optimal is CodeSetBits)) {
+                return optimal;
+            }
+            
+            Contract.Assert ((bitSet.Length - bitSet.Count) > 0 ); // has complement items
+            
+            if (((bitSet.Length - bitSet.Count) < (bitSet.Length / 4))) {
+                // possible more than 3/4 space saving
+                
+                // get complement and offset
+                BitSetArray bitsComplement = new BitSetArray (bitSet.Length);
+                int offset = bitSet.Complement.First();
+                foreach (var item in bitSet.Complement) {
+                    bitsComplement.Set (item - offset);
+                }
+                bitsComplement.TrimExcess();
+                if ((bitsComplement.Length < (bitSet.Length / 4)) ||
+                    (bitsComplement.Count <= ICodeSetService.ListMaxCount)) {
+                    // Can save at least 3/4 of space
+                    CodeSetFull fullSet = new CodeSetFull(bitSet.First, bitSet.Last);
+                    ICodeSet diffSet = OptimalPartOne (new CodeSetBits (ICodeSetService.FromCompact (bitsComplement, offset)));
+                    if (diffSet is CodeSetBits) diffSet = OptimalPartTwo (diffSet as CodeSetBits);
+                    return new CodeSetDiff (fullSet, diffSet);
+                }
+            }
+            // final choice
+            return OptimalPartTwo(bitSet);
+        }
+
         #endregion
 
         #region Operations Factory
@@ -273,7 +275,7 @@ namespace DD.Collections.Specialized
                     bits.Set (code, true);
                 }
             }
-            return ToICodeSet (bits);
+            return From (bits);
         }
 
         #endregion
@@ -340,7 +342,7 @@ namespace DD.Collections.Specialized
                     if (a.Count == 0) { return Empty; }
                 }
             }
-            return ToICodeSet (a);
+            return From (a);
         }
 
         #endregion
@@ -402,7 +404,7 @@ namespace DD.Collections.Specialized
                     a.SymmetricExceptWith(b);
                 }
             }
-            return ToICodeSet (a);
+            return From (a);
         }
 
         #endregion
@@ -464,7 +466,7 @@ namespace DD.Collections.Specialized
                     }
                 }
             }
-            return ToICodeSet (bits.Cast<Code>());
+            return From (bits.Cast<Code>());
         }
 
         #endregion
@@ -484,7 +486,7 @@ namespace DD.Collections.Specialized
             compact.Not();
             compact.TrimExcess();
             Contract.Assert (compact.Count != 0);
-            return ToICodeSet (compact.FromCompact(req.First));
+            return From (compact.FromCompact(req.First));
         }
         
         #endregion

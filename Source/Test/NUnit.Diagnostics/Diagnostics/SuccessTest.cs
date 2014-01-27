@@ -50,7 +50,7 @@ namespace DD.Diagnostics {
             Assert.False (success);
 
             // shows message pointing at line below
-            success.Assert (false, "Press ignore"); // shows message pointing at this line
+            success.Assert (false, "line == 53, Press ignore"); // shows message pointing at this line
             Assert.False (success);
 
             success = true;
@@ -59,7 +59,7 @@ namespace DD.Diagnostics {
             Assert.True (success);
 
             // shows message pointing at line below
-            success.Assert (false, "Press ignore"); // shows message pointing at this line
+            success.Assert (false, "line == 62, Press ignore"); // shows message pointing at this line
             Assert.False (success);
 #endif
         }

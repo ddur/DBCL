@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 
-namespace DD.Collections.Specialized
+namespace DD.Collections
 {
     /// <summary>Empty ICodeSet, private constructor
     /// <remarks>Singleton</remarks>

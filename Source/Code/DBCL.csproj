@@ -134,7 +134,13 @@
     <Compile Include="Collections\ICodeSet\CodeService.cs" />
     <Compile Include="Collections\ICodeSet\CodeSet.cs" />
     <Compile Include="Collections\ICodeSet\CodeSetBits.cs" />
+    <Compile Include="Collections\ICodeSet\CodeSetDiff.cs" />
+    <Compile Include="Collections\ICodeSet\CodeSetFull.cs" />
+    <Compile Include="Collections\ICodeSet\CodeSetList.cs" />
     <Compile Include="Collections\ICodeSet\CodeSetNull.cs" />
+    <Compile Include="Collections\ICodeSet\CodeSetPage.cs" />
+    <Compile Include="Collections\ICodeSet\CodeSetPair.cs" />
+    <Compile Include="Collections\ICodeSet\CodeSetWide.cs" />
     <Compile Include="Collections\ICodeSet\ICodeSet.cs" />
     <Compile Include="Collections\ICodeSet\ICodeSetDictionary.cs" />
     <Compile Include="Collections\ICodeSet\ICodeSetFactory.cs" />

@@ -57,7 +57,7 @@ namespace DD.Collections {
         [Pure]
         public bool this[Code code] {
             get {
-                Contract.Ensures (Contract.Result<bool> () == ((IEnumerable<Code>)this).Contains (code));
+                //Contract.Ensures (Contract.Result<bool> () == ((IEnumerable<Code>)this).Contains (code));
                 return default (bool);
             }
         }
@@ -65,9 +65,9 @@ namespace DD.Collections {
         [Pure]
         public int Length {
             get {
-                Contract.Ensures (Contract.Result<int> ().InRange (Code.MinCount, Code.MaxCount));
-                Contract.Ensures ((this.Count == 0 && this.Length == 0) ||
-                                  (this.Count > 0 && this.Length >= this.Count && this.Length == this.Last - this.First + 1));
+                //Contract.Ensures (Contract.Result<int> ().InRange (Code.MinCount, Code.MaxCount));
+                //Contract.Ensures ((this.Count == 0 && Contract.Result<int>() == 0) ||
+                //                  (this.Count > 0 && Contract.Result<int>() >= this.Count && Contract.Result<int>() == this.Last - this.First + 1));
                 return default (int);
             }
         }
@@ -75,7 +75,7 @@ namespace DD.Collections {
         [Pure]
         public Code First {
             get {
-                Contract.Ensures ((Contract.Result<Code> () <= this.Last) && this[Contract.Result<Code> ()]);
+                //Contract.Ensures ((Contract.Result<Code> () <= this.Last) && this[Contract.Result<Code> ()]);
                 Contract.EnsuresOnThrow<InvalidOperationException> (this.Count == 0);
                 return default (Code);
             }
@@ -84,7 +84,7 @@ namespace DD.Collections {
         [Pure]
         public Code Last {
             get {
-                Contract.Ensures ((Contract.Result<Code> () >= this.First) && this[Contract.Result<Code> ()]);
+                //Contract.Ensures ((Contract.Result<Code> () >= this.First) && this[Contract.Result<Code> ()]);
                 Contract.EnsuresOnThrow<InvalidOperationException> (this.Count == 0);
                 return default (Code);
             }
@@ -173,7 +173,7 @@ namespace DD.Collections {
 
                 if (self.Count > 0) {
                     
-                    //success.Assert (!(self is CodeSetNull));
+                    success.Assert (!(self is CodeSetNull));
                     success.Assert (self.Count.InRange (1, self.Length));
                     success.Assert (self.Count == ((IEnumerable<Code>)self).Count ());
                     success.Assert (self.Length == self.Last - self.First + 1);
@@ -185,7 +185,7 @@ namespace DD.Collections {
                     
                 }
                 else { // self.Count == 0
-                    //success.Assert (self is CodeSetNull || self is CodeSetBits);
+                    success.Assert (self is CodeSetNull || self is CodeSetBits);
                     success.Assert (self.Length == self.Count);
                 }
 
