@@ -118,6 +118,9 @@
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="C5">
+      <HintPath>..\..\packages\C5.2.2.5073.27396\lib\portable-net40+sl50+wp80+win\C5.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -127,6 +130,15 @@
   <ItemGroup>
     <Compile Include="Collections\BitSetArray\BitSetArray.cs" />
     <Compile Include="Collections\BitSetArray\BitSetArray.Theory.cs" />
+    <Compile Include="Collections\ICodeSet\Code.cs" />
+    <Compile Include="Collections\ICodeSet\CodeService.cs" />
+    <Compile Include="Collections\ICodeSet\CodeSet.cs" />
+    <Compile Include="Collections\ICodeSet\CodeSetBits.cs" />
+    <Compile Include="Collections\ICodeSet\CodeSetNull.cs" />
+    <Compile Include="Collections\ICodeSet\ICodeSet.cs" />
+    <Compile Include="Collections\ICodeSet\ICodeSetDictionary.cs" />
+    <Compile Include="Collections\ICodeSet\ICodeSetFactory.cs" />
+    <Compile Include="Collections\ICodeSet\ICodeSetService.cs" />
     <Compile Include="Diagnostics\Success.cs" />
     <Compile Include="Enumerables\Extensions.cs" />
     <Compile Include="Enumerables\Loop.cs" />
@@ -137,6 +149,11 @@
     <Compile Include="ExtendsObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Collections\ICodeSet" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
