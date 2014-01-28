@@ -42,8 +42,10 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Collections\CodeSetBitsTest\Construction.cs" />
+    <Compile Include="Collections\CodeSetBitsTest\Constructors.cs" />
     <Compile Include="Collections\CodeSetBitsTest\Members.cs" />
+    <Compile Include="Collections\CodeSetPairTest\Constructors.cs" />
+    <Compile Include="Collections\CodeSetPairTest\Members.cs" />
     <Compile Include="Collections\CodeTest\AsICodeSet.cs" />
     <Compile Include="Collections\CodeTest\AsICollectionOfCode.cs" />
     <Compile Include="Collections\CodeTest\AsIComparableToICodeSet.cs" />
@@ -67,6 +69,7 @@
     <Folder Include="Collections\CodeTest" />
     <Folder Include="Collections\ICodeSetTest" />
     <Folder Include="Collections\CodeSetBitsTest" />
+    <Folder Include="Collections\CodeSetPairTest" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Code\DBCL.csproj">

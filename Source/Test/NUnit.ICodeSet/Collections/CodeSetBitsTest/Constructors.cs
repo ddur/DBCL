@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace DD.Collections.CodeSetBitsTest
 {
     [TestFixture]
-    public class Construction
+    public class Constructors
     {
         
         [Test]

@@ -177,6 +177,7 @@ namespace DD.Collections {
                     success.Assert (self.Count.InRange (1, self.Length));
                     success.Assert (self.Count == ((IEnumerable<Code>)self).Count ());
                     success.Assert (self.Length == self.Last - self.First + 1);
+                    success.Assert (self.First <= self.Last);
                     success.Assert (self[self.First]);
                     success.Assert (self[self.Last]);
 
