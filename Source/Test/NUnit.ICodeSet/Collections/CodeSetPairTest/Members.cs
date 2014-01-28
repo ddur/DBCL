@@ -14,7 +14,7 @@ namespace DD.Collections.CodeSetPairTest
     public class Members
     {
         [Test]
-        public void MembersTest()
+        public void AllMembers()
         {
             CodeSetPair csp;
 

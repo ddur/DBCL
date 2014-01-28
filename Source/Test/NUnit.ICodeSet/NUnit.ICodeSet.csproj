@@ -44,6 +44,8 @@
   <ItemGroup>
     <Compile Include="Collections\CodeSetBitsTest\Constructors.cs" />
     <Compile Include="Collections\CodeSetBitsTest\Members.cs" />
+    <Compile Include="Collections\CodeSetFullTest\Constructors.cs" />
+    <Compile Include="Collections\CodeSetNullTest\Members.cs" />
     <Compile Include="Collections\CodeSetPairTest\Constructors.cs" />
     <Compile Include="Collections\CodeSetPairTest\Members.cs" />
     <Compile Include="Collections\CodeTest\AsICodeSet.cs" />
@@ -70,6 +72,8 @@
     <Folder Include="Collections\ICodeSetTest" />
     <Folder Include="Collections\CodeSetBitsTest" />
     <Folder Include="Collections\CodeSetPairTest" />
+    <Folder Include="Collections\CodeSetNullTest" />
+    <Folder Include="Collections\CodeSetFullTest" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Code\DBCL.csproj">
