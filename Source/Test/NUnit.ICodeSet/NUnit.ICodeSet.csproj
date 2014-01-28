@@ -42,8 +42,21 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Collections\CodeTest.cs" />
-    <Compile Include="Collections\ICodeSetTest.cs" />
+    <Compile Include="Collections\CodeSetBitsTest\Construction.cs" />
+    <Compile Include="Collections\CodeSetBitsTest\Members.cs" />
+    <Compile Include="Collections\CodeTest\AsICodeSet.cs" />
+    <Compile Include="Collections\CodeTest\AsICollectionOfCode.cs" />
+    <Compile Include="Collections\CodeTest\AsIComparableToICodeSet.cs" />
+    <Compile Include="Collections\CodeTest\AsIEnumerableOfCode.cs" />
+    <Compile Include="Collections\CodeTest\AsIEqualityComparerOfCode.cs" />
+    <Compile Include="Collections\CodeTest\AsIEqualityComparerOfICodeSet.cs" />
+    <Compile Include="Collections\CodeTest\CodeExtends.cs" />
+    <Compile Include="Collections\CodeTest\CodeStruct.cs" />
+    <Compile Include="Collections\CodeTest\Compiler.cs" />
+    <Compile Include="Collections\CodeTest\DataSource.cs" />
+    <Compile Include="Collections\CodeTest\DecodeString.cs" />
+    <Compile Include="Collections\CodeTest\EncodeToString.cs" />
+    <Compile Include="Collections\ICodeSetTest\Factory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -51,6 +64,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Collections" />
+    <Folder Include="Collections\CodeTest" />
+    <Folder Include="Collections\ICodeSetTest" />
+    <Folder Include="Collections\CodeSetBitsTest" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Code\DBCL.csproj">

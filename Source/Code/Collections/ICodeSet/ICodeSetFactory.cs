@@ -26,14 +26,14 @@ namespace DD.Collections
         
         #region ToICodeSet Factory
 
-        public static ICodeSet From (this string coded) {
-            Contract.Requires<ArgumentNullException> (!coded.Is(null));
-            Contract.Requires<ArgumentException> (coded != string.Empty);
+        public static ICodeSet From (this string utf16) {
+            Contract.Requires<ArgumentNullException> (!utf16.Is(null));
+            Contract.Requires<ArgumentException> (utf16 != string.Empty);
 
             Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
             Contract.Ensures (OutputDictionary.Is(null) || OutputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
 
-            return From (coded.Decode());
+            return From (utf16.Decode());
         }
 
         public static ICodeSet From (char req, params char[] opt) {
@@ -63,7 +63,12 @@ namespace DD.Collections
             Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
             Contract.Ensures (OutputDictionary.Is(null) || OutputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
 
-            return From (chars.Cast<Code>());
+            //return From (chars.Cast<Code>()); //InvalidCastException
+            List<Code> codeList = new List<Code>();
+            foreach (Code code in chars) {
+                codeList.Add(code);
+            }
+            return From (codeList);
         }
 
         public static ICodeSet From (Code req, params Code[] opt) {

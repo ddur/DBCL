@@ -35,7 +35,11 @@ namespace DD.Collections
         
         [Pure] public virtual int Length {
             get {
-                return (this.Last - this.First + 1);
+                if (this.Count == 0) {
+                    return 0;
+                } else {
+                    return (this.Last - this.First + 1);
+                }
             }
         }
         

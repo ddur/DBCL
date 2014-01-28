@@ -18,16 +18,48 @@ namespace DD.Collections
     {
         #region Ctor
 
-        internal CodeSetBits (BitSetArray bits) {
-
-            Contract.Ensures (this.sorted.IsNot (null));
+        // TODO Theory.Compact(BitSetArray, offset)
+        /// <summary>From Compact BitSetArray
+        /// </summary>
+        /// <param name="bits"></param>
+        /// <param name="offset"></param>
+        internal CodeSetBits (BitSetArray bits, int offset) {
+            Contract.Requires<ArgumentNullException> (bits.IsNot(null));
+            Contract.Requires<ArgumentException> (bits.Length <= Code.MaxCount);
+            Contract.Requires<ArgumentException> (bits[0] == true);
+            Contract.Requires<ArgumentException> (bits[bits.Length-1] == true);
+            Contract.Requires<ArgumentException> (offset >= 0);
+            Contract.Requires<ArgumentException> (offset <= Code.MaxCount - bits.Length);
 
             // Input -> Output
-            Contract.Ensures (bits.Is(null) && this.sorted.Count == 0);
-            Contract.Ensures (bits.Is(null) || this.sorted.Count == bits.Count);
-            Contract.Ensures (bits.Is(null) || Contract.ForAll (bits, item => this[item]));
+            Contract.Ensures (this.Count == bits.Count);
+            Contract.Ensures (this.First == offset);
+            Contract.Ensures (this.Last == offset + bits.Length - 1);
 
-            if (bits.IsNot(null) && bits.Count != 0) {
+            this.sorted = BitSetArray.Copy(bits);
+            Contract.Assume (this.sorted.Equals(bits));
+
+            this.start = offset;
+            this.final = offset + this.sorted.Length - 1;
+        }
+
+        internal CodeSetBits () {
+
+            // Input -> Output
+            Contract.Ensures (this.Count == 0);
+
+            this.sorted = new BitSetArray();
+        }
+
+        internal CodeSetBits (BitSetArray bits) {
+
+            Contract.Requires<ArgumentNullException> (bits.IsNot(null));
+
+            // Input -> Output
+            Contract.Ensures (bits.Count == this.Count);
+            Contract.Ensures (Contract.ForAll (bits, item => this[item]));
+
+            if (bits.Count != 0) {
                 this.start = (int)bits.First;
                 this.final = (int)bits.Last;
                 this.sorted = new BitSetArray (this.final - this.start + 1);
@@ -43,12 +75,14 @@ namespace DD.Collections
 
         internal CodeSetBits (IEnumerable<Code> codes) {
 
-            Contract.Ensures (this.sorted.IsNot (null));
-            Contract.Ensures (codes.Is(null) || this.sorted.Count != 0);
-            Contract.Ensures (codes.Is(null) || this.sorted.Count == codes.Distinct ().Count ());
-            Contract.Ensures (codes.Is(null) || Contract.ForAll (codes, item => this[item]));
+            Contract.Requires<ArgumentNullException> (codes.IsNot(null));
 
-            if (codes.IsNot(null) && !codes.IsEmpty()) {
+            // Input -> Output
+            Contract.Ensures (codes.IsEmpty() || this.Count != 0);
+            Contract.Ensures (codes.IsEmpty() || Contract.ForAll (codes, item => this[item]));
+            Contract.Ensures (this.Count == 0 || this.Count == codes.Distinct ().Count ());
+
+            if (!codes.IsEmpty()) {
                 if (codes is ICodeSet) {
                     ICodeSet codeSet = codes as ICodeSet;
                     this.start = codeSet.First;
@@ -65,12 +99,9 @@ namespace DD.Collections
                     }
                 }
 
-                // codes is same class or class based on BitSetArray?
+                // codes is same class?
                 if (codes is CodeSetBits) {
                     this.sorted = ((CodeSetBits)codes).sorted;
-                }
-                else if (codes is CodeSetPage) {
-                    this.sorted = ((CodeSetPage)codes).ToCompact();
                 }
                 else {
                     this.sorted = new BitSetArray (this.final - this.start + 1);
@@ -106,7 +137,7 @@ namespace DD.Collections
 
         [Pure] public override int Count {
             get {
-                return sorted.Count;
+                return this.sorted.Count;
             }
         }
 

@@ -254,9 +254,10 @@ namespace DD.Collections
 	       		    Buffer.BlockCopy (bytes, 0, utf32, 0, bytes.Length);
                     int index = 0;
                     foreach ( int item in result ) {
-                        success.Assert (index < utf32.Length && utf32[index] == item);
+                        success.Assert (utf32[index] == item);
                         index++;
                     }
+                    success.Assert (index == utf32.Length);
 		        } 
 		        return success;
 		    }

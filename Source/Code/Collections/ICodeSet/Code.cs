@@ -83,11 +83,6 @@ namespace DD.Collections
 
         #region IEquatable<Code>
         
-        public override bool Equals(object obj)
-        {
-            return (obj is Code) && Equals((Code)obj);
-        }
-        
         public bool Equals(Code that)
         {
             return this.Value == that.Value;
@@ -109,11 +104,11 @@ namespace DD.Collections
         #region IEqualityComparer<Code>
         
         [Pure] public bool Equals(Code a, Code b) {
-            return a.Value == b.Value;
+            return a == b;
         }
 
         [Pure] public int GetHashCode(Code c) {
-            return this.Value.GetHashCode();
+            return c.GetHashCode();
         }
         
         #endregion
@@ -133,7 +128,7 @@ namespace DD.Collections
         #region ICodeSet Interface
 
         [Pure] bool ICodeSet.this [Code code] {
-            get { return this.Value == code.Value; }
+            get { return this == code; }
         }
 
         [Pure] int ICodeSet.Length {
@@ -141,11 +136,11 @@ namespace DD.Collections
         }
 
         [Pure] Code ICodeSet.First {
-            get { return (Code)this; }
+            get { return this; }
         }
 
         [Pure] Code ICodeSet.Last {
-            get { return (Code)this; }
+            get { return this; }
         }
 
         #endregion
@@ -171,15 +166,14 @@ namespace DD.Collections
         //[SuppressMessage("Microsoft.Contracts", "CC1033", Justification = "Contract inheritance option disabled. Ensures is just stupid")]
         [Pure] 
         bool ICollection<Code>.Contains(Code code) {
-            return ((ICodeSet)this)[code];
+            return this == code;
         }
 
         /// <summary>Copies members from this collection into Code[]
         /// </summary>
         /// <param name="array"></param>
         /// <param name="arrIndex"></param>
-        //[ContractOption("contract", "inheritance", false)]
-        [SuppressMessage("Microsoft.Contracts", "CC1033", Justification = "Contract inheritance option disabled")]
+        [SuppressMessage("Microsoft.Contracts", "CC1033", Justification = "Not same exceptions")]
         [Pure] 
         void ICollection<Code>.CopyTo(Code[] array, int arrayIndex) {
             Contract.Requires<ArgumentNullException>(!array.Is(null));
@@ -238,14 +232,17 @@ namespace DD.Collections
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
+        [Pure]
         public bool Equals(ICodeSet a, ICodeSet b) {
             return ICodeSetService.Equals(a, b);
         }
+
         /// <summary>
         /// Returns a hash code for the specified object.
         /// </summary>
         /// <param name="c"></param>
         /// <returns></returns>
+        [Pure]
         public int GetHashCode(ICodeSet c) {
             return ICodeSetService.GetHashCode(c);
         }
@@ -280,13 +277,11 @@ namespace DD.Collections
         #region Methods
 
         [Pure]
-		public string Encode ()
-		{
-		    if (this.HasCharValue) { return this.IsSurrogate? "" + (char)0xFFFD : "" + (char)this; }
-			int v = Value - 0x10000;
-			return "" + (char)((v>>10)|0xD800) + (char)((v&0x3FF)|0xDC00);
-		}
-
+        public override bool Equals(object obj)
+        {
+            return (obj is Code) && Equals((Code)obj);
+        }
+        
         [Pure]
         public override string ToString()
         {
@@ -299,6 +294,14 @@ namespace DD.Collections
 		    }
             return "\\x" + Value.ToString("X");
         }
+
+        [Pure]
+		public string Encode ()
+		{
+		    if (this.HasCharValue) { return this.IsSurrogate? "" + (char)0xFFFD : "" + (char)this; }
+			int v = Value - 0x10000;
+			return "" + (char)((v>>10)|0xD800) + (char)((v&0x3FF)|0xDC00);
+		}
 
 		[Pure]
 		public string ToXmlEntity() {
