@@ -14,7 +14,7 @@ namespace DD.Collections
     /// <summary>Intermediate ICodeSet that is later optimized into other space efficient ICodeSet implementations
     /// <remarks>Can .Count 0 to 1114112 Code members</remarks>
     /// </summary>
-    internal class CodeSetBits : CodeSet
+    public class CodeSetBits : CodeSet
     {
         #region Ctor
 

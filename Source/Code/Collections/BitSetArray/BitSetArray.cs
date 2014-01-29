@@ -2506,7 +2506,6 @@ namespace DD.Collections {
                 int shorterArrLen = thisArrLen <= thatArrLen ? thisArrLen : thatArrLen;
 
                 long[] longer = thisArrLen > thatArrLen ? this.array : that.array;
-                //long[] shorter = thisArrLen <= thatArrLen ? this.array : that.array;
 
                 // not overlaping part
                 Contract.Assume (longer != null);

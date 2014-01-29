@@ -101,6 +101,7 @@ TestResults
 *.Cache
 ClientBin
 [Ss]tyle[Cc]op.*
+[Ss]tyle[Cc]op[Vv]iolations.xml
 ~$*
 *.dbmdl
 Generated_Code #added for RIA/Silverlight projects
