@@ -147,7 +147,6 @@ namespace DD.Enumerables {
                 value += this.Step;
                 --count;
             }
-            yield break;
         }
 
         public static implicit operator Range (Loop loop) {

@@ -166,10 +166,7 @@ namespace DD.Collections
             Contract.Ensures (Contract.Result<IEnumerable<Code>>().IsNot(null));
             Contract.Ensures (Contract.Result<IEnumerable<Code>>().Count() == compact.Count);
 
-            if (compact.IsNull() || compact.Count == 0) {
-                yield break;
-            }
-            else {
+            if (!compact.IsNull() && compact.Count != 0) {
                 foreach (int item in compact) {
                     yield return (Code)(item+start);
                 }

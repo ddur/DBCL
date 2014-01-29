@@ -52,7 +52,6 @@ namespace DD {
                 foreach ( var item in this.items ) {
                     yield return item;
                 }
-                yield break;
             }
         }
 

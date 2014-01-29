@@ -45,6 +45,7 @@
     <Compile Include="Collections\CodeSetBitsTest\Constructors.cs" />
     <Compile Include="Collections\CodeSetBitsTest\Members.cs" />
     <Compile Include="Collections\CodeSetFullTest\Constructors.cs" />
+    <Compile Include="Collections\CodeSetFullTest\Members.cs" />
     <Compile Include="Collections\CodeSetNullTest\Members.cs" />
     <Compile Include="Collections\CodeSetPairTest\Constructors.cs" />
     <Compile Include="Collections\CodeSetPairTest\Members.cs" />

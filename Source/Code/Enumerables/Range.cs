@@ -112,10 +112,9 @@ namespace DD.Enumerables {
             int final = this.First <= this.Last? this.Last : this.First;
 
             while ( start <= value && value <= final ) {
-                    yield return (int)value;
-                    value += this.Step;
+                yield return (int)value;
+                value += this.Step;
             }
-            yield break;
         }
 
         public static implicit operator Loop (Range range) {

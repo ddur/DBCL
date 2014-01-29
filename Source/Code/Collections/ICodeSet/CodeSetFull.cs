@@ -19,7 +19,7 @@ namespace DD.Collections {
         #region Ctor
 
         internal CodeSetFull (Code first, Code last) {
-            Contract.Requires<ArgumentException> ((first + ICodeSetService.PairCount) < last);
+            Contract.Requires<ArgumentException> ((first + ICodeSetService.PairCount) <= last);
 
             // Input -> Output
             Contract.Ensures (this.First == first);
@@ -50,7 +50,7 @@ namespace DD.Collections {
 
         [Pure] public override int Count {
             get {
-                return this.Length;
+                return 1 + this.final - this.start;
             }
         }
 
@@ -67,8 +67,8 @@ namespace DD.Collections {
         }
 
         [Pure] public override IEnumerator<Code> GetEnumerator () {
-            for ( Code code = this.start; code <= this.final; code++ ) {
-                yield return code;
+            for ( int code = this.start; code <= this.final; code++ ) {
+                yield return (Code)code;
             }
         }
 

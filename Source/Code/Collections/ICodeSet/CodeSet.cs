@@ -38,7 +38,7 @@ namespace DD.Collections
                 if (this.Count == 0) {
                     return 0;
                 } else {
-                    return (this.Last - this.First + 1);
+                    return (1 + this.Last - this.First);
                 }
             }
         }
