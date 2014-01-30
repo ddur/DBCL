@@ -25,6 +25,7 @@ namespace DD.Collections
         /// <param name="offset"></param>
         internal CodeSetBits (BitSetArray bits, int offset) {
             Contract.Requires<ArgumentNullException> (bits.IsNot(null));
+            Contract.Requires<ArgumentException> (bits.Count > 0);
             Contract.Requires<ArgumentException> (bits.Length <= Code.MaxCount);
             Contract.Requires<ArgumentException> (bits[0] == true);
             Contract.Requires<ArgumentException> (bits[bits.Length-1] == true);
@@ -101,6 +102,7 @@ namespace DD.Collections
 
                 // codes is same class?
                 if (codes is CodeSetBits) {
+                    // ICodeSet is ReadOnly => can share guts/internals
                     this.sorted = ((CodeSetBits)codes).sorted;
                 }
                 else {

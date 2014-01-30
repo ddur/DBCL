@@ -17,16 +17,43 @@ namespace DD.Collections {
 
         #region Ctor
 
+        // TODO Theory.Compact(BitSetArray, offset)
+        /// <summary>From Compact BitSetArray
+        /// </summary>
+        /// <param name="bits"></param>
+        /// <param name="offset"></param>
+        internal CodeSetPage (BitSetArray bits, int offset) {
+            Contract.Requires<ArgumentNullException> (bits.IsNot(null));
+            Contract.Requires<ArgumentException> (bits.Count > ICodeSetService.PairCount);
+            Contract.Requires<ArgumentException> (bits[0] == true);
+            Contract.Requires<ArgumentException> (bits[bits.Length-1] == true);
+            Contract.Requires<ArgumentException> (offset >= 0);
+            Contract.Requires<ArgumentException> (offset <= Code.MaxCount - bits.Length);
+            Contract.Requires<ArgumentException> (((Code)(bits.First+offset)).UnicodePlane == ((Code)(bits.Last+offset)).UnicodePlane);
+
+            // Input -> Output
+            Contract.Ensures (this.Count == bits.Count);
+            Contract.Ensures (this.First == offset);
+            Contract.Ensures (this.Last == offset + bits.Length - 1);
+
+            this.sorted = BitSetArray.Copy(bits);
+            Contract.Assume (this.sorted.Equals(bits));
+
+            this.start = offset;
+            this.final = offset + this.sorted.Length - 1;
+        }
+
         internal CodeSetPage (BitSetArray bits) {
             Contract.Requires<ArgumentNullException> (!bits.Is(null));
             Contract.Requires<ArgumentException> (bits.Count > ICodeSetService.PairCount);
             Contract.Requires<ArgumentOutOfRangeException> (bits.Last <= Code.MaxValue);
             Contract.Requires<ArgumentException> (((Code)bits.First).UnicodePlane == ((Code)bits.Last).UnicodePlane);
 
+            // Internal
             Contract.Ensures (this.sorted.IsNot (null));
 
             // Input -> Output
-            Contract.Ensures (this.sorted.Count == bits.Count);
+            Contract.Ensures (this.Count == bits.Count);
             Contract.Ensures (Contract.ForAll (bits, item => this[item]));
             Contract.Ensures (this.First.UnicodePlane == this.Last.UnicodePlane);
 
@@ -44,6 +71,7 @@ namespace DD.Collections {
             Contract.Requires<ArgumentException> (codes.Distinct().Count() > ICodeSetService.PairCount);
             Contract.Requires<ArgumentException> (codes.Min().UnicodePlane == codes.Max().UnicodePlane);
 
+            // Internal
             Contract.Ensures (this.sorted.IsNot (null));
 
             // Input -> Output
@@ -64,9 +92,15 @@ namespace DD.Collections {
                         this.final = code;
                 }
             }
-            this.sorted = new BitSetArray (1 + this.final - this.start);
-            foreach ( Code code in codes ) {
-                this.sorted.Set (code - this.start, true);
+            if (codes is CodeSetPage) {
+                // ICodeSet is ReadOnly => can share guts/internals
+                this.sorted = ((CodeSetPage)codes).sorted;
+            }
+            else {
+                this.sorted = new BitSetArray (1 + this.final - this.start);
+                foreach ( Code code in codes ) {
+                    this.sorted.Set (code - this.start, true);
+                }
             }
         }
 
@@ -134,7 +168,7 @@ namespace DD.Collections {
 
             // public
             Contract.Invariant (this.First.UnicodePlane == this.Last.UnicodePlane);
-            Contract.Invariant (this.Length <= char.MaxValue + 1);
+            Contract.Invariant (this.Length <= (char.MaxValue + 1));
             Contract.Invariant (this.Count > ICodeSetService.PairCount);
 
         }
