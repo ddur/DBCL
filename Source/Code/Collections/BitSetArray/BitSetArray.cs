@@ -130,14 +130,14 @@ namespace DD.Collections {
 
         public sealed class Enumerator : IEnumerator<int>, IEnumerator, IDisposable {
 
-            private BitSetArray enumerated;
-            private int version;
-            private bool doNext;
-            private int arrayLen;
+            private readonly BitSetArray enumerated;
+            private readonly int version;
+            private readonly int arrayLen;
             private int arrIndex;
             private int bitStart;
             private int bitIndex;
             private ulong bitItems;
+            private bool doNext;
             private bool invalid = true;
 
             public Enumerator (BitSetArray that) {
@@ -286,14 +286,14 @@ namespace DD.Collections {
 
         public sealed class EnumeratorComplement : IEnumerator<int>, IEnumerator, IDisposable {
 
-            private BitSetArray enumerated;
-            private int version;
-            private bool doNext;
-            private int arrayLen;
+            private readonly BitSetArray enumerated;
+            private readonly int version;
+            private readonly int arrayLen;
             private int arrIndex;
             private int bitStart;
             private int bitIndex;
             private ulong bitItems;
+            private bool doNext;
             private bool invalid = true;
 
             public EnumeratorComplement (BitSetArray that) {
@@ -452,14 +452,14 @@ namespace DD.Collections {
 
         public sealed class EnumeratorReverse : IEnumerator<int>, IEnumerator, IDisposable {
 
-            private BitSetArray enumerated;
-            private int version;
-            private bool doNext;
-            private int arrayLen;
+            private readonly BitSetArray enumerated;
+            private readonly int version;
+            private readonly int arrayLen;
             private int arrIndex;
             private int bitStart;
             private int bitIndex;
             private long bitItems;
+            private bool doNext;
             private bool invalid = true;
 
             public EnumeratorReverse (BitSetArray that) {

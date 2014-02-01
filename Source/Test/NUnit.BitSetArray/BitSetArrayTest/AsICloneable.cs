@@ -28,20 +28,11 @@ namespace DD.Collections.BitSetArrayTest.Interfaces {
 
         [Test, TestCaseSource ("SetValueSource")]
         public void Clone (BitSetArray me) {
-            BitSetArray clone = (BitSetArray)me.Clone ();
+            var clone = (BitSetArray)me.Clone ();
             Assert.That (clone.Count == me.Count);
             Assert.That (clone.Length == me.Length);
             Assert.That (clone.SetEquals (me));
         }
 
-        [TestFixtureSetUp]
-        public void Init () {
-            GC.Collect ();
-        }
-
-        [TestFixtureTearDown]
-        public void Dispose () {
-            GC.Collect ();
-        }
     }
 }

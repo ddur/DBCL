@@ -12,6 +12,7 @@ namespace DD.Collections.BitSetArrayTest.Interfaces {
 
     [TestFixture]
     public class AsIComparable {
+
         [Test]
         public void CompareTo () {
             BitSetArray bsA = new BitSetArray ();
