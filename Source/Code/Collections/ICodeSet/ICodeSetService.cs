@@ -247,7 +247,7 @@ namespace DD.Collections
         [Pure] public static int CompareTo (this ICodeSet self, ICodeSet that) {
             
             if (ICodeSetService.QuickSetEquals (self, that) == true) { return 0; }
-            Contract.Assume (!(self.IsNull() || that.IsNull()));
+            Contract.Assume (!(self.IsNull() && that.IsNull()));
 
             if (self.IsNull()) { return -1; }
             if (that.IsNull()) { return 1; }
