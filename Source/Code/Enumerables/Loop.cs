@@ -60,11 +60,10 @@ namespace DD.Enumerables {
 
         [ContractInvariantMethod]
         private void Invariant() {
+        	// TODO Theory
             Contract.Invariant (this.Times > 0);
-            long last = (long)this.First + (((long)this.Times-1) * (long)this.Step);
-            Contract.Invariant (last >= int.MinValue);
-            Contract.Invariant (last <= int.MaxValue);
-            Contract.Invariant (last == this.Last);
+            Contract.Invariant (((long)this.First + (((long)this.Times-1) * (long)this.Step)).InRange(int.MinValue, int.MaxValue));
+            Contract.Invariant (((long)this.First + (((long)this.Times-1) * (long)this.Step)) == this.Last);
         }
 
         /// <summary>Creates IEnumerable&lt;int&gt; Loop with "times" items 

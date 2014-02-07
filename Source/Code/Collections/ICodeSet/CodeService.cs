@@ -314,7 +314,7 @@ namespace DD.Collections
 	
 		/// <summary>Returns True if collection{int} Contains All (IsSupersetOf) specified characters.
 		/// <para>Characters are decoded from UTF16 encoding.</para>
-		/// <para>To treat characters as items, cast chrs to IEnumerable&lt;char&gt;.</para>
+		/// <para>To treat characters as items, cast string to IEnumerable&lt;char&gt;.</para>
 		/// </summary>
 		/// <param name="utf16">string</param>
 		/// <returns>bool</returns>

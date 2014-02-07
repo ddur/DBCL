@@ -79,7 +79,7 @@ namespace DD.Collections {
             Contract.Ensures (this.sorted.Count == codes.Distinct().Count());
             Contract.Ensures (this.First.UnicodePlane == this.Last.UnicodePlane);
 
-            ICodeSet iCodeSet = codes as ICodeSet;
+            var iCodeSet = codes as ICodeSet;
             if (iCodeSet.IsNot(null)) {
                 this.start = iCodeSet.First;
                 this.final = iCodeSet.Last;

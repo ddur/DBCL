@@ -309,11 +309,12 @@ namespace DD.Collections
 
         /// <summary>Equals check in constant time (no iterations)
         /// </summary>
-        /// <param name="codes">CodeSet</param>
+        /// <param name="self">CodeSet</param>
         /// <returns>true/false/maybe</returns>
         [Pure]
         private static bool? QuickSetEquals(this ICodeSet self, ICodeSet that) {
-            // ATTN! '==' operator can be overloaded to point indirectly here so using "CodeSet == CodeSet" here will create endless loop
+            // ATTN! '==' operator can be overloaded to point indirectly here 
+            // so using "CodeSet == CodeSet" here will create endless loop
 
             // Compare .Count(s)
             if ( (self.IsNull () || self.Count == 0) && (that.IsNull () || that.Count == 0) ) {

@@ -166,7 +166,6 @@ namespace DD.Collections
     
             private CodeSetContractClass() {}
     
-            //[ContractOption("contract", "inheritance", false)]
             [Pure] public override int Count {
                 get {
                     Contract.Ensures (Contract.Result<int> () == ((IEnumerable<Code>)this).Count ());

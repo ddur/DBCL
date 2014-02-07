@@ -64,7 +64,8 @@ namespace DD.Collections
             Contract.Ensures (OutputDictionary.Is(null) || OutputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
 
             //return From (chars.Cast<Code>()); //InvalidCastException
-            List<Code> codeList = new List<Code>();
+            //return From (chars.OfType<Code>()); //ArgumentException
+            var codeList = new List<Code>();
             foreach (Code code in chars) {
                 codeList.Add(code);
             }
@@ -163,7 +164,7 @@ namespace DD.Collections
 
             #region List
             else if (bitSet.Count < ICodeSetService.ListMaxCount) {
-                // List space less than Bits/4 space (bitSet.Length/8)*4
+                // List space less than 1/4 Bits space (bitSet.Length/8)*4
                 if ((bitSet.Count * sizeof(int)) < (bitSet.Length/2)) {
                     return new CodeSetList (bitSet);
                 }
@@ -205,7 +206,7 @@ namespace DD.Collections
                 // possible more than 3/4 space saving
                 
                 // get complement and offset
-                BitSetArray bitsComplement = new BitSetArray (bitSet.Length);
+                var bitsComplement = new BitSetArray (bitSet.Length);
                 int offset = bitSet.Complement.First();
                 foreach (var item in bitSet.Complement) {
                     bitsComplement.Set (item - offset);
@@ -214,7 +215,7 @@ namespace DD.Collections
                 if ((bitsComplement.Length < (bitSet.Length / 4)) ||
                     (bitsComplement.Count <= ICodeSetService.ListMaxCount)) {
                     // Can save at least 3/4 of space
-                    CodeSetFull fullSet = new CodeSetFull(bitSet.First, bitSet.Last);
+                    var fullSet = new CodeSetFull(bitSet.First, bitSet.Last);
                     ICodeSet diffSet = OptimalPartOne (new CodeSetBits (ICodeSetService.FromCompact (bitsComplement, offset)));
                     if (diffSet is CodeSetBits) diffSet = OptimalPartTwo (diffSet as CodeSetBits);
                     return new CodeSetDiff (fullSet, diffSet);
@@ -272,7 +273,7 @@ namespace DD.Collections
             }
             if (maxLength == int.MinValue) { return Empty; }
             ++maxLength;
-            BitSetArray bits = new BitSetArray(maxLength);
+            var bits = new BitSetArray(maxLength);
             // TEST: foreach union takes same time as time to create another BitSetArray b (and then a.Or(b))
             foreach (ICodeSet item in sets) {
                 if (item.Is(null) || item.IsEmpty()) { continue; }
@@ -327,8 +328,8 @@ namespace DD.Collections
             Contract.Assert (maxLength != int.MinValue);
             ++maxLength;
 
-            BitSetArray a = new BitSetArray (maxLength);
-            BitSetArray b = new BitSetArray (maxLength);
+            var a = new BitSetArray (maxLength);
+            var b = new BitSetArray (maxLength);
             bool first = true;
             foreach (ICodeSet codeSet in sets) {
                 Contract.Assert (codeSet.Count != 0);
@@ -391,8 +392,8 @@ namespace DD.Collections
                 if (codeSet.Last > maxLength) { maxLength = codeSet.Last; }
             }
             ++maxLength;
-            BitSetArray a = new BitSetArray (maxLength);
-            BitSetArray b = new BitSetArray (maxLength);
+            var a = new BitSetArray (maxLength);
+            var b = new BitSetArray (maxLength);
             bool first = true;
             foreach (ICodeSet codeSet in sets) {
                 if (first) {
@@ -454,7 +455,7 @@ namespace DD.Collections
                 if (codeSet.Last > maxLength) { maxLength = codeSet.Last; }
             }
             ++maxLength;
-            BitSetArray bits = new BitSetArray (maxLength);
+            var bits = new BitSetArray (maxLength);
             bool first = true;
             // TEST: foreach item difference takes same time as time to create BitSetArray b (and then a.Not(b))
             foreach (ICodeSet codeSet in sets) {
