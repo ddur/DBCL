@@ -83,28 +83,17 @@ namespace DD.Collections
 
         #region IEquatable<Code>
         
-        public bool Equals(Code that)
+        [Pure] public bool Equals(Code that)
         {
             return this.Value == that.Value;
         }
-        
-        public static bool operator ==(Code lhs, Code rhs)
-        {
-            return lhs.Equals(rhs);
-        }
-        
-        public static bool operator !=(Code lhs, Code rhs)
-        {
-            return !(lhs == rhs);
-        }
-
         
         #endregion
 
         #region IEqualityComparer<Code>
         
         [Pure] public bool Equals(Code a, Code b) {
-            return a == b;
+            return a.Value == b.Value;
         }
 
         [Pure] public int GetHashCode(Code c) {
@@ -128,7 +117,7 @@ namespace DD.Collections
         #region ICodeSet Interface
 
         [Pure] bool ICodeSet.this [Code code] {
-            get { return this == code; }
+            get { return this.Value == code.Value; }
         }
 
         [Pure] int ICodeSet.Length {
@@ -166,13 +155,13 @@ namespace DD.Collections
         //[SuppressMessage("Microsoft.Contracts", "CC1033", Justification = "Contract inheritance option disabled. Ensures is just stupid")]
         [Pure] 
         bool ICollection<Code>.Contains(Code code) {
-            return this == code;
+            return this.Value == code.Value;
         }
 
         /// <summary>Copies members from this collection into Code[]
         /// </summary>
         /// <param name="array"></param>
-        /// <param name="arrIndex"></param>
+        /// <param name="arrayIndex"></param>
         [SuppressMessage("Microsoft.Contracts", "CC1033", Justification = "Not same exceptions")]
         [Pure] 
         void ICollection<Code>.CopyTo(Code[] array, int arrayIndex) {
@@ -195,6 +184,7 @@ namespace DD.Collections
 
         /// <summary>Explicit interface implementation.<para>Operations not supported on Read-Only Collection</para>
         /// </summary>
+        /// <param name="code"></param>
         [Pure]
         bool ICollection<Code>.Remove(Code code) { throw new NotSupportedException(); }
         
@@ -295,14 +285,6 @@ namespace DD.Collections
             return "\\x" + Value.ToString("X");
         }
 
-        [Pure]
-		public string Encode ()
-		{
-		    if (this.HasCharValue) { return this.IsSurrogate? "" + (char)0xFFFD : "" + (char)this; }
-			int v = Value - 0x10000;
-			return "" + (char)((v>>10)|0xD800) + (char)((v&0x3FF)|0xDC00);
-		}
-
         #endregion
 
         #region Properties
@@ -321,62 +303,12 @@ namespace DD.Collections
             }
         }
 
-        [Pure]
-        public bool HasCharValue {
-            get {
-                Contract.Ensures (Contract.Result<bool> () == (Value.InRange (0, 0xFFFF)));
+		#endregion
 
-    			return Value.HasCharValue();
-            }
-        }
+		#region Operators
 
-        [Pure]
-        public bool IsSurrogate {
-            get {
-                Contract.Ensures (Contract.Result<bool> () == (Value.InRange (0xD800, 0xDFFF)));
-
-    		    return (this.HasCharValue && char.IsSurrogate((char)Value));
-            }
-        }
-
-        [Pure]
-        public bool IsHighSurrogate {
-            get {
-                Contract.Ensures (Contract.Result<bool> () == (Value.InRange (0xD800, 0xDBFF)));
-
-    		    return (this.HasCharValue && char.IsHighSurrogate((char)Value));
-            }
-        }
-
-        [Pure]
-        public bool IsLowSurrogate {
-            get {
-    		    Contract.Ensures (Contract.Result<bool>() == (( 0xDC00 <= Value ) && ( Value <= 0xDFFF )));
-    
-    		    return (this.HasCharValue && char.IsLowSurrogate((char)Value));
-            }
-        }
-
-        [Pure]
-        public bool IsPermanentlyUndefined {
-            get {
-    		    Contract.Ensures (Contract.Result<bool>() == 
-                                  (Value.InRange(0xFDD0, 0xFDDF)) || 
-                                  (Value > 0xFF && ((Value&0xFFFF) == 0xFFFE || (Value&0xFFFF) == 0xFFFF))
-                                 );
-                return (Value.InRange(0xFDD0, 0xFDDF) ||
-                        (Value > 0xFF &&
-                         ((Value&0xFFFF) == 0xFFFE || (Value&0xFFFF) == 0xFFFF)));
-            }
-        }
-        
-        [Pure]
-        public int UnicodePlane {
-            get {
-                return Value >> 16;
-            }
-        }
-
+		#region Equality Operators
+		// Cast operator will redirect to int equality operators
 		#endregion
 
         #region Cast Operators
@@ -390,6 +322,10 @@ namespace DD.Collections
         public static implicit operator Code (byte value) {
             return new Code(value);
         }
+		[CLSCompliantAttribute(false)]
+        public static implicit operator Code (ushort value) {
+            return new Code(value);
+        }
         public static implicit operator Code (char value) {
             return new Code(value);
         }
@@ -399,7 +335,13 @@ namespace DD.Collections
             return new Code(value);
         }
 
-        #endregion
+		#endregion
+
+		#region Comparators
+		// Cast operator will redirect to int comparators
+		#endregion
+
+		#endregion
         
     }
 }

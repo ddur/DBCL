@@ -35,8 +35,8 @@ namespace DD.Collections {
 
         #region Fields
 
-        private readonly Code start;
-        private readonly Code final;
+        private readonly int start;
+        private readonly int final;
 
         #endregion
 
@@ -56,19 +56,19 @@ namespace DD.Collections {
 
         [Pure] public override Code First {
             get {
-                return this.start;
+				return (Code)this.start;
             }
         }
 
         [Pure] public override Code Last {
             get {
-                return this.final;
+                return (Code)this.final;
             }
         }
 
         [Pure] public override IEnumerator<Code> GetEnumerator () {
-            for ( int code = this.start; code <= this.final; code++ ) {
-                yield return (Code)code;
+            for ( int item = this.start; item <= this.final; item++ ) {
+                yield return (Code)item;
             }
         }
 

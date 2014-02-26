@@ -49,8 +49,8 @@ namespace DD.Collections.CodeTest
         public void EncodeValidCode(int code) 
         {
             Code C = code;
-            if (C.HasCharValue) {
-                if (C.IsSurrogate) {
+			if (C.HasCharValue()) {
+				if (C.IsSurrogate()) {
                     Assert.That(code.Encode() == "" + (char)0xFFFD);
                 }
                 else {
@@ -69,11 +69,11 @@ namespace DD.Collections.CodeTest
             Assert.DoesNotThrow ( delegate {codeList.Encode();});
             codeList = new List<Code>();
             Assert.DoesNotThrow ( delegate {codeList.Encode();});
-            foreach (Code code in ValidCode) { if(!code.IsSurrogate) codeList.Add(code); }
+			foreach (Code code in ValidCode) { if(!code.IsSurrogate()) codeList.Add(code); }
             string result = codeList.Encode();
             Assert.True (codeList.SequenceEqual(result.Decode()));
             codeList.Clear();
-            foreach (Code code in ValidCode) { codeList.Add(code.IsSurrogate?(Code)0xFFFD:code); }
+			foreach (Code code in ValidCode) { codeList.Add(code.IsSurrogate()?(Code)0xFFFD:code); }
             result = codeList.Encode();
             Assert.True (codeList.SequenceEqual(result.Decode()));
             codeList.Clear();

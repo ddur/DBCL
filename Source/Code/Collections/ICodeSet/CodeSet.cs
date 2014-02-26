@@ -168,6 +168,7 @@ namespace DD.Collections
     
             [Pure] public override int Count {
                 get {
+					Contract.Ensures (Contract.Result<int> ().IsCodesCount());
                     Contract.Ensures (Contract.Result<int> () == ((IEnumerable<Code>)this).Count ());
                     return default(int);
                 }

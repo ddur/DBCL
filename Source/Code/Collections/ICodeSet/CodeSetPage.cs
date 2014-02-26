@@ -29,7 +29,7 @@ namespace DD.Collections {
             Contract.Requires<ArgumentException> (bits[bits.Length-1] == true);
             Contract.Requires<ArgumentException> (offset >= 0);
             Contract.Requires<ArgumentException> (offset <= Code.MaxCount - bits.Length);
-            Contract.Requires<ArgumentException> (((Code)(bits.First+offset)).UnicodePlane == ((Code)(bits.Last+offset)).UnicodePlane);
+			Contract.Requires<ArgumentException> (((Code)(bits.First+offset)).UnicodePlane() == ((Code)(bits.Last+offset)).UnicodePlane());
 
             // Input -> Output
             Contract.Ensures (this.Count == bits.Count);
@@ -47,7 +47,7 @@ namespace DD.Collections {
             Contract.Requires<ArgumentNullException> (!bits.Is(null));
             Contract.Requires<ArgumentException> (bits.Count > ICodeSetService.PairCount);
             Contract.Requires<ArgumentOutOfRangeException> (bits.Last <= Code.MaxValue);
-            Contract.Requires<ArgumentException> (((Code)bits.First).UnicodePlane == ((Code)bits.Last).UnicodePlane);
+            Contract.Requires<ArgumentException> (((Code)bits.First).UnicodePlane() == ((Code)bits.Last).UnicodePlane());
 
             // Internal
             Contract.Ensures (this.sorted.IsNot (null));
@@ -55,7 +55,7 @@ namespace DD.Collections {
             // Input -> Output
             Contract.Ensures (this.Count == bits.Count);
             Contract.Ensures (Contract.ForAll (bits, item => this[item]));
-            Contract.Ensures (this.First.UnicodePlane == this.Last.UnicodePlane);
+            Contract.Ensures (this.First.UnicodePlane() == this.Last.UnicodePlane());
 
             this.start = (int)bits.First;
             this.final = (int)bits.Last;
@@ -69,7 +69,7 @@ namespace DD.Collections {
 
             Contract.Requires<ArgumentNullException> (!codes.Is(null));
             Contract.Requires<ArgumentException> (codes.Distinct().Count() > ICodeSetService.PairCount);
-            Contract.Requires<ArgumentException> (codes.Min().UnicodePlane == codes.Max().UnicodePlane);
+            Contract.Requires<ArgumentException> (codes.Min().UnicodePlane() == codes.Max().UnicodePlane());
 
             // Internal
             Contract.Ensures (this.sorted.IsNot (null));
@@ -77,7 +77,7 @@ namespace DD.Collections {
             // Input -> Output
             Contract.Ensures (Contract.ForAll (codes, item => this[item]));
             Contract.Ensures (this.sorted.Count == codes.Distinct().Count());
-            Contract.Ensures (this.First.UnicodePlane == this.Last.UnicodePlane);
+            Contract.Ensures (this.First.UnicodePlane() == this.Last.UnicodePlane());
 
             var iCodeSet = codes as ICodeSet;
             if (iCodeSet.IsNot(null)) {
@@ -167,7 +167,7 @@ namespace DD.Collections {
             Contract.Invariant (this.Last == this.final);
 
             // public
-            Contract.Invariant (this.First.UnicodePlane == this.Last.UnicodePlane);
+            Contract.Invariant (this.First.UnicodePlane() == this.Last.UnicodePlane());
             Contract.Invariant (this.Length <= (char.MaxValue + 1));
             Contract.Invariant (this.Count > ICodeSetService.PairCount);
 

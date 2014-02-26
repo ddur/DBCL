@@ -51,8 +51,8 @@ namespace DD.Collections.CodeTest
 	    [Test, TestCaseSource("ValidCode")]
 	    public void ValidIntIsCodeCount(int code)
 	    {
-	        Assert.True(code.IsCodeCount());
-	        Assert.True((code+1).IsCodeCount());
+	        Assert.True(code.IsCodesCount());
+	        Assert.True((code+1).IsCodesCount());
 	        
 	    }
 	    
@@ -60,9 +60,9 @@ namespace DD.Collections.CodeTest
 	    public void InvalidIntIsNotCodeCount(int code)
 	    {
 	        if (code == Code.MaxValue + 1)
-    	        Assert.True (code.IsCodeCount());
+    	        Assert.True (code.IsCodesCount());
 	        else 
-	           Assert.False (code.IsCodeCount());
+	           Assert.False (code.IsCodesCount());
 	        
 	    }
 	    

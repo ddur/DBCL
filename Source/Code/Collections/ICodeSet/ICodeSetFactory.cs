@@ -180,10 +180,10 @@ namespace DD.Collections
 
             Contract.Ensures (!(Contract.Result<ICodeSet>() is CodeSetBits));
 
-            if (bitSet.First.UnicodePlane == bitSet.Last.UnicodePlane) {
+            if (bitSet.First.UnicodePlane() == bitSet.Last.UnicodePlane()) {
                 return new CodeSetPage(bitSet);
             } else {
-                Contract.Assert(bitSet.First.UnicodePlane != bitSet.Last.UnicodePlane);
+                Contract.Assert(bitSet.First.UnicodePlane() != bitSet.Last.UnicodePlane());
                 return new CodeSetWide(bitSet);
             }
         }

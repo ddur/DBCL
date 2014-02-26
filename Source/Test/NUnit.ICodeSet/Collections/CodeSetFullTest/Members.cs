@@ -19,64 +19,64 @@ namespace DD.Collections.CodeSetFullTest
         [Test]
         public void AllMembers()
         {
-            CodeSetFull csf;
+            CodeSetFull codeSetFull;
 
-            csf = new CodeSetFull(1, 7);
+            codeSetFull = new CodeSetFull(1, 7);
 
             // enumerator
-            Assert.True (csf.SequenceEqual(new Code[7] {1,2,3,4,5,6,7}));
+            Assert.True (codeSetFull.SequenceEqual(new Code[7] {1,2,3,4,5,6,7}));
 
             // count first last length
-            Assert.True (csf.Count == 7);
-            Assert.True (csf.First == 1);
-            Assert.True (csf.Last == 7);
-            Assert.True (csf.Count == csf.Length);
-            Assert.True (csf.Length == 1 + csf.Last - csf.First);
+            Assert.True (codeSetFull.Count == 7);
+            Assert.True (codeSetFull.First == 1);
+            Assert.True (codeSetFull.Last == 7);
+            Assert.True (codeSetFull.Count == codeSetFull.Length);
+            Assert.True (codeSetFull.Length == 1 + codeSetFull.Last - codeSetFull.First);
 
             // indexer
-            Assert.True (csf[1]);
-            Assert.True (csf[7]);
-            Assert.True (csf[5]);
-            Assert.False (csf[9]);
-            Assert.False (csf[Code.MinValue]);
-            Assert.False (csf[Code.MaxValue]);
+            Assert.True (codeSetFull[1]);
+            Assert.True (codeSetFull[7]);
+            Assert.True (codeSetFull[5]);
+            Assert.False (codeSetFull[9]);
+            Assert.False (codeSetFull[Code.MinValue]);
+            Assert.False (codeSetFull[Code.MaxValue]);
 
             
-            csf = new CodeSetFull(Code.MinValue, Code.MaxValue);
+            codeSetFull = new CodeSetFull(Code.MinValue, Code.MaxValue);
 
             // enumerator -> SequenceEqual
             Range range = Code.MinValue.To(Code.MaxValue);
-            Assert.True (csf.Select(item => (int)item).SequenceEqual(range));
+			Assert.True (codeSetFull.Select(item => (int)(item)).SequenceEqual(range));
 
             // getEnumerator
-            var eF = csf.GetEnumerator();
+            var codeSetFullEnumerator = codeSetFull.GetEnumerator();
             foreach (int code in range) {
-                if (eF.MoveNext() && (Code)code == eF.Current) {
+                if (codeSetFullEnumerator.MoveNext() && (Code)code == codeSetFullEnumerator.Current) {
                     // ok
                 }
                 else {
                     Assert.True (false);
                 }
             }
-            Assert.False (eF.MoveNext());
+            Assert.False (codeSetFullEnumerator.MoveNext());
 
             // count first last length
-            Assert.True (csf.Count == Code.MaxCount);
-            Assert.True (csf.First == Code.MinValue);
-            Assert.True (csf.Last == Code.MaxValue);
-            Assert.True (csf.Length == 1 + csf.Last - csf.First);
+            Assert.True (codeSetFull.Count == Code.MaxCount);
+            Assert.True (codeSetFull.First == Code.MinValue);
+            Assert.True (codeSetFull.Last == Code.MaxValue);
+            Assert.True (codeSetFull.Length == 1 + codeSetFull.Last - codeSetFull.First);
 
             // indexer
-            Assert.True (csf[Code.MinValue]);
-            Assert.True (csf[Code.MaxValue]);
+            Assert.True (codeSetFull[Code.MinValue]);
+            Assert.True (codeSetFull[Code.MaxValue]);
 
-            Assert.True (csf[0]);
-            Assert.True (csf[1114111]);
+            Assert.True (codeSetFull[0]);
+            Assert.True (codeSetFull[1114111]);
             
-            Assert.True (csf[1]);
-            Assert.True (csf[7]);
-            Assert.True (csf[5]);
-            Assert.True (csf[9]);
+            Assert.True (codeSetFull[1]);
+            Assert.True (codeSetFull[7]);
+            Assert.True (codeSetFull[5]);
+            Assert.True (codeSetFull[9]);
             
         }
     }

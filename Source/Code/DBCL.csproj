@@ -134,7 +134,6 @@
     <Compile Include="Collections\ICodeSet\CodeEncoding.cs" />
     <Compile Include="Collections\ICodeSet\CodeExtended.cs" />
     <Compile Include="Collections\ICodeSet\CodeExtends.cs" />
-    <Compile Include="Collections\ICodeSet\CodeService.cs" />
     <Compile Include="Collections\ICodeSet\CodeSet.cs" />
     <Compile Include="Collections\ICodeSet\CodeSetBits.cs" />
     <Compile Include="Collections\ICodeSet\CodeSetDiff.cs" />

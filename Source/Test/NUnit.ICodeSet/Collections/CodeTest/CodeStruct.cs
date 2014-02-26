@@ -89,7 +89,7 @@ namespace DD.Collections.CodeTest
 			if (code.InRange(char.MinValue, char.MaxValue)) {
 
 				Assert.True (chrs.Length == 1);
-				if (C.IsSurrogate) {
+				if (C.IsSurrogate()) {
 					Assert.False (char.IsSurrogate(chrs[0]));
 					Assert.True (chrs[0] == 0xFFFD);
 				}
@@ -136,15 +136,15 @@ namespace DD.Collections.CodeTest
 		[Test, TestCaseSource("ValidCode")]
 		public void IsHighLowSurrogate (int code) {
 			Code C = code;
-			if (C.HasCharValue) {
-				Assert.True (C.IsSurrogate == char.IsSurrogate((char)C));
-				Assert.True (C.IsLowSurrogate == char.IsLowSurrogate((char)C));
-				Assert.True (C.IsHighSurrogate == char.IsHighSurrogate((char)C));
+			if (C.HasCharValue()) {
+				Assert.True (C.IsSurrogate() == char.IsSurrogate((char)C));
+				Assert.True (C.IsLowSurrogate() == char.IsLowSurrogate((char)C));
+				Assert.True (C.IsHighSurrogate() == char.IsHighSurrogate((char)C));
 			}
 			else {
-				Assert.False (C.IsSurrogate);
-				Assert.False (C.IsLowSurrogate);
-				Assert.False (C.IsHighSurrogate);
+				Assert.False (C.IsSurrogate());
+				Assert.False (C.IsLowSurrogate());
+				Assert.False (C.IsHighSurrogate());
 			}
 		}
 
@@ -152,20 +152,20 @@ namespace DD.Collections.CodeTest
 		public void IsPremanentlyUndefined (int code) {
 			Code C = code;
 			if (code.InRange (0xFDD0, 0xFDDF)) {
-				Assert.True (C.IsPermanentlyUndefined);
+				Assert.True (C.IsPermanentlyUndefined());
 			}
 			else if ((code&0xFFFF) == 0xFFFF | (code&0xFFFF) == 0xFFFE) {
-				Assert.True (C.IsPermanentlyUndefined);
+				Assert.True (C.IsPermanentlyUndefined());
 			}
 			else {
-				Assert.False (C.IsPermanentlyUndefined);
+				Assert.False (C.IsPermanentlyUndefined());
 			}
 		}
 
 		[Test, TestCaseSource("ValidCode")]
 		public void UnicodePlane (int code) {
 			Code C = code;
-			Assert.True (C.UnicodePlane == (code >> 16));
+			Assert.True (C.UnicodePlane() == (code >> 16));
 		}
 
 		[Test, TestCaseSource("ValidCode")]
@@ -206,7 +206,7 @@ namespace DD.Collections.CodeTest
 		[Test, TestCaseSource("ValidCode")]
 		public void IsXml10Char (int code) {
 			Code C = code;
-			if (C.IsSurrogate||C==0xFFFE||C==0xFFFF) {
+			if (C.IsSurrogate()||C==0xFFFE||C==0xFFFF) {
 				Assert.False (C.IsXml10Char());
 			}
 			else if (C<0x20 && C!=0x9 && C!=0xA && C!=0xD ) {
@@ -221,7 +221,7 @@ namespace DD.Collections.CodeTest
 		[Test, TestCaseSource("ValidCode")]
 		public void IsXml10Discouraged (int code) {
 			Code C = code;
-			if (C.IsPermanentlyUndefined) {
+			if (C.IsPermanentlyUndefined()) {
 				Assert.True (C.IsXml10Discouraged());
 			}
    			// is in range [127:159] (control character) except 0x85-NEL (control character)
@@ -236,7 +236,7 @@ namespace DD.Collections.CodeTest
 		[Test, TestCaseSource("ValidCode")]
 		public void IsXml11Char (int code) {
 			Code C = code;
-			if (C.IsSurrogate||C==0xFFFE||C==0xFFFF) {
+			if (C.IsSurrogate()||C==0xFFFE||C==0xFFFF) {
 				Assert.False (C.IsXml11Char());
 			}
 			else if (C==0) {
@@ -250,7 +250,7 @@ namespace DD.Collections.CodeTest
 		[Test, TestCaseSource("ValidCode")]
 		public void IsXml11Restricted (int code) {
 			Code C = code;
-			if (C.HasCharValue && char.IsControl((char)C) && C!=0x0 && C!=0x9 && C!=0xA && C!=0xD && C!=0x85) {
+			if (C.HasCharValue() && char.IsControl((char)C) && C!=0x0 && C!=0x9 && C!=0xA && C!=0xD && C!=0x85) {
 				Assert.True (C.IsXml11Restricted());
 			}
 			else {
@@ -261,7 +261,7 @@ namespace DD.Collections.CodeTest
 		[Test, TestCaseSource("ValidCode")]
 		public void IsXml11Discouraged (int code) {
 			Code C = code;
-			if (C.IsPermanentlyUndefined || C.IsXml11Restricted()) {
+			if (C.IsPermanentlyUndefined() || C.IsXml11Restricted()) {
 				Assert.True (C.IsXml11Discouraged());
 			}
 			else {
