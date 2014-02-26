@@ -303,25 +303,6 @@ namespace DD.Collections
 			return "" + (char)((v>>10)|0xD800) + (char)((v&0x3FF)|0xDC00);
 		}
 
-		[Pure]
-		public string ToXmlEntity() {
-		    if ((Value&0xFF) == Value) {
-		        switch (Value) { // XML predefined entities
-		            case ((int)'>'):
-    				    return "&gt;";
-    				case ((int)'<'):
-    					return "&lt;";
-    	            case ((int)'&'):
-    					return "&amp;";
-                    case ((int)'\''):
-    					return "&apos;";
-                    case ((int)'"'):
-    					return "&quot;";
-    			}
-		    }
-			return "&#x" + Value.ToString("X") + ";";
-		}
-
         #endregion
 
         #region Properties
@@ -396,59 +377,7 @@ namespace DD.Collections
             }
         }
 
-        /// <summary>http://www.w3.org/TR/2008/REC-xml-20081126/#charsets</summary>
-        [Pure]
-        public bool IsXml10Char {
-            get {
-                return (Value == 0x9 || Value == 0xA || Value == 0xD ||   
-                         Value.InRange(0x20, 0xD7FF) ||
-                         Value.InRange(0xE000, 0xFFFD) || 
-                         Value.InRange(0x10000, 0x10FFFF));
-            }
-        }
-        
-        /// <summary>http://www.w3.org/TR/2008/REC-xml-20081126/#charsets</summary>
-        [Pure]
-        public bool IsXml10Discouraged {
-            get {
-                return ( Value.InRange(0x7F, 0x84) ||
-                         Value.InRange(0x86, 0x9F) ||
-                         this.IsPermanentlyUndefined
-                        );
-            }
-        }
-        
-        /// <summary>http://www.w3.org/TR/2006/REC-xml11-20060816/#charsets</summary>
-        [Pure]
-        public bool IsXml11Char {
-            get {
-                return ((Value.InRange(0x1, 0xD7FF) ||
-                         Value.InRange(0xE000, 0xFFFD) || 
-                         Value.InRange(0x10000, 0x10FFFF)));
-            }
-        }
-        
-        /// <summary>http://www.w3.org/TR/2006/REC-xml11-20060816/#charsets</summary>
-        [Pure]
-        public bool IsXml11Restricted {
-            get {
-                return (Value.InRange(0x1, 0x8) || 
-                        Value.InRange(0xB, 0xC) || 
-                        Value.InRange(0xE, 0x1F) || 
-                        Value.InRange(0x7F, 0x84) || 
-                        Value.InRange(0x86, 0x9F));
-            }
-        }
-
-        /// <summary>http://www.w3.org/TR/2006/REC-xml11-20060816/#charsets</summary>
-        [Pure]
-        public bool IsXml11Discouraged {
-            get {
-                return (this.IsPermanentlyUndefined || this.IsXml11Restricted);
-            }
-        }
-
-        #endregion
+		#endregion
 
         #region Cast Operators
         
