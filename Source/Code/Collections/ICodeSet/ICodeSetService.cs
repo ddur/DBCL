@@ -30,7 +30,7 @@ namespace DD.Collections
 
         public const int UnitCount = 1;
         public const int PairCount = 2;
-        public const int ListMaxCount = 16; // NOTE log(16) == 4 tests, check speed on 32 and 64
+        public const int ListMaxCount = 16; // NOTE: log(16) == 4 tests, TODO: check speed on 32 and 64
 
         public const int NullStart = -1;
         public const int NullFinal = -2;
@@ -54,10 +54,10 @@ namespace DD.Collections
 
             if (self.IsNull() || self.Count == 0) return new BitSetArray();
             
-            CodeSetBits bits = self as CodeSetBits;
+            var bits = self as CodeSetBits;
             if (bits.IsNot(null)) return bits.ToBitSetArray();
 
-            BitSetArray ret = new BitSetArray (self.Last+1);
+            var ret = new BitSetArray (self.Last+1);
             foreach (int code in self) {
                 ret.Set (code, true);
             }
@@ -107,10 +107,10 @@ namespace DD.Collections
 
             if (self.IsNull() || self.Count == 0) return new BitSetArray();
             
-            CodeSetBits bits = self as CodeSetBits;
+            var bits = self as CodeSetBits;
             if (bits.IsNot(null)) return bits.ToCompact();
             
-            BitSetArray ret = new BitSetArray (self.Length);
+            var ret = new BitSetArray (self.Length);
             foreach (int code in self) {
                 ret.Set (code-self.First, true);
             }
@@ -144,7 +144,7 @@ namespace DD.Collections
             if (self.IsNull() || self.Count == 0) return new BitSetArray();
             if (range.IsNull() || range.Length == 0) return new BitSetArray();
 
-            BitSetArray ret = new BitSetArray (range.Length);
+            var ret = new BitSetArray (range.Length);
 
             if (!self.RangeOverlaps(range)) return ret;
             
@@ -177,21 +177,6 @@ namespace DD.Collections
 
         #region ICodeSet Relations Service
 
-        /// <summary>True if self.Equals(that)
-        /// <para>ICodeSet is sorted/ordered set, Equals == SetEquals == SequenceEqual</para>
-        /// </summary>
-        /// <param name="self"></param>
-        /// <param name="that"></param>
-        /// <returns></returns>
-        [Pure] public static bool Equals (this ICodeSet self, ICodeSet that) {
-            switch (ICodeSetService.QuickSetEquals(self, that)) {
-                    case false: return false;
-                    case true: return true;
-                    default: break;
-            }
-            return self.SequenceEqual(that);
-        }
-        
         [Pure] public static bool Overlaps (this ICodeSet self, ICodeSet that) {
 
             // TODO? Check if both or one is of CodeBits type and then use that type operations
@@ -212,31 +197,37 @@ namespace DD.Collections
             Code overlapLast = self.Last <= that.Last ? self.Last : that.Last;
             Contract.Assert (overlapFirst <= overlapLast);
 
-            ICodeSet small = self.Count <= that.Count ? self : that;
-            ICodeSet large = self.Count > that.Count ? self : that;
+            ICodeSet smaller = self.Count <= that.Count ? self : that;
+            ICodeSet larger = self.Count > that.Count ? self : that;
 
-            foreach (var code in small) {
+            foreach (var code in smaller) {
                 if (code < overlapFirst) continue;
                 if (code > overlapLast) break;
-                if (large[code]) return true;
+                if (larger[code]) return true;
             }
             return false;
         }
         
         [Pure] public static bool IsSubsetOf (this ICodeSet self, ICodeSet that) {
-            return ICodeSetService.IsRangeSubsetOf (self, that);
+            return
+				self.IsRangeSubsetOf(that) && // null/empty excluded
+				self.Count <= that.Count &&
+				self.All(item => that[item]);
         }
         
         [Pure] public static bool IsProperSubsetOf (this ICodeSet self, ICodeSet that) {
-            return ICodeSetService.IsRangeSubsetOf (self, that) && self.Count < that.Count;
+            return 
+				self.IsRangeSubsetOf(that) && // null/empty excluded 
+				self.Count < that.Count &&
+				self.All(item => that[item]);
         }
 
         [Pure] public static bool IsSupersetOf (this ICodeSet self, ICodeSet that) {
-            return ICodeSetService.IsSubsetOf(that, self);
+			return that.IsSubsetOf(self);
         }
         
         [Pure] public static bool IsProperSupersetOf (this ICodeSet self, ICodeSet that) {
-            return ICodeSetService.IsProperSubsetOf(that, self);
+			return that.IsProperSubsetOf(self);
         }
         
         /// <summary>Compared as two BigIntegers (BitSetArray)
@@ -246,7 +237,7 @@ namespace DD.Collections
         /// <returns></returns>
         [Pure] public static int CompareTo (this ICodeSet self, ICodeSet that) {
             
-            if (ICodeSetService.QuickSetEquals (self, that) == true) { return 0; }
+            if (self.QuickSetEquals(that) == true) { return 0; }
             Contract.Assume (!(self.IsNull() && that.IsNull()));
 
             if (self.IsNull()) { return -1; }
@@ -254,15 +245,41 @@ namespace DD.Collections
             if (self.Last < that.Last) { return -1; }
             if (self.Last > that.Last) { return 1; }
 
-            return ICodeSetService.ToBitSetArray(self).CompareTo(ICodeSetService.ToBitSetArray(that));
+            return self.ToBitSetArray().CompareTo(that.ToBitSetArray());
         }
 
         #endregion
 
+        #region ICodeSet Equality Service
+
+        /// <summary>True if self.Equals(that)
+        /// <para>ICodeSet is sorted/ordered set, Equals == SetEquals == SequenceEqual</para>
+        /// </summary>
+        /// <param name="self"></param>
+        /// <param name="that"></param>
+        /// <returns></returns>
+        [Pure] public static bool Equals (this ICodeSet self, ICodeSet that) {
+            switch (ICodeSetService.QuickSetEquals(self, that)) {
+                    case false: return false;
+                    case true: return true;
+                    default: break;
+            }
+            return self.SequenceEqual(that);
+        }
+        
+        [Pure] public static int GetHashCode (ICodeSet self) {
+            if (self.IsNull() || self.Count == 0) return 0;
+            return unchecked(self.First<<2) ^ unchecked(self.Count<<1) ^ (self.Last);
+        }
+
+        #endregion
+        
         #region Range Relations Service
 
         [Pure] public static bool RangeEquals (this ICodeSet self, ICodeSet that) {
-            if (self.IsNull() || self.Count == 0) {
+            Contract.Requires<ArgumentNullException> (ThisMethodHandlesNull);
+
+			if (self.IsNull() || self.Count == 0) {
                 if (that.IsNullOrEmpty()) return true;
                 return false;
             }
@@ -272,7 +289,9 @@ namespace DD.Collections
         }
 
         [Pure] public static bool RangeOverlaps (this ICodeSet self, ICodeSet that) {
-            if (self.IsNull() || self.Count == 0 || that.IsNull() || that.Count == 0) {
+            Contract.Requires<ArgumentNullException> (ThisMethodHandlesNull);
+
+			if (self.IsNull() || self.Count == 0 || that.IsNull() || that.Count == 0) {
                 return false; // empty ranges never overlap
             }
             if ( self.First > that.Last || self.Last < that.First ) {
@@ -282,38 +301,47 @@ namespace DD.Collections
         }
 
         [Pure] public static bool IsRangeSubsetOf (this ICodeSet self, ICodeSet that) {
-            if (self.IsNull() || self.Count == 0 || that.IsNull() || that.Count == 0) {
+            Contract.Requires<ArgumentNullException> (ThisMethodHandlesNull);
+
+			if (self.IsNull() || self.Count == 0 || that.IsNull() || that.Count == 0) {
                 return false; // empty range is never subset/superset
             }
-            if ( self.First >= that.First || self.Last <= that.Last ) {
-                return true; // range self.IsSubsetOf(that)
+            if ( self.First >= that.First && self.Last <= that.Last ) {
+                return true; // self.range.IsSubsetOf(that.range)
             }
             return false;
         }
 
         [Pure] public static bool IsProperRangeSubsetOf (this ICodeSet self, ICodeSet that) {
-            return self.IsRangeSubsetOf (that) && self.Length < that.Length;
+            Contract.Requires<ArgumentNullException> (ThisMethodHandlesNull);
+
+			return self.IsRangeSubsetOf (that) && self.Length < that.Length;
         }
 
         [Pure] public static bool IsRangeSupersetOf (this ICodeSet self, ICodeSet that) {
-            return that.IsRangeSubsetOf(self);
+            Contract.Requires<ArgumentNullException> (ThisMethodHandlesNull);
+
+			return that.IsRangeSubsetOf(self);
         }
         
         [Pure] public static bool IsProperRangeSupersetOf (this ICodeSet self, ICodeSet that) {
-            return that.IsProperRangeSubsetOf (self);
+            Contract.Requires<ArgumentNullException> (ThisMethodHandlesNull);
+
+			return that.IsProperRangeSubsetOf (self);
         }
 
         #endregion
         
         #region Quick Set Relations
 
-        /// <summary>Equals check in constant time (no iterations)
-        /// </summary>
-        /// <param name="self">CodeSet</param>
+        /// <summary>Equals check in constant time (no iteration)</summary>
+		/// <param name="self"></param>
+		/// <param name="that"></param>
         /// <returns>true/false/maybe</returns>
-        [Pure]
-        private static bool? QuickSetEquals(this ICodeSet self, ICodeSet that) {
-            // ATTN! '==' operator can be overloaded to point indirectly here 
+        [Pure] private static bool? QuickSetEquals(this ICodeSet self, ICodeSet that) {
+            Contract.Requires<ArgumentNullException> (ThisMethodHandlesNull);
+
+			// ATTN! '==' operator can be overloaded to point indirectly here 
             // so using "CodeSet == CodeSet" here will create endless loop
 
             // Compare .Count(s)
@@ -343,13 +371,14 @@ namespace DD.Collections
             return null; // Maybe Equals
         }
 
-        /// <summary>Overlaps check in constant time (no iterations)
-        /// </summary>
-        /// <param name="codes">CodeSet</param>
+        /// <summary>Overlaps check in constant time (no iteration)</summary>
+		/// <param name="self"></param>
+		/// <param name="that"></param>
         /// <returns>true/false/maybe</returns>
-        [Pure]
-        private static bool? QuickSetOverlaps(this ICodeSet self, ICodeSet that) {
-            // QuickEquals is allways checked before QuickOverlaps
+        [Pure] private static bool? QuickSetOverlaps(this ICodeSet self, ICodeSet that) {
+            Contract.Requires<ArgumentNullException> (ThisMethodHandlesNull);
+
+			// QuickEquals is allways checked before QuickOverlaps
 
             // Never overlaps if ranges do not overlap. (Checks  empty ICodeSet too)
             if (!self.RangeOverlaps(that)) {
@@ -370,30 +399,28 @@ namespace DD.Collections
 
         #endregion
         
-        #region Equality Service
-
-        [Pure] public static int GetHashCode (ICodeSet self) {
-            if (self.IsNull() || self.Count == 0) return 0;
-            return unchecked(self.First<<2) ^ unchecked(self.Count<<1) ^ (self.Last);
-        }
-
-        #endregion
-        
         #region Properties Service
 
         [Pure] public static bool IsNullOrEmpty (this ICodeSet self) {
-            return self.IsNull() || self.Count == 0;
+            Contract.Requires<ArgumentNullException> (ThisMethodHandlesNull);
+
+			return self.IsNull() || self.Count == 0;
         }
         [Pure] public static bool IsNullOrEmpty (this BitSetArray self) {
-            return self.IsNull() || self.Count == 0;
+            Contract.Requires<ArgumentNullException> (ThisMethodHandlesNull);
+
+			return self.IsNull() || self.Count == 0;
         }
         
         [Pure] internal static bool IsFull (this ICodeSet self) {
-            return self.IsNull()? false : self.Count != 0 && self.Count == self.Length;
+            Contract.Requires<ArgumentNullException> (ThisMethodHandlesNull);
+
+			return !self.IsNull() && self.Count != 0 && self.Count == self.Length;
         }
         [Pure] internal static bool IsFull (this BitSetArray self) {
-            return self.IsNull()? false : self.Count != 0
-                && self.Count == 1 + self.Last - self.First;
+            Contract.Requires<ArgumentNullException> (ThisMethodHandlesNull);
+
+			return !self.IsNull() && self.Count != 0 && self.Count == 1 + self.Last - self.First;
         }
 
         #endregion
