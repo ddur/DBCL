@@ -18,16 +18,6 @@ namespace DD.Collections
         
         private const bool ThisMethodHandlesNull = true;
 
-        // TODO? Implement CodeXML1 as ienumerable of
-        // intersect full unicode range with Code.IsXml10Char && !Code.IsXml10Discouraged
-        // foreach(var code in CodeFull(Code.MinValue,Code.MaxValue) {
-        //      if (code.IsXml10Char && !Code.IsXml10Discouraged)
-        //          yield return code;
-        
-        // TODO? implement CodeOver(laps) UnicodeBlock/Range over domain XML10 or UnicodeAssigned
-        // ATTN! CodeOver.First/Last CodeMask?
-        // ATTN? Do not optimize Code(Set)Over
-
         public const int UnitCount = 1;
         public const int PairCount = 2;
         public const int ListMaxCount = 16; // NOTE: log(16) == 4 tests, TODO: check speed on 32 and 64
@@ -179,16 +169,12 @@ namespace DD.Collections
 
         [Pure] public static bool Overlaps (this ICodeSet self, ICodeSet that) {
 
-            // TODO? Check if both or one is of CodeBits type and then use that type operations
-
             switch (self.QuickSetEquals(that)) {
                     case true: return true;
-                    default: break;
             }
             switch (self.QuickSetOverlaps(that)) {
                     case false: return false;
                     case true: return true;
-                    default: break;
             }
 
             // Get overlap range
@@ -259,11 +245,12 @@ namespace DD.Collections
         /// <param name="that"></param>
         /// <returns></returns>
         [Pure] public static bool Equals (this ICodeSet self, ICodeSet that) {
-            switch (ICodeSetService.QuickSetEquals(self, that)) {
-                    case false: return false;
-                    case true: return true;
-                    default: break;
-            }
+			switch (self.QuickSetEquals(that)) {
+				case false:
+					return false;
+				case true:
+					return true;
+			}
             return self.SequenceEqual(that);
         }
         
@@ -342,7 +329,7 @@ namespace DD.Collections
             Contract.Requires<ArgumentNullException> (ThisMethodHandlesNull);
 
 			// ATTN! '==' operator can be overloaded to point indirectly here 
-            // so using "CodeSet == CodeSet" here will create endless loop
+            // so using "ICodeSet == ICodeSet" here will create endless loop
 
             // Compare .Count(s)
             if ( (self.IsNull () || self.Count == 0) && (that.IsNull () || that.Count == 0) ) {
@@ -406,7 +393,8 @@ namespace DD.Collections
 
 			return self.IsNull() || self.Count == 0;
         }
-        [Pure] public static bool IsNullOrEmpty (this BitSetArray self) {
+
+		[Pure] public static bool IsNullOrEmpty (this BitSetArray self) {
             Contract.Requires<ArgumentNullException> (ThisMethodHandlesNull);
 
 			return self.IsNull() || self.Count == 0;
@@ -417,7 +405,8 @@ namespace DD.Collections
 
 			return !self.IsNull() && self.Count != 0 && self.Count == self.Length;
         }
-        [Pure] internal static bool IsFull (this BitSetArray self) {
+
+		[Pure] internal static bool IsFull (this BitSetArray self) {
             Contract.Requires<ArgumentNullException> (ThisMethodHandlesNull);
 
 			return !self.IsNull() && self.Count != 0 && self.Count == 1 + self.Last - self.First;
