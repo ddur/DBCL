@@ -44,12 +44,11 @@ namespace DD.Collections
 			Contract.Ensures (
 				Contract.Result<bool>() ==
 				(self.Value.InRange(0xFDD0, 0xFDDF)) ||
-				(self > 0xFF && ((self&0xFFFF) == 0xFFFE ||
-					(self&0xFFFF) == 0xFFFF)));
+				(self > 0xFF && ((self&0xFF) == 0xFE ||
+					(self&0xFF) == 0xFF)));
 			return (self.Value.InRange(0xFDD0, 0xFDDF) ||
 				(self > 0xFF &&
-					((self&0xFFFF) == 0xFFFE ||
-						(self&0xFFFF) == 0xFFFF)));
+					((self&0xFF) == 0xFE || (self&0xFF) == 0xFF)));
 		}
 		
 		[Pure]

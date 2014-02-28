@@ -322,10 +322,6 @@ namespace DD.Collections
         public static implicit operator Code (byte value) {
             return new Code(value);
         }
-		[CLSCompliantAttribute(false)]
-        public static implicit operator Code (ushort value) {
-            return new Code(value);
-        }
         public static implicit operator Code (char value) {
             return new Code(value);
         }

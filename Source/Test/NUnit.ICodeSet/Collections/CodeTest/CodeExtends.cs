@@ -30,34 +30,88 @@ namespace DD.Collections.CodeTest
 	        }
 	    }
 	    
-	    [Test, TestCaseSource("ValidChar")]
-	    public void CharHasCodeValue(int intCodeValue)
+	    [Test, TestCaseSource("ValidChar"), TestCaseSource("ValidCode")]
+	    public void IsSurrogate_ValidCode(int intCodeValue)
 	    {
-	        Assert.True (intCodeValue.HasCodeValue());
+			Assert.True (intCodeValue.IsSurrogate() == ((Code)intCodeValue).IsSurrogate());
+			Assert.True (intCodeValue.IsLowSurrogate() == ((Code)intCodeValue).IsLowSurrogate());
+			Assert.True (intCodeValue.IsHighSurrogate() == ((Code)intCodeValue).IsHighSurrogate());
+	    }
+	    [Test, TestCaseSource("InvalidCode")]
+	    public void IsSurrogate_InvalidCode(int intCodeValue)
+	    {
+			Assert.False (intCodeValue.IsSurrogate());
+			Assert.False (intCodeValue.IsLowSurrogate());
+			Assert.False (intCodeValue.IsHighSurrogate());
+	    }
+
+		[Test, TestCaseSource("ValidChar"), TestCaseSource("ValidCode")]
+	    public void IsPermanentlyUndefined_ValidCode(int intCodeValue)
+	    {
+			Assert.True (intCodeValue.IsPermanentlyUndefined() == ((Code)intCodeValue).IsPermanentlyUndefined());
+			if (intCodeValue <= 0xFF) 
+				Assert.False (intCodeValue.IsPermanentlyUndefined());
+			else {
+				if (((intCodeValue&0xFF)==0xFE) || ((intCodeValue&0xFF)==0xFF))  
+					Assert.True (intCodeValue.IsPermanentlyUndefined());
+			}
+			if (intCodeValue.InRange(0xFDD0, 0xFDDF)) 
+				Assert.True (intCodeValue.IsPermanentlyUndefined());
+	    }
+	    [Test, TestCaseSource("InvalidCode")]
+	    public void IsPermanentlyUndefined_InvalidCode(int intCodeValue)
+	    {
+			Assert.True (intCodeValue.IsPermanentlyUndefined());
 	    }
 	
+	    [Test, TestCaseSource("ValidChar")]
+	    public void HasCharValue_ValidChar(int code)
+	    {
+			Assert.True(code.HasCharValue());
+	    }
 	    [Test, TestCaseSource("ValidCode")]
-	    public void ValidIntHasCodeValue(int code)
+	    public void HasCharValue_ValidCode(int code)
+	    {
+			Assert.IsTrue(code.HasCharValue() == ((Code)code).HasCharValue());
+	    }
+	    [Test, TestCaseSource("InvalidCode")]
+	    public void HasCharValue_InvalidCode(int code)
+	    {
+	        Assert.False(code.HasCharValue());
+	    }
+	
+	    [Test, TestCaseSource("ValidChar"), TestCaseSource("ValidCode")]
+	    public void HasCodeValue_ValidCode(int code)
 	    {
 	        Assert.True(code.HasCodeValue());
 	    }
-	
 	    [Test, TestCaseSource("InvalidCode")]
-	    public void InvalidIntHasNotCodeValue(int code)
+	    public void HasCodeValue_InvalidCode(int code)
 	    {
 	        Assert.False(code.HasCodeValue());
 	    }
 	
-	    [Test, TestCaseSource("ValidCode")]
-	    public void ValidIntIsCodeCount(int code)
+	    [Test, TestCaseSource("ValidChar"), TestCaseSource("ValidCode")]
+	    public void CastToCodeValue_ValidCode(int i) {
+	        Assert.True (i.CastToCodeValue().HasCodeValue());
+	        Assert.True (i.CastToCodeValue() == i);
+	    }
+
+	    [Test, TestCaseSource("InvalidCode")]
+	    public void CastToCodeValue_InvalidCode(int i) {
+	        Assert.True (i.CastToCodeValue().HasCodeValue());
+	        Assert.True (i.CastToCodeValue() != i);
+	    }
+
+	    [Test, TestCaseSource("ValidChar"), TestCaseSource("ValidCode")]
+	    public void IsCodeCount_ValidCode(int code)
 	    {
 	        Assert.True(code.IsCodesCount());
 	        Assert.True((code+1).IsCodesCount());
 	        
 	    }
-	    
 	    [Test, TestCaseSource("InvalidCode")]
-	    public void InvalidIntIsNotCodeCount(int code)
+	    public void IsCodeCount_InvalidCode(int code)
 	    {
 	        if (code == Code.MaxValue + 1)
     	        Assert.True (code.IsCodesCount());
@@ -66,16 +120,14 @@ namespace DD.Collections.CodeTest
 	        
 	    }
 	    
-	    [Test, TestCaseSource("ValidCode")]
-	    public void ValidIntCastToCodeValue(int i) {
-	        Assert.True (i.CastToCodeValue().HasCodeValue());
-	        Assert.True (i.CastToCodeValue() == i);
+	    [Test, TestCaseSource("ValidChar"), TestCaseSource("ValidCode")]
+	    public void Encode_ValidCode(int i) {
+			Assert.True (i.Encode() == ((Code)i).Encode());
 	    }
 
 	    [Test, TestCaseSource("InvalidCode")]
-	    public void InvalidIntCastToCodeValue(int i) {
-	        Assert.True (i.CastToCodeValue().HasCodeValue());
-	        Assert.True (i.CastToCodeValue() != i);
+	    public void Encode_InvalidCode(int i) {
+			Assert.Throws<ArgumentOutOfRangeException>(delegate{i.Encode();});
 	    }
 
 	    [Test]
