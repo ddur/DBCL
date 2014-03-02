@@ -9,6 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using DD.Diagnostics;
 using DD.Enumerables;
 
 namespace DD.Collections
@@ -163,24 +164,36 @@ namespace DD.Collections
 
 		[ContractInvariantMethod]
 		private void Invariant () {
-			// private
-			Contract.Invariant (this.planes.IsNot (null));
-			Contract.Invariant (this.planes.Length.InRange (2, 1 + ((Code)Code.MaxValue).UnicodePlane()));
-			Contract.Invariant (Contract.ForAll (this.planes, plane => plane.IsNot (null)));
-			
-			// public <- private
-			Contract.Invariant (this.First == this.planes[0].First);
-			Contract.Invariant (this.Last == this.planes.Last().Last);
-			int count = 0; foreach (ICodeSet iCodeSet in this.planes) { count += iCodeSet.Count; }
-			Contract.Invariant (this.Count == count);
-			
-			// public
-			Contract.Invariant (this.Count > ICodeSetService.ListMaxCount);
-			Contract.Invariant (this.Length > 1 + char.MaxValue);
-			Contract.Invariant (this.First.UnicodePlane() != this.Last.UnicodePlane());
+			Contract.Invariant (Theory.Invariant (this));
 		}
 
 		#endregion
 
+		private static class Theory {
+
+			[Pure] public static bool Invariant (CodeSetWide self) {
+
+				// disable once ConvertToConstant.Local
+				Success success = true;
+
+				// private
+				success.Assert (self.planes.IsNot (null));
+				success.Assert (self.planes.Length.InRange (2, 1 + ((Code)Code.MaxValue).UnicodePlane()));
+				success.Assert (Contract.ForAll (self.planes, plane => plane.IsNot (null)));
+				
+				// public <- private
+				success.Assert (self.First == self.planes[0].First);
+				success.Assert (self.Last == self.planes.Last().Last);
+				int count = 0; foreach (ICodeSet iCodeSet in self.planes) { count += iCodeSet.Count; }
+				success.Assert (self.Count == count);
+				
+				// public
+				success.Assert (self.Count > ICodeSetService.ListMaxCount);
+				success.Assert (self.Length > 1 + char.MaxValue);
+				success.Assert (self.First.UnicodePlane() != self.Last.UnicodePlane());
+				
+				return success;
+			}
+		}
 	}
 }
