@@ -79,6 +79,7 @@
     <Folder Include="Collections\CodeSetFullTest" />
     <Folder Include="Collections\CodeSetListTest" />
     <Folder Include="Collections\CodeSetPageTest" />
+    <Folder Include="Collections\CodeSetWideTest" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Code\DBCL.csproj">
