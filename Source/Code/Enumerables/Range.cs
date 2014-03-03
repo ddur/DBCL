@@ -124,10 +124,9 @@ namespace DD.Enumerables {
             int span = 1 + Math.Abs(range.final - range.start);
             int step = Math.Abs (range.step);
 
-            if (step.InRange (1, span)) {
-                return new Loop ( span/step, range.start, range.step);
-            }
-            return new Loop (1, range.start, range.step);
+			return step.InRange(1, span) ? 
+				new Loop(span / step, range.start, range.step) : 
+				new Loop(1, range.start, range.step);
         }
     }
 }

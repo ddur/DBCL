@@ -30,18 +30,11 @@ namespace DD.Collections
 			Contract.Requires<ArgumentNullException> (!codes.Is(null));
 			Contract.Requires<ArgumentException> (codes.Distinct().Count() > ICodeSetService.ListMaxCount);
 			Contract.Requires<ArgumentException> (codes.Min().UnicodePlane() != codes.Max().UnicodePlane());
-			
-			Contract.Ensures (this.planes.IsNot(null));
-			Contract.Ensures (this.planes.Length > 1);
-			Contract.Ensures (this.Count > ICodeSetService.ListMaxCount);
-			Contract.Ensures (this.First.UnicodePlane() != this.Last.UnicodePlane());
 
-			// Input -> Output
-			Contract.Ensures (codes.Distinct().Count() == this.Count);
-			Contract.Ensures (Contract.ForAll (codes, item => this[item]));
-			
-			if (codes is ICodeSet) {
-				var iCodeSet = codes as ICodeSet;
+			Contract.Ensures (Theory.Construct (codes, this));
+
+			var iCodeSet = codes as ICodeSet;
+			if (codes.IsNot(null)) {
 				this.start = iCodeSet.First;
 				this.final = iCodeSet.Last;
 			}
@@ -51,63 +44,62 @@ namespace DD.Collections
 					if (this.final < code) this.final = code;
 				}
 			}
-			this.Init (codes, ref this.startPlane, ref this.finalPlane, ref this.planes, ref this.count);
+			this.Init (ref this.startPlane, ref this.finalPlane, ref this.planes);
 
-		}
-
-		internal CodeSetWide(BitSetArray bits)
-		{
-			Contract.Requires<ArgumentNullException> (!bits.Is(null));
-			Contract.Requires<ArgumentOutOfRangeException> (bits.Last <= Code.MaxValue);
-			Contract.Requires<ArgumentException> (bits.Count > ICodeSetService.ListMaxCount);
-			Contract.Requires<ArgumentException> (((Code)bits.First).UnicodePlane() != ((Code)bits.Last).UnicodePlane());
-
-			Contract.Ensures (this.Count > 0);
-			Contract.Ensures (this.Length > char.MaxValue + 1);
-			Contract.Ensures (this.planes.Length > 1);
-
-			// Input -> Output
-			Contract.Ensures (this.Count == bits.Count);
-			Contract.Ensures (Contract.ForAll (bits, item => this[item]));
-			
-			this.start = (Code)bits.First;
-			this.final = (Code)bits.Last;
-			
-			this.Init (bits.Cast<Code>(), ref this.startPlane, ref this.finalPlane, ref this.planes, ref this.count);
-		}
-
-		private void Init (IEnumerable<Code> codes, ref int startPlane, ref int finalPlane, ref ICodeSet[] thisPlanes, ref int thisCount) {
-
-			startPlane = this.start.UnicodePlane();
-			finalPlane = this.final.UnicodePlane();
-			thisPlanes = new ICodeSet[1 + finalPlane - startPlane];
-
-			int counter = 0;
-			var planesList = new List<Code>[this.planes.Length];
-			var loop = thisPlanes.Length.Times();
-			while (loop.Do) {
-				planesList[counter] = new List<Code>();
-				++counter;
-			}
+			var planesList = Enumerable.Repeat(new List<Code>(),this.planes.Length).ToArray();
 			foreach (Code code in codes) {
-				planesList[code.UnicodePlane() - startPlane].Add(code);
+				planesList[code.UnicodePlane() - this.startPlane].Add(code);
 			}
+			this.Init (planesList);
+			foreach (ICodeSet codeSet in this.planes) {
+				this.count += codeSet.Count;
+			}
+
+		}
+
+		internal CodeSetWide(BitSetArray codes)
+		{
+			Contract.Requires<ArgumentNullException> (!codes.Is(null));
+			Contract.Requires<ArgumentException> (codes.Count > ICodeSetService.ListMaxCount);
+			Contract.Requires<ArgumentOutOfRangeException> (codes.Last <= Code.MaxValue);
+			Contract.Requires<ArgumentException> (((Code)codes.First).UnicodePlane() != ((Code)codes.Last).UnicodePlane());
+
+			Contract.Ensures (Theory.Construct (codes, this));
+			
+			this.start = (Code)codes.First;
+			this.final = (Code)codes.Last;
+
+			this.Init (ref this.startPlane, ref this.finalPlane, ref this.planes);
+
+			var planesList = Enumerable.Repeat(new List<Code>(),this.planes.Length).ToArray();
+			foreach (Code code in codes) {
+				planesList[code.UnicodePlane() - this.startPlane].Add(code);
+			}
+			this.Init (planesList);
+			foreach (ICodeSet codeSet in this.planes) {
+				this.count += codeSet.Count;
+			}
+		}
+
+		void Init (ref int thisStartPlane, ref int thisFinalPlane, ref ICodeSet[] thisPlanes) {
+			thisStartPlane = this.start.UnicodePlane();
+			thisFinalPlane = this.final.UnicodePlane();
+			thisPlanes = new ICodeSet[1 + thisFinalPlane - thisStartPlane];
+		}
+		
+		void Init (IEnumerable<List<Code>> planesList) {
 			int plane = 0;
 			foreach (List<Code> codeList in planesList) {
 				if (codeList.Count == 0) {
-					thisPlanes[plane] = CodeSetNull.Singleton;
+					this.planes[plane] = CodeSetNull.Singleton;
 				} else {
-					thisPlanes[plane] = new CodeSetBits(codeList).Optimal();
+					this.planes[plane] = new CodeSetBits(codeList).Optimal();
 				}
 				++plane;
 			}
-
-			thisCount = 0;
-			foreach (ICodeSet codeSet in this.planes) {
-				thisCount += codeSet.Count;
-			}
 		}
 		
+
 		#endregion
 
 		#region Fields
@@ -170,10 +162,31 @@ namespace DD.Collections
 		#endregion
 
 		private static class Theory {
+			
+			[Pure] public static bool Construct (IEnumerable<Code> codes, CodeSetWide self) {
+				
+				Success success = true;
+				
+				// Intput -> Output
+				success.Assert (codes.Distinct().Count() == self.Count);
+				success.Assert (Contract.ForAll (codes, item => self[item]));
+			
+				return success;
+			}
+
+			[Pure] public static bool Construct (BitSetArray codes, CodeSetWide self) {
+				
+				Success success = true;
+				
+				// Intput -> Output
+				success.Assert (codes.Count == self.Count);
+				success.Assert (Contract.ForAll (codes, item => self[item]));
+			
+				return success;
+			}
 
 			[Pure] public static bool Invariant (CodeSetWide self) {
 
-				// disable once ConvertToConstant.Local
 				Success success = true;
 
 				// private

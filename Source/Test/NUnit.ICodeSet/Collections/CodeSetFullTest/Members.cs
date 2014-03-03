@@ -45,7 +45,7 @@ namespace DD.Collections.CodeSetFullTest
             codeSetFull = new CodeSetFull(Code.MinValue, Code.MaxValue);
 
             // enumerator -> SequenceEqual
-            Range range = Code.MinValue.To(Code.MaxValue);
+			var range = Enumerable.Range(0, Code.MaxCount);
 			Assert.True (codeSetFull.Select(item => (int)(item)).SequenceEqual(range));
 
             // getEnumerator
