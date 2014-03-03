@@ -216,7 +216,7 @@ namespace DD.Collections
                     (bitsComplement.Count <= ICodeSetService.ListMaxCount)) {
                     // Can save at least 3/4 of space
                     var fullSet = new CodeSetFull(bitSet.First, bitSet.Last);
-                    ICodeSet diffSet = OptimalPartOne (new CodeSetBits (ICodeSetService.FromCompact (bitsComplement, offset)));
+                    ICodeSet diffSet = OptimalPartOne (new CodeSetBits(bitsComplement.FromCompact(offset)));
                     if (diffSet is CodeSetBits) diffSet = OptimalPartTwo (diffSet as CodeSetBits);
                     return new CodeSetDiff (fullSet, diffSet);
                 }

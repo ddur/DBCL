@@ -8,84 +8,31 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using DD.Diagnostics;
 
 namespace DD.Collections
 {
-    /// <summary>Intermediate ICodeSet that is later optimized into other space efficient ICodeSet implementations
-    /// <remarks>Can .Count 0 to 1114112 Code members</remarks>
+    /// <summary>Intermediate ICodeSet that is later optimized into other ICodeSet implementations
     /// </summary>
     public class CodeSetBits : CodeSet
     {
         #region Ctor
 
-        // TODO Theory.Compact(BitSetArray, offset)
-        /// <summary>From Compact BitSetArray
-        /// </summary>
-        /// <param name="bits"></param>
-        /// <param name="offset"></param>
-        internal CodeSetBits (BitSetArray bits, int offset) {
-            Contract.Requires<ArgumentNullException> (bits.IsNot(null));
-            Contract.Requires<ArgumentException> (bits.Count > 0);
-            Contract.Requires<ArgumentException> (bits.Length <= Code.MaxCount);
-            Contract.Requires<ArgumentException> (bits[0] == true);
-            Contract.Requires<ArgumentException> (bits[bits.Length-1] == true);
-            Contract.Requires<ArgumentException> (offset >= 0);
-            Contract.Requires<ArgumentException> (offset <= Code.MaxCount - bits.Length);
-
-            // Input -> Output
-            Contract.Ensures (this.Count == bits.Count);
-            Contract.Ensures (this.First == offset);
-            Contract.Ensures (this.Last == offset + bits.Length - 1);
-
-            this.sorted = BitSetArray.Copy(bits);
-            Contract.Assume (this.sorted.Equals(bits));
-
-            this.start = offset;
-            this.final = offset + this.sorted.Length - 1;
-        }
-
+		/// <summary>Empty CodeSetBits</summary>
+		/// <remarks>Only CodeSetBits and CodeSetNull can be Empty</remarks>
         internal CodeSetBits () {
-
-            // Input -> Output
-            Contract.Ensures (this.Count == 0);
+			Contract.Ensures (Theory.Construct(this));
 
             this.sorted = new BitSetArray();
         }
 
-        internal CodeSetBits (BitSetArray bits) {
-
-            Contract.Requires<ArgumentNullException> (bits.IsNot(null));
-
-            // Input -> Output
-            Contract.Ensures (bits.Count == this.Count);
-            Contract.Ensures (Contract.ForAll (bits, item => this[item]));
-
-            if (bits.Count != 0) {
-                this.start = (int)bits.First;
-                this.final = (int)bits.Last;
-                this.sorted = new BitSetArray (this.final - this.start + 1);
-                foreach ( Code code in bits ) {
-                    this.sorted.Set (code - this.start, true);
-                }
-            }
-            else {
-                this.sorted = new BitSetArray (this.final - this.start + 1);
-                Contract.Assert (this.sorted.Length == 0);
-            }
-        }
-
         internal CodeSetBits (IEnumerable<Code> codes) {
-
             Contract.Requires<ArgumentNullException> (codes.IsNot(null));
-
-            // Input -> Output
-            Contract.Ensures (codes.IsEmpty() || this.Count != 0);
-            Contract.Ensures (codes.IsEmpty() || Contract.ForAll (codes, item => this[item]));
-            Contract.Ensures (this.Count == 0 || this.Count == codes.Distinct ().Count ());
+			Contract.Ensures (Theory.Construct(codes, this));
 
             if (!codes.IsEmpty()) {
-                if (codes is ICodeSet) {
-                    ICodeSet codeSet = codes as ICodeSet;
+                var codeSet = codes as ICodeSet;
+				if (codeSet.IsNot(null)) {
                     this.start = codeSet.First;
                     this.final = codeSet.Last;
                 }
@@ -102,7 +49,7 @@ namespace DD.Collections
 
                 // codes is same class?
                 if (codes is CodeSetBits) {
-                    // ICodeSet is ReadOnly => can share guts/internals
+                    // ICodeSet is ReadOnly => can share internals
                     this.sorted = ((CodeSetBits)codes).sorted;
                 }
                 else {
@@ -113,10 +60,50 @@ namespace DD.Collections
                 }
             }
             else {
-                this.sorted = new BitSetArray (this.final - this.start + 1);
-                Contract.Assert (this.sorted.Count == 0);
-                Contract.Assert (this.sorted.Length == 0);
+                this.sorted = new BitSetArray ();
             }
+        }
+
+		/// <summary>From BitSetArray</summary>
+		/// <param name="bits">BitSetArray</param>
+        internal CodeSetBits (BitSetArray bits) {
+
+            Contract.Requires<ArgumentNullException> (bits.IsNot(null));
+			Contract.Requires<ArgumentException> (bits.Count == 0 || bits.Last <= Code.MaxValue);
+			Contract.Ensures (Theory.Construct(bits, this));
+
+            if (bits.Count != 0) {
+                this.start = (int)bits.First;
+                this.final = (int)bits.Last;
+                this.sorted = new BitSetArray (this.final - this.start + 1);
+                foreach ( Code code in bits ) {
+                    this.sorted.Set (code - this.start, true);
+                }
+            }
+            else {
+                this.sorted = new BitSetArray ();
+            }
+        }
+
+        /// <summary>From Compact BitSetArray</summary>
+        /// <param name="bits">Compact BitSetArray</param>
+        /// <param name="offset">int</param>
+        internal CodeSetBits (BitSetArray bits, int offset) {
+
+			Contract.Requires<ArgumentNullException> (bits.IsNot(null));
+            Contract.Requires<ArgumentException> (bits.Length <= Code.MaxCount);
+			Contract.Requires<ArgumentException> (bits.Count == 0 || (bits[0] && bits[bits.Length-1]));
+            Contract.Requires<ArgumentException> (offset >= 0);
+            Contract.Requires<ArgumentException> (offset <= Code.MaxCount - bits.Length);
+
+			Contract.Ensures (Theory.Construct(bits, offset, this));
+
+            this.sorted = BitSetArray.Copy(bits);
+
+			if (bits.Count != 0) {
+	            this.start = offset;
+	            this.final = offset + this.sorted.Length - 1;
+			}
         }
 
         #endregion
@@ -133,7 +120,7 @@ namespace DD.Collections
 
         [Pure] public override bool this[Code code] {
             get {
-                return this.Count != 0 ? sorted[code - this.start] : false ;
+				return this.sorted.Count != 0 && sorted[code - this.start];
             }
         }
 
@@ -145,20 +132,20 @@ namespace DD.Collections
 
         [Pure] public override Code First {
             get {
-                if (this.Count != 0) return this.start;
+                if (this.sorted.Count != 0) return this.start;
                 throw new InvalidOperationException();
             }
         }
 
         [Pure] public override Code Last {
             get {
-                if (this.Count != 0) return this.final;
+                if (this.sorted.Count != 0) return this.final;
                 throw new InvalidOperationException();
             }
         }
 
         [Pure] public override IEnumerator<Code> GetEnumerator () {
-            foreach ( Code code in this.sorted ) {
+            foreach ( var code in this.sorted ) {
                 yield return this.start + code;
             }
         }
@@ -169,34 +156,7 @@ namespace DD.Collections
 
         [ContractInvariantMethod]
         private void Invariant () {
-
-            // TODO! move all this to Theory.Method
-            // ATTN! Contract ignores branches and checks all Invariants
-//            Contract.Invariant (this.sorted.IsNot (null));
-//            Contract.Invariant (this.sorted.Length <= Code.MaxCount);
-//            Contract.Invariant (this.sorted.Length == 1 + this.final - this.start);
-//            Contract.Invariant (this.sorted.Count.InRange (0, this.sorted.Length));
-//
-//            if (this.sorted.Count > 0) {
-//                Contract.Invariant (this.start.HasCodeValue ());
-//                Contract.Invariant (this.final.HasCodeValue ());
-//                Contract.Invariant (this.sorted[0]);
-//                Contract.Invariant (this.sorted[this.final - this.start]);
-//            }
-//            else {
-//                Contract.Invariant (this.start == ICodeSetService.NullStart);
-//                Contract.Invariant (this.final == ICodeSetService.NullFinal);
-//            }
-//            
-//            // public <- private
-//            Contract.Invariant (this.Length == this.sorted.Length);
-//            Contract.Invariant (this.Count == this.sorted.Count);
-//            if (this.Count != 0) {
-//                Contract.Invariant (this.First == this.start);
-//                Contract.Invariant (this.Last == this.start);
-//            }
-            
-
+			Contract.Invariant (Theory.Invariant(this));
         }
 
         #endregion
@@ -207,11 +167,109 @@ namespace DD.Collections
         
         internal IEnumerable<Code> Complement {
             get {
-                foreach (int item in this.sorted.Complement()) {
+                foreach (var item in this.sorted.Complement()) {
                     yield return item + this.start;
                 }
             }
         }
 
+		#region Theory
+
+		static class Theory {
+
+			[Pure] public static bool Construct(CodeSetBits self) {
+				return self.sorted.Count == 0;
+			}
+			
+			[Pure] public static bool Construct (IEnumerable<Code> codes, CodeSetBits self) {
+
+				Success success = true;
+				
+	            success.Assert (codes.IsEmpty() || Contract.ForAll (codes, item => self.sorted[item-self.start]));
+				if (!codes.IsNullOrEmpty()) {
+		            success.Assert (self.sorted.Count == codes.Distinct().Count());
+					success.Assert (self.start == codes.Min());
+					success.Assert (self.final == codes.Max());
+				}
+				else {
+		            success.Assert (self.Count == 0);
+				}
+				
+				return success;
+			}
+			
+			[Pure] public static bool Construct (BitSetArray bits, CodeSetBits self) {
+
+				Success success = true;
+
+	            success.Assert (self.sorted.Count == bits.Count);
+
+				if (bits.Count != 0) {
+					success.Assert (self.start == (int)bits.First);
+					success.Assert (self.final == (int)bits.Last);
+					foreach (var item in bits) {
+						success.Assert (self.sorted[item-self.start]);
+					}
+				}
+				
+				return success;
+			}
+			
+			[Pure] public static bool Construct (BitSetArray bits, int offset, CodeSetBits self) {
+
+				Success success = true;
+				
+				// compact bits?
+				if (bits.Count != 0) {
+					success.Assert (bits[0]);
+					success.Assert (bits[bits.Length-1]);
+				}
+
+				success.Assert (self.sorted.Count == bits.Count);
+				success.Assert (self.sorted.Equals(bits));
+
+				if (bits.Count != 0) {
+					success.Assert (self.start == offset);
+					success.Assert (self.final == bits.Length + offset - 1);
+					foreach (var item in bits) {
+						success.Assert (self.sorted[item]);
+					}
+				}
+
+				return success;
+			}
+			
+			[Pure] public static bool Invariant(CodeSetBits self) {
+
+				Success success = true;
+				
+	            success.Assert (self.sorted.IsNot (null));
+	            success.Assert (self.sorted.Length <= Code.MaxCount);
+	            success.Assert (self.sorted.Length == 1 + self.final - self.start);
+	
+	            if (self.sorted.Count != 0) {
+	                success.Assert (self.start.HasCodeValue ());
+	                success.Assert (self.final.HasCodeValue ());
+	                success.Assert (self.sorted[0]);
+	                success.Assert (self.sorted[self.sorted.Length - 1]);
+	            }
+	            else {
+	                success.Assert (self.start == ICodeSetService.NullStart);
+	                success.Assert (self.final == ICodeSetService.NullFinal);
+	            }
+	            
+	            // public <- private
+	            success.Assert (self.Length == self.sorted.Length);
+	            success.Assert (self.Count == self.sorted.Count);
+	            if (self.Count != 0) {
+	                success.Assert (self.First == self.start);
+	                success.Assert (self.Last == self.final);
+	            }
+				
+				return success;
+			}
+		}
+
+		#endregion
     }
 }

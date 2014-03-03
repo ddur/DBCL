@@ -16,14 +16,14 @@ namespace DD.Collections.CodeSetBitsTest
         [Test]
         public void Indexer()
         {
-            Random r = new Random();
+            var r = new Random();
             Code C = r.Next(Code.MinValue, Code.MaxValue);
             Code D = C;
             while (D == C) {
                 D = r.Next(Code.MinValue, Code.MaxValue);
             }
 
-            CodeSetBits csb = new CodeSetBits();
+            var csb = new CodeSetBits();
             Assert.False ( csb[C] );
             Assert.False ( csb[D] );
             

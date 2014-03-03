@@ -28,10 +28,6 @@ namespace DD.Collections.CodeSetNullTest
             Assert.True (csn.SequenceEqual(new Code[0]));
             
             Random r = new Random();
-            Loop loop = 10.Times();
-            while (loop.Do) {
-                Assert.False (csn[r.Next(Code.MinValue, Code.MaxValue)]);
-            }
             foreach (var item in 10.Times()) {
                 Assert.False (csn[r.Next(Code.MinValue, Code.MaxValue)]);
             }
