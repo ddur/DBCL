@@ -14,7 +14,7 @@ namespace DD.Collections
 {
     /// <summary>Intermediate ICodeSet that is later optimized into other ICodeSet implementations
     /// </summary>
-    public class CodeSetBits : CodeSet
+    public sealed class CodeSetBits : CodeSet
     {
         #region Ctor
 

@@ -11,9 +11,7 @@ using System.Linq;
 
 namespace DD.Collections {
 
-    /// <summary>Range Set
-    /// <remarks>Space efficient, O(k)</remarks>
-    /// </summary>
+    /// <summary>Full Range Set</summary>
     public sealed class CodeSetFull : CodeSet {
 
         #region Ctor
@@ -44,7 +42,7 @@ namespace DD.Collections {
 
         [Pure] public override bool this[Code code] {
             get {
-                return this.start <= code && code <= this.final;
+                return this.start <= code && this.final >= code;
             }
         }
 
