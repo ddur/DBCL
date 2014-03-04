@@ -61,7 +61,7 @@ namespace DD.Collections
 
 		[Pure] public int CompareTo (ICodeSet that) {
 			// disable once InvokeAsExtensionMethod
-			Contract.Ensures (Contract.Result<int>() == ICodeSetService.CompareTo(this,that));
+			Contract.Ensures (Contract.Result<int>() == ICodeSetService.CompareTo(this, that));
 			// disable once InvokeAsExtensionMethod
 			return ICodeSetService.CompareTo (this, that);
 		}
@@ -72,10 +72,10 @@ namespace DD.Collections
 
 		[Pure] public override bool Equals(object obj)
 		{
-			// disable once AccessToStaticMemberViaDerivedType
-			Contract.Ensures (Contract.Result<bool>() == (obj is ICodeSet) && ICodeSetService.Equals(this, obj));
-			// disable once AccessToStaticMemberViaDerivedType
-			return (obj is ICodeSet) && ICodeSetService.Equals(this, obj);
+			// disable once InvokeAsExtensionMethod
+			Contract.Ensures (Contract.Result<bool>() == ((obj is ICodeSet) && ICodeSetService.Equals(this, (ICodeSet)obj)));
+			// disable once InvokeAsExtensionMethod
+			return (obj is ICodeSet) && ICodeSetService.Equals(this, (ICodeSet)obj);
 		}
 		
 		[Pure] public override int GetHashCode()

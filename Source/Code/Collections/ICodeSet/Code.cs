@@ -208,7 +208,7 @@ namespace DD.Collections
 
 		[Pure] public bool Equals (ICodeSet that) {
 			// disable once InvokeAsExtensionMethod
-			Contract.Ensures (Contract.Result<bool>() == ICodeSetService.Equals(this,that));
+			Contract.Ensures (Contract.Result<bool>() == ICodeSetService.Equals(this, that));
 			// disable once InvokeAsExtensionMethod
 			return ICodeSetService.Equals (this, that);
 		}
@@ -284,10 +284,10 @@ namespace DD.Collections
 		[Pure]
 		public override bool Equals(object obj)
 		{
-			// disable once AccessToStaticMemberViaDerivedType
-			Contract.Ensures (Contract.Result<bool>() == (obj is ICodeSet) && ICodeSetService.Equals(this, obj));
-			// disable once AccessToStaticMemberViaDerivedType
-			return (obj is ICodeSet) && ICodeSetService.Equals(this, obj);
+			// disable once InvokeAsExtensionMethod
+			Contract.Ensures (Contract.Result<bool>() == ((obj is ICodeSet) && ICodeSetService.Equals(this, (ICodeSet)obj)));
+			// disable once InvokeAsExtensionMethod
+			return (obj is ICodeSet) && ICodeSetService.Equals(this, (ICodeSet)obj);
 		}
 		
 		[Pure]

@@ -17,7 +17,7 @@ namespace DD.Collections.CodeTest
         [Test]
         public void NotSupported() {
             
-            Random r = new Random();
+            var r = new Random();
             Code C = r.Next(Code.MinValue, Code.MaxValue);
             Code D = r.Next(Code.MinValue, Code.MaxValue);
             ICollection<Code> iC = C;
@@ -33,7 +33,7 @@ namespace DD.Collections.CodeTest
         [Test]
         public void ReadOnlyIsTrue() {
 
-            Random r = new Random();
+            var r = new Random();
             Code C = r.Next(Code.MinValue, Code.MaxValue);
             ICollection<Code> iC = C;
             
@@ -47,7 +47,7 @@ namespace DD.Collections.CodeTest
         [Test]
         public void CountIsOne() {
 
-            Random r = new Random();
+            var r = new Random();
             Code C = r.Next(Code.MinValue, Code.MaxValue);
             ICollection<Code> iC = C;
             
@@ -58,7 +58,7 @@ namespace DD.Collections.CodeTest
         [Test]
         public void ContainsOneCode() {
 
-            Random r = new Random();
+            var r = new Random();
             Code C = r.Next(Code.MinValue, Code.MaxValue);
             Code D = r.Next(Code.MinValue, Code.MaxValue);
             ICollection<Code> iC = C;
@@ -70,13 +70,13 @@ namespace DD.Collections.CodeTest
         [Test]
         public void CopyToArray() {
 
-            Random r = new Random();
+            var r = new Random();
             Code C = r.Next(Code.MinValue, Code.MaxValue);
 
             ICollection<Code> iC = C;
             
             // CopyTo
-            Code[] arrayC = new Code[2];
+            var arrayC = new Code[2];
             iC.CopyTo(arrayC, 0);
             Assert.True (arrayC[0] == C);
             iC.CopyTo(arrayC, 1);
