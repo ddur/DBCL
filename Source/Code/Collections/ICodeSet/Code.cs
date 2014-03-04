@@ -207,10 +207,15 @@ namespace DD.Collections
 		#region IEquatable<ICodeSet>
 
 		[Pure] public bool Equals (ICodeSet that) {
+			// disable once InvokeAsExtensionMethod
+			Contract.Ensures (Contract.Result<bool>() == ICodeSetService.Equals(this,that));
+			// disable once InvokeAsExtensionMethod
 			return ICodeSetService.Equals (this, that);
 		}
 
 		[Pure] public override int GetHashCode() {
+			// disable once InvokeAsExtensionMethod
+			Contract.Ensures (Contract.Result<int>() == ICodeSetService.GetHashCode(this));
 			return ICodeSetService.GetHashCode(this);
 		}
 		
