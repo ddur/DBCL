@@ -243,6 +243,7 @@ namespace DD.Collections
 
 				Success success = true;
 				
+				// private
 	            success.Assert (self.sorted.IsNot (null));
 	            success.Assert (self.sorted.Length <= Code.MaxCount);
 	            success.Assert (self.sorted.Length == 1 + self.final - self.start);
