@@ -17,8 +17,7 @@ namespace DD.Collections
         
         #region Ctor
 
-        private CodeSetNull() {
-        }
+        private CodeSetNull() {}
 
         #endregion
         
@@ -35,6 +34,10 @@ namespace DD.Collections
         }
 
         [Pure] public override int Count {
+	        get { return 0; }
+        }
+
+        [Pure] public override int Length {
 	        get { return 0; }
         }
 
@@ -60,7 +63,7 @@ namespace DD.Collections
 
         [ContractInvariantMethod]
         private void Invariant () {
-            // public
+            // constraints
             Contract.Invariant (this.Count == 0);
             Contract.Invariant (this.Length == 0);
         }

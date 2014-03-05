@@ -183,6 +183,7 @@ namespace DD.Collections
 			
 			[Pure] public static bool Construct (IEnumerable<Code> codes, CodeSetBits self) {
 
+				// disable once ConvertToConstant.Local
 				Success success = true;
 				
 	            success.Assert (codes.IsEmpty() || Contract.ForAll (codes, item => self.sorted[item-self.start]));
@@ -200,6 +201,7 @@ namespace DD.Collections
 			
 			[Pure] public static bool Construct (BitSetArray bits, CodeSetBits self) {
 
+				// disable once ConvertToConstant.Local
 				Success success = true;
 
 	            success.Assert (self.sorted.Count == bits.Count);
@@ -217,6 +219,7 @@ namespace DD.Collections
 			
 			[Pure] public static bool Construct (BitSetArray bits, int offset, CodeSetBits self) {
 
+				// disable once ConvertToConstant.Local
 				Success success = true;
 				
 				// compact bits?
@@ -241,6 +244,7 @@ namespace DD.Collections
 			
 			[Pure] public static bool Invariant(CodeSetBits self) {
 
+				// disable once ConvertToConstant.Local
 				Success success = true;
 				
 				// private

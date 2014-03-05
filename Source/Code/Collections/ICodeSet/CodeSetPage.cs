@@ -8,176 +8,194 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using DD.Diagnostics;
 
 namespace DD.Collections {
 
-    /// <summary>CodeSetPage contains only codes within same unicode plane/page
-    /// </summary>
-    public sealed class CodeSetPage : CodeSet {
+	/// <summary>CodeSetPage contains only codes within same unicode plane/page
+	/// </summary>
+	public sealed class CodeSetPage : CodeSet {
 
-        #region Ctor
+		#region Ctor
 
-        // TODO Theory.Compact(BitSetArray, offset)
-        /// <summary>From Compact BitSetArray
-        /// </summary>
-        /// <param name="bits"></param>
-        /// <param name="offset"></param>
-        internal CodeSetPage (BitSetArray bits, int offset) {
-            Contract.Requires<ArgumentNullException> (bits.IsNot(null));
-            Contract.Requires<ArgumentException> (bits.Count > ICodeSetService.PairCount);
-            Contract.Requires<ArgumentException> (bits[0] == true);
-            Contract.Requires<ArgumentException> (bits[bits.Length-1] == true);
-            Contract.Requires<ArgumentException> (offset >= 0);
-            Contract.Requires<ArgumentException> (offset <= Code.MaxCount - bits.Length);
-			Contract.Requires<ArgumentException> (((Code)(bits.First+offset)).UnicodePlane() == ((Code)(bits.Last+offset)).UnicodePlane());
+		internal CodeSetPage (IEnumerable<Code> codes) {
 
-            // Input -> Output
-            Contract.Ensures (this.Count == bits.Count);
-            Contract.Ensures (this.First == offset);
-            Contract.Ensures (this.Last == offset + bits.Length - 1);
+			Contract.Requires<ArgumentNullException> (!codes.Is(null));
+			Contract.Requires<ArgumentException> (codes.Distinct().Count() > ICodeSetService.PairCount);
+			Contract.Requires<ArgumentException> (codes.Min().UnicodePlane() == codes.Max().UnicodePlane());
+			Contract.Requires<ArgumentException> (1 + codes.Max() - codes.Min() != codes.Distinct().Count());
 
-            this.sorted = BitSetArray.Copy(bits);
-            Contract.Assume (this.sorted.Equals(bits));
+			Contract.Ensures (Theory.Construct(codes, this));
 
-            this.start = offset;
-            this.final = offset + this.sorted.Length - 1;
-        }
+			var iCodeSet = codes as ICodeSet;
+			if (iCodeSet.IsNot(null)) {
+				this.start = iCodeSet.First;
+				this.final = iCodeSet.Last;
+			}
+			else {
+				foreach ( Code code in codes ) {
+					if ( code < this.start )
+						this.start = code;
+					if ( code > this.final )
+						this.final = code;
+				}
+			}
+			if (codes is CodeSetPage) {
+				// ICodeSet is ReadOnly => can share guts/internals
+				this.sorted = ((CodeSetPage)codes).sorted;
+			}
+			else {
+				this.sorted = new BitSetArray (1 + this.final - this.start);
+				foreach ( Code code in codes ) {
+					this.sorted.Set (code - this.start, true);
+				}
+			}
+		}
 
-        internal CodeSetPage (BitSetArray bits) {
-            Contract.Requires<ArgumentNullException> (!bits.Is(null));
-            Contract.Requires<ArgumentException> (bits.Count > ICodeSetService.PairCount);
-            Contract.Requires<ArgumentOutOfRangeException> (bits.Last <= Code.MaxValue);
-            Contract.Requires<ArgumentException> (((Code)bits.First).UnicodePlane() == ((Code)bits.Last).UnicodePlane());
+		internal CodeSetPage (BitSetArray bits) {
 
-            // Internal
-            Contract.Ensures (this.sorted.IsNot (null));
+			Contract.Requires<ArgumentNullException> (!bits.Is(null));
+			Contract.Requires<ArgumentException> (bits.Count > ICodeSetService.PairCount);
+			Contract.Requires<ArgumentOutOfRangeException> (bits.Last <= Code.MaxValue);
+			Contract.Requires<ArgumentException> (((Code)bits.First).UnicodePlane() == ((Code)bits.Last).UnicodePlane());
+			Contract.Requires<ArgumentException> (bits.Count != bits.Length);
 
-            // Input -> Output
-            Contract.Ensures (this.Count == bits.Count);
-            Contract.Ensures (Contract.ForAll (bits, item => this[item]));
-            Contract.Ensures (this.First.UnicodePlane() == this.Last.UnicodePlane());
+			Contract.Ensures (Theory.Construct(bits, this));
 
-            this.start = (int)bits.First;
-            this.final = (int)bits.Last;
-            this.sorted = new BitSetArray (this.final - this.start + 1);
-            foreach ( Code code in bits ) {
-                this.sorted.Set (code - this.start, true);
-            }
-        }
+			this.start = (int)bits.First;
+			this.final = (int)bits.Last;
+			this.sorted = new BitSetArray (this.final - this.start + 1);
+			foreach ( Code code in bits ) {
+				this.sorted.Set (code - this.start, true);
+			}
+		}
 
-        internal CodeSetPage (IEnumerable<Code> codes) {
+		#endregion
 
-            Contract.Requires<ArgumentNullException> (!codes.Is(null));
-            Contract.Requires<ArgumentException> (codes.Distinct().Count() > ICodeSetService.PairCount);
-            Contract.Requires<ArgumentException> (codes.Min().UnicodePlane() == codes.Max().UnicodePlane());
+		#region Fields
 
-            // Internal
-            Contract.Ensures (this.sorted.IsNot (null));
+		private readonly BitSetArray sorted;
+		private readonly int start = Code.MaxValue;
+		private readonly int final = Code.MinValue;
 
-            // Input -> Output
-            Contract.Ensures (Contract.ForAll (codes, item => this[item]));
-            Contract.Ensures (this.sorted.Count == codes.Distinct().Count());
-            Contract.Ensures (this.First.UnicodePlane() == this.Last.UnicodePlane());
+		#endregion
 
-            var iCodeSet = codes as ICodeSet;
-            if (iCodeSet.IsNot(null)) {
-                this.start = iCodeSet.First;
-                this.final = iCodeSet.Last;
-            }
-            else {
-                foreach ( Code code in codes ) {
-                    if ( code < this.start )
-                        this.start = code;
-                    if ( code > this.final )
-                        this.final = code;
-                }
-            }
-            if (codes is CodeSetPage) {
-                // ICodeSet is ReadOnly => can share guts/internals
-                this.sorted = ((CodeSetPage)codes).sorted;
-            }
-            else {
-                this.sorted = new BitSetArray (1 + this.final - this.start);
-                foreach ( Code code in codes ) {
-                    this.sorted.Set (code - this.start, true);
-                }
-            }
-        }
+		#region ICodeSet
 
-        #endregion
+		[Pure] public override bool this[Code code] {
+			get {
+				return sorted[code - this.start];
+			}
+		}
 
-        #region Fields
+		[Pure] public override int Count {
+			get {
+				return sorted.Count;
+			}
+		}
 
-        private readonly BitSetArray sorted;
-        private readonly Code start = Code.MaxValue;
-        private readonly Code final = Code.MinValue;
+		[Pure] public override Code First {
+			get {
+				return this.start;
+			}
+		}
 
-        #endregion
+		[Pure] public override Code Last {
+			get {
+				return this.final;
+			}
+		}
 
-        #region ICodeSet
+		[Pure] public override IEnumerator<Code> GetEnumerator () {
+			foreach ( Code code in this.sorted ) {
+				yield return this.start + code;
+			}
+		}
 
-        [Pure] public override bool this[Code code] {
-            get {
-                return sorted[code - this.start];
-            }
-        }
+		#endregion
 
-        [Pure] public override int Count {
-            get {
-                return sorted.Count;
-            }
-        }
+		#region Invariant
 
-        [Pure] public override Code First {
-            get {
-                return this.start;
-            }
-        }
+		[ContractInvariantMethod]
+		private void Invariant () {
+			Contract.Invariant (Theory.Invariant (this));
+		}
 
-        [Pure] public override Code Last {
-            get {
-                return this.final;
-            }
-        }
+		#endregion
 
-        [Pure] public override IEnumerator<Code> GetEnumerator () {
-            foreach ( Code code in this.sorted ) {
-                yield return this.start + code;
-            }
-        }
+		internal BitSetArray ToCompact () {
+			return BitSetArray.Copy (this.sorted);
+		}
 
-        #endregion
+		private static class Theory {
+		 
+			[Pure] public static bool Construct (IEnumerable<Code> codes, CodeSetPage self) {
 
-        #region Invariant
+				// disable once ConvertToConstant.Local
+				Success success = true;
+				
+				// input -> private
+				success.Assert (self.sorted.IsNot (null));
+				success.Assert (self.sorted.Count == codes.Distinct().Count());
+				foreach (var item in codes) {
+					success.Assert (self.sorted[item-self.start]);
+				}
 
-        [ContractInvariantMethod]
-        private void Invariant () {
+				success.Assert (self.start == codes.Min());
+				success.Assert (self.final == codes.Max());
+				
+				return success;
+			}
+			
+			[Pure] public static bool Construct (BitSetArray bits, CodeSetPage self) {
 
-            // private
-            Contract.Invariant (this.sorted.IsNot (null));
-            Contract.Invariant (this.sorted.Length == 1 + this.final - this.start);
-            Contract.Invariant (this.sorted.Count > ICodeSetService.PairCount);
-            Contract.Invariant (this.sorted[0]);
-            Contract.Invariant (this.sorted[this.final - this.start]);
+				// disable once ConvertToConstant.Local
+				Success success = true;
 
-            // public <- private
-            Contract.Invariant (this.Length == this.sorted.Length);
-            Contract.Invariant (this.Count == this.sorted.Count);
-            Contract.Invariant (this.First == this.start);
-            Contract.Invariant (this.Last == this.final);
+				success.Assert (self.sorted.IsNot (null));
+				success.Assert (self.sorted.Count == bits.Count);
+				foreach (var item in bits) {
+					success.Assert (self.sorted[item-self.start]);
+				}
 
-            // public
-            Contract.Invariant (this.First.UnicodePlane() == this.Last.UnicodePlane());
-            Contract.Invariant (this.Length <= (char.MaxValue + 1));
-            Contract.Invariant (this.Count > ICodeSetService.PairCount);
+				success.Assert (self.start == (int)bits.First);
+				success.Assert (self.final == (int)bits.Last);
+				
+				return success;
+			}
 
-        }
+			[Pure] public static bool Invariant(CodeSetPage self) {
 
-        #endregion
+				// disable once ConvertToConstant.Local
+				Success success = true;
+				
+				// private
+				success.Assert (self.sorted.IsNot (null));
+				success.Assert (self.sorted.Length <= (1 + char.MaxValue));
+				success.Assert (self.sorted.Count > ICodeSetService.PairCount);
+				success.Assert (self.sorted.Count != self.sorted.Length);
+				success.Assert (self.sorted[0]);
+				success.Assert (self.sorted[self.sorted.Length - 1]);
 
-        internal BitSetArray ToCompact () {
-            return BitSetArray.Copy (this.sorted);
-        }
-        
-    }
+				success.Assert (self.start.HasCodeValue ());
+				success.Assert (self.final.HasCodeValue ());
+				success.Assert (((Code)self.start).UnicodePlane() == ((Code)self.final).UnicodePlane());
+
+				// public <- private
+				success.Assert (self.Length == self.sorted.Length);
+				success.Assert (self.Count == self.sorted.Count);
+				success.Assert (self.First == self.start);
+				success.Assert (self.Last == self.final);
+				
+				// constraints
+				success.Assert (self.Count > ICodeSetService.PairCount);
+				success.Assert (self.Count <= (1 + char.MaxValue));
+				success.Assert (self.Length <= (1 + char.MaxValue));
+				success.Assert (self.Count != self.Length);
+				success.Assert (self.First.UnicodePlane() == self.Last.UnicodePlane());
+
+				return success;
+			}
+		}
+	}
 }

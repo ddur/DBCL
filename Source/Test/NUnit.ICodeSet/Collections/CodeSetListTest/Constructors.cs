@@ -31,11 +31,9 @@ namespace DD.Collections.CodeSetListTest
             Assert.Throws<ArgumentException> (delegate{new CodeSetList(0.To(16).Select(item => (Code)item));});
             Assert.Throws<ArgumentException> (delegate{new CodeSetList((Code.MaxValue-17).To(Code.MaxValue).Select(item => (Code)item));});
 
-            csl = new CodeSetList (2.To(15).Select(item => (Code)item));
-            Assert.True (csl.SequenceEqual(2.To(15).Select(item => (Code)item)));
-
-            csl = new CodeSetList (0.To(15).Select(item => (Code)item));
-            Assert.True (csl.SequenceEqual(0.To(15).Select(item => (Code)item)));
+            // does not except full-range of codes
+            Assert.Throws<ArgumentException> (delegate{new CodeSetList(1.To(8).Select(item => (Code)item));});
+            Assert.Throws<ArgumentException> (delegate{new CodeSetList((Code.MaxValue-10).To(Code.MaxValue).Select(item => (Code)item));});
 
             Code[] input = new Code[] {1114111,2,2,22,50,100,200,500,1000,10000,100000,1000000,1,0,65536,128000,512000};
             csl = new CodeSetList (input);

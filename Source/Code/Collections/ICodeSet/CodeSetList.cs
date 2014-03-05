@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using DD.Diagnostics;
 
 namespace DD.Collections {
 
@@ -21,14 +22,11 @@ namespace DD.Collections {
 		internal CodeSetList (IEnumerable<Code> codes) {
 			Contract.Requires<ArgumentNullException> (!codes.IsNull ());
 			Contract.Requires<ArgumentException> (!codes.IsEmpty ());
-
 			Contract.Requires<ArgumentException> (codes.Distinct ().Count () > ICodeSetService.PairCount);
 			Contract.Requires<ArgumentException> (codes.Distinct ().Count () <= ICodeSetService.ListMaxCount);
+			Contract.Requires<ArgumentException> (1 + codes.Max() - codes.Min() != codes.Distinct().Count());
 
-			// Input -> private
-			Contract.Ensures (this.sorted.IsNot (null));
-			Contract.Ensures (Contract.ForAll (codes, item => this.sorted.Contains(item)));
-			Contract.Ensures (this.sorted.Count == codes.Distinct().Count());
+			Contract.Ensures (Theory.Construct(codes, this));
 
 			if (codes is ICodeSet) {
 				this.sorted = new List<Code> (codes); // creates sorted&distinct list from sorted set
@@ -83,23 +81,52 @@ namespace DD.Collections {
 
 		[ContractInvariantMethod]
 		private void Invariant () {
-			// private
-			Contract.Invariant (this.sorted.IsNot (null));
-			Contract.Invariant (this.sorted.Count > ICodeSetService.PairCount);
-			Contract.Invariant (this.sorted.Count <= ICodeSetService.ListMaxCount);
-			Contract.Invariant (this.sorted.SequenceEqual(this.sorted.Distinct().OrderBy(item => (item))));
-
-			// public <- private
-			Contract.Invariant (this.First == this.sorted[0]);
-			Contract.Invariant (this.Last == this.sorted.Last());
-			Contract.Invariant (this.Count == this.sorted.Count);
-
-			// constraints
-			Contract.Invariant (this.Count > ICodeSetService.PairCount);
-			Contract.Invariant (this.Count <= ICodeSetService.ListMaxCount);
+			Contract.Invariant (Theory.Invariant(this));
 		}
 
 		#endregion
 		
+		private static class Theory {
+			
+			[Pure] public static bool Construct (IEnumerable<Code> codes, CodeSetList self) {
+				
+				// disable once ConvertToConstant.Local
+				Success success = true;
+				
+				// Input -> private
+				success.Assert (self.sorted.IsNot (null));
+				success.Assert (Contract.ForAll(codes, self.sorted.Contains));
+				success.Assert (self.sorted.Count == codes.Distinct().Count());
+				success.Assert (self.sorted[0] == codes.Min());
+				success.Assert (self.sorted[self.sorted.Count - 1] == codes.Max());
+				success.Assert (self.sorted.SequenceEqual(codes.Distinct().OrderBy(item => (item))));
+
+				return success;
+			}
+			
+			[Pure] public static bool Invariant (CodeSetList self) {
+				
+				// disable once ConvertToConstant.Local
+				Success success = true;
+				
+				// private
+				success.Assert (self.sorted.IsNot (null));
+				success.Assert (self.sorted.Count > ICodeSetService.PairCount);
+				success.Assert (self.sorted.Count <= ICodeSetService.ListMaxCount);
+				success.Assert (self.sorted.SequenceEqual(self.sorted.Distinct().OrderBy(item => (item))));
+	
+				// public <- private
+				success.Assert (self.First == self.sorted[0]);
+				success.Assert (self.Last == self.sorted[self.sorted.Count - 1]);
+				success.Assert (self.Count == self.sorted.Count);
+	
+				// constraints
+				success.Assert (self.Count > ICodeSetService.PairCount);
+				success.Assert (self.Count <= ICodeSetService.ListMaxCount);
+	            success.Assert (self.Count != self.Length);
+
+				return success;
+			}
+		}
 	}
 }
