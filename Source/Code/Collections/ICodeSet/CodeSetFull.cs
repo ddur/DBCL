@@ -19,9 +19,10 @@ namespace DD.Collections {
         internal CodeSetFull (Code first, Code last) {
             Contract.Requires<ArgumentException> ((first + ICodeSetService.PairCount) <= last);
 
-            // Input -> Output
+            // Input -> private
             Contract.Ensures (this.start == first);
             Contract.Ensures (this.final == last);
+            Contract.Ensures (this.count == 1 + this.final - this.start);
 
             this.start = first;
             this.final = last;
@@ -88,7 +89,8 @@ namespace DD.Collections {
             Contract.Invariant (this.First == this.start);
             Contract.Invariant (this.Last == this.final);
 
-            // public
+            // constraints
+            Contract.Invariant (this.Count == this.Length);
             Contract.Invariant (this.Count > ICodeSetService.PairCount);
         }
 
