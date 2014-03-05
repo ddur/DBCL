@@ -165,28 +165,30 @@ namespace DD.Collections
 		/// <param name="array"></param>
 		/// <param name="arrayIndex"></param>
 		[SuppressMessage("Microsoft.Contracts", "CC1033", Justification = "Not same exceptions")]
-		[Pure]
-		void ICollection<Code>.CopyTo(Code[] array, int arrayIndex) {
+		[Pure] void ICollection<Code>.CopyTo(Code[] array, int arrayIndex) {
 			Contract.Requires<ArgumentNullException>(!array.Is(null));
 			Contract.Requires<ArgumentOutOfRangeException>(arrayIndex >= 0);
 			Contract.Requires<ArgumentOutOfRangeException>(arrayIndex <= (array.Length - 1));
 			array[arrayIndex] = this;
 		}
 
-		/// <summary>Explicit interface implementation.<para>Operations not supported on Read-Only Collection</para>
+		/// <summary>Explicit interface implementation.<para>Operation not supported on Read-Only Collection</para>
 		/// </summary>
 		/// <param name="code"></param>
+		/// <exception cref="T:System.NotSupportedException"></exception>
 		[Pure]
 		void ICollection<Code>.Add(Code code) { throw new NotSupportedException(); }
 
-		/// <summary>Explicit interface implementation.<para>Operations not supported on Read-Only Collection</para>
+		/// <summary>Explicit interface implementation.<para>Operation not supported on Read-Only Collection</para>
 		/// </summary>
+		/// <exception cref="T:System.NotSupportedException"></exception>
 		[Pure]
 		void ICollection<Code>.Clear() { throw new NotSupportedException(); }
 
-		/// <summary>Explicit interface implementation.<para>Operations not supported on Read-Only Collection</para>
+		/// <summary>Explicit interface implementation.<para>Operation not supported on Read-Only Collection</para>
 		/// </summary>
 		/// <param name="code"></param>
+		/// <exception cref="T:System.NotSupportedException"></exception>
 		[Pure]
 		bool ICollection<Code>.Remove(Code code) { throw new NotSupportedException(); }
 		

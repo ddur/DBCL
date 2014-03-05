@@ -147,12 +147,11 @@ namespace DD.Collections
 		/// </summary>
 		/// <param name="array"></param>
 		/// <param name="arrayIndex"></param>
-		//[ContractOption("contract", "inheritance", false)]
-		//[SuppressMessage("Microsoft.Contracts", "CC1033", Justification = "Contract inheritance option disabled")]
+		[SuppressMessage("Microsoft.Contracts", "CC1033", Justification = "Not same exceptions")]
 		[Pure] public void CopyTo(Code[] array, int arrayIndex) {
-			//Contract.Requires<ArgumentNullException>(!array.Is(null));
-			//Contract.Requires<ArgumentOutOfRangeException>(arrayIndex >= 0);
-			//Contract.Requires<ArgumentOutOfRangeException>(arrayIndex <= (array.Length - this.Count));
+			Contract.Requires<ArgumentNullException>(!array.Is(null));
+			Contract.Requires<ArgumentOutOfRangeException>(arrayIndex >= 0);
+			Contract.Requires<ArgumentOutOfRangeException>(arrayIndex <= (array.Length - this.Count));
 			foreach (Code code in this) {
 				array[arrayIndex] = code;
 				++arrayIndex;

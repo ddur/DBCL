@@ -20,13 +20,12 @@ namespace DD.Collections {
             Contract.Requires<ArgumentException> ((first + ICodeSetService.PairCount) <= last);
 
             // Input -> Output
-            Contract.Ensures (this.First == first);
-            Contract.Ensures (this.Last == last);
-            Contract.Ensures (this.Count > ICodeSetService.PairCount);
-            Contract.Ensures (this.Count == this.Length);
+            Contract.Ensures (this.start == first);
+            Contract.Ensures (this.final == last);
 
             this.start = first;
             this.final = last;
+			this.count = 1 + this.final - this.start;
         }
 
         #endregion
@@ -35,6 +34,7 @@ namespace DD.Collections {
 
         private readonly int start;
         private readonly int final;
+		private readonly int count;
 
         #endregion
 
@@ -48,7 +48,13 @@ namespace DD.Collections {
 
         [Pure] public override int Count {
             get {
-                return 1 + this.final - this.start;
+                return this.count;
+            }
+        }
+
+        [Pure] public override int Length {
+            get {
+                return this.count;
             }
         }
 
@@ -77,12 +83,13 @@ namespace DD.Collections {
         [ContractInvariantMethod]
         private void Invariant () {
             // public <- private
+  	        Contract.Invariant (this.Count == this.count);
+  	        Contract.Invariant (this.Length == this.count);
             Contract.Invariant (this.First == this.start);
             Contract.Invariant (this.Last == this.final);
 
             // public
             Contract.Invariant (this.Count > ICodeSetService.PairCount);
-            Contract.Invariant (this.Count == this.Length);
         }
 
         #endregion
