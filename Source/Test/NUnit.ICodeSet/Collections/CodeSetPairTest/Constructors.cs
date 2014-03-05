@@ -9,18 +9,22 @@ using NUnit.Framework;
 
 namespace DD.Collections.CodeSetPairTest
 {
-    [TestFixture]
-    public class Constructors
-    {
-        [Test]
-        public void FromPair()
-        {
-            CodeSetPair csp;
-            Assert.Throws<ArgumentException> (delegate{csp = new CodeSetPair(9,3);});
-            Assert.Throws<InvalidCastException> (delegate{csp = new CodeSetPair(-20,3);});
-            Assert.Throws<InvalidCastException> (delegate{csp = new CodeSetPair(0,-32);});
-            csp = new CodeSetPair(1, 2);
-            csp = new CodeSetPair(Code.MinValue, Code.MaxValue);
-        }
-    }
+	[TestFixture]
+	public class Constructors
+	{
+		[Test]
+		public void FromPair()
+		{
+			CodeSetPair csp;
+			Assert.Throws<ArgumentException> (delegate{csp = new CodeSetPair(9,3);});
+			Assert.Throws<ArgumentException> (delegate{csp = new CodeSetPair(2,2);});
+
+			Assert.Throws<InvalidCastException> (delegate{csp = new CodeSetPair(-20,3);});
+			Assert.Throws<InvalidCastException> (delegate{csp = new CodeSetPair(0,-32);});
+
+			csp = new CodeSetPair(1,2);
+			csp = new CodeSetPair(1,3);
+			csp = new CodeSetPair(Code.MinValue, Code.MaxValue);
+		}
+	}
 }

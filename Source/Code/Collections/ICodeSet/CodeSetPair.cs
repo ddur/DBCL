@@ -8,78 +8,102 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using DD.Diagnostics;
 
 namespace DD.Collections
 {
-    /// <summary>Set of two items (codes)
-    /// <remarks>Space efficient, O(k)</remarks>
-    /// </summary>
-    public sealed class CodeSetPair : CodeSet {
+	/// <summary>Set of two items (codes)
+	/// <remarks>Space efficient, O(k)</remarks>
+	/// </summary>
+	public sealed class CodeSetPair : CodeSet {
 
-        #region Ctor
+		#region Ctor
 
-        internal CodeSetPair (Code first, Code last) {
-            Contract.Requires<ArgumentException> (first < last);
+		internal CodeSetPair (Code low, Code high) {
+			Contract.Requires<ArgumentException> (low < high);
 
-            // Input -> Output
-            Contract.Ensures (this.Count == ICodeSetService.PairCount);
-            Contract.Ensures (this[first] && this[last]);
+			Contract.Ensures (Theory.Construct(low, high, this));
 
-            this.one = first;
-            this.two = last;
-        }
+			this.start = low;
+			this.final = high;
+		}
 
-        #endregion
+		#endregion
 
-        #region Fields
+		#region Fields
 
-        private readonly Code one;
-	    private readonly Code two;
+		private readonly int start;
+		private readonly int final;
 
-	    #endregion
+		#endregion
 
-	    #region ICodeSet
+		#region ICodeSet
 
-	    [Pure] public override bool this [Code code] {
-            get { return code == this.one || code == this.two; }
-        }
+		[Pure] public override bool this [Code code] {
+			get { return code == this.start || code == this.final; }
+		}
 
-	    [Pure] public override int Count {
-	        get { return ICodeSetService.PairCount; }
-        }
+		[Pure] public override int Count {
+			get { return ICodeSetService.PairCount; }
+		}
 
-	    [Pure] public override Code First {
-            get { return this.one; }
-        }
+		[Pure] public override Code First {
+			get { return this.start; }
+		}
 
-	    [Pure] public override Code Last {
-            get { return this.two; }
-        }
+		[Pure] public override Code Last {
+			get { return this.final; }
+		}
 
-	    [Pure] public override IEnumerator<Code> GetEnumerator() {
-            yield return this.one;
-            yield return this.two;
-        }
+		[Pure] public override IEnumerator<Code> GetEnumerator() {
+			yield return this.start;
+			yield return this.final;
+		}
 
-        #endregion
-        
-        #region Invariant
-        
-        [ContractInvariantMethod]
-        private void Invariant () {
-            // private
-            Contract.Invariant (this.one != this.two);
+		#endregion
+		
+		#region Invariant
+		
+		[ContractInvariantMethod]
+		private void Invariant () {
+			Contract.Invariant (Theory.Invariant(this));
+		}
 
-            // public <- private
-            Contract.Invariant (this.First == this.one);
-            Contract.Invariant (this.Last == this.two);
-            
-            // public
-            Contract.Invariant (this.Count == ICodeSetService.PairCount);
-            Contract.Invariant (this.First != this.Last);
-        }
+		#endregion
+		
+		private static class Theory {
 
-        #endregion
-        
+			[Pure] public static bool Construct(int low, int high, CodeSetPair self) {
+				// disable once ConvertToConstant.Local
+				Success success = true;
+				
+				// input -> private
+				success.Assert (self.start == low);
+				success.Assert (self.final == high);
+				success.Assert (self[low]);
+				success.Assert (self[high]);
+
+				return success;
+			}
+			
+			[Pure] public static bool Invariant (CodeSetPair self) {
+				// disable once ConvertToConstant.Local
+				Success success = true;
+				
+				// private
+				success.Assert (self.start.HasCodeValue ());
+				success.Assert (self.final.HasCodeValue ());
+				success.Assert (self.start < self.final);
+
+				// public <- private
+				success.Assert (self.First == self.start);
+				success.Assert (self.Last == self.final);
+				
+				// constraints
+				success.Assert (self.Count == ICodeSetService.PairCount);
+
+				return success;
+			}
+		}
 	}
 }
