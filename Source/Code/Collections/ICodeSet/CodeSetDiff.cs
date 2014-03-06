@@ -7,20 +7,18 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using DD.Diagnostics;
 
 namespace DD.Collections {
 
-	/// <summary>Difference of two ICodeSet's under ICodeSet constrains
-	/// <remarks>Space efficient, O(k)</remarks>
-	/// </summary>
+	/// <summary>Difference set (Range-Set)</summary>
 	public sealed class CodeSetDiff : CodeSet {
 
 		#region Ctor
 
-		/// <summary>Constructor
-		/// Set a is full set
-		/// set a.First &lt; b.First b.Last &lt; a.Last
-		/// </summary>
+		/// <summary>Constructor</summary>
+		/// <param name="a">CodeRange</param>
+		/// <param name="b">CodeSet</param>
 		internal CodeSetDiff (ICodeSet a, ICodeSet b) {
 			Contract.Requires<ArgumentNullException> (!a.IsNull ());
 			Contract.Requires<ArgumentNullException> (!b.IsNull ());
@@ -28,24 +26,17 @@ namespace DD.Collections {
 			Contract.Requires<ArgumentException> (!a.IsEmpty ());
 			Contract.Requires<ArgumentException> (!b.IsEmpty ());
 
-			Contract.Requires<ArgumentException> ((a.Count - b.Count) > ICodeSetService.ListMaxCount);
+			// a is range
+			Contract.Requires<ArgumentException> (a.Count == a.Length);
 
-			// ensures first & last members
+			// b is proper-inner range subset of a
 			Contract.Requires<ArgumentException> (a.First < b.First);
 			Contract.Requires<ArgumentException> (b.Last < a.Last);
 
-			Contract.Ensures (this.aSet.IsNot (null));
-			Contract.Ensures (this.bSet.IsNot (null));
-			Contract.Ensures (this.aSet.Is (a));
-			Contract.Ensures (this.bSet.Is (b));
+			// this.count > ListMaxCount (two-sets-indexer/list-indexer)
+			Contract.Requires<ArgumentException> ((a.Count - b.Count) > ICodeSetService.ListMaxCount);
 
-			// Input -> Output
-			Contract.Ensures (this.Count > ICodeSetService.ListMaxCount);
-			Contract.Ensures (this.Count == a.Count - b.Count);
-			Contract.Ensures (Contract.ForAll (a, item => this[item] == this.aSet[item] && !this.bSet[item]));
-			Contract.Ensures (Contract.ForAll (b, item => !this[item]));
-			Contract.Ensures (this.First == this.aSet.First);
-			Contract.Ensures (this.Last == this.aSet.Last);
+			Contract.Ensures (Theory.Construct(a, b, this));
 
 			this.aSet = a;
 			this.bSet = b;
@@ -106,21 +97,61 @@ namespace DD.Collections {
 
 		[ContractInvariantMethod]
 		private void Invariant () {
-			// private
-			Contract.Invariant (this.aSet.IsNot (null));
-			Contract.Invariant (this.bSet.IsNot (null));
-			
-			// public <- private
-			Contract.Invariant (this.Count == aSet.Count - bSet.Count);
-			Contract.Invariant (this.First == aSet.First);
-			Contract.Invariant (this.Last == aSet.Last);
-
-			// public
-			Contract.Invariant (this.Count > ICodeSetService.ListMaxCount);
-			Contract.Invariant (this.Count < Code.MaxCount);
+			Contract.Invariant (Theory.Invariant(this));
 		}
 
 		#endregion
 		
+		private static class Theory {
+			
+			[Pure] public static bool Construct (ICodeSet a, ICodeSet b, CodeSetDiff self) {
+				// disable once ConvertToConstant.Local
+				Success success = true;
+
+				// input
+				success.Assert (!a.Is(null));
+				success.Assert (!b.Is(null));
+				success.Assert (!a.IsEmpty());
+				success.Assert (!b.IsEmpty());
+				success.Assert (a.Count == a.Length);
+				success.Assert (a.First < b.First);
+				success.Assert (b.Last < a.Last);
+				success.Assert ((a.Count - b.Count) > ICodeSetService.ListMaxCount);
+
+				// input -> private
+				success.Assert (self.aSet.Is (a));
+				success.Assert (self.bSet.Is (b));
+
+				return success;
+			}
+
+			[Pure] public static bool Invariant (CodeSetDiff self) {
+				// disable once ConvertToConstant.Local
+				Success success = true;
+
+				// private
+				success.Assert (!self.aSet.Is (null));
+				success.Assert (!self.bSet.Is (null));
+				success.Assert (!self.aSet.IsEmpty());
+				success.Assert (!self.bSet.IsEmpty());
+				success.Assert (self.aSet.Count == self.aSet.Length);
+				success.Assert (self.aSet.First < self.bSet.First);
+				success.Assert (self.bSet.Last < self.aSet.Last);
+				success.Assert ((self.aSet.Count - self.bSet.Count) > ICodeSetService.ListMaxCount);
+
+				// public <- private
+				success.Assert (self.Count == self.aSet.Count - self.bSet.Count);
+				success.Assert (self.Length == self.aSet.Length);
+				success.Assert (self.First == self.aSet.First);
+				success.Assert (self.Last == self.aSet.Last);
+
+				// constraints
+				success.Assert (self.Count > ICodeSetService.ListMaxCount);
+				success.Assert (self.Count < Code.MaxCount);
+
+				return success;
+			}
+
+		}
 	}
 }
