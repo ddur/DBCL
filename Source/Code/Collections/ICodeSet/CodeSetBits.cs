@@ -130,6 +130,12 @@ namespace DD.Collections
             }
         }
 
+        [Pure] public override int Length {
+            get {
+                return this.sorted.Length;
+            }
+        }
+
         [Pure] public override Code First {
             get {
                 if (this.sorted.Count != 0) return this.start;
@@ -186,11 +192,13 @@ namespace DD.Collections
 				// disable once ConvertToConstant.Local
 				Success success = true;
 				
-	            success.Assert (codes.IsEmpty() || Contract.ForAll (codes, item => self.sorted[item-self.start]));
 				if (!codes.IsNullOrEmpty()) {
 		            success.Assert (self.sorted.Count == codes.Distinct().Count());
 					success.Assert (self.start == codes.Min());
 					success.Assert (self.final == codes.Max());
+					foreach (var item in codes) {
+						success.Assert (self.sorted[item-self.start]);
+					}
 				}
 				else {
 		            success.Assert (self.Count == 0);

@@ -75,8 +75,8 @@ namespace DD.Collections {
 		#region Fields
 
 		private readonly BitSetArray sorted;
-		private readonly int start = Code.MaxValue;
-		private readonly int final = Code.MinValue;
+		private readonly Code start = Code.MaxValue;
+		private readonly Code final = Code.MinValue;
 
 		#endregion
 
@@ -91,6 +91,12 @@ namespace DD.Collections {
 		[Pure] public override int Count {
 			get {
 				return sorted.Count;
+			}
+		}
+
+		[Pure] public override int Length {
+			get {
+				return sorted.Length;
 			}
 		}
 
@@ -177,9 +183,7 @@ namespace DD.Collections {
 				success.Assert (self.sorted[0]);
 				success.Assert (self.sorted[self.sorted.Length - 1]);
 
-				success.Assert (self.start.HasCodeValue ());
-				success.Assert (self.final.HasCodeValue ());
-				success.Assert (((Code)self.start).UnicodePlane() == ((Code)self.final).UnicodePlane());
+				success.Assert (self.start.UnicodePlane() == self.final.UnicodePlane());
 
 				// public <- private
 				success.Assert (self.Length == self.sorted.Length);

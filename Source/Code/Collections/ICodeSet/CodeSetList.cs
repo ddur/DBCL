@@ -59,6 +59,12 @@ namespace DD.Collections {
 			}
 		}
 
+		[Pure] public override int Length {
+			get {
+				return 1 + this.sorted[this.sorted.Count - 1] - this.sorted[0];
+			}
+		}
+
 		[Pure] public override Code First {
 			get {
 				return this.sorted[0];
@@ -95,7 +101,9 @@ namespace DD.Collections {
 				
 				// Input -> private
 				success.Assert (self.sorted.IsNot (null));
-				success.Assert (Contract.ForAll(codes, self.sorted.Contains));
+				foreach (var item in codes) {
+					success.Assert (self.sorted.Contains(item));
+				}
 				success.Assert (self.sorted.Count == codes.Distinct().Count());
 				success.Assert (self.sorted[0] == codes.Min());
 				success.Assert (self.sorted[self.sorted.Count - 1] == codes.Max());
@@ -113,7 +121,6 @@ namespace DD.Collections {
 				success.Assert (self.sorted.IsNot (null));
 				success.Assert (self.sorted.Count > ICodeSetService.PairCount);
 				success.Assert (self.sorted.Count <= ICodeSetService.ListMaxCount);
-				success.Assert (self.sorted.SequenceEqual(self.sorted.Distinct().OrderBy(item => (item))));
 	
 				// public <- private
 				success.Assert (self.First == self.sorted[0]);

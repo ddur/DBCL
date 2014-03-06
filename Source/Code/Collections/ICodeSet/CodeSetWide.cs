@@ -21,9 +21,6 @@ namespace DD.Collections
 	{
 		
 		#region Ctor
-		private CodeSetWide() {
-			
-		}
 		
 		internal CodeSetWide(IEnumerable<Code> codes)
 		{
@@ -98,7 +95,6 @@ namespace DD.Collections
 				++plane;
 			}
 		}
-		
 
 		#endregion
 
@@ -127,6 +123,12 @@ namespace DD.Collections
 		[Pure] public override int Count {
 			get {
 				return this.count;
+			}
+		}
+
+		[Pure] public override int Length {
+			get {
+				return 1 + this.final - this.start;
 			}
 		}
 
@@ -165,42 +167,54 @@ namespace DD.Collections
 			
 			[Pure] public static bool Construct (IEnumerable<Code> codes, CodeSetWide self) {
 				
+				// disable once ConvertToConstant.Local
 				Success success = true;
 				
-				// Intput -> Output
-				success.Assert (codes.Distinct().Count() == self.Count);
-				success.Assert (Contract.ForAll (codes, item => self[item]));
+				// input -> private
+				success.Assert (codes.Distinct().Count() == self.count);
+				foreach (var item in codes) {
+					success.Assert (self.planes[item.UnicodePlane()][item]);
+				}
 			
 				return success;
 			}
 
 			[Pure] public static bool Construct (BitSetArray codes, CodeSetWide self) {
 				
+				// disable once ConvertToConstant.Local
 				Success success = true;
 				
-				// Intput -> Output
+				// input -> private
 				success.Assert (codes.Count == self.Count);
-				success.Assert (Contract.ForAll (codes, item => self[item]));
+				foreach (Code item in codes) {
+					success.Assert (self.planes[item.UnicodePlane()][item]);
+				}
 			
 				return success;
 			}
 
 			[Pure] public static bool Invariant (CodeSetWide self) {
 
+				// disable once ConvertToConstant.Local
 				Success success = true;
 
 				// private
 				success.Assert (self.planes.IsNot (null));
 				success.Assert (self.planes.Length.InRange (2, 1 + ((Code)Code.MaxValue).UnicodePlane()));
-				success.Assert (Contract.ForAll (self.planes, plane => plane.IsNot (null)));
+				foreach (var plane in self.planes) {
+					success.Assert (plane.IsNot (null));
+				}
+				int counter = 0; foreach (ICodeSet iCodeSet in self.planes) { counter += iCodeSet.Count; }
+				success.Assert (self.count == counter);
+				success.Assert (self.start == self.planes[0].First);
+				success.Assert (self.final == self.planes[self.planes.Length-1].Last);
 				
 				// public <- private
-				success.Assert (self.First == self.planes[0].First);
-				success.Assert (self.Last == self.planes.Last().Last);
-				int count = 0; foreach (ICodeSet iCodeSet in self.planes) { count += iCodeSet.Count; }
-				success.Assert (self.Count == count);
+				success.Assert (self.Count == self.count);
+				success.Assert (self.First == self.start);
+				success.Assert (self.Last == self.final);
 				
-				// public
+				// constraints
 				success.Assert (self.Count > ICodeSetService.ListMaxCount);
 				success.Assert (self.Length > 1 + char.MaxValue);
 				success.Assert (self.First.UnicodePlane() != self.Last.UnicodePlane());

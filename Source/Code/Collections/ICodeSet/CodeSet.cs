@@ -34,19 +34,11 @@ namespace DD.Collections
 			}
 		}
 		
+		[Pure] public abstract int Length { get; }
+		
 		[Pure] public abstract Code First { get; }
 		
 		[Pure] public abstract Code Last { get; }
-		
-		[Pure] public virtual int Length {
-			get {
-				if (this.Count == 0) {
-					return 0;
-				} else {
-					return (1 + this.Last - this.First);
-				}
-			}
-		}
 		
 		[Pure] IEnumerator IEnumerable.GetEnumerator() { return this.GetEnumerator(); }
 		

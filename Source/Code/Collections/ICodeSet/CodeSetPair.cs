@@ -32,8 +32,8 @@ namespace DD.Collections
 
 		#region Fields
 
-		private readonly int start;
-		private readonly int final;
+		private readonly Code start;
+		private readonly Code final;
 
 		#endregion
 
@@ -45,6 +45,10 @@ namespace DD.Collections
 
 		[Pure] public override int Count {
 			get { return ICodeSetService.PairCount; }
+		}
+
+		[Pure] public override int Length {
+			get { return 1 + this.final - this.start; }
 		}
 
 		[Pure] public override Code First {
@@ -73,7 +77,7 @@ namespace DD.Collections
 		
 		private static class Theory {
 
-			[Pure] public static bool Construct(int low, int high, CodeSetPair self) {
+			[Pure] public static bool Construct(Code low, Code high, CodeSetPair self) {
 				// disable once ConvertToConstant.Local
 				Success success = true;
 				
@@ -91,8 +95,6 @@ namespace DD.Collections
 				Success success = true;
 				
 				// private
-				success.Assert (self.start.HasCodeValue ());
-				success.Assert (self.final.HasCodeValue ());
 				success.Assert (self.start < self.final);
 
 				// public <- private

@@ -32,8 +32,8 @@ namespace DD.Collections {
 
 		#region Fields
 
-		private readonly int start;
-		private readonly int final;
+		private readonly Code start;
+		private readonly Code final;
 		private readonly int count;
 
 		#endregion
@@ -84,8 +84,6 @@ namespace DD.Collections {
 		private void Invariant () {
 
 			// private
-			Contract.Invariant (this.start.HasCodeValue());
-			Contract.Invariant (this.final.HasCodeValue());
 			Contract.Invariant (this.start < this.final);
 			Contract.Invariant (this.final - this.start >= ICodeSetService.PairCount);
 			Contract.Invariant (this.count == 1 + this.final - this.start);
