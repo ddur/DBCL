@@ -29,6 +29,9 @@ namespace DD.Collections.CodeSetPageTest
 			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new BitSetArray() {21});});
 			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new BitSetArray() {12,5});});
 
+			// requires at least one NOT member
+			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new BitSetArray() {1,2,3,4,5});});
+
 			// requires all codes within same unicode plane
 			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new BitSetArray() {12,66000});});
 
@@ -50,6 +53,9 @@ namespace DD.Collections.CodeSetPageTest
 			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new Code[0]);});
 			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new List<Code>() {21});});
 			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new List<Code>() {1,25});});
+
+			// requires more than ICodeSetService.ListMaxCount NOT members
+			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new List<Code>() {1,2,3,4,5});});
 
 			// requires all codes within same unicode plane
 			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new List<Code>() {12,25,66,66000});});
@@ -74,6 +80,9 @@ namespace DD.Collections.CodeSetPageTest
 			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new CodeSetBits(new Code[0]));});
 			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new CodeSetBits(new List<Code>() {21}));});
 			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new CodeSetBits(new List<Code>() {1,25}));});
+
+			// requires more than ICodeSetService.ListMaxCount NOT members
+			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new CodeSetBits(new List<Code>() {1,2,3,4,5}));});
 
 			// requires all codes within same unicode plane
 			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new CodeSetBits(new List<Code>() {12,66000}));});

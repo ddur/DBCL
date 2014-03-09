@@ -33,8 +33,8 @@ namespace DD.Collections {
 			Contract.Requires<ArgumentException> (a.First < b.First);
 			Contract.Requires<ArgumentException> (b.Last < a.Last);
 
-			// this.count > ListMaxCount (two-sets-indexer/list-indexer)
-			Contract.Requires<ArgumentException> ((a.Count - b.Count) > ICodeSetService.ListMaxCount);
+			// this.count > PairCount
+			Contract.Requires<ArgumentException> ((a.Count - b.Count) > ICodeSetService.PairCount);
 
 			Contract.Ensures (Theory.Construct(a, b, this));
 
@@ -116,7 +116,7 @@ namespace DD.Collections {
 				success.Assert (a.Count == a.Length);
 				success.Assert (a.First < b.First);
 				success.Assert (b.Last < a.Last);
-				success.Assert ((a.Count - b.Count) > ICodeSetService.ListMaxCount);
+				success.Assert ((a.Count - b.Count) > ICodeSetService.PairCount);
 
 				// input -> private
 				success.Assert (self.aSet.Is (a));
@@ -137,7 +137,7 @@ namespace DD.Collections {
 				success.Assert (self.aSet.Count == self.aSet.Length);
 				success.Assert (self.aSet.First < self.bSet.First);
 				success.Assert (self.bSet.Last < self.aSet.Last);
-				success.Assert ((self.aSet.Count - self.bSet.Count) > ICodeSetService.ListMaxCount);
+				success.Assert ((self.aSet.Count - self.bSet.Count) > ICodeSetService.PairCount);
 
 				// public <- private
 				success.Assert (self.Count == self.aSet.Count - self.bSet.Count);
@@ -146,8 +146,8 @@ namespace DD.Collections {
 				success.Assert (self.Last == self.aSet.Last);
 
 				// constraints
-				success.Assert (self.Count > ICodeSetService.ListMaxCount);
-				success.Assert (self.Count < Code.MaxCount);
+				success.Assert (self.Count > ICodeSetService.PairCount);// not Pair
+				success.Assert (self.Count < self.Length);				// not Full
 
 				return success;
 			}

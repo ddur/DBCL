@@ -53,6 +53,7 @@
     <Compile Include="Collections\CodeSetPageTest\Members.cs" />
     <Compile Include="Collections\CodeSetPairTest\Constructors.cs" />
     <Compile Include="Collections\CodeSetPairTest\Members.cs" />
+    <Compile Include="Collections\CodeSetWideTest\Constructors.cs" />
     <Compile Include="Collections\CodeTest\AsICodeSet.cs" />
     <Compile Include="Collections\CodeTest\AsICollectionOfCode.cs" />
     <Compile Include="Collections\CodeTest\AsIComparableToICodeSet.cs" />

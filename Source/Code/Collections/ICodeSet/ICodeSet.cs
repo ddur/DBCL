@@ -16,10 +16,7 @@ using DD.Diagnostics;
 namespace DD.Collections {
 
 	/// <summary>ICodeSet interface
-	/// <remarks>
-	/// <para>ICodeSet implementation requires sorted/ordered ISet&lt;Code&gt;/IEnumerable&lt;Code&gt;</para>
-	/// <para>HashSet is not sorted! Contract will fail on HashSet based ICodeSet implementation</para>
-	/// </remarks>
+	/// <remarks>ICodeSet implementation requires sorted/ordered IEnumerable&lt;Code&gt;</remarks>
 	/// </summary>
 	[ContractClass (typeof (ICodeSetContractClass))]
 	public interface ICodeSet :

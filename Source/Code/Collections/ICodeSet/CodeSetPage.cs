@@ -21,9 +21,10 @@ namespace DD.Collections {
 		internal CodeSetPage (IEnumerable<Code> codes) {
 
 			Contract.Requires<ArgumentNullException> (!codes.Is(null));
-			Contract.Requires<ArgumentException> (codes.Distinct().Count() > ICodeSetService.PairCount);
-			Contract.Requires<ArgumentException> (codes.Min().UnicodePlane() == codes.Max().UnicodePlane());
-			Contract.Requires<ArgumentException> (1 + codes.Max() - codes.Min() != codes.Distinct().Count());
+			Contract.Requires<ArgumentException> (!codes.IsEmpty());
+			Contract.Requires<ArgumentException> (codes.Distinct().Count() > ICodeSetService.PairCount); // not Null-Pair
+			Contract.Requires<ArgumentException> (codes.Distinct().Count() < (codes.Max() - codes.Min())); // not Full-Pair
+			Contract.Requires<ArgumentException> (codes.Min().UnicodePlane() == codes.Max().UnicodePlane()); // one Page
 
 			Contract.Ensures (Theory.Construct(codes, this));
 
@@ -41,7 +42,7 @@ namespace DD.Collections {
 				}
 			}
 			if (codes is CodeSetPage) {
-				// ICodeSet is ReadOnly => can share guts/internals
+				// ICodeSet is ReadOnly => can share
 				this.sorted = ((CodeSetPage)codes).sorted;
 			}
 			else {
@@ -55,10 +56,11 @@ namespace DD.Collections {
 		internal CodeSetPage (BitSetArray bits) {
 
 			Contract.Requires<ArgumentNullException> (!bits.Is(null));
-			Contract.Requires<ArgumentException> (bits.Count > ICodeSetService.PairCount);
+			Contract.Requires<ArgumentException> (!bits.IsEmpty());
 			Contract.Requires<ArgumentOutOfRangeException> (bits.Last <= Code.MaxValue);
-			Contract.Requires<ArgumentException> (((Code)bits.First).UnicodePlane() == ((Code)bits.Last).UnicodePlane());
-			Contract.Requires<ArgumentException> (bits.Count != bits.Length);
+			Contract.Requires<ArgumentException> (bits.Count > ICodeSetService.PairCount);	// not Null-Pair
+			Contract.Requires<ArgumentException> (bits.Count < (bits.Last - bits.First));	// not Full-Pair
+			Contract.Requires<ArgumentException> (((Code)bits.First).UnicodePlane() == ((Code)bits.Last).UnicodePlane()); // one Page
 
 			Contract.Ensures (Theory.Construct(bits, this));
 
@@ -133,22 +135,30 @@ namespace DD.Collections {
 			return BitSetArray.Copy (this.sorted);
 		}
 
-		private static class Theory {
-		 
+		internal static class Theory {
+
 			[Pure] public static bool Construct (IEnumerable<Code> codes, CodeSetPage self) {
 
 				// disable once ConvertToConstant.Local
 				Success success = true;
 				
+				var distinctItems = codes.Distinct().OrderBy(item => (item));
+				var distinctCount = distinctItems.Count();
+				Code distinctMin = distinctItems.Min();
+				Code distinctMax = distinctItems.Max();
+
 				// input -> private
 				success.Assert (self.sorted.IsNot (null));
-				success.Assert (self.sorted.Count == codes.Distinct().Count());
-				foreach (var item in codes) {
+				success.Assert (self.sorted.Count == distinctCount);
+				var e = self.sorted.GetEnumerator();
+				foreach (var item in distinctItems) {
+					e.MoveNext();
+					success.Assert (item == e.Current + self.start);// => SequenceEqual
 					success.Assert (self.sorted[item-self.start]);
 				}
 
-				success.Assert (self.start == codes.Min());
-				success.Assert (self.final == codes.Max());
+				success.Assert (self.start == distinctItems.Min());
+				success.Assert (self.final == distinctItems.Max());
 				
 				return success;
 			}
@@ -158,9 +168,13 @@ namespace DD.Collections {
 				// disable once ConvertToConstant.Local
 				Success success = true;
 
+				// input -> private
 				success.Assert (self.sorted.IsNot (null));
 				success.Assert (self.sorted.Count == bits.Count);
+				var e = self.sorted.GetEnumerator();
 				foreach (var item in bits) {
+					e.MoveNext();
+					success.Assert (item == e.Current + self.start);// => SequenceEqual
 					success.Assert (self.sorted[item-self.start]);
 				}
 
@@ -177,12 +191,9 @@ namespace DD.Collections {
 				
 				// private
 				success.Assert (self.sorted.IsNot (null));
-				success.Assert (self.sorted.Length <= (1 + char.MaxValue));
-				success.Assert (self.sorted.Count > ICodeSetService.PairCount);
-				success.Assert (self.sorted.Count != self.sorted.Length);
-				success.Assert (self.sorted[0]);
-				success.Assert (self.sorted[self.sorted.Length - 1]);
-
+				success.Assert (self.sorted.IsCompact());
+				success.Assert (self.sorted.Count > ICodeSetService.PairCount);	// not Null-Pair
+				success.Assert (self.sorted.Count < (self.sorted.Length - 1));	// not Full-Pair
 				success.Assert (self.start.UnicodePlane() == self.final.UnicodePlane());
 
 				// public <- private
@@ -192,11 +203,9 @@ namespace DD.Collections {
 				success.Assert (self.Last == self.final);
 				
 				// constraints
-				success.Assert (self.Count > ICodeSetService.PairCount);
-				success.Assert (self.Count <= (1 + char.MaxValue));
-				success.Assert (self.Length <= (1 + char.MaxValue));
-				success.Assert (self.Count != self.Length);
-				success.Assert (self.First.UnicodePlane() == self.Last.UnicodePlane());
+				success.Assert (self.Count > ICodeSetService.PairCount);// not Unit-Pair
+				success.Assert (self.Count < (self.Length - 1));		// not Full-Pair
+				success.Assert (self.First.UnicodePlane() == self.Last.UnicodePlane()); // one Page
 
 				return success;
 			}

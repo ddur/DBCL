@@ -25,11 +25,11 @@ namespace DD.Collections.CodeSetPageTest
                 D = r.Next(char.MinValue+10, char.MaxValue);
             }
 
-            csp  = new CodeSetPage(new List<Code>() {1,2,4});
+            csp  = new CodeSetPage(new List<Code>() {1,2,40});
             Assert.False ( csp[C] );
             Assert.False ( csp[D] );
             
-            csp  = new CodeSetPage(new List<Code>() {1,2,C});
+            csp  = new CodeSetPage(new List<Code>() {1,2,50,C});
             Assert.True ( csp[C] );
             Assert.False ( csp[D] );
             

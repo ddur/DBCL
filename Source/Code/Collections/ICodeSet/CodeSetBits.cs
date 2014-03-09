@@ -259,12 +259,11 @@ namespace DD.Collections
 	            success.Assert (self.sorted.IsNot (null));
 	            success.Assert (self.sorted.Length <= Code.MaxCount);
 	            success.Assert (self.sorted.Length == 1 + self.final - self.start);
+				success.Assert (self.sorted.IsCompact());
 	
 	            if (self.sorted.Count != 0) {
 	                success.Assert (self.start.HasCodeValue ());
 	                success.Assert (self.final.HasCodeValue ());
-	                success.Assert (self.sorted[0]);
-	                success.Assert (self.sorted[self.sorted.Length - 1]);
 	            }
 	            else {
 	                success.Assert (self.start == ICodeSetService.NullStart);
