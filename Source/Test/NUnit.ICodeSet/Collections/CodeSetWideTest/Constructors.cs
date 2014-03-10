@@ -1,11 +1,9 @@
-﻿/*
- * Created by SharpDevelop.
- * User: ddur
- * Date: 06/03/2014
- * Time: 20:44
- * 
- * To change this template use Tools | Options | Coding | Edit Standard Headers.
- */
+﻿// --------------------------------------------------------------------------------
+// <copyright file="https://github.com/ddur/DBCL/blob/master/LICENSE" company="DD">
+// Copyright © 2013-2014 Dragan Duric. All Rights Reserved.
+// </copyright>
+// --------------------------------------------------------------------------------
+
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
@@ -50,7 +48,7 @@ namespace DD.Collections.CodeSetWideTest
 					65537,65538,65539,65540,65542});}
 			);
 			
-			// requires to span over single unicode page
+			// requires to span over unicode page
 			Assert.Throws<ArgumentException> (
 				delegate { csw = new CodeSetWide(new BitSetArray () {
 					0,1,2,3,
