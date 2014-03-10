@@ -221,7 +221,7 @@ namespace DD.Collections
 				// private
 				success.Assert (self.planes.IsNot (null));
 				success.Assert (self.planes.Length > 1);
-				success.Assert (self.planes.Length <= ((Code)Code.MaxValue).UnicodePlane());
+				success.Assert (self.planes.Length <= 1 + ((Code)Code.MaxValue).UnicodePlane());
 				foreach (var plane in self.planes) {
 					success.Assert (plane.IsNot (null));
 				}
