@@ -26,12 +26,16 @@ namespace DD.Collections {
 			Contract.Requires<ArgumentException> (!a.IsEmpty ());
 			Contract.Requires<ArgumentException> (!b.IsEmpty ());
 
-			// a is range
+			// a is full range
 			Contract.Requires<ArgumentException> (a.Count == a.Length);
+			Contract.Requires<ArgumentException> (a is CodeSetFull);
 
 			// b is proper-inner range subset of a
 			Contract.Requires<ArgumentException> (a.First < b.First);
 			Contract.Requires<ArgumentException> (b.Last < a.Last);
+			
+			// b is not CodeSetBits
+			Contract.Requires<ArgumentException> (!(b is CodeSetBits));
 
 			// this.count > PairCount
 			Contract.Requires<ArgumentException> ((a.Count - b.Count) > ICodeSetService.PairCount);
@@ -55,7 +59,7 @@ namespace DD.Collections {
 
 		[Pure] public override bool this[Code code] {
 			get {
-				return this.aSet[code] && !this.bSet[code];
+				return !this.bSet[code] && this.aSet[code];
 			}
 		}
 
