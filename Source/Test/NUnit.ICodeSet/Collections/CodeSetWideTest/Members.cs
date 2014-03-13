@@ -20,6 +20,21 @@ namespace DD.Collections.CodeSetWideTest
 		CodeSetWide csw1 = new CodeSetWide(list1);
 		CodeSetWide csw2 = new CodeSetWide(list2);
 
+		[Test] public void AsEnumerable() {
+			
+			Assert.True (csw1.SequenceEqual(list1));
+			Assert.True (csw2.SequenceEqual(list2));
+		}
+
+		[Test] public void FirstLast() {
+
+			Assert.True (csw1.First.Value == 0);
+			Assert.True (csw1.Last.Value == Code.MaxValue);
+
+			Assert.True (csw2.First.Value == 32768);
+			Assert.True (csw2.Last.Value == 65537);
+		}
+		
 		[Test]
 		public void Indexer()
 		{
@@ -63,19 +78,5 @@ namespace DD.Collections.CodeSetWideTest
 
 		}
 		
-		[Test] public void FirstLast() {
-
-			Assert.True (csw1.First.Value == 0);
-			Assert.True (csw1.Last.Value == Code.MaxValue);
-
-			Assert.True (csw2.First.Value == 32768);
-			Assert.True (csw2.Last.Value == 65537);
-		}
-		
-		[Test] public void Enumerable() {
-			
-			Assert.True (csw1.SequenceEqual(list1));
-			Assert.True (csw2.SequenceEqual(list2));
-		}
 	}
 }
