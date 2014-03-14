@@ -8,8 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using DD.Collections;
 using NUnit.Framework;
+
+using DD.Collections;
 
 namespace DD.Collections.CodeTest
 {
@@ -77,31 +78,6 @@ namespace DD.Collections.CodeTest
 		public void ConstructCastFromInvalidInt(int code) {
 			Assert.Throws<ArgumentOutOfRangeException> ( delegate { new Code(code); });
 			Assert.Throws<InvalidCastException> ( delegate { Code C = code; });
-		}
-
-		[Test, TestCaseSource("ValidCode")]
-		public void CastToCharArray(int code) {
-			Code C = code;
-			char[] chrs = C;
-
-			Assert.NotNull (chrs);
-			
-			if (code.InRange(char.MinValue, char.MaxValue)) {
-
-				Assert.True (chrs.Length == 1);
-				if (C.IsSurrogate()) {
-					Assert.False (char.IsSurrogate(chrs[0]));
-					Assert.True (chrs[0] == 0xFFFD);
-				}
-				else {
-					Assert.True (chrs[0] == C);
-				}
-			} else {
-				Assert.True (chrs.Length == 2);
-				Assert.True (char.IsHighSurrogate(chrs[0]));
-				Assert.True (char.IsLowSurrogate(chrs[1]));
-				Assert.True ((""+chrs[0]+chrs[1]).Decode().First() == C);
-			}
 		}
 
 		[Test, TestCaseSource("ValidCode")]

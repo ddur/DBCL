@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 
 using DD.Collections;
+using DD.Text;
+
 using NUnit.Framework;
 
 namespace DD.Collections.CodeTest

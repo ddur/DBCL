@@ -336,9 +336,9 @@ namespace DD.Collections
 		public static implicit operator int (Code code) {
 			return code.Value;
 		}
-		public static implicit operator char[] (Code code) {
-			return code.Encode().ToCharArray();
-		}
+//		public static implicit operator char[] (Code code) {
+//			return code.Encode().ToCharArray();
+//		}
 		public static implicit operator Code (byte value) {
 			return new Code(value);
 		}

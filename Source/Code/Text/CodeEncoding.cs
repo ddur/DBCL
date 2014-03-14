@@ -10,9 +10,10 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 
+using DD.Collections;
 using DD.Diagnostics;
 
-namespace DD.Collections
+namespace DD.Text
 {
 	public static class CodeEncoding {
 

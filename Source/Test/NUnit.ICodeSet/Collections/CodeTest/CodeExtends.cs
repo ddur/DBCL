@@ -6,8 +6,11 @@
 
 using System;
 using System.Collections.Generic;
-using DD.Collections;
+
 using NUnit.Framework;
+
+using DD.Collections;
+using DD.Text;
 
 namespace DD.Collections.CodeTest
 {
