@@ -70,6 +70,7 @@
     <Compile Include="Collections\CodeTest\DataSource.cs" />
     <Compile Include="Collections\CodeTest\DecodeString.cs" />
     <Compile Include="Collections\CodeTest\EncodeToString.cs" />
+    <Compile Include="Collections\ICodeSetTest\Dictionary.cs" />
     <Compile Include="Collections\ICodeSetTest\Factory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

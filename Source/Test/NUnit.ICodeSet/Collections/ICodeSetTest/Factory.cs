@@ -42,8 +42,8 @@ namespace DD.Collections.ICodeSetTest
             Assert.True (ICodeSetFactory.OutputDictionary[cCode] == 1);
             
             // a/b is same set
-            aCode = ICodeSetFactory.From ("az");
-            bCode = ICodeSetFactory.From ("za");
+			aCode = "az".From();
+			bCode = "za".From();
             Assert.True (aCode is CodeSetPair);
             Assert.True (aCode == bCode);
             Assert.True (aCode.Equals(bCode));
@@ -54,7 +54,7 @@ namespace DD.Collections.ICodeSetTest
             Assert.True (ICodeSetFactory.OutputDictionary[aCode] == 2);
 
             // c is different
-            cCode = ICodeSetFactory.From ("09");
+			cCode = "09".From();
             Assert.True (aCode is CodeSetPair);
             Assert.True (aCode != cCode);
             Assert.True (!aCode.Equals(cCode));
@@ -81,8 +81,8 @@ namespace DD.Collections.ICodeSetTest
 
 
             // a/b is same
-            aCode = ICodeSetFactory.From ("Aabcdef");
-            bCode = ICodeSetFactory.From ("fedAcbaAf");
+			aCode = "Aabcdef".From();
+			bCode = "fedAcbaAf".From();
             Assert.True (aCode == bCode);
             Assert.True (aCode.Equals(bCode));
             Assert.True (aCode.Is(bCode));
@@ -93,7 +93,7 @@ namespace DD.Collections.ICodeSetTest
                          ICodeSetFactory.OutputDictionary[bCode]);
 
             // c is same as a/b
-            cCode = ICodeSetFactory.From ((IEnumerable<char>)"Aabcdef");
+			cCode = ("Aabcdef" as IEnumerable<char>).From();
             Assert.True (aCode == cCode);
             Assert.True (aCode.Equals(cCode));
             Assert.True (aCode.Is(cCode));

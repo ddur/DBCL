@@ -47,24 +47,25 @@ namespace DD.Collections
 
         #region IDictionary<ICodeSet, int>
 
-        public int this [ICodeSet codes] {
+        public int this [ICodeSet codeSet] {
             get {
-                return this.unique[codes];
+                return this.unique[codeSet];
             }
             set {
-                this.unique[codes] = value;
+				throw new NotSupportedException("Value is auto-numbered");
+                //this.unique[codeSet] = value;
             }
         }
         
         public ICollection<ICodeSet> Keys {
             get {
-                return (ICollection<ICodeSet>)this.unique.Keys;
+				return this.unique.Keys.ToList();
             }
         }
         
         public ICollection<int> Values {
             get {
-                return (ICollection<int>)this.unique.Values;
+				return this.unique.Values.ToList();
             }
         }
         
@@ -86,13 +87,13 @@ namespace DD.Collections
         
         public bool IsReadOnly {
             get {
-                return ((ICollection<KeyValuePair<ICodeSet,int>>)this.unique).IsReadOnly;
+                return this.unique.IsReadOnly;
             }
         }
         
         public void Add(ICodeSet key, int value)
         {
-            this.unique.Add (key, value);
+			throw new NotSupportedException("Value is auto-numbered");
         }
         
         public bool Remove(ICodeSet key)
@@ -107,7 +108,7 @@ namespace DD.Collections
         
         public void Add(KeyValuePair<ICodeSet, int> item)
         {
-            ((ICollection<KeyValuePair<ICodeSet,int>>)this.unique).Add (item);
+			throw new NotSupportedException("Value is auto-numbered");
         }
         
         public bool Remove(KeyValuePair<ICodeSet, int> item)
