@@ -26,9 +26,23 @@ namespace DD.Collections.ICodeSetTest
 		public void AddICodeSet() {
 			icsDict = new ICodeSetDictionary();
 			icsDict.Add (new CodeSetFull(0,5));
+			icsDict.Add (new CodeSetList(new Code[] {0,2,4,6,8,10}));
 			Assert.True (icsDict[new CodeSetFull(0,5)] == 0);
 			Assert.True (icsDict[new CodeSetBits(new Code[]{0,1,2,3,4,5})] == 0);
-			// TODO duplicate add
+			Assert.True (icsDict[new CodeSetList(new Code[]{0,2,4,6,8,10})] == 1);
+			Assert.True (icsDict[new CodeSetPage(new Code[]{0,2,4,6,8,10})] == 1);
+			
+			// add duplicate
+			Assert.Throws<ArgumentException> (
+				delegate {
+					icsDict.Add (new CodeSetFull(0,5));
+				}
+			);
+			Assert.Throws<ArgumentException> (
+				delegate {
+					icsDict.Add (new CodeSetPage(new Code[]{0,2,4,6,8,10}));
+				}
+			);
 		}
 		
 		[Test]
@@ -252,6 +266,7 @@ namespace DD.Collections.ICodeSetTest
 			icsDict.Add (new CodeSetFull(0,5));
 			icsDict.Add (new CodeSetFull(0,4));
 			icsDict.Add (new CodeSetFull(0,6));
+			Assert.True (icsDict.Values.Distinct().Count() == 3);
 			Assert.True (icsDict.Values.Contains(0));
 			Assert.True (icsDict.Values.Contains(1));
 			Assert.True (icsDict.Values.Contains(2));

@@ -32,7 +32,12 @@ namespace DD.Collections
 
 		public void Add(ICodeSet key)
 		{
-			this.unique.Add (key, id++);
+			try {
+				this.unique.Add (key, id++);
+			}
+			catch (C5.DuplicateNotAllowedException) {
+				throw new ArgumentException("Duplicate not allowed");
+			}
 		}
 		
 		public bool Find(ref ICodeSet key)
