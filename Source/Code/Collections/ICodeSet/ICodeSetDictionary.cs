@@ -53,7 +53,6 @@ namespace DD.Collections
             }
             set {
 				throw new NotSupportedException("Value is auto-numbered");
-                //this.unique[codeSet] = value;
             }
         }
         
@@ -91,10 +90,10 @@ namespace DD.Collections
             }
         }
         
-        public void Add(ICodeSet key, int value)
-        {
+		void IDictionary<ICodeSet, int>.Add(ICodeSet key, int value)
+		{
 			throw new NotSupportedException("Value is auto-numbered");
-        }
+		}
         
         public bool Remove(ICodeSet key)
         {
@@ -106,15 +105,15 @@ namespace DD.Collections
             this.unique.Clear();
         }
         
-        public void Add(KeyValuePair<ICodeSet, int> item)
-        {
+		void ICollection<KeyValuePair<ICodeSet, int>>.Add(KeyValuePair<ICodeSet, int> item)
+		{
 			throw new NotSupportedException("Value is auto-numbered");
-        }
+		}
         
-        public bool Remove(KeyValuePair<ICodeSet, int> item)
-        {
-            return ((ICollection<KeyValuePair<ICodeSet,int>>)this.unique).Remove (item);
-        }
+		bool ICollection<KeyValuePair<ICodeSet, int>>.Remove(KeyValuePair<ICodeSet, int> item)
+		{
+			throw new NotSupportedException();
+		}
         
         #endregion        
 
@@ -122,21 +121,22 @@ namespace DD.Collections
 
         bool ICollection<KeyValuePair<ICodeSet,int>>.Contains(KeyValuePair<ICodeSet, int> item)
         {
-            return ((ICollection<KeyValuePair<ICodeSet,int>>)this.unique).Contains (item);
+			throw new NotSupportedException();
         }
         
         void ICollection<KeyValuePair<ICodeSet,int>>.CopyTo(KeyValuePair<ICodeSet, int>[] array, int arrayIndex)
         {
-            ((ICollection<KeyValuePair<ICodeSet,int>>)this.unique).CopyTo (array, arrayIndex);
+			throw new NotSupportedException();
         }
         
         IEnumerator<KeyValuePair<ICodeSet, int>> IEnumerable<KeyValuePair<ICodeSet,int>>.GetEnumerator()
         {
-            return ((ICollection<KeyValuePair<ICodeSet,int>>)this.unique).GetEnumerator();
+			throw new NotSupportedException();
         }
-        IEnumerator IEnumerable.GetEnumerator()
+
+		IEnumerator IEnumerable.GetEnumerator()
         {
-            return ((System.Collections.IEnumerable)this.unique).GetEnumerator();
+			throw new NotSupportedException();
         }
         
         #endregion
