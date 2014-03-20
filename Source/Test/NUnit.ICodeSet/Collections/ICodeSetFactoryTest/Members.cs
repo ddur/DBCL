@@ -8,10 +8,10 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 
-namespace DD.Collections.ICodeSetTest
+namespace DD.Collections.ICodeSetFactoryTest
 {
     [TestFixture]
-    public class Factory
+    public class Members
     {
         [Test]
         public void CreateUnique()
