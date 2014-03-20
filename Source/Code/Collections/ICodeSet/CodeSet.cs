@@ -79,12 +79,12 @@ namespace DD.Collections
 		
 		[Pure] public static bool operator ==(CodeSet lhs, CodeSet rhs)
 		{
-			return lhs.Equals(rhs);
+			return lhs.Is(null) ? rhs.IsNullOrEmpty() : lhs.Equals(rhs);
 		}
 		
 		[Pure] public static bool operator !=(CodeSet lhs, CodeSet rhs)
 		{
-			return !lhs.Equals(rhs);
+			return lhs.Is(null) ? !rhs.IsNullOrEmpty() : !lhs.Equals(rhs);
 		}
 
 		#endregion

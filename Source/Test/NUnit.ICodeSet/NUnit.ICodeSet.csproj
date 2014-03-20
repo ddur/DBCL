@@ -42,6 +42,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\CodeSetAbstractTest\Members.cs" />
     <Compile Include="Collections\CodeSetBitsTest\Constructors.cs" />
     <Compile Include="Collections\CodeSetBitsTest\Members.cs" />
     <Compile Include="Collections\CodeSetDiffTest\Constructors.cs" />
@@ -86,6 +87,7 @@
     <Folder Include="Collections\CodeSetPageTest" />
     <Folder Include="Collections\CodeSetWideTest" />
     <Folder Include="Collections\CodeSetDiffTest" />
+    <Folder Include="Collections\CodeSetAbstractTest" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Code\DBCL.csproj">

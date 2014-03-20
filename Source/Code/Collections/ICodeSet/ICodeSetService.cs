@@ -44,9 +44,6 @@ namespace DD.Collections
 
             if (self.IsNull() || self.Count == 0) return new BitSetArray();
             
-            var bits = self as CodeSetBits;
-            if (bits.IsNot(null)) return bits.ToBitSetArray();
-
             var ret = new BitSetArray (self.Last+1);
             foreach (int code in self) {
                 ret.Set (code, true);
@@ -183,10 +180,10 @@ namespace DD.Collections
         [Pure] public static int CompareTo (this ICodeSet self, ICodeSet that) {
             
             if (self.QuickSetEquals(that) == true) { return 0; }
-            Contract.Assume (!(self.IsNull() && that.IsNull()));
+            Contract.Assume (!(self.IsNullOrEmpty() && that.IsNullOrEmpty()));
 
-            if (self.IsNull()) { return -1; }
-            if (that.IsNull()) { return 1; }
+            if (self.IsNullOrEmpty()) { return -1; }
+            if (that.IsNullOrEmpty()) { return 1; }
             if (self.Last < that.Last) { return -1; }
             if (self.Last > that.Last) { return 1; }
 
