@@ -71,14 +71,15 @@
     <Compile Include="Collections\CodeTest\DataSource.cs" />
     <Compile Include="Collections\CodeTest\DecodeString.cs" />
     <Compile Include="Collections\CodeTest\EncodeToString.cs" />
-    <Compile Include="Collections\ICodeSetTest\Dictionary.cs" />
-    <Compile Include="Collections\ICodeSetTest\Factory.cs" />
+    <Compile Include="Collections\ICodeSetDictionaryTest\Constructors.cs" />
+    <Compile Include="Collections\ICodeSetDictionaryTest\Members.cs" />
+    <Compile Include="Collections\ICodeSetFactoryTest\Members.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Collections" />
     <Folder Include="Collections\CodeTest" />
-    <Folder Include="Collections\ICodeSetTest" />
+    <Folder Include="Collections\ICodeSetFactoryTest" />
     <Folder Include="Collections\CodeSetBitsTest" />
     <Folder Include="Collections\CodeSetPairTest" />
     <Folder Include="Collections\CodeSetNullTest" />
@@ -88,6 +89,7 @@
     <Folder Include="Collections\CodeSetWideTest" />
     <Folder Include="Collections\CodeSetDiffTest" />
     <Folder Include="Collections\CodeSetAbstractTest" />
+    <Folder Include="Collections\ICodeSetDictionaryTest" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Code\DBCL.csproj">

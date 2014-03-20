@@ -10,18 +10,13 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 
-namespace DD.Collections.ICodeSetTest
+namespace DD.Collections.ICodeSetDictionaryTest
 {
 	[TestFixture]
-	public class Dictionary
+	public class Members
 	{
 		ICodeSetDictionary icsDict;
 
-		[Test]
-		public void Construct() {
-			icsDict = new ICodeSetDictionary();
-		}
-		
 		[Test]
 		public void AddICodeSet() {
 			icsDict = new ICodeSetDictionary();
