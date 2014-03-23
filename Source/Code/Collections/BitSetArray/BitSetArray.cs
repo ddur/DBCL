@@ -3062,17 +3062,11 @@ namespace DD.Collections {
         #region Cast Operators
 
         public static explicit operator BitArray (BitSetArray a) {
-            if ( a.IsNull () ) {
-                return new BitArray (0);
-            }
-            return a.ToBitArray ();
+			return a.IsNull() ? new BitArray(0) : a.ToBitArray();
         }
 
         public static explicit operator BitSetArray (BitArray a) {
-            if ( a.IsNull () ) {
-                return new BitSetArray ();
-            }
-            return BitSetArray.Mask (a, a.Count);
+			return a.IsNull() ? new BitSetArray() : BitSetArray.Mask(a, a.Count);
         }
 
         #endregion
@@ -3080,48 +3074,23 @@ namespace DD.Collections {
         #region Set Operators
 
         public static BitSetArray operator | (BitSetArray a, BitSetArray b) {
-            if ( a.IsNull () ) {
-                return b;
-            }
-            else {
-                return (BitSetArray.Copy (a)).Or (b);
-            }
+			return a.IsNull() ? b : (BitSetArray.Copy(a)).Or(b);
         }
 
         public static BitSetArray operator & (BitSetArray a, BitSetArray b) {
-            if ( a.IsNull () ) {
-                return new BitSetArray ();
-            }
-            else {
-                return (BitSetArray.Copy (a)).And (b);
-            }
+			return a.IsNull() ? new BitSetArray() : (BitSetArray.Copy(a)).And(b);
         }
 
         public static BitSetArray operator ^ (BitSetArray a, BitSetArray b) {
-            if ( a.IsNull () ) {
-                return b;
-            }
-            else {
-                return (BitSetArray.Copy (a)).Xor (b);
-            }
+			return a.IsNull() ? b : (BitSetArray.Copy(a)).Xor(b);
         }
 
         public static BitSetArray operator - (BitSetArray a, BitSetArray b) {
-            if ( a.IsNull () ) {
-                return new BitSetArray ();
-            }
-            else {
-                return (BitSetArray.Copy (a)).Not (b);
-            }
+			return a.IsNull() ? new BitSetArray() : (BitSetArray.Copy(a)).Not(b);
         }
 
         public static BitSetArray operator ~ (BitSetArray a) {
-            if ( a.IsNull () ) {
-                return new BitSetArray ();
-            }
-            else {
-                return (BitSetArray.Copy (a)).Not ();
-            }
+			return a.IsNull() ? new BitSetArray() : (BitSetArray.Copy(a)).Not();
         }
 
         #endregion
