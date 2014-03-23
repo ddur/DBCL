@@ -185,10 +185,10 @@ namespace DD.Collections
 		/// <param name="self"></param>
 		/// <param name="that"></param>
 		/// <returns></returns>
-		[Pure] public static int CompareTo (this ICodeSet self, ICodeSet that) {
+		[Pure] public static int CompareTo (ICodeSet self, ICodeSet that) {
 			
 			if (self.QuickSetEquals(that) == true) { return 0; }
-			Contract.Assume (!(self.IsNullOrEmpty() && that.IsNullOrEmpty()));
+			Contract.Assert (!(self.IsNullOrEmpty() && that.IsNullOrEmpty()));
 
 			if (self.IsNullOrEmpty()) { return -1; }
 			if (that.IsNullOrEmpty()) { return 1; }
@@ -208,13 +208,14 @@ namespace DD.Collections
 		/// <param name="self"></param>
 		/// <param name="that"></param>
 		/// <returns></returns>
-		[Pure] public static bool Equals (this ICodeSet self, ICodeSet that) {
+		[Pure] public static bool Equals (ICodeSet self, ICodeSet that) {
 			switch (self.QuickSetEquals(that)) {
 				case false:
 					return false;
 				case true:
 					return true;
 			}
+			Contract.Assert (!(self.IsNullOrEmpty() || that.IsNullOrEmpty()));
 			return self.SequenceEqual(that);
 		}
 		

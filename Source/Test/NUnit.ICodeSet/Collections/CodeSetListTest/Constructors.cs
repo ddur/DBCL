@@ -26,6 +26,7 @@ namespace DD.Collections.CodeSetListTest
             Assert.Throws<ArgumentException> (delegate{new CodeSetList(new Code[0]);});
             Assert.Throws<ArgumentException> (delegate{new CodeSetList(new Code[] {1});});
             Assert.Throws<ArgumentException> (delegate{new CodeSetList(new Code[] {1,7});});
+            Assert.Throws<ArgumentException> (delegate{new CodeSetList(new Code[] {1,7,7});});
 
             // requires no more than ICodeSetService.ListMaxCount (16) members
             Assert.Throws<ArgumentException> (delegate{new CodeSetList(0.To(16).Select(item => (Code)item));});

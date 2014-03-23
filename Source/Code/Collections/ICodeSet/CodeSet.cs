@@ -45,16 +45,12 @@ namespace DD.Collections
 		[Pure] public abstract IEnumerator<Code> GetEnumerator();
 		
 		[Pure] public virtual bool Equals (ICodeSet that) {
-			// disable once InvokeAsExtensionMethod
 			Contract.Ensures (Contract.Result<bool>() == ICodeSetService.Equals(this,that));
-			// disable once InvokeAsExtensionMethod
 			return ICodeSetService.Equals (this, that);
 		}
 
 		[Pure] public int CompareTo (ICodeSet that) {
-			// disable once InvokeAsExtensionMethod
 			Contract.Ensures (Contract.Result<int>() == ICodeSetService.CompareTo(this, that));
-			// disable once InvokeAsExtensionMethod
 			return ICodeSetService.CompareTo (this, that);
 		}
 
@@ -64,15 +60,12 @@ namespace DD.Collections
 
 		[Pure] public override bool Equals(object obj)
 		{
-			// disable once InvokeAsExtensionMethod
 			Contract.Ensures (Contract.Result<bool>() == ((obj is ICodeSet) && ICodeSetService.Equals(this, (ICodeSet)obj)));
-			// disable once InvokeAsExtensionMethod
 			return (obj is ICodeSet) && ICodeSetService.Equals(this, (ICodeSet)obj);
 		}
 		
 		[Pure] public override int GetHashCode()
 		{
-			// disable once InvokeAsExtensionMethod
 			Contract.Ensures (Contract.Result<int>() == ICodeSetService.GetHashCode(this));
 			return ICodeSetService.GetHashCode(this);
 		}
@@ -98,9 +91,7 @@ namespace DD.Collections
 		/// <param name="b"></param>
 		/// <returns></returns>
 		[Pure] public bool Equals(ICodeSet a, ICodeSet b) {
-			// disable once InvokeAsExtensionMethod
 			Contract.Ensures (Contract.Result<bool>() == ICodeSetService.Equals(a, b));
-			// disable once InvokeAsExtensionMethod
 			return ICodeSetService.Equals(a, b);
 		}
 		/// <summary>
@@ -109,7 +100,6 @@ namespace DD.Collections
 		/// <param name="that"></param>
 		/// <returns></returns>
 		[Pure] public int GetHashCode(ICodeSet that) {
-			// disable once InvokeAsExtensionMethod
 			Contract.Ensures (Contract.Result<int>() == ICodeSetService.GetHashCode(that));
 			return ICodeSetService.GetHashCode(that);
 		}
