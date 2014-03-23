@@ -199,34 +199,38 @@ namespace DD.Collections
 			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
 			Contract.Ensures(!(Contract.Result<ICodeSet>() is CodeSetBits));
 			
-			ICodeSet optimal = OptimalPartOne(bitSet);
+			ICodeSet retSet = OptimalPartOne(bitSet);
 
-			if (!(optimal is CodeSetBits)) {
-				return optimal;
+			if (retSet is CodeSetBits) {
+
+				// not optimal, try DiffSet
+				var complement = bitSet.ToCompact();
+				complement.Not();
+				ICodeSet notSet = OptimalPartOne(new CodeSetBits(complement, (int)retSet.First));
+	
+				if (notSet is CodeSetBits) {
+
+					// not optimal, check size
+					if (notSet.Length < (bitSet.Length / 4)) {
+						// can save at least 3/4 of space
+						retSet = new CodeSetDiff(
+							new CodeSetFull(bitSet.First, bitSet.Last),
+							OptimalPartTwo(notSet as CodeSetBits));
+					}
+					else {
+						// final choice
+						retSet = OptimalPartTwo(bitSet);
+					}
+				}
+				else {
+					// notSet is optimal
+					retSet = new CodeSetDiff(
+						new CodeSetFull(bitSet.First, bitSet.Last),
+						notSet);
+				}
 			}
 			
-			// get complement and offset
-			var bitNot = new BitSetArray(bitSet.Length);
-			int offset = bitSet.Complement.First();
-			foreach (var item in bitSet.Complement) {
-				bitNot.Set(item - offset);
-			}
-			bitNot.TrimExcess();
-			ICodeSet diffSet = OptimalPartOne(new CodeSetBits(bitNot, offset));
-
-			if (!(diffSet is CodeSetBits)) {
-				return new CodeSetDiff(
-					new CodeSetFull(bitSet.First, bitSet.Last),
-					diffSet);
-			}
-			if (diffSet.Length < (bitSet.Length / 4)) { // Can save at least 3/4 of space?
-				return new CodeSetDiff(
-					new CodeSetFull(bitSet.First, bitSet.Last),
-					OptimalPartTwo(diffSet as CodeSetBits));
-			}
-			
-			// final choice
-			return OptimalPartTwo(bitSet);
+			return retSet;
 		}
 
 		#endregion
@@ -483,20 +487,19 @@ namespace DD.Collections
 		
 		#region Complement
 		
-		public static ICodeSet Complement (this ICodeSet req) {
+		public static ICodeSet Complement (this ICodeSet self) {
 			Contract.Requires<ArgumentNullException> (ThisMethodHandlesNull);
-			Contract.Requires<ArgumentOutOfRangeException> (InputDictionary.Is(null) || InputDictionary.ContainsKey(req));
+			Contract.Requires<ArgumentOutOfRangeException> (InputDictionary.Is(null) || InputDictionary.ContainsKey(self));
 
 			Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
 			Contract.Ensures (OutputDictionary.Is(null) || OutputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
 
-			if (req.Is(null) || ((req.Length - req.Count) == 0)) return Empty;
+			if (self.Is(null) || ((self.Length - self.Count) == 0)) return Empty;
 
-			BitSetArray compact = req.ToCompact();
-			compact.Not();
-			compact.TrimExcess();
-			Contract.Assert (compact.Count != 0);
-			return From (compact.FromCompact(req.First));
+			BitSetArray complement = self.ToCompact();
+			complement.Not();
+			Contract.Assert (complement.Count != 0);
+			return From (new CodeSetBits(complement, self.First));
 		}
 		
 		#endregion

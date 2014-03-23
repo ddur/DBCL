@@ -70,7 +70,7 @@ namespace DD.Collections.CodeSetBitsTest
 		}
 		
 		[Test]
-		public void FromBitSetArrayCompact()
+		public void FromBitSetArrayAtOffset()
 		{
 			CodeSetBits csb;
 
