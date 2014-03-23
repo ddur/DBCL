@@ -168,7 +168,15 @@ namespace DD.Collections
 		static class Theory {
 
 			[Pure] public static bool Construct(CodeSetBits self) {
-				return self.sorted.Count == 0;
+
+				// disable once ConvertToConstant.Local
+				Success success = true;
+
+				success.Assert (self.sorted.Count == 0);
+				success.Assert (self.start == ICodeSetService.NullStart);
+				success.Assert (self.final == ICodeSetService.NullFinal);
+
+				return success;
 			}
 			
 			[Pure] public static bool Construct (IEnumerable<Code> codes, CodeSetBits self) {
@@ -185,9 +193,7 @@ namespace DD.Collections
 					}
 				}
 				else {
-					success.Assert (self.Count == 0);
-					success.Assert (self.start == ICodeSetService.NullStart);
-					success.Assert (self.final == ICodeSetService.NullFinal);
+					success.Assert (Construct(self));
 				}
 				
 				return success;
@@ -201,6 +207,7 @@ namespace DD.Collections
 				success.Assert (self.sorted.Count == bits.Count);
 
 				if (bits.Count != 0) {
+					success.Assert (self.sorted.Count == bits.Count);
 					success.Assert (self.start == (int)bits.First + offset);
 					success.Assert (self.final == (int)bits.Last + offset);
 					foreach (var item in bits) {
@@ -208,8 +215,7 @@ namespace DD.Collections
 					}
 				}
 				else {
-					success.Assert (self.start == ICodeSetService.NullStart);
-					success.Assert (self.final == ICodeSetService.NullFinal);
+					success.Assert (Construct(self));
 				}
 				
 				return success;
