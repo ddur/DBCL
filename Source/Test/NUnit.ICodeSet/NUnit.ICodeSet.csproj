@@ -77,6 +77,8 @@
     <Compile Include="Collections\ICodeSetServiceTest\Constants.cs" />
     <Compile Include="Collections\ICodeSetServiceTest\Members\CompareTo.cs" />
     <Compile Include="Collections\ICodeSetServiceTest\Members\Equals.cs" />
+    <Compile Include="Collections\ICodeSetServiceTest\Members\GetHashCode.cs" />
+    <Compile Include="Collections\ICodeSetServiceTest\Members\IsCompact.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

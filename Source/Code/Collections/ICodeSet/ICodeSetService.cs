@@ -211,12 +211,24 @@ namespace DD.Collections
 		[Pure] public static bool Equals (ICodeSet self, ICodeSet that) {
 			switch (self.QuickSetEquals(that)) {
 				case false:
-					return false;
+					return false; // one NullOrEmpty or both not QuickSetEquals
 				case true:
-					return true;
+					return true; // both NullOrEmpty or both QuickSetEquals
 			}
-			Contract.Assert (!(self.IsNullOrEmpty() || that.IsNullOrEmpty()));
-			return self.SequenceEqual(that);
+
+			// none empty, same count, same first, same last
+			Contract.Assume (!self.IsNullOrEmpty());
+			Contract.Assume (!that.IsNullOrEmpty());
+			Contract.Assume (self.Count == that.Count);
+			Contract.Assume (self.First == that.First);
+			Contract.Assume (self.Last == that.Last);
+
+			var e = that.GetEnumerator();
+			foreach (var code in self) {
+				e.MoveNext();
+				if (code != e.Current) return false;
+			}
+			return true;
 		}
 		
 		[Pure] public static int GetHashCode (ICodeSet self) {
@@ -320,6 +332,13 @@ namespace DD.Collections
 				// 100% Not Equals if Range|Count is not equal.
 				return false;
 			}
+
+			Contract.Assert (!self.IsNullOrEmpty());
+			Contract.Assert (!that.IsNullOrEmpty());
+			Contract.Assert (self.Count == that.Count);
+			Contract.Assert (self.First == that.First);
+			Contract.Assert (self.Last == that.Last);
+
 			return null; // Maybe Equals
 		}
 

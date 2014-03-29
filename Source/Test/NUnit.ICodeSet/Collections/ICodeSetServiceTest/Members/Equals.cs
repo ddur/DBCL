@@ -92,7 +92,7 @@ namespace DD.Collections.ICodeSetServiceTest.Members
 			b = new CodeSetBits(new Code[] {0,1,2,3,4,5,6,9});
 			Assert.True (ICodeSetService.Equals (a, b));
 
-			a = new CodeSetList(0,2,3,4,5,6,9);
+			a = new CodeSetList(0,2,3,4,5,6,7,9);
 			b = new CodeSetList(0,1,2,3,4,5,6,9);
 			Assert.False (ICodeSetService.Equals (a, b));
 
