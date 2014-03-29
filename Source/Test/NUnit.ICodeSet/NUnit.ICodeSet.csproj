@@ -75,7 +75,8 @@
     <Compile Include="Collections\ICodeSetDictionaryTest\Members.cs" />
     <Compile Include="Collections\ICodeSetFactoryTest\Members.cs" />
     <Compile Include="Collections\ICodeSetServiceTest\Constants.cs" />
-    <Compile Include="Collections\ICodeSetServiceTest\Members.cs" />
+    <Compile Include="Collections\ICodeSetServiceTest\Members\CompareTo.cs" />
+    <Compile Include="Collections\ICodeSetServiceTest\Members\Equals.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -93,6 +94,7 @@
     <Folder Include="Collections\CodeSetAbstractTest" />
     <Folder Include="Collections\ICodeSetDictionaryTest" />
     <Folder Include="Collections\ICodeSetServiceTest" />
+    <Folder Include="Collections\ICodeSetServiceTest\Members" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Code\DBCL.csproj">

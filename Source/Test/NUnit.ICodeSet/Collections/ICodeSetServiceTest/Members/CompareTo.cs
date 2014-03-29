@@ -4,7 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------
 
-
 using System;
 using NUnit.Framework;
 
@@ -105,97 +104,5 @@ namespace DD.Collections.ICodeSetServiceTest.Members
 			b = new CodeSetList(0,2,3,4,5,6,90);
 			Assert.True (ICodeSetService.CompareTo (a, b) == 1);
 		}			
-	}
-
-	[TestFixture]
-	public class Equals
-	{
-		[Test]
-		public void Equals_NullOrEmpty() {
-			
-			ICodeSet a = null;
-			ICodeSet b = null;
-			Assert.True (ICodeSetService.Equals(a, b));
-			
-			a = CodeSetNull.Singleton;
-			b = null;
-			Assert.True (ICodeSetService.Equals (a, b));
-
-			a = CodeSetNull.Singleton;
-			b = new CodeSetBits();
-			Assert.True (ICodeSetService.Equals (a, b));
-
-			a = new CodeSetBits();
-			b = CodeSetNull.Singleton;
-			Assert.True (ICodeSetService.Equals (a, b));
-
-			a = null;
-			b = new CodeSetBits();
-			Assert.True (ICodeSetService.Equals (a, b));
-		}
-
-		[Test]
-		public void Equals_NullOrEmpty_with_NotEmpty() {
-			
-			ICodeSet a = null;
-			ICodeSet b = new Code(0);
-			Assert.False (ICodeSetService.Equals (a, b));
-
-			a = new CodeSetBits();
-			b = new CodeSetPair(0,100);
-			Assert.False (ICodeSetService.Equals (a, b));
-
-			a = CodeSetNull.Singleton;
-			b = new CodeSetList(0,100,1000);
-			Assert.False (ICodeSetService.Equals (a, b));
-
-			a = new Code(0);
-			b = null; 
-			Assert.False (ICodeSetService.Equals (a, b));
-
-			a = new CodeSetPair(0,100);
-			b = CodeSetNull.Singleton;
-			Assert.False (ICodeSetService.Equals (a, b));
-
-			a = new CodeSetList(0,100,1000);
-			b = new CodeSetBits();
-			Assert.False (ICodeSetService.Equals (a, b));
-		}
-
-		[Test]
-		public void Equals_NotEmpty () {
-			
-			ICodeSet a = new Code(0);
-			ICodeSet b = new Code(1);
-			Assert.False (ICodeSetService.Equals (a, b));
-
-			a = new Code(100);
-			b = new Code(1);
-			Assert.False (ICodeSetService.Equals (a, b));
-
-			a = new CodeSetList(0,1,2,3,4,5,6,8);
-			b = new CodeSetList(0,1,2,3,4,5,6,9);
-			Assert.False (ICodeSetService.Equals (a, b));
-
-			a = new CodeSetList(0,1,2,3,4,5,6,90);
-			b = new CodeSetList(0,1,2,3,4,5,6,8);
-			Assert.False (ICodeSetService.Equals (a, b));
-
-			a = new Code(0);
-			b = new Code(0);
-			Assert.True (ICodeSetService.Equals (a, b));
-
-			a = new CodeSetList(0,1,2,3,4,5,6,9);
-			b = new CodeSetBits(new Code[] {0,1,2,3,4,5,6,9});
-			Assert.True (ICodeSetService.Equals (a, b));
-
-			a = new CodeSetList(0,2,3,4,5,6,9);
-			b = new CodeSetList(0,1,2,3,4,5,6,9);
-			Assert.False (ICodeSetService.Equals (a, b));
-
-			a = new CodeSetList(0,1,2,3,4,5,6,90);
-			b = new CodeSetList(0,2,3,4,5,6,90);
-			Assert.False (ICodeSetService.Equals (a, b));
-		}
 	}
 }

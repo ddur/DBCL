@@ -267,7 +267,7 @@ namespace DD.Collections
 		[Pure] public static bool IsProperRangeSubsetOf (this ICodeSet self, ICodeSet that) {
 			Contract.Requires<ArgumentNullException> (ThisMethodHandlesNull);
 
-			return self.IsRangeSubsetOf (that) && self.Length < that.Length;
+			return self.IsRangeSubsetOf(that) && self.Length < that.Length;
 		}
 
 		[Pure] public static bool IsRangeSupersetOf (this ICodeSet self, ICodeSet that) {
