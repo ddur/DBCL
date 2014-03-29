@@ -236,6 +236,10 @@ namespace DD.Collections
 			return unchecked(self.First<<2) ^ unchecked(self.Count<<1) ^ (self.Last);
 		}
 
+		[Pure] public static bool SequenceEqual (this ICodeSet self, ICodeSet that) {
+			return ICodeSetService.Equals(self, that);
+		}
+
 		#endregion
 		
 		#region Range Relations Service
