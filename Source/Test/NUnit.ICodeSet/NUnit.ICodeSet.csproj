@@ -79,6 +79,8 @@
     <Compile Include="Collections\ICodeSetServiceTest\Members\Equals.cs" />
     <Compile Include="Collections\ICodeSetServiceTest\Members\GetHashCode.cs" />
     <Compile Include="Collections\ICodeSetServiceTest\Members\IsCompact.cs" />
+    <Compile Include="Collections\ICodeSetServiceTest\Members\IsFull_BitSetArray.cs" />
+    <Compile Include="Collections\ICodeSetServiceTest\Members\IsFull_ICodeSet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

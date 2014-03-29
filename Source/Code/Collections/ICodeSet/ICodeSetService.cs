@@ -393,7 +393,7 @@ namespace DD.Collections
 		[Pure] internal static bool IsFull (this BitSetArray self) {
 			Contract.Requires<ArgumentNullException> (ThisMethodHandlesNull);
 
-			return !self.IsNull() && self.Count != 0 && self.Count == 1 + self.Last - self.First;
+			return !self.IsNull() && self.Count != 0 && (self.Count == (1 + (int)self.Last - (int)self.First));
 		}
 
 		#endregion
