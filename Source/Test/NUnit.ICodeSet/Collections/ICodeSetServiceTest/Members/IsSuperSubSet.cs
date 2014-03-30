@@ -10,7 +10,7 @@ using NUnit.Framework;
 namespace DD.Collections.ICodeSetServiceTest.Members
 {
 	[TestFixture]
-	public class SuperSubSet
+	public class IsSuperSubSet
 	{
 		[Test]
 		public void Null()

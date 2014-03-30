@@ -75,7 +75,7 @@ namespace DD.Collections.ICodeSetServiceTest.Members
 		}
 
 		[Test]
-		public void RangeEqual()
+		public void RangeEquals_IsTrue()
 		{
 			ICodeSet a = new CodeSetList(6,9,28);
 			ICodeSet b = new CodeSetPair(6,28);
@@ -85,7 +85,7 @@ namespace DD.Collections.ICodeSetServiceTest.Members
 		}
 
 		[Test]
-		public void NotRangeEqual()
+		public void RangeEquals_IsFalse()
 		{
 			ICodeSet a = new CodeSetList(6,9,28);
 			ICodeSet b = new CodeSetPair(6,27);
