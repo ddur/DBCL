@@ -46,7 +46,7 @@ namespace DD.Collections.ICodeSetServiceTest.Members
 		}
 
 		[Test]
-		public void Self() {
+		public void ReferenceEqual() {
 			ICodeSet a = new CodeSetBits(1,2,3);
 
 			Assert.False (a.IsProperRangeSubsetOf(a));

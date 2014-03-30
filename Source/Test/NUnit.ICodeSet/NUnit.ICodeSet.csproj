@@ -85,6 +85,7 @@
     <Compile Include="Collections\ICodeSetServiceTest\Members\IsNullOrEmpty_ICodeSet.cs" />
     <Compile Include="Collections\ICodeSetServiceTest\Members\IsProperRangeSubSuperOf.cs" />
     <Compile Include="Collections\ICodeSetServiceTest\Members\IsRangeSubSuperOf.cs" />
+    <Compile Include="Collections\ICodeSetServiceTest\Members\SuperSubSet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
