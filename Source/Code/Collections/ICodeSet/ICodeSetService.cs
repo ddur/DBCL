@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace DD.Collections
 {
-	/// <summary>ICodeSet service &amp; extension methods
+	/// <summary>Provides conversion, relation and predicate services
 	/// <remarks>All public except methods returning ICodeSet</remarks>
 	/// </summary>
 	public static class ICodeSetService {
@@ -134,11 +134,11 @@ namespace DD.Collections
 		[Pure] public static bool Overlaps (this ICodeSet self, ICodeSet that) {
 
 			switch (self.QuickSetEquals(that)) {
-					case true: return true;
+				case true: return !self.IsNullOrEmpty();
 			}
 			switch (self.QuickSetOverlaps(that)) {
-					case false: return false;
-					case true: return true;
+				case false: return false;
+				case true: return true;
 			}
 
 			// Get overlap range
@@ -306,7 +306,7 @@ namespace DD.Collections
 		/// <param name="self"></param>
 		/// <param name="that"></param>
 		/// <returns>true/false/maybe</returns>
-		[Pure] private static bool? QuickSetEquals(this ICodeSet self, ICodeSet that) {
+		[Pure] internal static bool? QuickSetEquals(this ICodeSet self, ICodeSet that) {
 			Contract.Requires<ArgumentNullException> (ThisMethodHandlesNull);
 
 			// ATTN! '==' operator can be overloaded to point indirectly here
@@ -350,7 +350,7 @@ namespace DD.Collections
 		/// <param name="self"></param>
 		/// <param name="that"></param>
 		/// <returns>true/false/maybe</returns>
-		[Pure] private static bool? QuickSetOverlaps(this ICodeSet self, ICodeSet that) {
+		[Pure] internal static bool? QuickSetOverlaps(this ICodeSet self, ICodeSet that) {
 			Contract.Requires<ArgumentNullException> (ThisMethodHandlesNull);
 
 			// QuickEquals is allways checked before QuickOverlaps

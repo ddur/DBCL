@@ -18,28 +18,48 @@ namespace DD.Collections.ICodeSetServiceTest.Members
 			
 			ICodeSet a = null;
 			ICodeSet b = null;
-			Assert.True (ICodeSetService.Equals(a, b));
-			Assert.True (a.SequenceEqual(b));
+			Assert.IsTrue (ICodeSetService.Equals(a, b));
+			Assert.IsTrue (ICodeSetService.Equals(b, a));
+			Assert.IsTrue (a.SequenceEqual(b));
+			Assert.IsTrue (b.SequenceEqual(a));
+			Assert.IsTrue (a.QuickSetEquals(b) == true);
+			Assert.IsTrue (b.QuickSetEquals(a) == true);
 			
 			a = CodeSetNull.Singleton;
 			b = null;
-			Assert.True (ICodeSetService.Equals (a, b));
-			Assert.True (a.SequenceEqual(b));
+			Assert.IsTrue (ICodeSetService.Equals (a, b));
+			Assert.IsTrue (ICodeSetService.Equals (b, a));
+			Assert.IsTrue (a.SequenceEqual(b));
+			Assert.IsTrue (b.SequenceEqual(a));
+			Assert.IsTrue (a.QuickSetEquals(b) == true);
+			Assert.IsTrue (b.QuickSetEquals(a) == true);
 
 			a = CodeSetNull.Singleton;
 			b = new CodeSetBits();
-			Assert.True (ICodeSetService.Equals (a, b));
-			Assert.True (a.SequenceEqual(b));
+			Assert.IsTrue (ICodeSetService.Equals (a, b));
+			Assert.IsTrue (ICodeSetService.Equals (b, a));
+			Assert.IsTrue (a.SequenceEqual(b));
+			Assert.IsTrue (b.SequenceEqual(a));
+			Assert.IsTrue (a.QuickSetEquals(b) == true);
+			Assert.IsTrue (b.QuickSetEquals(a) == true);
 
 			a = new CodeSetBits();
 			b = CodeSetNull.Singleton;
-			Assert.True (ICodeSetService.Equals (a, b));
-			Assert.True (a.SequenceEqual(b));
+			Assert.IsTrue (ICodeSetService.Equals (a, b));
+			Assert.IsTrue (ICodeSetService.Equals (b, a));
+			Assert.IsTrue (a.SequenceEqual(b));
+			Assert.IsTrue (b.SequenceEqual(a));
+			Assert.IsTrue (a.QuickSetEquals(b) == true);
+			Assert.IsTrue (b.QuickSetEquals(a) == true);
 
 			a = null;
 			b = new CodeSetBits();
-			Assert.True (ICodeSetService.Equals (a, b));
-			Assert.True (a.SequenceEqual(b));
+			Assert.IsTrue (ICodeSetService.Equals (a, b));
+			Assert.IsTrue (ICodeSetService.Equals (b, a));
+			Assert.IsTrue (a.SequenceEqual(b));
+			Assert.IsTrue (b.SequenceEqual(a));
+			Assert.IsTrue (a.QuickSetEquals(b) == true);
+			Assert.IsTrue (b.QuickSetEquals(a) == true);
 		}
 
 		[Test]
@@ -47,33 +67,57 @@ namespace DD.Collections.ICodeSetServiceTest.Members
 			
 			ICodeSet a = null;
 			ICodeSet b = new Code(0);
-			Assert.False (ICodeSetService.Equals (a, b));
-			Assert.False (a.SequenceEqual(b));
+			Assert.IsFalse (ICodeSetService.Equals (a, b));
+			Assert.IsFalse (ICodeSetService.Equals (b, a));
+			Assert.IsFalse (a.SequenceEqual(b));
+			Assert.IsFalse (b.SequenceEqual(a));
+			Assert.IsTrue (a.QuickSetEquals(b) == false);
+			Assert.IsTrue (b.QuickSetEquals(a) == false);
 
 			a = new CodeSetBits();
 			b = new CodeSetPair(0,100);
-			Assert.False (ICodeSetService.Equals (a, b));
-			Assert.False (a.SequenceEqual(b));
+			Assert.IsFalse (ICodeSetService.Equals (a, b));
+			Assert.IsFalse (ICodeSetService.Equals (b, a));
+			Assert.IsFalse (a.SequenceEqual(b));
+			Assert.IsFalse (b.SequenceEqual(a));
+			Assert.IsTrue (a.QuickSetEquals(b) == false);
+			Assert.IsTrue (b.QuickSetEquals(a) == false);
 
 			a = CodeSetNull.Singleton;
 			b = new CodeSetList(0,100,1000);
-			Assert.False (ICodeSetService.Equals (a, b));
-			Assert.False (a.SequenceEqual(b));
+			Assert.IsFalse (ICodeSetService.Equals (a, b));
+			Assert.IsFalse (ICodeSetService.Equals (b, a));
+			Assert.IsFalse (a.SequenceEqual(b));
+			Assert.IsFalse (b.SequenceEqual(a));
+			Assert.IsTrue (a.QuickSetEquals(b) == false);
+			Assert.IsTrue (b.QuickSetEquals(a) == false);
 
 			a = new Code(0);
 			b = null; 
-			Assert.False (ICodeSetService.Equals (a, b));
-			Assert.False (a.SequenceEqual(b));
+			Assert.IsFalse (ICodeSetService.Equals (a, b));
+			Assert.IsFalse (ICodeSetService.Equals (b, a));
+			Assert.IsFalse (a.SequenceEqual(b));
+			Assert.IsFalse (b.SequenceEqual(a));
+			Assert.IsTrue (a.QuickSetEquals(b) == false);
+			Assert.IsTrue (b.QuickSetEquals(a) == false);
 
 			a = new CodeSetPair(0,100);
 			b = CodeSetNull.Singleton;
-			Assert.False (ICodeSetService.Equals (a, b));
-			Assert.False (a.SequenceEqual(b));
+			Assert.IsFalse (ICodeSetService.Equals (a, b));
+			Assert.IsFalse (ICodeSetService.Equals (b, a));
+			Assert.IsFalse (a.SequenceEqual(b));
+			Assert.IsFalse (b.SequenceEqual(a));
+			Assert.IsTrue (a.QuickSetEquals(b) == false);
+			Assert.IsTrue (b.QuickSetEquals(a) == false);
 
 			a = new CodeSetList(0,100,1000);
 			b = new CodeSetBits();
-			Assert.False (ICodeSetService.Equals (a, b));
-			Assert.False (a.SequenceEqual(b));
+			Assert.IsFalse (ICodeSetService.Equals (a, b));
+			Assert.IsFalse (ICodeSetService.Equals (b, a));
+			Assert.IsFalse (a.SequenceEqual(b));
+			Assert.IsFalse (b.SequenceEqual(a));
+			Assert.IsTrue (a.QuickSetEquals(b) == false);
+			Assert.IsTrue (b.QuickSetEquals(a) == false);
 		}
 
 		[Test]
@@ -81,43 +125,84 @@ namespace DD.Collections.ICodeSetServiceTest.Members
 			
 			ICodeSet a = new Code(0);
 			ICodeSet b = new Code(1);
-			Assert.False (ICodeSetService.Equals (a, b));
-			Assert.False (a.SequenceEqual(b));
+			Assert.IsFalse (ICodeSetService.Equals (a, b));
+			Assert.IsFalse (ICodeSetService.Equals (b, a));
+			Assert.IsFalse (a.SequenceEqual(b));
+			Assert.IsFalse (b.SequenceEqual(a));
+			Assert.IsTrue (a.QuickSetEquals(b) == false);
+			Assert.IsTrue (b.QuickSetEquals(a) == false);
 
 			a = new Code(100);
 			b = new Code(1);
-			Assert.False (ICodeSetService.Equals (a, b));
-			Assert.False (a.SequenceEqual(b));
+			Assert.IsFalse (ICodeSetService.Equals (a, b));
+			Assert.IsFalse (ICodeSetService.Equals (b, a));
+			Assert.IsFalse (a.SequenceEqual(b));
+			Assert.IsFalse (b.SequenceEqual(a));
+			Assert.IsTrue (a.QuickSetEquals(b) == false);
+			Assert.IsTrue (b.QuickSetEquals(a) == false);
 
 			a = new CodeSetList(0,1,2,3,4,5,6,8);
 			b = new CodeSetList(0,1,2,3,4,5,6,9);
-			Assert.False (ICodeSetService.Equals (a, b));
-			Assert.False (a.SequenceEqual(b));
+			Assert.IsFalse (ICodeSetService.Equals (a, b));
+			Assert.IsFalse (ICodeSetService.Equals (b, a));
+			Assert.IsFalse (a.SequenceEqual(b));
+			Assert.IsFalse (b.SequenceEqual(a));
+			Assert.IsTrue (a.QuickSetEquals(b) == false);
+			Assert.IsTrue (b.QuickSetEquals(a) == false);
 
 			a = new CodeSetList(0,1,2,3,4,5,6,90);
 			b = new CodeSetList(0,1,2,3,4,5,6,8);
-			Assert.False (ICodeSetService.Equals (a, b));
-			Assert.False (a.SequenceEqual(b));
+			Assert.IsFalse (ICodeSetService.Equals (a, b));
+			Assert.IsFalse (ICodeSetService.Equals (b, a));
+			Assert.IsFalse (a.SequenceEqual(b));
+			Assert.IsFalse (b.SequenceEqual(a));
+			Assert.IsTrue (a.QuickSetEquals(b) == false);
+			Assert.IsTrue (b.QuickSetEquals(a) == false);
 
 			a = new Code(0);
 			b = new Code(0);
-			Assert.True (ICodeSetService.Equals (a, b));
-			Assert.True (a.SequenceEqual(b));
+			Assert.IsTrue (ICodeSetService.Equals (a, b));
+			Assert.IsTrue (ICodeSetService.Equals (b, a));
+			Assert.IsTrue (a.SequenceEqual(b));
+			Assert.IsTrue (b.SequenceEqual(a));
+			Assert.IsTrue (a.QuickSetEquals(b) == true);
+			Assert.IsTrue (b.QuickSetEquals(a) == true);
+
+			a = new CodeSetPair(0,6);
+			b = new CodeSetBits(0,6);
+			Assert.IsTrue (ICodeSetService.Equals (a, b));
+			Assert.IsTrue (ICodeSetService.Equals (b, a));
+			Assert.IsTrue (a.SequenceEqual(b));
+			Assert.IsTrue (b.SequenceEqual(a));
+			Assert.IsTrue (a.QuickSetEquals(b) == true);
+			Assert.IsTrue (b.QuickSetEquals(a) == true);
 
 			a = new CodeSetList(0,1,2,3,4,5,6,9);
-			b = new CodeSetBits(new Code[] {0,1,2,3,4,5,6,9});
-			Assert.True (ICodeSetService.Equals (a, b));
-			Assert.True (a.SequenceEqual(b));
+			b = new CodeSetBits(0,1,2,3,4,5,6,9);
+			Assert.IsTrue (ICodeSetService.Equals (a, b));
+			Assert.IsTrue (ICodeSetService.Equals (b, a));
+			Assert.IsTrue (a.SequenceEqual(b));
+			Assert.IsTrue (b.SequenceEqual(a));
+			Assert.IsTrue (a.QuickSetEquals(b) == null);
+			Assert.IsTrue (b.QuickSetEquals(a) == null);
 
 			a = new CodeSetList(0,2,3,4,5,6,7,9);
 			b = new CodeSetList(0,1,2,3,4,5,6,9);
-			Assert.False (ICodeSetService.Equals (a, b));
-			Assert.False (a.SequenceEqual(b));
+			Assert.IsFalse (ICodeSetService.Equals (a, b));
+			Assert.IsFalse (ICodeSetService.Equals (b, a));
+			Assert.IsFalse (a.SequenceEqual(b));
+			Assert.IsFalse (b.SequenceEqual(a));
+			Assert.IsTrue (a.QuickSetEquals(b) == null);
+			Assert.IsTrue (b.QuickSetEquals(a) == null);
 
 			a = new CodeSetList(0,1,2,3,4,5,6,90);
 			b = new CodeSetList(0,2,3,4,5,6,90);
-			Assert.False (ICodeSetService.Equals (a, b));
-			Assert.False (a.SequenceEqual(b));
+			Assert.IsFalse (ICodeSetService.Equals (a, b));
+			Assert.IsFalse (ICodeSetService.Equals (b, a));
+			Assert.IsFalse (a.SequenceEqual(b));
+			Assert.IsFalse (b.SequenceEqual(a));
+			Assert.IsTrue (a.QuickSetEquals(b) == false);
+			Assert.IsTrue (b.QuickSetEquals(a) == false);
 		}
 	}
 }

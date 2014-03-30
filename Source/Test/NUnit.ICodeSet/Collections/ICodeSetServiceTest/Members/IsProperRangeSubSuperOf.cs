@@ -21,12 +21,26 @@ namespace DD.Collections.ICodeSetServiceTest.Members
 			Assert.False (b.IsProperRangeSubsetOf(a));
 
 			Assert.True (a.IsProperRangeSubsetOf(b) == b.IsProperRangeSupersetOf(a));
+
+			b = new CodeSetPair(1,2);
+
+			Assert.False (a.IsProperRangeSubsetOf(b));
+			Assert.False (b.IsProperRangeSubsetOf(a));
+
+			Assert.True (a.IsProperRangeSubsetOf(b) == b.IsProperRangeSupersetOf(a));
 		}
 
 		[Test]
 		public void Empty() {
 			ICodeSet a = new CodeSetBits();
 			ICodeSet b = CodeSetNull.Singleton;
+
+			Assert.False (a.IsProperRangeSubsetOf(b));
+			Assert.False (b.IsProperRangeSubsetOf(a));
+
+			Assert.True (a.IsProperRangeSubsetOf(b) == b.IsProperRangeSupersetOf(a));
+
+			b = new Code(7);
 
 			Assert.False (a.IsProperRangeSubsetOf(b));
 			Assert.False (b.IsProperRangeSubsetOf(a));

@@ -35,6 +35,26 @@ namespace DD.Collections.ICodeSetServiceTest.Members
 
 			Assert.IsTrue (a.IsProperSubsetOf(b) == b.IsProperSupersetOf(a)); 
 			Assert.IsTrue (b.IsProperSubsetOf(a) == a.IsProperSupersetOf(b)); 
+
+			b = new Code(5);
+
+			Assert.IsFalse (a.IsSubsetOf(b)); 
+			Assert.IsFalse (b.IsSubsetOf(a)); 
+
+			Assert.IsFalse (a.IsSupersetOf(b)); 
+			Assert.IsFalse (b.IsSupersetOf(a)); 
+
+			Assert.IsFalse (a.IsProperSubsetOf(b)); 
+			Assert.IsFalse (b.IsProperSubsetOf(a)); 
+
+			Assert.IsFalse (a.IsProperSupersetOf(b)); 
+			Assert.IsFalse (b.IsProperSupersetOf(a)); 
+
+			Assert.IsTrue (a.IsSubsetOf(b) == b.IsSupersetOf(a)); 
+			Assert.IsTrue (b.IsSubsetOf(a) == a.IsSupersetOf(b)); 
+
+			Assert.IsTrue (a.IsProperSubsetOf(b) == b.IsProperSupersetOf(a)); 
+			Assert.IsTrue (b.IsProperSubsetOf(a) == a.IsProperSupersetOf(b)); 
 		}
 
 		[Test]
@@ -42,6 +62,26 @@ namespace DD.Collections.ICodeSetServiceTest.Members
 		{
 			ICodeSet a = new CodeSetBits();
 			ICodeSet b = CodeSetNull.Singleton;
+
+			Assert.IsFalse (a.IsSubsetOf(b)); 
+			Assert.IsFalse (b.IsSubsetOf(a)); 
+
+			Assert.IsFalse (a.IsSupersetOf(b)); 
+			Assert.IsFalse (b.IsSupersetOf(a)); 
+
+			Assert.IsFalse (a.IsProperSubsetOf(b)); 
+			Assert.IsFalse (b.IsProperSubsetOf(a)); 
+
+			Assert.IsFalse (a.IsProperSupersetOf(b)); 
+			Assert.IsFalse (b.IsProperSupersetOf(a)); 
+
+			Assert.IsTrue (a.IsSubsetOf(b) == b.IsSupersetOf(a)); 
+			Assert.IsTrue (b.IsSubsetOf(a) == a.IsSupersetOf(b)); 
+
+			Assert.IsTrue (a.IsProperSubsetOf(b) == b.IsProperSupersetOf(a)); 
+			Assert.IsTrue (b.IsProperSubsetOf(a) == a.IsProperSupersetOf(b)); 
+
+			b = new CodeSetBits(1,5);
 
 			Assert.IsFalse (a.IsSubsetOf(b)); 
 			Assert.IsFalse (b.IsSubsetOf(a)); 
