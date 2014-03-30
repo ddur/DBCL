@@ -83,6 +83,8 @@
     <Compile Include="Collections\ICodeSetServiceTest\Members\IsFull_ICodeSet.cs" />
     <Compile Include="Collections\ICodeSetServiceTest\Members\IsNullOrEmpty_BitSetArray.cs" />
     <Compile Include="Collections\ICodeSetServiceTest\Members\IsNullOrEmpty_ICodeSet.cs" />
+    <Compile Include="Collections\ICodeSetServiceTest\Members\IsProperRangeSubSuperOf.cs" />
+    <Compile Include="Collections\ICodeSetServiceTest\Members\IsRangeSubSuperOf.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

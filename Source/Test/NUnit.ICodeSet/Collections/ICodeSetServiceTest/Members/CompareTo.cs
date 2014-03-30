@@ -13,7 +13,7 @@ namespace DD.Collections.ICodeSetServiceTest.Members
 	public class CompareTo
 	{
 		[Test]
-		public void CompareTo_NullOrEmpty()
+		public void NullOrEmpty()
 		{
 			ICodeSet a = null;
 			ICodeSet b = null;
@@ -37,7 +37,7 @@ namespace DD.Collections.ICodeSetServiceTest.Members
 		}
 
 		[Test]
-		public void CompareTo_NullOrEmpty_with_NotEmpty() {
+		public void NullOrEmpty_with_NotEmpty() {
 			
 			ICodeSet a = null;
 			ICodeSet b = new Code(0);
@@ -66,7 +66,7 @@ namespace DD.Collections.ICodeSetServiceTest.Members
 		}
 
 		[Test]
-		public void CompareTo_NotEmpty_MSB() {
+		public void NotEmpty_CompareMostSignificantBit() {
 
 			ICodeSet a = new Code(0);
 			ICodeSet b = new Code(1);
@@ -86,7 +86,7 @@ namespace DD.Collections.ICodeSetServiceTest.Members
 		}			
 
 		[Test]
-		public void CompareTo_NotEmpty_BIT() {
+		public void NotEmpty_CompareBits() {
 
 			ICodeSet a = new Code(0);
 			ICodeSet b = new Code(0);

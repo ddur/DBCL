@@ -13,21 +13,21 @@ namespace DD.Collections.ICodeSetServiceTest.Members
 	public class IsFull_BitSetArray
 	{
 		[Test]
-		public void IsFull_Null_IsFalse()
+		public void Null_IsFalse()
 		{
 			BitSetArray isNull = null;
 			Assert.False (isNull.IsFull());
 		}
 
 		[Test]
-		public void IsFull_Empty_IsFalse()
+		public void Empty_IsFalse()
 		{
 			var isEmpty = new BitSetArray();
 			Assert.False (isEmpty.IsFull());
 		}
 
 		[Test]
-		public void IsFull_NotFull_IsFalse()
+		public void NotFull_IsFalse()
 		{
 			var isNotFull = new BitSetArray() {1,3};
 			Assert.False (isNotFull.IsFull());
@@ -37,7 +37,7 @@ namespace DD.Collections.ICodeSetServiceTest.Members
 		}
 
 		[Test]
-		public void IsFull_Full_IsTrue()
+		public void Full_IsTrue()
 		{
 			var isFull = new BitSetArray() {0};
 			Assert.True (isFull.IsFull());

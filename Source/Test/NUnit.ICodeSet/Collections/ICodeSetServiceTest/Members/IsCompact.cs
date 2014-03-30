@@ -13,21 +13,21 @@ namespace DD.Collections.ICodeSetServiceTest.Members
 	public class IsCompact
 	{
 		[Test]
-		public void IsCompact_Null_ReturnsFalse()
+		public void Null_ReturnsFalse()
 		{
 			BitSetArray isNull = null;
 			Assert.False (isNull.IsCompact());
 		}
 
 		[Test]
-		public void IsCompact_Empty_ReturnsTrue()
+		public void Empty_ReturnsTrue()
 		{
 			var isEmpty = new BitSetArray();
 			Assert.True (isEmpty.IsCompact());
 		}
 
 		[Test]
-		public void IsCompact_NotEmpty()
+		public void NotEmpty_ReturnsCompact()
 		{
 			var notEmpty = new BitSetArray() {0};
 			Assert.True (notEmpty.IsCompact());

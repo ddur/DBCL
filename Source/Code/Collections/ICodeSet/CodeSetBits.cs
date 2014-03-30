@@ -26,6 +26,8 @@ namespace DD.Collections
 			this.sorted = new BitSetArray();
 		}
 
+		internal CodeSetBits (params Code[] codes) : this ((IEnumerable<Code>)codes) {}
+
 		internal CodeSetBits (IEnumerable<Code> codes) {
 			Contract.Requires<ArgumentNullException> (codes.IsNot(null));
 			Contract.Ensures (Theory.Construct(codes, this));

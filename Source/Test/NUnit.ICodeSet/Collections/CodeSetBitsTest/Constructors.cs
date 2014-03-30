@@ -22,6 +22,15 @@ namespace DD.Collections.CodeSetBitsTest
 		}
 		
 		[Test]
+		public void FromParamsCodes()
+		{
+			CodeSetBits csb;
+
+			csb = new CodeSetBits (1);
+			csb = new CodeSetBits (1,12,33,20);
+		}
+		
+		[Test]
 		public void FromCodes()
 		{
 			CodeSetBits csb;

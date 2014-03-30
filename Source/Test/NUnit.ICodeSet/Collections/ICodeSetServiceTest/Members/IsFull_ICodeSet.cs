@@ -13,14 +13,14 @@ namespace DD.Collections.ICodeSetServiceTest.Members
 	public class IsFull_ICodeSet
 	{
 		[Test]
-		public void IsFull_Null_IsFalse()
+		public void Null_IsFalse()
 		{
 			ICodeSet isNull = null;
 			Assert.False (isNull.IsFull());
 		}
 
 		[Test]
-		public void IsFull_Empty_IsFalse()
+		public void Empty_IsFalse()
 		{
 			ICodeSet isEmpty = CodeSetNull.Singleton;
 			Assert.False (isEmpty.IsFull());
@@ -30,7 +30,7 @@ namespace DD.Collections.ICodeSetServiceTest.Members
 		}
 
 		[Test]
-		public void IsFull_NotFull_IsFalse()
+		public void NotFull_IsFalse()
 		{
 			ICodeSet isNotFull = new CodeSetBits(new Code[]{1,3});
 			Assert.False (isNotFull.IsFull());
@@ -40,7 +40,7 @@ namespace DD.Collections.ICodeSetServiceTest.Members
 		}
 
 		[Test]
-		public void IsFull_Full_IsTrue()
+		public void Full_IsTrue()
 		{
 			ICodeSet isFull = new CodeSetBits(new Code[]{12});
 			Assert.True (isFull.IsFull());
