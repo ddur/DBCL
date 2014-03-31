@@ -37,6 +37,32 @@ namespace DD.Collections.ICodeSetServiceTest.Members
 		public void FromCodeSetBits()
 		{
 			BitSetArray compact;
+			ICodeSet a = new CodeSetBits(20);
+			
+			compact = a.ToCompact();
+			Assert.IsTrue (compact.Count == 1);
+			Assert.IsTrue (compact.IsCompact());
+
+			a = new CodeSetBits(22,65);
+			compact = a.ToCompact();
+			Assert.IsTrue (compact.Count == 2);
+			Assert.IsTrue (compact.IsCompact());
+
+			a = new CodeSetBits(22,65,77);
+			compact = a.ToCompact();
+			Assert.IsTrue (compact.Count == 3);
+			Assert.IsTrue (compact.IsCompact());
+
+			a = new CodeSetBits(20,21,22,23,24,25,26,27,28,29);
+			compact = a.ToCompact();
+			Assert.IsTrue (compact.Count == 10);
+			Assert.IsTrue (compact.IsCompact());
+		}
+
+		[Test]
+		public void FromICodeSet()
+		{
+			BitSetArray compact;
 			ICodeSet a = new Code(20);
 			
 			compact = a.ToCompact();
