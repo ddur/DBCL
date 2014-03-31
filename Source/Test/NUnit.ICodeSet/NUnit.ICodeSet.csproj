@@ -89,6 +89,8 @@
     <Compile Include="Collections\ICodeSetServiceTest\Members\RangeEquals.cs" />
     <Compile Include="Collections\ICodeSetServiceTest\Members\RangeOverlaps.cs" />
     <Compile Include="Collections\ICodeSetServiceTest\Members\IsSuperSubSet.cs" />
+    <Compile Include="Collections\ICodeSetServiceTest\Members\ToBitSetArray.cs" />
+    <Compile Include="Collections\ICodeSetServiceTest\Members\ToCompact.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
