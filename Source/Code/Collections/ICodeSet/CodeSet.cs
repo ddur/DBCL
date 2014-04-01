@@ -45,13 +45,13 @@ namespace DD.Collections
 		[Pure] public abstract IEnumerator<Code> GetEnumerator();
 		
 		[Pure] public virtual bool Equals (ICodeSet that) {
-			Contract.Ensures (Contract.Result<bool>() == ICodeSetService.Equals(this,that));
-			return ICodeSetService.Equals (this, that);
+			Contract.Ensures (Contract.Result<bool>() == ICodeSetRelations.Equals(this,that));
+			return ICodeSetRelations.Equals (this, that);
 		}
 
 		[Pure] public int CompareTo (ICodeSet that) {
-			Contract.Ensures (Contract.Result<int>() == ICodeSetService.CompareTo(this, that));
-			return ICodeSetService.CompareTo (this, that);
+			Contract.Ensures (Contract.Result<int>() == ICodeSetRelations.CompareTo(this, that));
+			return ICodeSetRelations.CompareTo (this, that);
 		}
 
 		#endregion

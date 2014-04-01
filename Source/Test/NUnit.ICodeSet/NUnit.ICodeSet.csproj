@@ -74,21 +74,21 @@
     <Compile Include="Collections\ICodeSetDictionaryTest\Constructors.cs" />
     <Compile Include="Collections\ICodeSetDictionaryTest\Members.cs" />
     <Compile Include="Collections\ICodeSetFactoryTest\Members.cs" />
+    <Compile Include="Collections\ICodeSetRelations\Members\CompareTo.cs" />
+    <Compile Include="Collections\ICodeSetRelations\Members\Equals.cs" />
+    <Compile Include="Collections\ICodeSetRelations\Members\IsProperRangeSubSuperOf.cs" />
+    <Compile Include="Collections\ICodeSetRelations\Members\IsRangeSubSuperOf.cs" />
+    <Compile Include="Collections\ICodeSetRelations\Members\IsSuperSubSet.cs" />
+    <Compile Include="Collections\ICodeSetRelations\Members\Overlaps.cs" />
+    <Compile Include="Collections\ICodeSetRelations\Members\RangeEquals.cs" />
+    <Compile Include="Collections\ICodeSetRelations\Members\RangeOverlaps.cs" />
     <Compile Include="Collections\ICodeSetServiceTest\Constants.cs" />
-    <Compile Include="Collections\ICodeSetServiceTest\Members\CompareTo.cs" />
-    <Compile Include="Collections\ICodeSetServiceTest\Members\Equals.cs" />
     <Compile Include="Collections\ICodeSetServiceTest\Members\GetHashCode.cs" />
     <Compile Include="Collections\ICodeSetServiceTest\Members\IsCompact.cs" />
     <Compile Include="Collections\ICodeSetServiceTest\Members\IsFull_BitSetArray.cs" />
     <Compile Include="Collections\ICodeSetServiceTest\Members\IsFull_ICodeSet.cs" />
     <Compile Include="Collections\ICodeSetServiceTest\Members\IsNullOrEmpty_BitSetArray.cs" />
     <Compile Include="Collections\ICodeSetServiceTest\Members\IsNullOrEmpty_ICodeSet.cs" />
-    <Compile Include="Collections\ICodeSetServiceTest\Members\IsProperRangeSubSuperOf.cs" />
-    <Compile Include="Collections\ICodeSetServiceTest\Members\IsRangeSubSuperOf.cs" />
-    <Compile Include="Collections\ICodeSetServiceTest\Members\Overlaps.cs" />
-    <Compile Include="Collections\ICodeSetServiceTest\Members\RangeEquals.cs" />
-    <Compile Include="Collections\ICodeSetServiceTest\Members\RangeOverlaps.cs" />
-    <Compile Include="Collections\ICodeSetServiceTest\Members\IsSuperSubSet.cs" />
     <Compile Include="Collections\ICodeSetServiceTest\Members\ToBitSetArray.cs" />
     <Compile Include="Collections\ICodeSetServiceTest\Members\ToCompact.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -107,8 +107,10 @@
     <Folder Include="Collections\CodeSetDiffTest" />
     <Folder Include="Collections\CodeSetAbstractTest" />
     <Folder Include="Collections\ICodeSetDictionaryTest" />
+    <Folder Include="Collections\ICodeSetRelations\Members" />
     <Folder Include="Collections\ICodeSetServiceTest" />
     <Folder Include="Collections\ICodeSetServiceTest\Members" />
+    <Folder Include="Collections\ICodeSetRelations" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Code\DBCL.csproj">

@@ -7,7 +7,7 @@
 using System;
 using NUnit.Framework;
 
-namespace DD.Collections.ICodeSetServiceTest.Members
+namespace DD.Collections.ICodeSetRelationsTest.Members
 {
 	[TestFixture]
 	public class IsSuperSubSet

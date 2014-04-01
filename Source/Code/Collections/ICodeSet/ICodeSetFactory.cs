@@ -235,7 +235,7 @@ namespace DD.Collections
 
 		#endregion
 
-		#region Operations Factory
+		#region Operations
 
 		// ICodeSet operation names differ from ISet<T> names because
 		// ICodeSet operation does not mutate any operand and returns new set,
@@ -480,7 +480,7 @@ namespace DD.Collections
 					}
 				}
 			}
-			return From (bits.Cast<Code>());
+			return From (bits);
 		}
 
 		#endregion
@@ -496,10 +496,14 @@ namespace DD.Collections
 
 			if (self.Is(null) || ((self.Length - self.Count) == 0)) return Empty;
 
-			BitSetArray complement = self.ToCompact();
-			complement.Not();
-			Contract.Assert (complement.Count != 0);
-			return From (new CodeSetBits(complement, self.First));
+			BitSetArray compact = self.ToCompact();
+			compact.Not();
+			Contract.Assert (compact.Count != 0);
+			var complement = new BitSetArray(self.Last);
+			foreach (var item in compact) {
+				complement.Set(item + self.First);
+			}
+			return From (complement);
 		}
 		
 		#endregion
