@@ -70,12 +70,14 @@ namespace DD.Collections
 			return that.IsProperSubsetOf(self);
 		}
 		
-		/// <summary>Compared as two BigIntegers (BitSetArray)
+		/// <summary>ICodeSet.CompareTo() method implementation/semantics
+		/// <para>Compared as two BigIntegers (BitSetArray)</para>
 		/// </summary>
-		/// <param name="self"></param>
-		/// <param name="that"></param>
-		/// <returns></returns>
-		[Pure] internal static int CompareTo (ICodeSet self, ICodeSet that)
+		/// <param name="self">ICodeSet</param>
+		/// <param name="that">ICodeSet</param>
+		/// <returns>Same as IComparable.CompareTo</returns>
+		/// <remarks>Do not rename this extension method to "CompareTo"!</remarks>
+		[Pure] internal static int Compare (this ICodeSet self, ICodeSet that)
 		{
 			if (self.QuickSetEquals(that) == true) { return 0; }
 			Contract.Assert (!(self.IsNullOrEmpty() && that.IsNullOrEmpty()));
@@ -92,37 +94,63 @@ namespace DD.Collections
 
 		#region ICodeSet Set/Sequence Equality Relation
 
-		/// <summary>True if self.Equals(that)
-		/// <para>ICodeSet is sorted/ordered set, Equals == SetEquals == SequenceEqual</para>
+		/// <summary>ICodeSet.Equals() method implementation/semantics
+		/// <para>SetEquals == SequenceEqual == Equals</para>
 		/// </summary>
-		/// <param name="self"></param>
-		/// <param name="that"></param>
-		/// <returns></returns>
-		[Pure] internal static bool Equals (ICodeSet self, ICodeSet that) {
-			switch (self.QuickSetEquals(that)) {
+		/// <param name="self">ICodeSet</param>
+		/// <param name="that">ICodeSet</param>
+		/// <returns>True on value(set&amp;sequence) equality</returns>
+		/// <remarks>Do not rename this extension method to "Equals"!</remarks>
+		[Pure] public static bool SetEquals (this ICodeSet self, ICodeSet that) {
+			bool? IsEqual = self.QuickSetEquals(that); 
+			switch (IsEqual) {
 				case false:
 					return false; // one NullOrEmpty or both not QuickSetEquals
+
 				case true:
 					return true; // both NullOrEmpty or both QuickSetEquals
-			}
 
-			// none empty, same count, same first, same last
-			Contract.Assume (!self.IsNullOrEmpty());
-			Contract.Assume (!that.IsNullOrEmpty());
-			Contract.Assume (self.Count == that.Count);
-			Contract.Assume (self.First == that.First);
-			Contract.Assume (self.Last == that.Last);
+				default:
+					Contract.Assert (IsEqual == null);
 
-			var e = that.GetEnumerator();
-			foreach (var code in self) {
-				e.MoveNext();
-				if (code != e.Current) return false;
+					// none empty, same count, same first, same last
+					Contract.Assume (!self.IsNullOrEmpty());
+					Contract.Assume (!that.IsNullOrEmpty());
+					Contract.Assume (self.Count == that.Count);
+					Contract.Assume (self.First == that.First);
+					Contract.Assume (self.Last == that.Last);
+		
+					bool move = true;
+					var e = that.GetEnumerator();
+					foreach (var code in self) {
+						move = e.MoveNext();
+						Contract.Assume (move);
+						if (code != e.Current) return false;
+					}
+					move = e.MoveNext();
+					Contract.Assume (!move);
+					return true;
 			}
-			return true;
 		}
 		
+		/// <summary>SequenceEqual extension  
+		/// </summary>
+		/// <param name="self">ICodeSet</param>
+		/// <param name="that">ICodeSet</param>
+		/// <returns></returns>
 		[Pure] public static bool SequenceEqual (this ICodeSet self, ICodeSet that) {
-			return ICodeSetRelations.Equals(self, that);
+			return self.SetEquals(that);
+		}
+
+		/// <summary>ICodeSet.GetHashCode method implementation/semantics
+		/// </summary>
+		/// <param name="self">ICodeSet</param>
+		/// <returns>int HashCode</returns>
+		/// <remarks>Do not rename this extension method to "GetHashCode"!</remarks>
+		[Pure] public static int HashCode (this ICodeSet self)
+		{
+			if (self.IsNull() || self.Count == 0) return 0;
+			return unchecked(self.First<<2) ^ unchecked(self.Count<<1) ^ (self.Last);
 		}
 
 		#endregion

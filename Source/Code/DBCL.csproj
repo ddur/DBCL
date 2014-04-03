@@ -149,6 +149,7 @@
     <Compile Include="Collections\ICodeSet\ICodeSetDictionary.cs" />
     <Compile Include="Collections\ICodeSet\ICodeSetFactory.cs" />
     <Compile Include="Collections\ICodeSet\ICodeSetOperations.cs" />
+    <Compile Include="Collections\ICodeSet\ICodeSetReduction.cs" />
     <Compile Include="Collections\ICodeSet\ICodeSetRelations.cs" />
     <Compile Include="Collections\ICodeSet\ICodeSetService.cs" />
     <Compile Include="Diagnostics\Success.cs" />

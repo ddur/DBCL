@@ -102,7 +102,7 @@ namespace DD.Collections
 				if (codeList.Count == 0) {
 					this.planes[plane] = CodeSetNull.Singleton;
 				} else {
-					this.planes[plane] = new CodeSetBits(codeList).Optimal();
+					this.planes[plane] = new CodeSetBits(codeList).Reduce();
 				}
 				++plane;
 			}

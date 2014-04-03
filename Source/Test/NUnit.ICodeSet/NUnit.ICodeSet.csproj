@@ -74,8 +74,9 @@
     <Compile Include="Collections\ICodeSetDictionaryTest\Constructors.cs" />
     <Compile Include="Collections\ICodeSetDictionaryTest\Members.cs" />
     <Compile Include="Collections\ICodeSetFactoryTest\Members.cs" />
-    <Compile Include="Collections\ICodeSetRelations\Members\CompareTo.cs" />
+    <Compile Include="Collections\ICodeSetRelations\Members\Compare.cs" />
     <Compile Include="Collections\ICodeSetRelations\Members\Equals.cs" />
+    <Compile Include="Collections\ICodeSetRelations\Members\HashCode.cs" />
     <Compile Include="Collections\ICodeSetRelations\Members\IsProperRangeSubSuperOf.cs" />
     <Compile Include="Collections\ICodeSetRelations\Members\IsRangeSubSuperOf.cs" />
     <Compile Include="Collections\ICodeSetRelations\Members\IsSuperSubSet.cs" />
@@ -83,7 +84,6 @@
     <Compile Include="Collections\ICodeSetRelations\Members\RangeEquals.cs" />
     <Compile Include="Collections\ICodeSetRelations\Members\RangeOverlaps.cs" />
     <Compile Include="Collections\ICodeSetServiceTest\Constants.cs" />
-    <Compile Include="Collections\ICodeSetServiceTest\Members\GetHashCode.cs" />
     <Compile Include="Collections\ICodeSetServiceTest\Members\IsCompact.cs" />
     <Compile Include="Collections\ICodeSetServiceTest\Members\IsFull_BitSetArray.cs" />
     <Compile Include="Collections\ICodeSetServiceTest\Members\IsFull_ICodeSet.cs" />

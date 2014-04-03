@@ -119,72 +119,72 @@ namespace DD.Collections.CodeSetAbstractTest
 		[Test]
 		public void Equals_IEqualityComparerOfICodeSet() {
 
-			ICodeSet icset_a = new CodeSetList(new Code[] {0,1,5,7});
-			ICodeSet icset_b = new CodeSetPage(new Code[] {0,1,5,7});
-			ICodeSet icset_c = new CodeSetList(new Code[] {1,5,7});
+			CodeSet cset_a = new CodeSetList(new Code[] {0,1,5,7});
+			CodeSet cset_b = new CodeSetPage(new Code[] {0,1,5,7});
+			CodeSet cset_c = new CodeSetList(new Code[] {1,5,7});
 			
-			Assert.True (icset_a.Equals(icset_a, icset_b));
-			Assert.True (icset_b.Equals(icset_a, icset_b));
-			Assert.True (icset_c.Equals(icset_a, icset_b));
+			Assert.True (cset_a.Equals(cset_a, cset_b));
+			Assert.True (cset_b.Equals(cset_a, cset_b));
+			Assert.True (cset_c.Equals(cset_a, cset_b));
 
-			Assert.False (icset_a.Equals(icset_a, icset_c));
-			Assert.False (icset_b.Equals(icset_c, icset_a));
-			Assert.False (icset_c.Equals(icset_c, icset_a));
+			Assert.False (cset_a.Equals(cset_a, cset_c));
+			Assert.False (cset_b.Equals(cset_c, cset_a));
+			Assert.False (cset_c.Equals(cset_c, cset_a));
 
-			Assert.False (icset_a.Equals(icset_b, icset_c));
-			Assert.False (icset_b.Equals(icset_b, icset_c));
-			Assert.False (icset_c.Equals(icset_c, icset_b));
+			Assert.False (cset_a.Equals(cset_b, cset_c));
+			Assert.False (cset_b.Equals(cset_b, cset_c));
+			Assert.False (cset_c.Equals(cset_c, cset_b));
 
-			icset_c = null;
-			Assert.False (icset_a.Equals(icset_b, icset_c));
-			Assert.False (icset_b.Equals(icset_c, icset_b));
+			cset_c = null;
+			Assert.False (cset_a.Equals(cset_b, cset_c));
+			Assert.False (cset_b.Equals(cset_c, cset_b));
 
-			icset_b = null;
-			Assert.True (icset_a.Equals(icset_b, icset_c));
-			Assert.True (icset_a.Equals(icset_c, icset_b));
+			cset_b = null;
+			Assert.True (cset_a.Equals(cset_b, cset_c));
+			Assert.True (cset_a.Equals(cset_c, cset_b));
 		}
 
 		[Test]
 		public void Equals_ObjectOverride() {
 
-			ICodeSet icset_a = new CodeSetList(new Code[] {0,1,5,7});
-			ICodeSet icset_b = new CodeSetPage(new Code[] {0,1,5,7});
-			ICodeSet icset_c = new CodeSetList(new Code[] {1,5,7});
+			CodeSet cset_a = new CodeSetList(new Code[] {0,1,5,7});
+			CodeSet cset_b = new CodeSetPage(new Code[] {0,1,5,7});
+			CodeSet cset_c = new CodeSetList(new Code[] {1,5,7});
 			
-			Assert.True (icset_a.Equals((object)icset_a));
-			Assert.True (icset_b.Equals((object)icset_b));
-			Assert.True (icset_c.Equals((object)icset_c));
+			Assert.True (cset_a.Equals((object)cset_a));
+			Assert.True (cset_b.Equals((object)cset_b));
+			Assert.True (cset_c.Equals((object)cset_c));
 
-			Assert.True (icset_a.Equals((object)icset_b));
-			Assert.True (icset_b.Equals((object)icset_a));
+			Assert.True (cset_a.Equals((object)cset_b));
+			Assert.True (cset_b.Equals((object)cset_a));
 
-			Assert.False (icset_a.Equals((object)icset_c));
-			Assert.False (icset_b.Equals((object)icset_c));
+			Assert.False (cset_a.Equals((object)cset_c));
+			Assert.False (cset_b.Equals((object)cset_c));
 
-			Assert.False (icset_a.Equals((object)null));
-			Assert.False (icset_b.Equals((object)null));
-			Assert.False (icset_c.Equals((object)null));
+			Assert.False (cset_a.Equals((object)null));
+			Assert.False (cset_b.Equals((object)null));
+			Assert.False (cset_c.Equals((object)null));
 
-			Assert.False (icset_a.Equals((object)new BitSetArray(){0,1,5,7}));
-			Assert.False (icset_b.Equals((object)new Code[]{0,1,5,7}));
-			Assert.False (icset_c.Equals(new object()));
+			Assert.False (cset_a.Equals((object)new BitSetArray(){0,1,5,7}));
+			Assert.False (cset_b.Equals((object)new Code[]{0,1,5,7}));
+			Assert.False (cset_c.Equals(new object()));
 		}
 
 		[Test]
 		public void GetHashCode_ObjectOverride() {
-			ICodeSet icset_a = new CodeSetList(new Code[] {0,1,5,7});
-			ICodeSet icset_b = new CodeSetPage(new Code[] {0,1,5,7});
+			CodeSet cset_a = new CodeSetList(new Code[] {0,1,5,7});
+			CodeSet cset_b = new CodeSetPage(new Code[] {0,1,5,7});
 			
-			Assert.True (icset_a.GetHashCode() == icset_b.GetHashCode());
+			Assert.True (cset_a.GetHashCode() == cset_b.GetHashCode());
 		}
 
 		[Test]
 		public void GetHashCode_IEqualityComparerOfICodeSet() {
-			ICodeSet icset_a = new CodeSetList(new Code[] {0,1,5,7});
-			ICodeSet icset_b = new CodeSetPage(new Code[] {0,1,5,7});
+			CodeSet cset_a = new CodeSetList(new Code[] {0,1,5,7});
+			CodeSet cset_b = new CodeSetPage(new Code[] {0,1,5,7});
 			
-			Assert.True (icset_a.GetHashCode(icset_a) == icset_a.GetHashCode(icset_b));
-			Assert.True (icset_b.GetHashCode(icset_a) == icset_b.GetHashCode(icset_b));
+			Assert.True (cset_a.GetHashCode(cset_a) == cset_a.GetHashCode(cset_b));
+			Assert.True (cset_b.GetHashCode(cset_a) == cset_b.GetHashCode(cset_b));
 		}
 
 		[Test]

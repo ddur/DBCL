@@ -45,13 +45,13 @@ namespace DD.Collections
 		[Pure] public abstract IEnumerator<Code> GetEnumerator();
 		
 		[Pure] public virtual bool Equals (ICodeSet that) {
-			Contract.Ensures (Contract.Result<bool>() == ICodeSetRelations.Equals(this,that));
-			return ICodeSetRelations.Equals (this, that);
+			Contract.Ensures (Contract.Result<bool>() == this.SetEquals(that));
+			return this.SetEquals(that);
 		}
 
 		[Pure] public int CompareTo (ICodeSet that) {
-			Contract.Ensures (Contract.Result<int>() == ICodeSetRelations.CompareTo(this, that));
-			return ICodeSetRelations.CompareTo (this, that);
+			Contract.Ensures (Contract.Result<int>() == this.Compare(that));
+			return this.Compare(that);
 		}
 
 		#endregion
@@ -60,14 +60,14 @@ namespace DD.Collections
 
 		[Pure] public override bool Equals(object obj)
 		{
-			Contract.Ensures (Contract.Result<bool>() == ((obj is ICodeSet) && ICodeSetService.Equals(this, (ICodeSet)obj)));
-			return (obj is ICodeSet) && ICodeSetService.Equals(this, (ICodeSet)obj);
+			Contract.Ensures (Contract.Result<bool>() == ((obj is ICodeSet) && this.SetEquals((ICodeSet)obj)));
+			return (obj is ICodeSet) && this.SetEquals((ICodeSet)obj);
 		}
 		
 		[Pure] public override int GetHashCode()
 		{
-			Contract.Ensures (Contract.Result<int>() == ICodeSetService.GetHashCode(this));
-			return ICodeSetService.GetHashCode(this);
+			Contract.Ensures (Contract.Result<int>() == this.HashCode());
+			return this.HashCode();
 		}
 		
 		[Pure] public static bool operator ==(CodeSet lhs, CodeSet rhs)
@@ -91,8 +91,8 @@ namespace DD.Collections
 		/// <param name="b"></param>
 		/// <returns></returns>
 		[Pure] public bool Equals(ICodeSet a, ICodeSet b) {
-			Contract.Ensures (Contract.Result<bool>() == ICodeSetService.Equals(a, b));
-			return ICodeSetService.Equals(a, b);
+			Contract.Ensures (Contract.Result<bool>() == a.SetEquals(b));
+			return a.SetEquals(b);
 		}
 		/// <summary>
 		/// Returns a hash code for the specified object.
@@ -100,8 +100,8 @@ namespace DD.Collections
 		/// <param name="that"></param>
 		/// <returns></returns>
 		[Pure] public int GetHashCode(ICodeSet that) {
-			Contract.Ensures (Contract.Result<int>() == ICodeSetService.GetHashCode(that));
-			return ICodeSetService.GetHashCode(that);
+			Contract.Ensures (Contract.Result<int>() == that.HashCode());
+			return that.HashCode();
 		}
 
 		#endregion

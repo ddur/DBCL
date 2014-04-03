@@ -25,11 +25,28 @@ namespace DD.Collections
 		public const int NullStart = -1;
 		public const int NullFinal = -2;
 
-		#region To/From(Compact)BitSetArray Service
+		#region To Service
 
-		[Pure] public static bool IsCompact(this BitSetArray self) {
-			Contract.Requires<ArgumentNullException> (ThisMethodHandlesNull);
+		public static IEnumerable<Code> ToCodes (this IEnumerable<char> chars) {
+			if (chars.IsNot(null)) {
+				foreach (Code code in chars) {
+					yield return code; 
+				}
+			}
+		}
 
+		public static IEnumerable<Code> ToCodes (this IEnumerable<int> ints) {
+			if (ints.IsNot(null)) {
+				foreach (var code in ints) {
+					if (code.HasCodeValue()) {
+						yield return (Code)code;
+					}
+				}
+			}
+		}
+
+		[Pure] public static bool IsCompact(this BitSetArray self)
+		{
 			if (self.IsNull()) return false;
 			
 			if (self.Count == 0) {
@@ -44,8 +61,8 @@ namespace DD.Collections
 		/// </summary>
 		/// <param name="self"></param>
 		/// <returns></returns>
-		[Pure] public static BitSetArray ToBitSetArray(this ICodeSet self) {
-
+		[Pure] public static BitSetArray ToBitSetArray(this ICodeSet self)
+		{
 			Contract.Ensures (Contract.Result<BitSetArray>().IsNot(null));
 			Contract.Ensures (((self.IsNull() || self.Count == 0)
 							   && Contract.Result<BitSetArray>().Count == 0 )
@@ -68,9 +85,8 @@ namespace DD.Collections
 		/// </summary>
 		/// <param name="self"></param>
 		/// <returns></returns>
-		[Pure] internal static BitSetArray ToCompact(this ICodeSet self) {
-			Contract.Requires<ArgumentNullException> (ThisMethodHandlesNull);
-
+		[Pure] internal static BitSetArray ToCompact(this ICodeSet self)
+		{
 			Contract.Ensures (Contract.Result<BitSetArray>().IsNot(null));
 			Contract.Ensures (Contract.Result<BitSetArray>().IsCompact());
 
@@ -93,13 +109,7 @@ namespace DD.Collections
 		
 		#endregion
 
-		[Pure] internal static int GetHashCode (ICodeSet self)
-		{
-			if (self.IsNull() || self.Count == 0) return 0;
-			return unchecked(self.First<<2) ^ unchecked(self.Count<<1) ^ (self.Last);
-		}
-
-		#region Properties Service
+		#region Properties
 
 		[Pure] public static bool IsNullOrEmpty (this ICodeSet self) {
 			Contract.Requires<ArgumentNullException> (ThisMethodHandlesNull);

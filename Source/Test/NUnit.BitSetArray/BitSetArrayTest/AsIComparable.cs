@@ -15,8 +15,8 @@ namespace DD.Collections.BitSetArrayTest.Interfaces {
 
         [Test]
         public void CompareTo () {
-            BitSetArray bsA = new BitSetArray ();
-            BitSetArray bsB = new BitSetArray ();
+            var bsA = new BitSetArray ();
+            var bsB = new BitSetArray ();
 
             Assert.That (bsA.CompareTo ((BitSetArray)null) == 0);
             Assert.That (bsA.Equals ((BitSetArray)null));
@@ -74,7 +74,7 @@ namespace DD.Collections.BitSetArrayTest.Interfaces {
         }
 
         [TestFixtureTearDown]
-        public void Dispose () {
+        public void Kill () {
             GC.Collect ();
         }
     }

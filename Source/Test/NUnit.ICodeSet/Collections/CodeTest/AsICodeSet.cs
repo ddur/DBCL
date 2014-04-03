@@ -16,7 +16,7 @@ namespace DD.Collections.CodeTest
 		[Test]
 		public void Interface()
 		{
-			Random r = new Random();
+			var r = new Random();
 			Code C = r.Next(Code.MinValue, Code.MaxValue);
 			Code D = C;
 			while (D == C) {
@@ -41,14 +41,14 @@ namespace DD.Collections.CodeTest
 			ICodeSet ics2 = D;
 			Assert.False (iC.Equals(ics2));
 			Assert.False (iC.GetHashCode() == ics2.GetHashCode());
-			Assert.True  (iC.GetHashCode() == ICodeSetService.GetHashCode(iC));
-			Assert.True  (ics2.GetHashCode() == ICodeSetService.GetHashCode(ics2));
+			Assert.True  (iC.GetHashCode() == iC.HashCode());
+			Assert.True  (ics2.GetHashCode() == ics2.HashCode());
 
 			ics2 = C;
 			Assert.True  (iC.Equals(ics2));
 			Assert.True  (iC.GetHashCode() == ics2.GetHashCode());
-			Assert.True  (iC.GetHashCode() == ICodeSetService.GetHashCode(iC));
-			Assert.True  (ics2.GetHashCode() == ICodeSetService.GetHashCode(ics2));
+			Assert.True  (iC.GetHashCode() == iC.HashCode());
+			Assert.True  (ics2.GetHashCode() == ics2.HashCode());
 
 		}
 		

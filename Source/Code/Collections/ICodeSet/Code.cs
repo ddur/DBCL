@@ -209,16 +209,13 @@ namespace DD.Collections
 		#region IEquatable<ICodeSet>
 
 		[Pure] public bool Equals (ICodeSet that) {
-			// disable once InvokeAsExtensionMethod
-			Contract.Ensures (Contract.Result<bool>() == ICodeSetService.Equals(this, that));
-			// disable once InvokeAsExtensionMethod
-			return ICodeSetService.Equals (this, that);
+			Contract.Ensures (Contract.Result<bool>() == this.SetEquals(that));
+			return this.SetEquals (that);
 		}
 
 		[Pure] public override int GetHashCode() {
-			// disable once InvokeAsExtensionMethod
-			Contract.Ensures (Contract.Result<int>() == ICodeSetService.GetHashCode(this));
-			return ICodeSetService.GetHashCode(this);
+			Contract.Ensures (Contract.Result<int>() == this.HashCode());
+			return this.HashCode();
 		}
 		
 		#endregion
@@ -234,9 +231,9 @@ namespace DD.Collections
 		[Pure]
 		public bool Equals(ICodeSet a, ICodeSet b) {
 			// disable once InvokeAsExtensionMethod
-			Contract.Ensures (Contract.Result<bool>() == ICodeSetService.Equals(a, b));
+			Contract.Ensures (Contract.Result<bool>() == a.SetEquals(b));
 			// disable once InvokeAsExtensionMethod
-			return ICodeSetService.Equals(a, b);
+			return a.SetEquals(b);
 		}
 
 		/// <summary>
@@ -247,8 +244,8 @@ namespace DD.Collections
 		[Pure]
 		public int GetHashCode(ICodeSet that) {
 			// disable once InvokeAsExtensionMethod
-			Contract.Ensures (Contract.Result<int>() == ICodeSetService.GetHashCode(that));
-			return ICodeSetService.GetHashCode(that);
+			Contract.Ensures (Contract.Result<int>() == that.HashCode());
+			return that.HashCode();
 		}
 
 		#endregion
@@ -256,10 +253,8 @@ namespace DD.Collections
 		#region IComparable<ICodeSet>
 		
 		public int CompareTo (ICodeSet that) {
-			// disable once InvokeAsExtensionMethod
-			Contract.Ensures (Contract.Result<int>() == ICodeSetRelations.CompareTo(this,that));
-			// disable once InvokeAsExtensionMethod
-			return ICodeSetRelations.CompareTo (this, that);
+			Contract.Ensures (Contract.Result<int>() == this.Compare(that));
+			return this.Compare(that);
 		}
 		
 		#endregion
@@ -287,9 +282,9 @@ namespace DD.Collections
 		public override bool Equals(object obj)
 		{
 			// disable once InvokeAsExtensionMethod
-			Contract.Ensures (Contract.Result<bool>() == ((obj is ICodeSet) && ICodeSetService.Equals(this, (ICodeSet)obj)));
+			Contract.Ensures (Contract.Result<bool>() == ((obj is ICodeSet) && this.SetEquals((ICodeSet)obj)));
 			// disable once InvokeAsExtensionMethod
-			return (obj is ICodeSet) && ICodeSetService.Equals(this, (ICodeSet)obj);
+			return (obj is ICodeSet) && this.SetEquals((ICodeSet)obj);
 		}
 		
 		[Pure]
