@@ -29,7 +29,7 @@ namespace DD.Collections
 
 		#endregion
 
-		#region From
+		#region From items
 
 		// disable once MemberCanBeMadeStatic.Local
 		public ICodeSet From ()
@@ -55,7 +55,7 @@ namespace DD.Collections
 			Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
 			Contract.Ensures (outputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
 
-			return From ((IEnumerable<char>)chars);
+			return From (chars.ToCodes());
 		}
 
 		public ICodeSet From (IEnumerable<char> chars)
@@ -69,14 +69,29 @@ namespace DD.Collections
 			return From (chars.ToCodes());
 		}
 
-		public ICodeSet From (params Code[] codes)
+		public ICodeSet From (params int[] values)
 		{
-			Contract.Requires<ArgumentException> (!codes.IsEmpty());
+			Contract.Requires<ArgumentException> (!values.IsEmpty());
+			// disable once ConvertClosureToMethodGroup
+			Contract.Requires<ArgumentException> (Contract.ForAll(values, value => value.HasCodeValue()));
 
 			Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
 			Contract.Ensures (outputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
 
-			return From ((IEnumerable<Code>)codes);
+			return From (values.ToCodes());
+		}
+
+		public ICodeSet From (IEnumerable<int> values)
+		{
+			Contract.Requires<ArgumentNullException> (!values.Is(null));
+			Contract.Requires<ArgumentException> (!values.IsEmpty());
+			// disable once ConvertClosureToMethodGroup
+			Contract.Requires<ArgumentException> (Contract.ForAll(values, value => value.HasCodeValue()));
+
+			Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
+			Contract.Ensures (outputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
+
+			return From (values.ToCodes());
 		}
 
 		public ICodeSet From (IEnumerable<Code> codes)
@@ -94,7 +109,7 @@ namespace DD.Collections
 		{
 			Contract.Requires<ArgumentNullException> (!bits.Is(null));
 			Contract.Requires<ArgumentException> (bits.Count != 0);
-			Contract.Requires<ArgumentException> (bits.Last <= Code.MaxCount);
+			Contract.Requires<ArgumentException> (bits.Length <= Code.MaxCount || bits.Last <= Code.MaxValue);
 
 			Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
 			Contract.Ensures (outputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
@@ -102,7 +117,7 @@ namespace DD.Collections
 			return From (new CodeSetBits(bits));;
 		}
 
-		private ICodeSet From (CodeSetBits codeSet)
+		ICodeSet From (CodeSetBits codeSet)
 		{
 			Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
 			Contract.Ensures (!(Contract.Result<ICodeSet>() is CodeSetBits));
@@ -131,7 +146,7 @@ namespace DD.Collections
 		public static ICodeSetDictionary OutputDictionary = null;
 		public static ICodeSetDictionary InputDictionary = null;
 		
-		#region ToICodeSet Factory
+		#region From items To ICodeSet Factory
 
 		public static ICodeSet From (this string utf16) {
 			Contract.Requires<ArgumentNullException> (!utf16.Is(null));

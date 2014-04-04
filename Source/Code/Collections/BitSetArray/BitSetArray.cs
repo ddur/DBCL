@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Threading.Tasks;
 
 using DD.Diagnostics;
 
@@ -1871,9 +1872,16 @@ namespace DD.Collections {
                 int opLength = BitSetArray.GetLongArrayLength (this.range);
 
                 this.count = this.range - this.count;
-                for ( int index = 0; index < opLength; index++ ) {
-                    this.array[index] = ~this.array[index];
-                }
+//				if (System.Environment.ProcessorCount > 1 && opLength > 64) {
+//					Parallel.For(0, opLength, index => {
+//	                    this.array[index] = ~this.array[index];
+//					});
+//				}
+//				else {
+	                for ( int index = 0; index < opLength; index++ ) {
+	                    this.array[index] = ~this.array[index];
+	                }
+//				}
                 // false bit beyond .Length can change into true
                 // Not == Negative logic -> ClearTail 
                 this.ClearTail ();

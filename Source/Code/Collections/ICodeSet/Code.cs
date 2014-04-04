@@ -19,7 +19,7 @@ namespace DD.Collections
 
 		#region Ctor
 
-		public Code (byte value) {
+		internal Code (byte value) {
 			#if COMPACT
 			this.b0 = value;
 			this.b1 = 0;
@@ -29,7 +29,7 @@ namespace DD.Collections
 			#endif
 		}
 
-		public Code (char value) {
+		internal Code (char value) {
 			#if COMPACT
 			this.b0 = (byte)(value&0xFF);
 			this.b1 = (byte)((value>>8)&0xFF);
@@ -39,7 +39,7 @@ namespace DD.Collections
 			#endif
 		}
 
-		public Code (int value) {
+		internal Code (int value) {
 			Contract.Requires<ArgumentOutOfRangeException>(value.InRange(Code.MinValue, Code.MaxValue));
 
 			#if COMPACT
