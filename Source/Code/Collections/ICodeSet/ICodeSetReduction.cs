@@ -21,31 +21,31 @@ namespace DD.Collections
 			return self.Count == 0 ? 0 : 1 + (int)self.Last - (int)self.First;
 		}
 
-		[Pure] private static ICodeSet ReducePartOne (this BitSetArray bitSet)
+		[Pure] private static ICodeSet ReducePartOne (this BitSetArray bitSet, int offset)
 		{
 			Contract.Ensures (Contract.Result<ICodeSet>().Is(null)||!(Contract.Result<ICodeSet>() is CodeSetBits));
 
 			#region Null
-			if (bitSet.Is(null) || bitSet.Count == 0) {
+			if (bitSet.IsNullOrEmpty()) {
 				return CodeSetNull.Singleton;
 			}
 			#endregion
 
 			#region Unit
 			else if (bitSet.Count == ICodeSetService.UnitCount) {
-				return new Code ((int)bitSet.First);
+				return new Code ((int)bitSet.First + offset);
 			}
 			#endregion
 
 			#region Pair
 			else if (bitSet.Count == ICodeSetService.PairCount) {
-				return new CodeSetPair ((int)bitSet.First, (int)bitSet.Last);
+				return new CodeSetPair ((int)bitSet.First + offset, (int)bitSet.Last + offset);
 			}
 			#endregion
 
 			#region Full
 			else if (bitSet.Count == bitSet.Span()) {
-				return new CodeSetFull ((int)bitSet.First, (int)bitSet.Last);
+				return new CodeSetFull ((int)bitSet.First + offset, (int)bitSet.Last + offset);
 			}
 			#endregion
 
@@ -53,10 +53,10 @@ namespace DD.Collections
 			else if (bitSet.Count <= ICodeSetService.ListMaxCount) {
 				// List space less than 1/4 Bits space (bitSet.Span/8)*4
 				if ((bitSet.Count * sizeof(int)) < (bitSet.Span()/2)) {
-					return new CodeSetList (bitSet.ToCodes());
+					return new CodeSetList (bitSet.ToCodes(offset));
 				}
 				if (((Code)bitSet.First).UnicodePlane() != ((Code)bitSet.Last).UnicodePlane()) {
-					return new CodeSetList (bitSet.ToCodes());
+					return new CodeSetList (bitSet.ToCodes(offset));
 				}
 			}
 			#endregion
@@ -65,27 +65,27 @@ namespace DD.Collections
 
 		}
 
-		[Pure] private static ICodeSet ReducePartTwo(this BitSetArray self)
+		[Pure] private static ICodeSet ReducePartTwo(this BitSetArray self, int offset)
 		{
 			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
 			Contract.Ensures (!(Contract.Result<ICodeSet>() is CodeSetBits));
 
-			if (((Code)self.First).UnicodePlane() == ((Code)self.Last).UnicodePlane()) {
-				return new CodeSetPage(self);
+			if (((Code)(self.First + offset)).UnicodePlane() == ((Code)(self.Last + offset)).UnicodePlane()) {
+				return new CodeSetPage(self, offset);
 			} else {
 				Contract.Assert(((Code)self.First).UnicodePlane() != ((Code)self.Last).UnicodePlane());
-				return new CodeSetWide(self);
+				return new CodeSetWide(self, offset);
 			}
 		}
 		
-		[Pure] internal static ICodeSet Reduce (this BitSetArray self)
+		[Pure] internal static ICodeSet Reduce (this BitSetArray self, int offset = 0)
 		{
 			Contract.Requires<ArgumentException> (self.IsNull() || self.Length <= Code.MaxCount || self.Last <= Code.MaxValue);
 
 			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
 			Contract.Ensures(!(Contract.Result<ICodeSet>() is CodeSetBits));
 			
-			ICodeSet retSet = self.ReducePartOne();
+			ICodeSet retSet = self.ReducePartOne(offset);
 
 			if (retSet.Is(null)) {
 
@@ -103,11 +103,11 @@ namespace DD.Collections
 
 				Contract.Assert (complement.Count != 0); 
 
-				var notSet = complement.ReducePartOne();
+				var notSet = complement.ReducePartOne(offset);
 				if (notSet.IsNot(null)) {
 					// reduced, return DiffSet
 					retSet = new CodeSetDiff(
-						new CodeSetFull((int)self.First, (int)self.Last),
+						new CodeSetFull((int)self.First + offset, (int)self.Last + offset),
 						notSet);
 				}
 				else {
@@ -115,12 +115,12 @@ namespace DD.Collections
 					if (complement.Span() < (self.Span() / 4)) {
 						// can save at least 3/4 of space
 						retSet = new CodeSetDiff(
-							new CodeSetFull((int)self.First, (int)self.Last),
-							complement.ReducePartTwo());
+							new CodeSetFull((int)self.First + offset, (int)self.Last + offset),
+							complement.ReducePartTwo(offset));
 					}
 					else {
 						// final choice
-						retSet = self.ReducePartTwo();
+						retSet = self.ReducePartTwo(offset);
 					}
 				}
 			}
