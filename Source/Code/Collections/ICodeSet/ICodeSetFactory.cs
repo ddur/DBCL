@@ -31,101 +31,67 @@ namespace DD.Collections
 
 		#region From items
 
-		// disable once MemberCanBeMadeStatic.Local
-		public ICodeSet From ()
-		{
-			return CodeSetNull.Singleton;
-		}
-
 		public ICodeSet From (string utf16)
 		{
-			Contract.Requires<ArgumentNullException> (!utf16.Is(null));
-			Contract.Requires<ArgumentException> (utf16 != string.Empty);
-
 			Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
 			Contract.Ensures (outputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
 
-			return From (utf16.Decode());
+			return string.IsNullOrEmpty(utf16) ? CodeSetNull.Singleton : From(utf16.Decode()); 
 		}
 
 		public ICodeSet From (params char[] chars)
 		{
-			Contract.Requires<ArgumentException> (!chars.IsEmpty());
-
 			Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
 			Contract.Ensures (outputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
 
-			return From (chars.ToCodes());
+			return chars.IsNullOrEmpty() ? CodeSetNull.Singleton : From(chars.ToValues());
 		}
 
 		public ICodeSet From (IEnumerable<char> chars)
 		{
-			Contract.Requires<ArgumentNullException> (!chars.Is(null));
-			Contract.Requires<ArgumentException> (!chars.IsEmpty());
-
 			Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
 			Contract.Ensures (outputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
 
-			return From (chars.ToCodes());
-		}
-
-		public ICodeSet From (params int[] values)
-		{
-			Contract.Requires<ArgumentException> (!values.IsEmpty());
-			// disable once ConvertClosureToMethodGroup
-			Contract.Requires<ArgumentException> (Contract.ForAll(values, value => value.HasCodeValue()));
-
-			Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
-			Contract.Ensures (outputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
-
-			return From (values.ToCodes());
-		}
-
-		public ICodeSet From (IEnumerable<int> values)
-		{
-			Contract.Requires<ArgumentNullException> (!values.Is(null));
-			Contract.Requires<ArgumentException> (!values.IsEmpty());
-			// disable once ConvertClosureToMethodGroup
-			Contract.Requires<ArgumentException> (Contract.ForAll(values, value => value.HasCodeValue()));
-
-			Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
-			Contract.Ensures (outputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
-
-			return From (values.ToCodes());
+			return chars.IsNullOrEmpty() ? CodeSetNull.Singleton : From(chars.ToValues());
 		}
 
 		public ICodeSet From (IEnumerable<Code> codes)
 		{
-			Contract.Requires<ArgumentNullException> (!codes.Is(null));
-			Contract.Requires<ArgumentException> (!codes.IsEmpty());
+			Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
+			Contract.Ensures (outputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
+
+			return codes.IsNullOrEmpty() ? CodeSetNull.Singleton : From(codes.ToValues());
+		}
+
+		public ICodeSet From (params int[] values)
+		{
+			Contract.Requires<ArgumentException> (values.IsNullOrEmpty() || Contract.ForAll(values, value => value.HasCodeValue()));
 
 			Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
 			Contract.Ensures (outputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
 
-			return From (new CodeSetBits (codes));
+			return values.IsNullOrEmpty() ? CodeSetNull.Singleton : From(BitSetArray.From(values));
+		}
+
+		public ICodeSet From (IEnumerable<int> values)
+		{
+			Contract.Requires<ArgumentException> (values.IsNullOrEmpty() || Contract.ForAll(values, value => value.HasCodeValue()));
+
+			Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
+			Contract.Ensures (outputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
+
+			return values.IsNullOrEmpty() ? CodeSetNull.Singleton : From(BitSetArray.From(values));
 		}
 
 		public ICodeSet From (BitSetArray bits)
 		{
-			Contract.Requires<ArgumentNullException> (!bits.Is(null));
-			Contract.Requires<ArgumentException> (bits.Count != 0);
-			Contract.Requires<ArgumentException> (bits.Length <= Code.MaxCount || bits.Last <= Code.MaxValue);
+			Contract.Requires<ArgumentException> (bits.Is(null) || bits.Length <= Code.MaxCount || bits.Last <= Code.MaxValue);
 
 			Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
 			Contract.Ensures (outputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
 
-			return From (new CodeSetBits(bits));;
-		}
-
-		ICodeSet From (CodeSetBits codeSet)
-		{
-			Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
-			Contract.Ensures (!(Contract.Result<ICodeSet>() is CodeSetBits));
-			Contract.Ensures (outputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
-
-			ICodeSet key = codeSet;
+			ICodeSet key = bits.Reduce();
 			if (!outputDictionary.Find(ref key)) {
-				key = codeSet.Reduce();
 				outputDictionary.Add (key);
 			}
 			return key;

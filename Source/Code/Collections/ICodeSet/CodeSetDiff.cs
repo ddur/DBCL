@@ -34,9 +34,6 @@ namespace DD.Collections {
 			Contract.Requires<ArgumentException> (a.First < b.First);
 			Contract.Requires<ArgumentException> (b.Last < a.Last);
 			
-			// b is not CodeSetBits
-			Contract.Requires<ArgumentException> (!(b is CodeSetBits));
-
 			// this.count > PairCount
 			Contract.Requires<ArgumentException> ((a.Count - b.Count) > ICodeSetService.PairCount);
 

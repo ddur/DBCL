@@ -30,8 +30,8 @@ namespace DD.Collections.ICodeSetRelationsTest.Members
 		[Test]
 		public void Empty()
 		{
-			ICodeSet a = new CodeSetBits();
-			ICodeSet b = CodeSetNull.Singleton;;
+			ICodeSet a = CodeSetNull.Singleton;
+			ICodeSet b = CodeSetNull.Singleton;
 			
 			Assert.IsTrue (a.RangeEquals(b));
 			Assert.IsTrue (b.RangeEquals(a));
@@ -67,7 +67,7 @@ namespace DD.Collections.ICodeSetRelationsTest.Members
 		[Test]
 		public void SetEqual()
 		{
-			ICodeSet a = new CodeSetBits(6,9,28);
+			ICodeSet a = new CodeSetPage(6,9,28);
 			ICodeSet b = new CodeSetList(6,9,28);
 			
 			Assert.IsTrue (a.RangeEquals(b));

@@ -34,26 +34,8 @@ namespace DD.Collections.ICodeSetRelationsTest.Members
 			Assert.IsTrue (a.QuickSetEquals(b) == true);
 			Assert.IsTrue (b.QuickSetEquals(a) == true);
 
-			a = CodeSetNull.Singleton;
-			b = new CodeSetBits();
-			Assert.IsTrue (a.SetEquals(b));
-			Assert.IsTrue (b.SetEquals(a));
-			Assert.IsTrue (a.SequenceEqual(b));
-			Assert.IsTrue (b.SequenceEqual(a));
-			Assert.IsTrue (a.QuickSetEquals(b) == true);
-			Assert.IsTrue (b.QuickSetEquals(a) == true);
-
-			a = new CodeSetBits();
-			b = CodeSetNull.Singleton;
-			Assert.IsTrue (a.SetEquals(b));
-			Assert.IsTrue (b.SetEquals(a));
-			Assert.IsTrue (a.SequenceEqual(b));
-			Assert.IsTrue (b.SequenceEqual(a));
-			Assert.IsTrue (a.QuickSetEquals(b) == true);
-			Assert.IsTrue (b.QuickSetEquals(a) == true);
-
 			a = null;
-			b = new CodeSetBits();
+			b = CodeSetNull.Singleton;
 			Assert.IsTrue (a.SetEquals(b));
 			Assert.IsTrue (b.SetEquals(a));
 			Assert.IsTrue (a.SequenceEqual(b));
@@ -74,7 +56,7 @@ namespace DD.Collections.ICodeSetRelationsTest.Members
 			Assert.IsTrue (a.QuickSetEquals(b) == false);
 			Assert.IsTrue (b.QuickSetEquals(a) == false);
 
-			a = new CodeSetBits();
+			a = CodeSetNull.Singleton;
 			b = new CodeSetPair(0,100);
 			Assert.IsFalse (a.SetEquals(b));
 			Assert.IsFalse (b.SetEquals(a));
@@ -111,7 +93,7 @@ namespace DD.Collections.ICodeSetRelationsTest.Members
 			Assert.IsTrue (b.QuickSetEquals(a) == false);
 
 			a = new CodeSetList(0,100,1000);
-			b = new CodeSetBits();
+			b = CodeSetNull.Singleton;
 			Assert.IsFalse (a.SetEquals(b));
 			Assert.IsFalse (b.SetEquals(a));
 			Assert.IsFalse (a.SequenceEqual(b));
@@ -169,7 +151,7 @@ namespace DD.Collections.ICodeSetRelationsTest.Members
 			Assert.IsTrue (b.QuickSetEquals(a) == true);
 
 			a = new CodeSetPair(0,6);
-			b = new CodeSetBits(0,6);
+			b = new CodeSetPair(0,6);
 			Assert.IsTrue (a.SetEquals(b));
 			Assert.IsTrue (b.SetEquals(a));
 			Assert.IsTrue (a.SequenceEqual(b));
@@ -178,7 +160,7 @@ namespace DD.Collections.ICodeSetRelationsTest.Members
 			Assert.IsTrue (b.QuickSetEquals(a) == true);
 
 			a = new CodeSetList(0,1,2,3,4,5,6,9);
-			b = new CodeSetBits(0,1,2,3,4,5,6,9);
+			b = new CodeSetPage(0,1,2,3,4,5,6,9);
 			Assert.IsTrue (a.SetEquals(b));
 			Assert.IsTrue (b.SetEquals(a));
 			Assert.IsTrue (a.SequenceEqual(b));

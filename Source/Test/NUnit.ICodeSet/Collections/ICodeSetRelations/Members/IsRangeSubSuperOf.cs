@@ -32,7 +32,7 @@ namespace DD.Collections.ICodeSetRelationsTest.Members
 
 		[Test]
 		public void Empty() {
-			ICodeSet a = new CodeSetBits();
+			ICodeSet a = CodeSetNull.Singleton;
 			ICodeSet b = CodeSetNull.Singleton;
 
 			Assert.False (a.IsRangeSubsetOf(b));
@@ -61,7 +61,7 @@ namespace DD.Collections.ICodeSetRelationsTest.Members
 
 		[Test]
 		public void ReferenceEqual() {
-			ICodeSet a = new CodeSetBits(1,2,3);
+			ICodeSet a = new CodeSetPage(1,2,7);
 
 			Assert.True (a.IsRangeSubsetOf(a));
 
@@ -70,15 +70,15 @@ namespace DD.Collections.ICodeSetRelationsTest.Members
 
 		[Test]
 		public void RangeEqual() {
-			ICodeSet a = new CodeSetBits(1,2,3);
-			ICodeSet b = new CodeSetBits(1,2,3);
+			ICodeSet a = new CodeSetPage(1,2,5);
+			ICodeSet b = new CodeSetList(1,2,5);
 
 			Assert.True (a.IsRangeSubsetOf(b));
 			Assert.True (b.IsRangeSubsetOf(a));
 
 			Assert.True (a.IsRangeSubsetOf(b) == b.IsRangeSupersetOf(a));
 
-			b = new CodeSetPair(1,3); 
+			b = new CodeSetPair(1,5); 
 			Assert.True (a.IsRangeSubsetOf(b));
 			Assert.True (b.IsRangeSubsetOf(a));
 
@@ -87,15 +87,15 @@ namespace DD.Collections.ICodeSetRelationsTest.Members
 
 		[Test]
 		public void ProperRangeSubset() {
-			ICodeSet a = new CodeSetBits(0,1,2,3);
-			ICodeSet b = new CodeSetBits(1,2,3);
+			ICodeSet a = new CodeSetList(0,1,2,5);
+			ICodeSet b = new CodeSetPage(1,2,5);
 
 			Assert.True (b.IsRangeSubsetOf(a));
 			Assert.False (a.IsRangeSubsetOf(b));
 
 			Assert.True (a.IsRangeSubsetOf(b) == b.IsRangeSupersetOf(a));
 
-			b = new CodeSetBits(0,1,2); 
+			b = new CodeSetList(0,1,4); 
 			Assert.True (b.IsRangeSubsetOf(a));
 			Assert.False (a.IsRangeSubsetOf(b));
 
@@ -110,15 +110,15 @@ namespace DD.Collections.ICodeSetRelationsTest.Members
 
 		[Test]
 		public void NotRangeSubset() {
-			ICodeSet a = new CodeSetBits(0,1,2,3);
-			ICodeSet b = new CodeSetBits(1,2,3,4,5);
+			ICodeSet a = new CodeSetPage(0,1,2,5);
+			ICodeSet b = new CodeSetList(1,2,3,4,7);
 			
 			Assert.False (a.IsRangeSubsetOf(b));
 			Assert.False (b.IsRangeSubsetOf(a));
 
 			Assert.True (a.IsRangeSubsetOf(b) == b.IsRangeSupersetOf(a));
 
-			b = new Code(5);
+			b = new Code(9);
 			Assert.False (b.IsRangeSubsetOf(a));
 			Assert.False (a.IsRangeSubsetOf(b));
 

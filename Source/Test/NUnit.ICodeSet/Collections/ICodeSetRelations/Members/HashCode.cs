@@ -17,8 +17,7 @@ namespace DD.Collections.ICodeSetRelationsTest.Members
 		{
 			ICodeSet nullOrEmpty = null;
 			Assert.True (nullOrEmpty.HashCode() == 0);
-			nullOrEmpty = new CodeSetBits();
-			Assert.True (nullOrEmpty.HashCode() == 0);
+
 			nullOrEmpty = CodeSetNull.Singleton;
 			Assert.True (nullOrEmpty.HashCode() == 0);
 		}
@@ -29,17 +28,17 @@ namespace DD.Collections.ICodeSetRelationsTest.Members
 			ICodeSet notEmpty;
 			int hashCode;
 
-			notEmpty = new CodeSetBits(new Code[]{6});
+			notEmpty = new Code(6);
 			Assert.True (notEmpty.HashCode() != 0);
 			hashCode = notEmpty.HashCode();
 			Assert.True (new Code(6).HashCode() == hashCode);
 
-			notEmpty = new CodeSetBits(new Code[]{1,7});
+			notEmpty = new CodeSetPair(1,7);
 			Assert.True (notEmpty.HashCode() != 0);
 			hashCode = notEmpty.HashCode();
 			Assert.True (new CodeSetPair(1, 7).HashCode() == hashCode);
 			
-			notEmpty = new CodeSetBits(new Code[]{1,7,80});
+			notEmpty = new CodeSetList(1, 7, 80);
 			Assert.True (notEmpty.HashCode() != 0);
 			hashCode = notEmpty.HashCode();
 			Assert.True (new CodeSetList(1, 7, 80).HashCode() == hashCode);

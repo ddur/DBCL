@@ -22,11 +22,6 @@ namespace DD.Collections.ICodeSetServiceTest.Members
 			Assert.IsTrue (compact.Count == 0);
 			Assert.IsTrue (compact.IsCompact());
 
-			a = new CodeSetBits();
-			compact = a.ToCompact();
-			Assert.IsTrue (compact.Count == 0);
-			Assert.IsTrue (compact.IsCompact());
-
 			a = CodeSetNull.Singleton;
 			compact = a.ToCompact();
 			Assert.IsTrue (compact.Count == 0);
@@ -34,28 +29,18 @@ namespace DD.Collections.ICodeSetServiceTest.Members
 		}
 
 		[Test]
-		public void FromCodeSetBits()
+		public void FromCodeSetPage()
 		{
 			BitSetArray compact;
-			ICodeSet a = new CodeSetBits(20);
-			
-			compact = a.ToCompact();
-			Assert.IsTrue (compact.Count == 1);
-			Assert.IsTrue (compact.IsCompact());
+			ICodeSet a = new CodeSetPage(22,65,77);
 
-			a = new CodeSetBits(22,65);
-			compact = a.ToCompact();
-			Assert.IsTrue (compact.Count == 2);
-			Assert.IsTrue (compact.IsCompact());
-
-			a = new CodeSetBits(22,65,77);
 			compact = a.ToCompact();
 			Assert.IsTrue (compact.Count == 3);
 			Assert.IsTrue (compact.IsCompact());
 
-			a = new CodeSetBits(20,21,22,23,24,25,26,27,28,29);
+			a = new CodeSetPage(20,21,22,23,24,25,26,27,28,29,33);
 			compact = a.ToCompact();
-			Assert.IsTrue (compact.Count == 10);
+			Assert.IsTrue (compact.Count == 11);
 			Assert.IsTrue (compact.IsCompact());
 		}
 

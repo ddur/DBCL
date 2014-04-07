@@ -35,12 +35,39 @@ namespace DD.Collections
 			}
 		}
 
-		public static IEnumerable<Code> ToCodes (this IEnumerable<int> ints) {
+		public static IEnumerable<Code> ToCodes (this IEnumerable<int> ints, int offset = 0) {
 			if (ints.IsNot(null)) {
-				foreach (var code in ints) {
-					if (code.HasCodeValue()) {
-						yield return (Code)code;
+				if (offset == 0) {
+					foreach (var code in ints) {
+						if (code.HasCodeValue()) {
+							yield return (Code)code;
+						}
 					}
+				}
+				else {
+					int shifted;
+					foreach (var code in ints) {
+						shifted = code + offset;
+						if (shifted.HasCodeValue()) {
+							yield return (Code)shifted;
+						}
+					}
+				}
+			}
+		}
+
+		public static IEnumerable<int> ToValues (this IEnumerable<Code> codes) {
+			if (codes.IsNot(null)) {
+				foreach (Code code in codes) {
+					yield return code.Value; 
+				}
+			}
+		}
+
+		public static IEnumerable<int> ToValues (this IEnumerable<char> codes) {
+			if (codes.IsNot(null)) {
+				foreach (Code code in codes) {
+					yield return code.Value; 
 				}
 			}
 		}
@@ -92,7 +119,7 @@ namespace DD.Collections
 
 			if (self.IsNull() || self.Count == 0) return new BitSetArray();
 			
-			var bits = self as CodeSetBits;
+			var bits = self as CodeSetPage;
 			if (bits.IsNot(null)) return bits.ToCompact();
 			
 			var ret = new BitSetArray (self.Length);

@@ -7,8 +7,9 @@
     <OutputType>Library</OutputType>
     <RootNamespace>DD</RootNamespace>
     <AssemblyName>NUnit.ICodeSet</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <NoWin32Manifest>False</NoWin32Manifest>
   </PropertyGroup>
@@ -43,8 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collections\CodeSetAbstractTest\Members.cs" />
-    <Compile Include="Collections\CodeSetBitsTest\Constructors.cs" />
-    <Compile Include="Collections\CodeSetBitsTest\Members.cs" />
     <Compile Include="Collections\CodeSetDiffTest\Constructors.cs" />
     <Compile Include="Collections\CodeSetDiffTest\Members.cs" />
     <Compile Include="Collections\CodeSetFullTest\Constructors.cs" />
@@ -97,7 +96,6 @@
     <Folder Include="Collections" />
     <Folder Include="Collections\CodeTest" />
     <Folder Include="Collections\ICodeSetFactoryTest" />
-    <Folder Include="Collections\CodeSetBitsTest" />
     <Folder Include="Collections\CodeSetPairTest" />
     <Folder Include="Collections\CodeSetNullTest" />
     <Folder Include="Collections\CodeSetFullTest" />

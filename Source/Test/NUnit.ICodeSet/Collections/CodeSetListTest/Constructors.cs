@@ -40,7 +40,7 @@ namespace DD.Collections.CodeSetListTest
             csl = new CodeSetList (input);
             Assert.True (csl.SequenceEqual(input.Distinct().OrderBy(item => (item))));
 
-            csl = new CodeSetList (new CodeSetBits(input));
+            csl = new CodeSetList (new CodeSetWide(input));
             Assert.True (csl.SequenceEqual(input.Distinct().OrderBy(item => (item))));
 
         }

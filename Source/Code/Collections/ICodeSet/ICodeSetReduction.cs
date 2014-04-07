@@ -16,6 +16,118 @@ namespace DD.Collections
 	{
 		#region Reduction
 
+		[Pure] public static int Span (this BitSetArray self)
+		{
+			return self.Count == 0 ? 0 : 1 + (int)self.Last - (int)self.First;
+		}
+
+		[Pure] private static ICodeSet ReducePartOne (this BitSetArray bitSet)
+		{
+			Contract.Ensures (Contract.Result<ICodeSet>().Is(null)||!(Contract.Result<ICodeSet>() is CodeSetBits));
+
+			#region Null
+			if (bitSet.Is(null) || bitSet.Count == 0) {
+				return CodeSetNull.Singleton;
+			}
+			#endregion
+
+			#region Unit
+			else if (bitSet.Count == ICodeSetService.UnitCount) {
+				return new Code ((int)bitSet.First);
+			}
+			#endregion
+
+			#region Pair
+			else if (bitSet.Count == ICodeSetService.PairCount) {
+				return new CodeSetPair ((int)bitSet.First, (int)bitSet.Last);
+			}
+			#endregion
+
+			#region Full
+			else if (bitSet.Count == bitSet.Span()) {
+				return new CodeSetFull ((int)bitSet.First, (int)bitSet.Last);
+			}
+			#endregion
+
+			#region List
+			else if (bitSet.Count <= ICodeSetService.ListMaxCount) {
+				// List space less than 1/4 Bits space (bitSet.Span/8)*4
+				if ((bitSet.Count * sizeof(int)) < (bitSet.Span()/2)) {
+					return new CodeSetList (bitSet.ToCodes());
+				}
+				if (((Code)bitSet.First).UnicodePlane() != ((Code)bitSet.Last).UnicodePlane()) {
+					return new CodeSetList (bitSet.ToCodes());
+				}
+			}
+			#endregion
+			
+			return null;
+
+		}
+
+		[Pure] private static ICodeSet ReducePartTwo(this BitSetArray self)
+		{
+			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
+			Contract.Ensures (!(Contract.Result<ICodeSet>() is CodeSetBits));
+
+			if (((Code)self.First).UnicodePlane() == ((Code)self.Last).UnicodePlane()) {
+				return new CodeSetPage(self);
+			} else {
+				Contract.Assert(((Code)self.First).UnicodePlane() != ((Code)self.Last).UnicodePlane());
+				return new CodeSetWide(self);
+			}
+		}
+		
+		[Pure] internal static ICodeSet Reduce (this BitSetArray self)
+		{
+			Contract.Requires<ArgumentException> (self.IsNull() || self.Length <= Code.MaxCount || self.Last <= Code.MaxValue);
+
+			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
+			Contract.Ensures(!(Contract.Result<ICodeSet>() is CodeSetBits));
+			
+			ICodeSet retSet = self.ReducePartOne();
+
+			if (retSet.Is(null)) {
+
+				Contract.Assert (self.IsNot(null)); // not null
+				Contract.Assert (self.Count > ICodeSetService.PairCount); // not Code, not Pair
+				Contract.Assert (self.Span() != self.Count); // not Full -> has complement items 
+				
+				// not reduced, create complement
+				var complement = new BitSetArray(self.Length);
+				foreach (var item in self.Complement()) {
+					if (self.InRange(item)) {
+						complement.Set(item);
+					}
+				}
+
+				Contract.Assert (complement.Count != 0); 
+
+				var notSet = complement.ReducePartOne();
+				if (notSet.IsNot(null)) {
+					// reduced, return DiffSet
+					retSet = new CodeSetDiff(
+						new CodeSetFull((int)self.First, (int)self.Last),
+						notSet);
+				}
+				else {
+					// not reduced, check size
+					if (complement.Span() < (self.Span() / 4)) {
+						// can save at least 3/4 of space
+						retSet = new CodeSetDiff(
+							new CodeSetFull((int)self.First, (int)self.Last),
+							complement.ReducePartTwo());
+					}
+					else {
+						// final choice
+						retSet = self.ReducePartTwo();
+					}
+				}
+			}
+			
+			return retSet;
+		}
+
 		[Pure] private static ICodeSet ReducePartOne (this CodeSetBits bitSet)
 		{
 			Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));

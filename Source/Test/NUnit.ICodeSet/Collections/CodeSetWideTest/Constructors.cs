@@ -19,6 +19,7 @@ namespace DD.Collections.CodeSetWideTest
 			
 			CodeSetWide csw;
 
+			csw = new CodeSetWide(new Code[] {0,1, 1114111});
 			csw = new CodeSetWide(new BitSetArray() {0,1, 1114111});
 
 		}
@@ -75,7 +76,7 @@ namespace DD.Collections.CodeSetWideTest
 			CodeSetWide csw;
 
 			csw = new CodeSetWide(new Code[] {0,1, 65536});
-			csw = new CodeSetWide(new CodeSetBits(new Code[] {0,1,140000}));
+			csw = new CodeSetWide(new CodeSetList(new Code[] {0,1,140000}));
 
 		}
 

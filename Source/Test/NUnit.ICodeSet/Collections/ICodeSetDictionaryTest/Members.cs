@@ -23,7 +23,6 @@ namespace DD.Collections.ICodeSetDictionaryTest
 			icsDict.Add (new CodeSetFull(0,5));
 			icsDict.Add (new CodeSetList(new Code[] {0,2,4,6,8,10}));
 			Assert.True (icsDict[new CodeSetFull(0,5)] == 0);
-			Assert.True (icsDict[new CodeSetBits(new Code[]{0,1,2,3,4,5})] == 0);
 			Assert.True (icsDict[new CodeSetList(new Code[]{0,2,4,6,8,10})] == 1);
 			Assert.True (icsDict[new CodeSetPage(new Code[]{0,2,4,6,8,10})] == 1);
 			
@@ -77,7 +76,6 @@ namespace DD.Collections.ICodeSetDictionaryTest
 			icsDict = new ICodeSetDictionary();
 			icsDict.Add (new CodeSetFull(0,5));
 			Assert.True (icsDict.ContainsKey(new CodeSetFull(0,5)));
-			Assert.True (icsDict.ContainsKey(new CodeSetBits(new Code[]{0,1,2,3,4,5})));
 		}
 
 		[Test]
@@ -101,8 +99,6 @@ namespace DD.Collections.ICodeSetDictionaryTest
 			icsDict.Add (new CodeSetFull(0,4));
 			ICodeSet findSet = new CodeSetFull(0,5);
 			Assert.True (icsDict.Find(ref findSet));
-			findSet = new CodeSetBits(new Code[]{0,1,2,3,4,5});
-			Assert.True (icsDict.Find(ref findSet));
 		}
 
 		[Test]
@@ -118,8 +114,6 @@ namespace DD.Collections.ICodeSetDictionaryTest
 			icsDict.Add (new CodeSetFull(0,5));
 			Assert.True (icsDict[new CodeSetFull(0,4)] == 0);
 			Assert.True (icsDict[new CodeSetFull(0,5)] == 1);
-			Assert.True (icsDict[new CodeSetBits(new Code[]{0,1,2,3,4})] == 0);
-			Assert.True (icsDict[new CodeSetBits(new Code[]{0,1,2,3,4,5})] == 1);
 		}
 		
 		[Test]
@@ -152,9 +146,8 @@ namespace DD.Collections.ICodeSetDictionaryTest
 			icsDict.Add (new CodeSetFull(0,5));
 			icsDict.Add (new CodeSetFull(0,4));
 			Assert.False (icsDict.Remove(new CodeSetFull(0,6)));
-			Assert.False (icsDict.Remove(new CodeSetBits(new Code[]{0,1,2,3,4,5,6})));
-			Assert.True (icsDict.Remove(new CodeSetBits(new Code[]{0,1,2,3,4})));
-			Assert.True (icsDict.Remove(new CodeSetBits(new Code[]{0,1,2,3,4,5})));
+			Assert.True (icsDict.Remove(new CodeSetFull(0,4)));
+			Assert.True (icsDict.Remove(new CodeSetFull(0,5)));
 		}
 		
 		[Test]
@@ -236,12 +229,12 @@ namespace DD.Collections.ICodeSetDictionaryTest
 			Assert.True (value == 1);
 
 			Assert.True (
-				icsDict.TryGetValue(new CodeSetBits(new Code[] {0,1,2,3,4,5}), out value)
+				icsDict.TryGetValue(new CodeSetFull(0,5), out value)
 			);
 			Assert.True (value == 0);
 
 			Assert.True (
-				icsDict.TryGetValue(new CodeSetBits(new Code[] {0,1,2,3,4}), out value)
+				icsDict.TryGetValue(new CodeSetFull(0,4), out value)
 			);
 			Assert.True (value == 1);
 

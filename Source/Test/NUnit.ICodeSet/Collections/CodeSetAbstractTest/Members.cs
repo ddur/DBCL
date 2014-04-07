@@ -23,10 +23,6 @@ namespace DD.Collections.CodeSetAbstractTest
 			ICodeSet icset = new CodeSetPage(new Code[] {1,5,7});
 			Assert.True (acset.CompareTo(icset) == 0);
 
-			acset = new CodeSetBits();
-			icset = CodeSetNull.Singleton;
-			Assert.True (acset.CompareTo(icset) == 0);
-
 			acset = CodeSetNull.Singleton;
 			icset = CodeSetNull.Singleton;
 			Assert.True (acset.CompareTo(icset) == 0);
@@ -43,9 +39,6 @@ namespace DD.Collections.CodeSetAbstractTest
 			Assert.True (acset.CompareTo(icset) < 0);
 
 			icset = new CodeSetPage(new Code[] {0,1,5,7});
-			Assert.True (acset.CompareTo(icset) < 0);
-
-			acset = new CodeSetBits();
 			Assert.True (acset.CompareTo(icset) < 0);
 
 			acset = CodeSetNull.Singleton;

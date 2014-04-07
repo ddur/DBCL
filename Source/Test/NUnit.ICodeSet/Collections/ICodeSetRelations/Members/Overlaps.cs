@@ -40,7 +40,7 @@ namespace DD.Collections.ICodeSetRelationsTest.Members
 		[Test]
 		public void Empty()
 		{
-			ICodeSet a = new CodeSetBits();
+			ICodeSet a = CodeSetNull.Singleton;
 			ICodeSet b = CodeSetNull.Singleton;
 
 			Assert.IsFalse (a.Overlaps(b)); 
@@ -80,7 +80,7 @@ namespace DD.Collections.ICodeSetRelationsTest.Members
 		[Test]
 		public void ReferenceEqual()
 		{
-			ICodeSet a = new CodeSetBits(1,2,3);
+			ICodeSet a = new CodeSetList(0,2,4);
 
 			Assert.IsTrue (a.Overlaps(a));
 
@@ -90,7 +90,7 @@ namespace DD.Collections.ICodeSetRelationsTest.Members
 		[Test]
 		public void SetEqual()
 		{
-			ICodeSet a = new CodeSetBits(1,2,5);
+			ICodeSet a = new CodeSetPage(1,2,5);
 			ICodeSet b = new CodeSetList(1,2,5);
 
 			Assert.IsTrue (a.Overlaps(b));
@@ -105,8 +105,8 @@ namespace DD.Collections.ICodeSetRelationsTest.Members
 		[Test]
 		public void Overlaps_IsTrue()
 		{
-			ICodeSet a = new CodeSetBits(1,2,3,4,5,7,10);
-			ICodeSet b = new CodeSetBits(0,4,9);
+			ICodeSet a = new CodeSetPage(1,2,3,4,5,7,10);
+			ICodeSet b = new CodeSetPage(0,4,9);
 
 			Assert.IsTrue (a.Overlaps(b));
 			Assert.IsTrue (b.Overlaps(a));
@@ -140,8 +140,8 @@ namespace DD.Collections.ICodeSetRelationsTest.Members
 		[Test]
 		public void Overlaps_IsFalse()
 		{
-			ICodeSet a = new CodeSetBits(1,3,5);
-			ICodeSet b = new CodeSetBits(0,2,4);
+			ICodeSet a = new CodeSetPage(1,3,5);
+			ICodeSet b = new CodeSetPage(0,2,4);
 
 			Assert.IsFalse (a.Overlaps(b));
 			Assert.IsFalse (b.Overlaps(a));

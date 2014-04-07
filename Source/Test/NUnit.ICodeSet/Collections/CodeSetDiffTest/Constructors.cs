@@ -69,9 +69,9 @@ namespace DD.Collections.CodeSetDiffTest
 				delegate { csd = new CodeSetDiff(new CodeSetFull(1,100), new CodeSetPair(0,99)); }
 			);
 			
-			// requires !(b is CodeSetBits)
+			// requires !(b is CodeSetNull)
 			Assert.Throws<ArgumentException> (
-				delegate { csd = new CodeSetDiff(new CodeSetFull(0,100), new CodeSetBits(new Code[] {1,99})); }
+				delegate { csd = new CodeSetDiff(new CodeSetFull(0,100), CodeSetNull.Singleton); }
 			);
 			
 			// requires .Count > 2

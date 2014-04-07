@@ -77,18 +77,19 @@ namespace DD.Collections.CodeSetPageTest
 			Assert.Throws <ArgumentNullException> (delegate{csp = new CodeSetPage ((ICodeSet)null);});
 
 			// requires at least 3 members (> ICodeSetService.PairCount)
-			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new CodeSetBits(new Code[0]));});
-			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new CodeSetBits(new List<Code>() {21}));});
-			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new CodeSetBits(new List<Code>() {1,25}));});
+			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new Code[0]);});
+			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new List<Code>() {21});});
+			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new List<Code>() {1,25});});
 
-			// requires more than ICodeSetService.ListMaxCount NOT members
-			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new CodeSetBits(new List<Code>() {1,2,3,4,5}));});
+			// requires more than two NOT members
+			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new List<Code>() {1,2,3,4,5});});
+			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new List<Code>() {1,2,3,4,6});});
 
 			// requires all codes within same unicode plane
-			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new CodeSetBits(new List<Code>() {12,66000}));});
+			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new List<Code>() {12,66000});});
 
-			csp = new CodeSetPage (new CodeSetBits(new BitSetArray() {0,1,12,33,65535}));
-			CodeSetPage clone = new CodeSetPage (csp);
+			csp = new CodeSetPage (new BitSetArray() {0,1,12,33,65535});
+			var clone = new CodeSetPage (csp);
 		}
 		
 	}

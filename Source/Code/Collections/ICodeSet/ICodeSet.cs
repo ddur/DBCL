@@ -168,7 +168,7 @@ namespace DD.Collections {
 					
 				}
 				else {
-					success.Assert (self is CodeSetNull || self is CodeSetBits);
+					success.Assert (self is CodeSetNull);
 					success.Assert (self.Length == 0);
 				}
 

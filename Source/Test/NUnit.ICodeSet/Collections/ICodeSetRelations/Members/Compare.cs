@@ -24,15 +24,11 @@ namespace DD.Collections.ICodeSetRelationsTest.Members
 			Assert.True (a.Compare(b) == 0);
 
 			a = CodeSetNull.Singleton;
-			b = new CodeSetBits();
-			Assert.True (a.Compare(b) == 0);
-
-			a = new CodeSetBits();
 			b = CodeSetNull.Singleton;
 			Assert.True (a.Compare(b) == 0);
 
 			a = null;
-			b = new CodeSetBits();
+			b = CodeSetNull.Singleton;
 			Assert.True (a.Compare(b) == 0);
 		}
 
@@ -43,7 +39,7 @@ namespace DD.Collections.ICodeSetRelationsTest.Members
 			ICodeSet b = new Code(0);
 			Assert.True (a.Compare(b) == -1);
 
-			a = new CodeSetBits();
+			a = CodeSetNull.Singleton;
 			b = new CodeSetPair(0,100);
 			Assert.True (a.Compare(b) == -1);
 
@@ -60,7 +56,7 @@ namespace DD.Collections.ICodeSetRelationsTest.Members
 			Assert.True (a.Compare(b) == 1);
 
 			a = new CodeSetList(0,100,1000);
-			b = new CodeSetBits();
+			b = CodeSetNull.Singleton;
 			Assert.True (a.Compare(b) == 1);
 
 		}

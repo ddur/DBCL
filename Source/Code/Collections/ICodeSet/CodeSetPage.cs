@@ -19,6 +19,8 @@ namespace DD.Collections {
 
 		#region Ctor
 
+		internal CodeSetPage (params Code[] codes) : this ((IEnumerable<Code>)codes) {}
+
 		internal CodeSetPage (IEnumerable<Code> codes) {
 
 			Contract.Requires<ArgumentNullException> (!codes.Is(null));
