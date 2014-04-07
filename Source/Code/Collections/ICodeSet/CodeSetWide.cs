@@ -46,21 +46,22 @@ namespace DD.Collections
 
 		}
 
-		internal CodeSetWide(BitSetArray bits)
+		internal CodeSetWide(BitSetArray bits, int offset = 0)
 		{
 			Contract.Requires<ArgumentNullException> (!bits.Is(null));
 			Contract.Requires<ArgumentOutOfRangeException> (bits.Length <= Code.MaxCount || bits.Last <= Code.MaxValue);
+			Contract.Requires<ArgumentException> (((int)bits.First + offset).HasCodeValue() && ((int)bits.Last + offset).HasCodeValue());
 			Contract.Requires<ArgumentException> (bits.Count > ICodeSetService.PairCount);
 			Contract.Requires<ArgumentException> (bits.Count < (bits.Last - bits.First));
-			Contract.Requires<ArgumentException> (((Code)bits.First).UnicodePlane() != ((Code)bits.Last).UnicodePlane());
+			Contract.Requires<ArgumentException> (((Code)(bits.First + offset)).UnicodePlane() != ((Code)(bits.Last + offset)).UnicodePlane());
 
-			Contract.Ensures (Theory.Construct (bits, this));
+			Contract.Ensures (Theory.Construct (bits, offset, this));
 			
-			this.start = (Code)bits.First;
-			this.final = (Code)bits.Last;
+			this.start = (Code)(bits.First + offset);
+			this.final = (Code)(bits.Last + offset);
 
 			this.init (ref this.startPlane, ref this.finalPlane, ref this.planes);
-			this.init (bits);
+			this.init (bits, offset);
 			foreach (ICodeSet codeSet in this.planes) {
 				this.count += codeSet.Count;
 			}
@@ -80,34 +81,26 @@ namespace DD.Collections
 			thisPlanes = new ICodeSet[1 + thisFinalPlane - thisStartPlane];
 		}
 
-		void init (IEnumerable<int> bits) {
+		void init (IEnumerable<int> bits, int offset) {
 			var bitPlanes = getBitPlanes();
-			int currentPlane;
-			int currentValue;
 			foreach (var item in bits) {
-				currentPlane = item >> 16;
-				currentValue = item & 0xFFFF;
-				bitPlanes[currentPlane - this.startPlane].Set(currentValue);
+				bitPlanes[(item >> 16) - this.startPlane].Set(item & 0xFFFF);
 			}
-			initPlanes(bitPlanes);
+			initPlanes(bitPlanes, offset);
 		}
 
 		void init (IEnumerable<Code> codes) {
 			var bitPlanes = getBitPlanes();
-			int currentPlane;
-			int currentValue;
 			foreach (Code code in codes) {
-				currentPlane = code >> 16;
-				currentValue = code & 0xFFFF;
-				bitPlanes[currentPlane - this.startPlane].Set(currentValue);
+				bitPlanes[(code >> 16) - this.startPlane].Set(code & 0xFFFF);
 			}
 			initPlanes(bitPlanes);
 		}
 
-		void initPlanes (BitSetArray[] bitPlanes) {
+		void initPlanes (BitSetArray[] bitPlanes, int offset = 0) {
 			int index = 0;
 			foreach (var bitPlane in bitPlanes) {
-				this.planes[index] = bitPlane.Reduce();
+				this.planes[index] = bitPlane.Reduce(offset + ((index + this.startPlane) << 16));
 				++index;
 			}
 		}
@@ -130,10 +123,8 @@ namespace DD.Collections
 		[Pure] public override bool this[Code code] {
 			get {
 				int currentPlane = code.UnicodePlane();
-				if (currentPlane.InRange (this.startPlane, this.finalPlane)) {
-					return planes[currentPlane-this.startPlane][code&0xFFFF];
-				}
-				return false;
+				return currentPlane.InRange(this.startPlane, this.finalPlane) 
+					&& planes[currentPlane - this.startPlane][code];
 			}
 		}
 
@@ -162,12 +153,10 @@ namespace DD.Collections
 		}
 
 		[Pure] public override IEnumerator<Code> GetEnumerator () {
-			int currentPlane = startPlane;
 			foreach (ICodeSet codeSet in this.planes) {
 				foreach ( Code code in codeSet ) {
-					yield return code + (currentPlane << 16);
+					yield return code;
 				}
-				++currentPlane;
 			}
 		}
 
@@ -195,13 +184,13 @@ namespace DD.Collections
 				foreach (var item in codes.Distinct().OrderBy(code => (code))) {
 					e.MoveNext();
 					success.Assert (item == e.Current); // => SequenceEqual
-					success.Assert (self.planes[item.UnicodePlane()][item & 0xFFFF]);
+					success.Assert (self.planes[item.UnicodePlane()][item]);
 				}
 			
 				return success;
 			}
 
-			[Pure] public static bool Construct (BitSetArray bits, CodeSetWide self) {
+			[Pure] public static bool Construct (BitSetArray bits, int offset, CodeSetWide self) {
 				
 				// disable once ConvertToConstant.Local
 				Success success = true;
@@ -211,8 +200,8 @@ namespace DD.Collections
 				var e = self.GetEnumerator();
 				foreach (Code item in bits) {
 					e.MoveNext();
-					success.Assert (item.Value == e.Current); // => SequenceEqual
-					success.Assert (self.planes[item.UnicodePlane()][item & 0xFFFF]);
+					success.Assert ((item.Value + offset) == e.Current); // => SequenceEqual
+					success.Assert (self.planes[item.UnicodePlane()][item + offset]);
 				}
 			
 				return success;
@@ -235,16 +224,16 @@ namespace DD.Collections
 				var finalPlane = self.planes.LastOrDefault();
 				success.Assert (startPlane.Count != 0);
 				success.Assert (finalPlane.Count != 0);
-				success.Assert (startPlane[self.start & 0xFFFF]);
-				success.Assert (finalPlane[self.final & 0xFFFF]);
+				success.Assert (startPlane[self.start]);
+				success.Assert (finalPlane[self.final]);
 
 				int counter = 0; 
 				foreach (ICodeSet iCodeSet in self.planes) {
 					counter += iCodeSet.Count;
 				}
 				success.Assert (self.count == counter);
-				success.Assert ((self.start & 0xFFFF) == startPlane.First);
-				success.Assert ((self.final & 0xFFFF) == finalPlane.Last);
+				success.Assert ((self.start) == startPlane.First);
+				success.Assert ((self.final) == finalPlane.Last);
 				success.Assert (self.count > ICodeSetService.PairCount);// not Null-Pair
 				success.Assert (self.count < (self.final - self.start));// not Full-Pair
 				
