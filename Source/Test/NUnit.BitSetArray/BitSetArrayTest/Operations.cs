@@ -140,7 +140,7 @@ namespace DD.Collections.BitSetArrayTest {
             }, Throws.Nothing);
             Assert.That (testSet.Count == 0);
 
-            testSet = new BitSetArray ();
+            testSet = BitSetArray.Size ();
             Assert.That (delegate {
                 testSet.And ((BitSetArray)null);
             }, Throws.Nothing);
@@ -169,7 +169,7 @@ namespace DD.Collections.BitSetArrayTest {
                 testSet.Or ((BitSetArray)null);
             }, Throws.Nothing);
             Assert.That (testSet.Count == 3);
-            testSet = new BitSetArray (10);
+            testSet = BitSetArray.Size (10);
             Assert.That (delegate {
                 testSet.Or ((BitSetArray)null);
             }, Throws.Nothing);
@@ -194,7 +194,7 @@ namespace DD.Collections.BitSetArrayTest {
                 testSet.Xor ((BitSetArray)null);
             }, Throws.Nothing);
             Assert.That (testSet.Count == 3);
-            testSet = new BitSetArray (20);
+            testSet = BitSetArray.Size (20);
             Assert.That (delegate {
                 testSet.Xor ((BitSetArray)null);
             }, Throws.Nothing);
@@ -219,7 +219,7 @@ namespace DD.Collections.BitSetArrayTest {
                 testSet.Not ((BitSetArray)null);
             }, Throws.Nothing);
             Assert.That (testSet.Count == 3);
-            testSet = new BitSetArray (5);
+            testSet = BitSetArray.Size (5);
             Assert.That (delegate {
                 testSet.Not ((BitSetArray)null);
             }, Throws.Nothing);

@@ -33,7 +33,7 @@ namespace DD.Collections.BitSetArrayTest {
             Assert.That (test[11] == false);
             Assert.That (test[int.MaxValue] == false);
 
-            test = new BitSetArray ();
+            test = BitSetArray.Size ();
             Assert.That (test[int.MinValue] == false);
             Assert.That (test[-1] == false);
             Assert.That (test[0] == false);
@@ -106,7 +106,7 @@ namespace DD.Collections.BitSetArrayTest {
                 test[int.MaxValue] = true;
             }, Throws.TypeOf<ArgumentOutOfRangeException> ());
 
-            test = new BitSetArray ();
+            test = BitSetArray.Size ();
             Assert.That (delegate {
                 test[int.MinValue] = false;
             }, Throws.Nothing);
@@ -171,7 +171,7 @@ namespace DD.Collections.BitSetArrayTest {
                 test.Get (int.MaxValue);
             }, Throws.TypeOf<ArgumentOutOfRangeException> ());
 
-            test = new BitSetArray ();
+            test = BitSetArray.Size ();
             Assert.That (delegate {
                 test.Get (int.MinValue);
             }, Throws.TypeOf<ArgumentOutOfRangeException> ());
@@ -253,7 +253,7 @@ namespace DD.Collections.BitSetArrayTest {
                 test.Set (int.MaxValue, true);
             }, Throws.TypeOf<ArgumentOutOfRangeException> ());
 
-            test = new BitSetArray ();
+            test = BitSetArray.Size ();
             Assert.That (delegate {
                 test.Set (int.MinValue, true);
             }, Throws.TypeOf<ArgumentOutOfRangeException> ());
@@ -289,8 +289,8 @@ namespace DD.Collections.BitSetArrayTest {
 
         IEnumerable<BitSetArray> BitSetAllSource {
             get {
-                yield return new BitSetArray ();
-                yield return new BitSetArray (100, true);
+                yield return BitSetArray.Size ();
+                yield return BitSetArray.Size (100, true);
             }
         }
         [Test, TestCaseSource ("BitSetAllSource")]

@@ -16,16 +16,16 @@ namespace DD.Collections.ICodeSetServiceTest.Members
 		public void IsTrue()
 		{
 			Assert.True (((BitSetArray)null).IsNullOrEmpty());
-			Assert.True ((new BitSetArray()).IsNullOrEmpty());
-			Assert.True ((new BitSetArray(100)).IsNullOrEmpty());
+			Assert.True ((BitSetArray.Size()).IsNullOrEmpty());
+			Assert.True ((BitSetArray.Size(100)).IsNullOrEmpty());
 		}
 
 		[Test]
 		public void IsFalse()
 		{
-			Assert.False ((new BitSetArray(){0}).IsNullOrEmpty());
-			Assert.False ((new BitSetArray(100){1,2,3}).IsNullOrEmpty());
-			Assert.False ((new BitSetArray(100, true)).IsNullOrEmpty());
+			Assert.False ((BitSetArray.From (0)).IsNullOrEmpty());
+			Assert.False ((BitSetArray.From (1,2,3)).IsNullOrEmpty());
+			Assert.False ((BitSetArray.Size (100, true)).IsNullOrEmpty());
 		}
 	}
 }

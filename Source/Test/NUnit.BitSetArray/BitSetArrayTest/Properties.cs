@@ -15,7 +15,7 @@ namespace DD.Collections.BitSetArrayTest {
         [Test]
         public void LengthGet () {
             BitSetArray bs;
-            bs = new BitSetArray (10);
+            bs = BitSetArray.Size (10);
             Assert.That (bs.Length == 10);
             bs = BitSetArray.Size (200, true);
             Assert.That (bs.Length == 200);
@@ -26,7 +26,7 @@ namespace DD.Collections.BitSetArrayTest {
         [Test]
         public void LengthSet () {
             BitSetArray bs;
-            bs = new BitSetArray ();
+            bs = BitSetArray.Size ();
             Assert.That (delegate {
                 bs.Length = -1;
             }, Throws.TypeOf<ArgumentOutOfRangeException> ());
@@ -37,7 +37,7 @@ namespace DD.Collections.BitSetArrayTest {
 #if MAXCOVERAGE
 			bs.Length = int.MaxValue;
 #endif
-            bs = new BitSetArray ();
+            bs = BitSetArray.Size ();
             Assert.That (bs.Count == 0);
             Assert.That (bs.Length == 0);
             Assert.That (bs.Capacity == 0);
@@ -93,7 +93,7 @@ namespace DD.Collections.BitSetArrayTest {
 
         [Test]
         public void CapacityGet () {
-            BitSetArray bs = new BitSetArray (100, true);
+            BitSetArray bs = BitSetArray.Size (100, true);
             Assert.That (bs.Capacity == 128);
             bs.Add (500);
             Assert.That (bs.Capacity == 512);
@@ -103,7 +103,7 @@ namespace DD.Collections.BitSetArrayTest {
 
         [Test]
         public void CountGet () {
-            BitSetArray bs = new BitSetArray (200, true);
+            BitSetArray bs = BitSetArray.Size (200, true);
             Assert.That (bs.Count == 200);
             bs.Add (250);
             Assert.That (bs.Count == 201);
@@ -111,7 +111,7 @@ namespace DD.Collections.BitSetArrayTest {
 
         [Test]
         public void FirstGet () {
-            BitSetArray bs = new BitSetArray ();
+            BitSetArray bs = BitSetArray.Size ();
             Assert.True (bs.First == null);
             Assert.True (bs.Last == null);
             bs.Add (12);
@@ -127,7 +127,7 @@ namespace DD.Collections.BitSetArrayTest {
 
         [Test]
         public void LastGet () {
-            BitSetArray bs = new BitSetArray ();
+            BitSetArray bs = BitSetArray.Size ();
             Assert.True (bs.First == null);
             Assert.True (bs.Last == null);
             bs.Add (12);
@@ -143,19 +143,19 @@ namespace DD.Collections.BitSetArrayTest {
 
         [Test]
         public void IsReadonly () {
-            BitSetArray bs = new BitSetArray ();
+            BitSetArray bs = BitSetArray.Size ();
             Assert.That (!bs.IsReadOnly);
         }
 
         [Test]
         public void IsSynchronized () {
-            BitSetArray bs = new BitSetArray ();
+            BitSetArray bs = BitSetArray.Size ();
             Assert.That (!bs.IsSynchronized);
         }
 
         [Test]
         public void SyncRoot () {
-            BitSetArray bs = new BitSetArray ();
+            BitSetArray bs = BitSetArray.Size ();
             Assert.That (!bs.SyncRoot.IsNull ());
         }
 

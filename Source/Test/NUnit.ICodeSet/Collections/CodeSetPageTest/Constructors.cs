@@ -25,20 +25,20 @@ namespace DD.Collections.CodeSetPageTest
 			Assert.Throws <ArgumentNullException> (delegate{csp = new CodeSetPage ((BitSetArray)null);});
 
 			// requires at least 3 members (> ICodeSetService.PairCount)
-			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new BitSetArray());});
-			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new BitSetArray() {21});});
-			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new BitSetArray() {12,5});});
+			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (BitSetArray.Size ());});
+			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (BitSetArray.From (21));});
+			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (BitSetArray.From (12,5));});
 
 			// requires at least one NOT member
-			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new BitSetArray() {1,2,3,4,5});});
+			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (BitSetArray.From (1,2,3,4,5));});
 
 			// requires all codes within same unicode plane
-			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new BitSetArray() {12,66000});});
+			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (BitSetArray.From (12,66000));});
 
             // does not except full-range of codes
-            Assert.Throws<ArgumentException> (delegate{csp = new CodeSetPage(new BitSetArray(10, true));});
+            Assert.Throws<ArgumentException> (delegate{csp = new CodeSetPage(BitSetArray.Size (10, true));});
 
-			csp = new CodeSetPage (new BitSetArray() {1,12,33});
+			csp = new CodeSetPage (BitSetArray.From (1,12,33));
 		}
 		
 		[Test]
@@ -88,7 +88,7 @@ namespace DD.Collections.CodeSetPageTest
 			// requires all codes within same unicode plane
 			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new List<Code>() {12,66000});});
 
-			csp = new CodeSetPage (new BitSetArray() {0,1,12,33,65535});
+			csp = new CodeSetPage (BitSetArray.From (0,1,12,33,65535));
 			var clone = new CodeSetPage (csp);
 		}
 		

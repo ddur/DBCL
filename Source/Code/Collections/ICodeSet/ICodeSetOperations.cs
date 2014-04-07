@@ -17,7 +17,7 @@ namespace DD.Collections
 	internal static class ICodeSetOperations
 	{
 		private static BitSetArray NoBits {
-			get { return new BitSetArray(); }
+			get { return BitSetArray.Size (); }
 		}
 
 		#region Union or(a,b,c...)
@@ -175,7 +175,7 @@ namespace DD.Collections
 			BitSetArray compact = self.ToCompact();
 			compact.Not();
 			Contract.Assert (compact.Count != 0);
-			var complement = new BitSetArray(self.Last+1);
+			var complement = BitSetArray.Size (self.Last+1);
 			foreach (var item in compact) {
 				complement.Set(item + self.First);
 			}

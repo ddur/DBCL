@@ -98,9 +98,9 @@ namespace DD.Collections
 							   && Contract.ForAll(self, item => Contract.Result<BitSetArray>()[item])
 							  ));
 
-			if (self.IsNull() || self.Count == 0) return new BitSetArray();
+			if (self.IsNull() || self.Count == 0) return BitSetArray.Size ();
 			
-			var ret = new BitSetArray (self.Last+1);
+			var ret = BitSetArray.Size (self.Last+1);
 			foreach (int code in self) {
 				ret.Set (code, true);
 			}
@@ -117,12 +117,12 @@ namespace DD.Collections
 			Contract.Ensures (Contract.Result<BitSetArray>().IsNot(null));
 			Contract.Ensures (Contract.Result<BitSetArray>().IsCompact());
 
-			if (self.IsNull() || self.Count == 0) return new BitSetArray();
+			if (self.IsNull() || self.Count == 0) return BitSetArray.Size ();
 			
 			var bits = self as CodeSetPage;
 			if (bits.IsNot(null)) return bits.ToCompact();
 			
-			var ret = new BitSetArray (self.Length);
+			var ret = BitSetArray.Size (self.Length);
 			foreach (int code in self) {
 				ret.Set (code-self.First, true);
 			}

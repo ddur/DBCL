@@ -44,7 +44,7 @@ namespace DD.Collections.BitSetArrayTest {
         public void LeftOperandIsNull () {
             a = null;
             b = BitSetArray.From (1, 2, 3);
-            c = new BitSetArray ();
+            c = BitSetArray.Size ();
 
             Assert.That ((a | b).SetEquals (b));
             Assert.That ((a & b).SetEquals (a));
@@ -74,7 +74,7 @@ namespace DD.Collections.BitSetArrayTest {
         [Test]
         public void Equals () {
 
-            a = new BitSetArray () { 1, 2, 3 };
+			a = BitSetArray.From (1, 2, 3);
             b = BitSetArray.From (1, 2, 3);
             c = BitSetArray.From (new int[] { 1, 2, 3, 4 });
 
@@ -85,7 +85,7 @@ namespace DD.Collections.BitSetArrayTest {
             Assert.That (b != c);
             Assert.That (c != b);
 
-            c = new BitSetArray ();
+            c = BitSetArray.Size ();
 
             Assert.That (a == b);
             Assert.That (b == a);
@@ -110,7 +110,7 @@ namespace DD.Collections.BitSetArrayTest {
         [Test]
         public void Compare () {
 
-            a = new BitSetArray () { 1, 2, 3 };
+			a = BitSetArray.From (1, 2, 3);
             b = BitSetArray.From (1, 2, 3);
             c = BitSetArray.From (new int[] { 1, 2, 3, 4 });
 
@@ -167,7 +167,7 @@ namespace DD.Collections.BitSetArrayTest {
             Assert.That (c >= b);
             Assert.That (!(c <= b));
 
-            b = new BitSetArray ();
+            b = BitSetArray.Size ();
 
             Assert.That (a == b);
             Assert.That (b == a);
@@ -199,7 +199,7 @@ namespace DD.Collections.BitSetArrayTest {
         [Test]
         public void UnionOr () {
 
-            a = new BitSetArray () { 1, 2, 3 };
+			a = BitSetArray.From (1, 2, 3);
             b = BitSetArray.From (3, 4, 5);
             c = BitSetArray.From (new int[] { 1, 2, 3, 4, 5 });
 
@@ -211,7 +211,7 @@ namespace DD.Collections.BitSetArrayTest {
         [Test]
         public void IntersectionAnd () {
 
-            a = new BitSetArray () { 1, 2, 3 };
+			a = BitSetArray.From (1, 2, 3);
             b = BitSetArray.From (3, 4, 5);
             c = BitSetArray.From (new int[] { 3 });
 
@@ -223,7 +223,7 @@ namespace DD.Collections.BitSetArrayTest {
         [Test]
         public void SymmetricExceptXor () {
 
-            a = new BitSetArray () { 1, 2, 3 };
+			a = BitSetArray.From (1, 2, 3);
             b = BitSetArray.From (3, 4, 5);
             c = BitSetArray.From (new int[] { 1, 2, 4, 5 });
 
@@ -235,7 +235,7 @@ namespace DD.Collections.BitSetArrayTest {
         [Test]
         public void ExceptNot () {
 
-            a = new BitSetArray () { 1, 2, 3 };
+			a = BitSetArray.From (1, 2, 3);
             b = BitSetArray.From (3, 4, 5);
             c = BitSetArray.From (new int[] { 1, 2 });
 
@@ -247,12 +247,12 @@ namespace DD.Collections.BitSetArrayTest {
         [Test]
         public void ComplementNot () {
 
-            a = new BitSetArray () { 0, 1, 2, 3 };
+			a = BitSetArray.From (0, 1, 2, 3);
             b = BitSetArray.From (3, 4, 5);
             c = BitSetArray.From (new int[] { 0, 1, 2 });
 
-            Assert.That ((~a) == new BitSetArray ());
-            Assert.That ((~a) == new BitSetArray (10));
+            Assert.That ((~a) == BitSetArray.Size ());
+            Assert.That ((~a) == BitSetArray.Size (10));
             Assert.That ((~b) == c);
 
         }

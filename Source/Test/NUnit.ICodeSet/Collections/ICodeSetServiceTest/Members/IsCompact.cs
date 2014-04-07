@@ -5,6 +5,7 @@
 // --------------------------------------------------------------------------------
 
 using System;
+using DD.Collections;
 using NUnit.Framework;
 
 namespace DD.Collections.ICodeSetServiceTest.Members
@@ -22,29 +23,32 @@ namespace DD.Collections.ICodeSetServiceTest.Members
 		[Test]
 		public void Empty_ReturnsTrue()
 		{
-			var isEmpty = new BitSetArray();
+			var isEmpty = BitSetArray.Size ();
 			Assert.True (isEmpty.IsCompact());
 		}
 
 		[Test]
 		public void NotEmpty_ReturnsCompact()
 		{
-			var notEmpty = new BitSetArray() {0};
+			var notEmpty = BitSetArray.From (0);
 			Assert.True (notEmpty.IsCompact());
 
-			notEmpty = new BitSetArray() {1};
+			notEmpty = BitSetArray.From (1);
 			Assert.False (notEmpty.IsCompact());
 
-			notEmpty = new BitSetArray() {1,10};
+			notEmpty = BitSetArray.From (1,10);
 			Assert.False (notEmpty.IsCompact());
 
-			notEmpty = new BitSetArray() {0,10};
+			notEmpty = BitSetArray.From (0,10);
 			Assert.True (notEmpty.IsCompact());
 
-			notEmpty = new BitSetArray() {0,10,100};
+			notEmpty = BitSetArray.From (0,10,100);
 			Assert.True (notEmpty.IsCompact());
 
-			notEmpty = new BitSetArray(200) {0,10,100};
+			notEmpty = BitSetArray.Size (200);
+			notEmpty.Add (0);
+			notEmpty.Add (10);
+			notEmpty.Add (100);
 			Assert.False (notEmpty.IsCompact());
 
 			notEmpty.TrimExcess();

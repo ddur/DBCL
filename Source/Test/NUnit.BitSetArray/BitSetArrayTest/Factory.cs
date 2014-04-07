@@ -130,7 +130,7 @@ namespace DD.Collections.BitSetArrayTest {
 
             // Here will do only code coverage as this .Mask redirects to tested constructor
             Assert.That (delegate {
-                BitSetArray.Size (0);
+                BitSetArray.Size ();
             }, Throws.Nothing);
             Assert.That (delegate {
                 BitSetArray.Size (5);

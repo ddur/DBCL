@@ -15,7 +15,7 @@ namespace DD.Collections.BitSetArrayTest {
         [Test]
         public void ConstructEmptyEmpty () {
             BitSetArray test;
-            test = new BitSetArray ();
+            test = BitSetArray.Size ();
             Assert.That (test.Count == 0, Is.True);
             Assert.That (test.Length == 0, Is.True);
             Assert.That (test.First == null, Is.True);
@@ -27,37 +27,27 @@ namespace DD.Collections.BitSetArrayTest {
 
             // Exceptions
             Assert.That (delegate {
-                new BitSetArray (-1);
+                BitSetArray.Size (-1);
             }, Throws.TypeOf<ArgumentOutOfRangeException> ());
             Assert.That (delegate {
-                new BitSetArray (int.MinValue);
+                BitSetArray.Size (int.MinValue);
             }, Throws.TypeOf<ArgumentOutOfRangeException> ());
             Assert.That (delegate {
-                new BitSetArray (new Random ().Next (-1, int.MinValue));
+                BitSetArray.Size (new Random ().Next (-1, int.MinValue));
             }, Throws.TypeOf<ArgumentOutOfRangeException> ());
             Assert.That (delegate {
-                new BitSetArray (0, true);
+                BitSetArray.Size (0, true);
             }, Throws.TypeOf<ArgumentException> ());
-
-            Assert.That (delegate {
-                new BitSetArray () { -1 };
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
-            Assert.That (delegate {
-                new BitSetArray () { int.MinValue };
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
-            Assert.That (delegate {
-                new BitSetArray () { new Random ().Next (-1, int.MinValue) };
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
 
             BitSetArray test;
 
-            test = new BitSetArray (0);
+            test = BitSetArray.Size ();
             Assert.That (test.Count == 0, Is.True);
             Assert.That (test.Length == 0, Is.True);
             Assert.That (test.First == null, Is.True);
             Assert.That (test.Last == null, Is.True);
 
-            test = new BitSetArray (0x110000);
+            test = BitSetArray.Size (0x110000);
             Assert.That (test.Count == 0, Is.True);
             Assert.That (test.Length == 0x110000, Is.True);
             Assert.That (test.First == null, Is.True);
@@ -67,7 +57,7 @@ namespace DD.Collections.BitSetArrayTest {
             test = null;
             GC.Collect ();
 
-            test = new BitSetArray (int.MaxValue);
+            test = BitSetArray.Size (int.MaxValue);
             Assert.That (test.Count == 0, Is.True);
             Assert.That (test.Length == int.MaxValue, Is.True);
             Assert.That (test.First == null, Is.True);
@@ -83,37 +73,37 @@ namespace DD.Collections.BitSetArrayTest {
         public void ConstructWithDefaultValue () {
             // Exceptions
             Assert.That (delegate {
-                new BitSetArray (-1, true);
+                BitSetArray.Size (-1, true);
             }, Throws.TypeOf<ArgumentOutOfRangeException> ());
             Assert.That (delegate {
-                new BitSetArray (int.MinValue, true);
+                BitSetArray.Size (int.MinValue, true);
             }, Throws.TypeOf<ArgumentOutOfRangeException> ());
             Assert.That (delegate {
-                new BitSetArray (new Random ().Next (-1, int.MinValue), true);
+                BitSetArray.Size (new Random ().Next (-1, int.MinValue), true);
             }, Throws.TypeOf<ArgumentOutOfRangeException> ());
 
 
             BitSetArray test;
 
-            test = new BitSetArray (0, false);
+            test = BitSetArray.Size (0, false);
             Assert.That (test.Count == 0, Is.True);
             Assert.That (test.Length == 0, Is.True);
             Assert.That (test.First == null, Is.True);
             Assert.That (test.Last == null, Is.True);
 
-            test = new BitSetArray (0, false);
+            test = BitSetArray.Size (0, false);
             Assert.That (test.Count == 0, Is.True);
             Assert.That (test.Length == 0, Is.True);
             Assert.That (test.First == null, Is.True);
             Assert.That (test.Last == null, Is.True);
 
-            test = new BitSetArray (0x110000, true);
+            test = BitSetArray.Size (0x110000, true);
             Assert.That (test.Count == 0x110000, Is.True);
             Assert.That (test.Length == test.Count, Is.True);
             Assert.That (test.First == 0, Is.True);
             Assert.That (test.Last == test.Length - 1, Is.True);
 
-            test = new BitSetArray (0x110000, false);
+            test = BitSetArray.Size (0x110000, false);
             Assert.That (test.Count == 0, Is.True);
             Assert.That (test.Length == 0x110000, Is.True);
             Assert.That (test.First == null, Is.True);
@@ -123,7 +113,7 @@ namespace DD.Collections.BitSetArrayTest {
             test = null;
             GC.Collect ();
 
-            test = new BitSetArray (int.MaxValue, true);
+            test = BitSetArray.Size (int.MaxValue, true);
             Assert.That (test.Count == int.MaxValue, Is.True);
             Assert.That (test.Length == test.Count, Is.True);
             Assert.That (test.First == 0, Is.True);
@@ -139,18 +129,18 @@ namespace DD.Collections.BitSetArrayTest {
         public void ConstructCopy () {
             // Exceptions (null reference)
             Assert.That (delegate {
-                new BitSetArray ((BitSetArray)null, 0);
+                BitSetArray.From ((BitSetArray)null, 0);
             }, Throws.TypeOf<ArgumentNullException> ());
             Assert.That (delegate {
-                new BitSetArray ((BitSetArray)null);
+                BitSetArray.Copy ((BitSetArray)null);
             }, Throws.TypeOf<ArgumentNullException> ());
 
             BitSetArray test;
             BitSetArray copy;
 
             // copy empty
-            test = new BitSetArray (0, false);
-            copy = new BitSetArray (test);
+            test = BitSetArray.Size (0, false);
+            copy = BitSetArray.Copy (test);
             Assert.That (copy.IsNot (test));
             Assert.That (copy.Count == test.Count);
             Assert.That (copy.Length == test.Length);
@@ -164,12 +154,12 @@ namespace DD.Collections.BitSetArrayTest {
             Assert.That (copy.First != test.First);
             Assert.That (copy.Last != test.Last);
 
-            int largeLen = 0x10000;
-            int smallLen = 0xFF;
+			const int largeLen = 0x10000;
+			const int smallLen = 0xFF;
 
             // copy empty to larger space
-            test = new BitSetArray (0, false);
-            copy = new BitSetArray (test, largeLen);
+            test = BitSetArray.Size (0, false);
+            copy = BitSetArray.From (test, largeLen);
             Assert.That (copy.IsNot (test));
             Assert.That (copy.Count == test.Count);
             Assert.That (copy.Length != test.Length);
@@ -184,8 +174,8 @@ namespace DD.Collections.BitSetArrayTest {
             Assert.That (copy.Last != test.Last);
 
             // copy full
-            test = new BitSetArray (largeLen, true);
-            copy = new BitSetArray (test);
+            test = BitSetArray.Size (largeLen, true);
+            copy = BitSetArray.Copy (test);
             Assert.That (copy.IsNot (test));
             Assert.That (copy.Count == test.Count);
             Assert.That (copy.Length == test.Length);
@@ -202,8 +192,8 @@ namespace DD.Collections.BitSetArrayTest {
 
 
             // copy full to empty space
-            test = new BitSetArray (largeLen, true);
-            copy = new BitSetArray (test, 0);
+            test = BitSetArray.Size (largeLen, true);
+            copy = BitSetArray.From (test, 0);
             Assert.That (copy.IsNot (test));
             Assert.That (copy.Count != test.Count);
             Assert.That (copy.Count == 0);
@@ -214,8 +204,8 @@ namespace DD.Collections.BitSetArrayTest {
 
 
             // copy full to smaller space
-            test = new BitSetArray (largeLen, true);
-            copy = new BitSetArray (test, largeLen - 1);
+            test = BitSetArray.Size (largeLen, true);
+            copy = BitSetArray.From (test, largeLen - 1);
             Assert.That (copy.IsNot (test));
             Assert.That (copy.Count == test.Count - 1);
             Assert.That (copy.Length == test.Length - 1);
@@ -224,8 +214,8 @@ namespace DD.Collections.BitSetArrayTest {
 
 
             // copy full to smal space
-            test = new BitSetArray (largeLen, true);
-            copy = new BitSetArray (test, smallLen);
+            test = BitSetArray.Size (largeLen, true);
+            copy = BitSetArray.From (test, smallLen);
             Assert.That (copy.IsNot (test));
             Assert.That (copy.Count == smallLen);
             Assert.That (copy.Length == smallLen);
@@ -234,8 +224,8 @@ namespace DD.Collections.BitSetArrayTest {
 
 
             // copy small to larger space
-            test = new BitSetArray (smallLen, true);
-            copy = new BitSetArray (test, largeLen);
+            test = BitSetArray.Size (smallLen, true);
+            copy = BitSetArray.From (test, largeLen);
             Assert.That (copy.IsNot (test));
             Assert.That (copy.Count == test.Count);
             Assert.That (copy.Length == largeLen);
@@ -247,8 +237,8 @@ namespace DD.Collections.BitSetArrayTest {
             copy = null;
             GC.Collect ();
 
-            test = new BitSetArray (int.MaxValue, true);
-            copy = new BitSetArray (test);
+            test = BitSetArray.Size (int.MaxValue, true);
+            copy = BitSetArray.Copy (test);
             Assert.That (copy.IsNot (test));
             Assert.That (copy.Count == test.Count);
             Assert.That (copy.Length == test.Length);

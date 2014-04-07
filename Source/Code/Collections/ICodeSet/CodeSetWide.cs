@@ -70,7 +70,7 @@ namespace DD.Collections
 		BitSetArray[] getBitPlanes() {
 			var bitPlanes = new BitSetArray[this.planes.Length];
 			for (int i = 0; i < this.planes.Length; i++) {
-				bitPlanes[i] = new BitSetArray(char.MaxValue + 1);
+				bitPlanes[i] = BitSetArray.Size (char.MaxValue + 1);
 			}
 			return bitPlanes;
 		}

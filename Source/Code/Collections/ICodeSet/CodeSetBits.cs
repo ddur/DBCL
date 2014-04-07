@@ -23,7 +23,7 @@ namespace DD.Collections
 		internal CodeSetBits () {
 			Contract.Ensures (Theory.Construct(this));
 
-			this.sorted = new BitSetArray();
+			this.sorted = BitSetArray.Size(0);
 		}
 
 		internal CodeSetBits (params Code[] codes) : this ((IEnumerable<Code>)codes) {}
@@ -55,14 +55,14 @@ namespace DD.Collections
 					this.sorted = ((CodeSetBits)codes).sorted;
 				}
 				else {
-					this.sorted = new BitSetArray (this.final - this.start + 1);
+					this.sorted = BitSetArray.Size (this.final - this.start + 1);
 					foreach ( Code code in codes ) {
 						this.sorted.Set (code - this.start, true);
 					}
 				}
 			}
 			else {
-				this.sorted = new BitSetArray ();
+				this.sorted = BitSetArray.Size(0);
 			}
 		}
 
@@ -81,13 +81,13 @@ namespace DD.Collections
 			if (bits.Count != 0) {
 				this.start = (int)bits.First + offset;
 				this.final = (int)bits.Last + offset;
-				this.sorted = new BitSetArray (this.final - this.start + 1);
+				this.sorted = BitSetArray.Size (this.final - this.start + 1);
 				foreach ( Code code in bits ) {
 					this.sorted.Set (code + offset - this.start, true);
 				}
 			}
 			else {
-				this.sorted = new BitSetArray ();
+				this.sorted = BitSetArray.Size ();
 			}
 		}
 

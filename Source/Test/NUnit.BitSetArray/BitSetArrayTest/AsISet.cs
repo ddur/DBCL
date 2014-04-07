@@ -20,7 +20,7 @@ namespace DD.Collections.BitSetArrayTest.Interfaces.AsISet {
 
         [Test]
         public void Add () {
-            ISet<int> bs = new BitSetArray ();
+            ISet<int> bs = BitSetArray.Size ();
             Assert.That (delegate {
                 bs.Add (int.MinValue);
             }, Throws.Nothing);
@@ -145,7 +145,7 @@ namespace DD.Collections.BitSetArrayTest.Interfaces.AsISet {
         public void SetEqualsNull () {
             BitSetArray testSet = BitSetArray.From (1, 2, 3);
             Assert.That (!testSet.SetEquals ((int[])null));
-            testSet = new BitSetArray ();
+            testSet = BitSetArray.Size ();
             Assert.That (testSet.SetEquals ((int[])null));
         }
 
@@ -166,7 +166,7 @@ namespace DD.Collections.BitSetArrayTest.Interfaces.AsISet {
         public void OverlapsNull () {
             BitSetArray testSet = BitSetArray.From (1, 2, 3);
             Assert.That (!testSet.Overlaps ((int[])null));
-            testSet = new BitSetArray ();
+            testSet = BitSetArray.Size ();
             Assert.That (!testSet.Overlaps ((int[])null));
         }
 
@@ -192,7 +192,7 @@ namespace DD.Collections.BitSetArrayTest.Interfaces.AsISet {
         public void IsSupersetOfNull () {
             BitSetArray testSet = BitSetArray.From (1, 2, 3);
             Assert.That (!testSet.IsSupersetOf ((int[])null));
-            testSet = new BitSetArray ();
+            testSet = BitSetArray.Size ();
             Assert.That (!testSet.IsSupersetOf ((int[])null));
         }
 
@@ -213,7 +213,7 @@ namespace DD.Collections.BitSetArrayTest.Interfaces.AsISet {
         public void IsProperSupersetOfNull () {
             BitSetArray testSet = BitSetArray.From (1, 2, 3);
             Assert.That (!testSet.IsProperSupersetOf ((int[])null));
-            testSet = new BitSetArray ();
+            testSet = BitSetArray.Size ();
             Assert.That (!testSet.IsProperSupersetOf ((int[])null));
         }
 
@@ -239,7 +239,7 @@ namespace DD.Collections.BitSetArrayTest.Interfaces.AsISet {
         public void IsSubsetOfNull () {
             BitSetArray testSet = BitSetArray.From (1, 2, 3);
             Assert.That (!testSet.IsSubsetOf ((int[])null));
-            testSet = new BitSetArray ();
+            testSet = BitSetArray.Size ();
             Assert.That (!testSet.IsSubsetOf ((int[])null));
         }
 
@@ -260,7 +260,7 @@ namespace DD.Collections.BitSetArrayTest.Interfaces.AsISet {
         public void IsProperSubsetOfNull () {
             BitSetArray testSet = BitSetArray.From (1, 2, 3);
             Assert.That (!testSet.IsProperSubsetOf ((int[])null));
-            testSet = new BitSetArray ();
+            testSet = BitSetArray.Size ();
             Assert.That (!testSet.IsProperSubsetOf ((int[])null));
         }
 

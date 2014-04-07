@@ -17,7 +17,7 @@ namespace DD.Collections.BitSetArrayTest.Interfaces {
 
         [Test]
         public void Add () {
-            BitSetArray bs = new BitSetArray ();
+            var bs = BitSetArray.Size ();
             Assert.That (delegate {
                 ((ICollection<int>)bs).Add (int.MinValue);
             }, Throws.TypeOf<ArgumentOutOfRangeException> ());
@@ -35,7 +35,7 @@ namespace DD.Collections.BitSetArrayTest.Interfaces {
 
         [Test]
         public void Remove () {
-            BitSetArray bs = new BitSetArray (100, true);
+            var bs = BitSetArray.Size (100, true);
 
             int item;
             for ( int i = 0; i < 100; i++ ) {
@@ -49,7 +49,7 @@ namespace DD.Collections.BitSetArrayTest.Interfaces {
         public void Clear () {
             int len;
             int ver;
-            BitSetArray bs = new BitSetArray ();
+            var bs = BitSetArray.Size ();
             ver = bs.Version;
             bs.Clear ();
             Assert.That (bs.Count == 0);
@@ -57,7 +57,7 @@ namespace DD.Collections.BitSetArrayTest.Interfaces {
             Assert.That (bs.Version == ver);
             for ( int i = 0; i < 10; i++ ) {
                 len = r.Next (1, 100);
-                bs = new BitSetArray (len, true);
+                bs = BitSetArray.Size (len, true);
                 ver = bs.Version;
                 Assert.That (bs.Count == len);
                 bs.Clear ();
@@ -86,7 +86,7 @@ namespace DD.Collections.BitSetArrayTest.Interfaces {
             Assert.That (test.Contains (11) == false);
             Assert.That (test.Contains (int.MaxValue) == false);
 
-            test = new BitSetArray ();
+            test = BitSetArray.Size ();
             Assert.That (test.Contains (int.MinValue) == false);
             Assert.That (test.Contains (-1) == false);
             Assert.That (test.Contains (0) == false);

@@ -49,7 +49,7 @@ namespace DD.Collections {
 				this.sorted = ((CodeSetPage)codes).sorted;
 			}
 			else {
-				this.sorted = new BitSetArray (1 + this.final - this.start);
+				this.sorted = BitSetArray.Size (1 + this.final - this.start);
 				foreach ( Code code in codes ) {
 					this.sorted.Set (code - this.start, true);
 				}
@@ -70,7 +70,7 @@ namespace DD.Collections {
 
 			this.start = (int)bits.First + offset;
 			this.final = (int)bits.Last + offset;
-			this.sorted = new BitSetArray (this.final - this.start + 1);
+			this.sorted = BitSetArray.Size (this.final - this.start + 1);
 			foreach ( Code code in bits ) {
 				this.sorted.Set (code + offset - this.start, true);
 			}

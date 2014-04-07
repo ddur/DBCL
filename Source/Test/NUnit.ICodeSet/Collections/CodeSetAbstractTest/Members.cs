@@ -158,7 +158,7 @@ namespace DD.Collections.CodeSetAbstractTest
 			Assert.False (cset_b.Equals((object)null));
 			Assert.False (cset_c.Equals((object)null));
 
-			Assert.False (cset_a.Equals((object)new BitSetArray(){0,1,5,7}));
+			Assert.False (cset_a.Equals((object)BitSetArray.From(0,1,5,7)));
 			Assert.False (cset_b.Equals((object)new Code[]{0,1,5,7}));
 			Assert.False (cset_c.Equals(new object()));
 		}

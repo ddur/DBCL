@@ -22,36 +22,36 @@ namespace DD.Collections.ICodeSetServiceTest.Members
 		[Test]
 		public void Empty_IsFalse()
 		{
-			var isEmpty = new BitSetArray();
+			var isEmpty = BitSetArray.Size ();
 			Assert.False (isEmpty.IsFull());
 		}
 
 		[Test]
 		public void NotFull_IsFalse()
 		{
-			var isNotFull = new BitSetArray() {1,3};
+			var isNotFull = BitSetArray. From (1,3);
 			Assert.False (isNotFull.IsFull());
 
-			isNotFull = new BitSetArray() {0,7};
+			isNotFull = BitSetArray.From (0,7);
 			Assert.False (isNotFull.IsFull());
 		}
 
 		[Test]
 		public void Full_IsTrue()
 		{
-			var isFull = new BitSetArray() {0};
+			var isFull = BitSetArray.From (0);
 			Assert.True (isFull.IsFull());
 
-			isFull = new BitSetArray() {0,1};
+			isFull = BitSetArray.From (0,1);
 			Assert.True (isFull.IsFull());
 
-			isFull = new BitSetArray() {1,2};
+			isFull = BitSetArray.From (1,2);
 			Assert.True (isFull.IsFull());
 
-			isFull = new BitSetArray() {1,2,3};
+			isFull = BitSetArray.From (1,2,3);
 			Assert.True (isFull.IsFull());
 
-			isFull = new BitSetArray(10, true);
+			isFull = BitSetArray.Size (10, true);
 			Assert.True (isFull.IsFull());
 		}
 	}

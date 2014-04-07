@@ -32,7 +32,7 @@ namespace DD.Collections {
         /// <summary>
         /// Create empty set
         /// </summary>
-        public BitSetArray () {
+        private BitSetArray () {
 
             Contract.Ensures (Theory.Construct (this));
         }
@@ -56,7 +56,7 @@ namespace DD.Collections {
         /// Create empty set with size/capacity of length items and with default value if true
         /// </summary>
         /// <param name="length"></param>
-        public BitSetArray (int length, bool value = false)
+        private BitSetArray (int length, bool value = false)
             : this (length) {
             Contract.Requires<ArgumentOutOfRangeException> (ValidLength (length));
             Contract.Requires<ArgumentException> ((value.Bool () == true && length > 0) || (value.Bool () == false));
@@ -78,7 +78,7 @@ namespace DD.Collections {
         /// Create set from another set
         /// </summary>
         /// <param name="that"></param>
-        public BitSetArray (BitSetArray that) {
+        private BitSetArray (BitSetArray that) {
             Contract.Requires<ArgumentNullException> (that.IsNot (null));
 
             Contract.Ensures (Theory.Construct (this, that));
@@ -97,7 +97,7 @@ namespace DD.Collections {
         /// </summary>
         /// <param name="that"></param>
         /// <param name="length"></param>
-        public BitSetArray (BitSetArray that, int length) {
+        private BitSetArray (BitSetArray that, int length) {
             Contract.Requires<ArgumentNullException> (that.IsNot (null));
             Contract.Requires<ArgumentOutOfRangeException> (ValidLength (length));
 
@@ -754,14 +754,7 @@ namespace DD.Collections {
         }
 
         [Pure]
-        private static BitSetArray Size (int length) {
-            Contract.Requires<ArgumentOutOfRangeException> (ValidLength (length));
-
-            return new BitSetArray (length);
-        }
-
-        [Pure]
-        public static BitSetArray Size (int length, bool value = false) {
+        public static BitSetArray Size (int length = 0, bool value = false) {
             Contract.Requires<ArgumentOutOfRangeException> (ValidLength (length));
             Contract.Requires<ArgumentException> (
                 (

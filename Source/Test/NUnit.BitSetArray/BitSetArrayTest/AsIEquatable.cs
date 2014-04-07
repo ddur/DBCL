@@ -15,25 +15,25 @@ namespace DD.Collections.BitSetArrayTest.Interfaces {
     public class AsIEquatable {
         [Test]
         public void Equals () {
-            BitSetArray bsA = new BitSetArray ();
+            var bsA = BitSetArray.Size ();
 
             Assert.That (bsA.Equals (bsA));
             Assert.That (bsA.Equals ((BitSetArray)bsA.Clone ()));
             Assert.That (bsA.Equals ((BitSetArray)null));
-            Assert.That (bsA.Equals (new BitSetArray ()));
-            Assert.That (bsA.Equals (new BitSetArray (10)));
+            Assert.That (bsA.Equals (BitSetArray.Size ()));
+            Assert.That (bsA.Equals (BitSetArray.Size (10)));
 
             bsA = BitSetArray.From (0, 5, 10);
             Assert.That (bsA.Equals (bsA));
             Assert.That (bsA.Equals ((BitSetArray)bsA.Clone ()));
-            Assert.That (!bsA.Equals (new BitSetArray ()));
+            Assert.That (!bsA.Equals (BitSetArray.Size ()));
             Assert.That (!bsA.Equals ((BitSetArray)null));
 
         }
 
         [Test]
         public void EqualsObject () {
-            BitSetArray bsA = new BitSetArray ();
+            BitSetArray bsA = BitSetArray.Size ();
 
             Assert.That (bsA.Equals ((object)bsA));
             Assert.That (bsA.Equals (bsA.Clone ()));
@@ -44,7 +44,7 @@ namespace DD.Collections.BitSetArrayTest.Interfaces {
             bsA = BitSetArray.From (0, 5, 10);
             Assert.That (bsA.Equals ((object)bsA));
             Assert.That (bsA.Equals (bsA.Clone ()));
-            Assert.That (!bsA.Equals ((object)new BitSetArray ()));
+            Assert.That (!bsA.Equals ((object)BitSetArray.Size ()));
             Assert.That (!bsA.Equals ((object)null));
             Assert.That (bsA.Equals (bsA.ToItems ()));
             Assert.That (bsA.Equals (bsA.ToList ()));
@@ -53,8 +53,8 @@ namespace DD.Collections.BitSetArrayTest.Interfaces {
 
         [Test]
         public void GetHashCode_ () {
-            BitSetArray bsA = new BitSetArray ();
-            BitSetArray bsB = new BitSetArray (100);
+            BitSetArray bsA = BitSetArray.Size ();
+            BitSetArray bsB = BitSetArray.Size (100);
             Assert.That (bsA.GetHashCode () == bsB.GetHashCode ());
             Assert.That (bsA.GetHashCode () == bsB.GetHashCode ()); // cover GetHashCode cache
             bsA.Add (1);
