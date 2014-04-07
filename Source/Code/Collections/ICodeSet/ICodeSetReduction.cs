@@ -94,9 +94,11 @@ namespace DD.Collections
 				Contract.Assert (self.Span() != self.Count); // not Full -> has complement items 
 				
 				// not reduced, create complement
-				var complement = new BitSetArray(self.Length);
+				int start = (int)self.First;
+				int final = (int)self.Last;
+				var complement = BitSetArray.Size(self.Length);
 				foreach (var item in self.Complement()) {
-					if (self.InRange(item)) {
+					if (item.InRange(start, final)) {
 						complement.Set(item);
 					}
 				}
