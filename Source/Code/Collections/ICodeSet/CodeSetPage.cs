@@ -56,22 +56,23 @@ namespace DD.Collections {
 			}
 		}
 
-		internal CodeSetPage (BitSetArray bits) {
+		internal CodeSetPage (BitSetArray bits, int offset = 0) {
 
 			Contract.Requires<ArgumentNullException> (!bits.Is(null));
 			Contract.Requires<ArgumentException> (!bits.IsEmpty());
-			Contract.Requires<ArgumentOutOfRangeException> (bits.Last <= Code.MaxValue);
+			Contract.Requires<ArgumentOutOfRangeException> (bits.Length <= Code.MaxCount || bits.Last <= Code.MaxValue);
+			Contract.Requires<ArgumentException> (((int)bits.First + offset).HasCodeValue() && ((int)bits.Last + offset).HasCodeValue());
 			Contract.Requires<ArgumentException> (bits.Count > ICodeSetService.PairCount);	// not Null-Pair
 			Contract.Requires<ArgumentException> (bits.Count < (bits.Last - bits.First));	// not Full-Pair
-			Contract.Requires<ArgumentException> (((Code)bits.First).UnicodePlane() == ((Code)bits.Last).UnicodePlane()); // one Page
+			Contract.Requires<ArgumentException> (((Code)(bits.First + offset)).UnicodePlane() == ((Code)(bits.Last + offset)).UnicodePlane()); // one Page
 
-			Contract.Ensures (Theory.Construct(bits, this));
+			Contract.Ensures (Theory.Construct(bits, offset, this));
 
-			this.start = (int)bits.First;
-			this.final = (int)bits.Last;
+			this.start = (int)bits.First + offset;
+			this.final = (int)bits.Last + offset;
 			this.sorted = new BitSetArray (this.final - this.start + 1);
 			foreach ( Code code in bits ) {
-				this.sorted.Set (code - this.start, true);
+				this.sorted.Set (code + offset - this.start, true);
 			}
 		}
 
@@ -166,7 +167,7 @@ namespace DD.Collections {
 				return success;
 			}
 			
-			[Pure] public static bool Construct (BitSetArray bits, CodeSetPage self) {
+			[Pure] public static bool Construct (BitSetArray bits, int offset, CodeSetPage self) {
 
 				// disable once ConvertToConstant.Local
 				Success success = true;
@@ -177,12 +178,12 @@ namespace DD.Collections {
 				var e = self.sorted.GetEnumerator();
 				foreach (var item in bits) {
 					e.MoveNext();
-					success.Assert (item == e.Current + self.start);// => SequenceEqual
-					success.Assert (self.sorted[item-self.start]);
+					success.Assert (item == e.Current - offset + self.start);// => SequenceEqual
+					success.Assert (self.sorted[item + offset - self.start]);
 				}
 
-				success.Assert (self.start == (int)bits.First);
-				success.Assert (self.final == (int)bits.Last);
+				success.Assert (self.start == (int)bits.First + offset);
+				success.Assert (self.final == (int)bits.Last + offset);
 				
 				return success;
 			}
