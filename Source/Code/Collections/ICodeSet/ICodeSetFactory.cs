@@ -98,6 +98,98 @@ namespace DD.Collections
 		}
 
 		#endregion
+
+		#region Union bits.Or(a,b,c...)
+
+		public ICodeSet Union (params ICodeSet[] sets)
+		{
+			Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
+			Contract.Ensures (outputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
+
+			return From(sets.BitUnion());
+		}
+
+		public ICodeSet Union (IEnumerable<ICodeSet> sets)
+		{
+			Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
+			Contract.Ensures (outputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
+
+			return From(sets.BitUnion());
+		}
+
+		#endregion
+		
+		#region Intersection bits.And(((a,b),c),d...)
+		
+		public ICodeSet Intersection (params ICodeSet[] sets)
+		{
+			Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
+			Contract.Ensures (outputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
+
+			return From(sets.BitIntersection());
+		}
+
+		public ICodeSet Intersection (IEnumerable<ICodeSet> sets)
+		{
+			Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
+			Contract.Ensures (outputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
+
+			return From(sets.BitIntersection());
+		}
+
+		#endregion
+		
+		#region Disjunction bits.Xor(((a,b),c),d...)
+
+		public ICodeSet Disjunction (params ICodeSet[] sets)
+		{
+			Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
+			Contract.Ensures (outputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
+
+			return From(sets.BitDisjunction());
+		}
+
+		public ICodeSet Disjunction (IEnumerable<ICodeSet> sets)
+		{
+			Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
+			Contract.Ensures (outputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
+
+			return From(sets.BitDisjunction());
+		}
+
+		#endregion
+
+		#region Difference bits.Not(((a-b)-c)-d...)
+
+		public ICodeSet Difference (params ICodeSet[] sets)
+		{
+			Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
+			Contract.Ensures (outputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
+
+			return From(sets.BitDifference());
+		}
+
+		public ICodeSet Difference (IEnumerable<ICodeSet> sets)
+		{
+			Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
+			Contract.Ensures (outputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
+
+			return From(sets.BitDifference());
+		}
+
+		#endregion
+		
+		#region Complement
+		
+		public ICodeSet Complement (ICodeSet self)
+		{
+			Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
+			Contract.Ensures (outputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
+
+			return From(self.BitComplement());
+		}
+		
+		#endregion
 	}
 
 
@@ -225,7 +317,7 @@ namespace DD.Collections
 		// ICodeSet operation does not mutate any operand and returns new set,
 		// unlike ISet<T> operations that mutate and return left operand.
 		
-		#region Union or(a,b,c...)
+		#region Union bit.Or(a,b,c...)
 
 		public static ICodeSet Union (this ICodeSet req, params ICodeSet[] opt)
 		{
@@ -266,7 +358,7 @@ namespace DD.Collections
 			}
 			if (maxLength == int.MinValue) { return Empty; }
 			++maxLength;
-			var bits = new BitSetArray(maxLength);
+			var bits = BitSetArray.Size (maxLength);
 			// TEST: foreach union takes same time as time to create another BitSetArray b (and then a.Or(b))
 			foreach (ICodeSet item in sets) {
 				if (item.Is(null) || item.IsEmpty()) { continue; }
@@ -279,7 +371,7 @@ namespace DD.Collections
 
 		#endregion
 		
-		#region Intersection and(((a,b),c),d...)
+		#region Intersection bit.And(((a,b),c),d...)
 		
 		public static ICodeSet Intersection (this ICodeSet req, params ICodeSet[] opt)
 		{
@@ -322,8 +414,8 @@ namespace DD.Collections
 			Contract.Assert (maxLength != int.MinValue);
 			++maxLength;
 
-			var a = new BitSetArray (maxLength);
-			var b = new BitSetArray (maxLength);
+			var a = BitSetArray.Size (maxLength);
+			var b = BitSetArray.Size (maxLength);
 			bool first = true;
 			foreach (ICodeSet codeSet in sets) {
 				Contract.Assert (codeSet.Count != 0);
@@ -387,8 +479,8 @@ namespace DD.Collections
 				if (codeSet.Last > maxLength) { maxLength = codeSet.Last; }
 			}
 			++maxLength;
-			var a = new BitSetArray (maxLength);
-			var b = new BitSetArray (maxLength);
+			var a = BitSetArray.Size (maxLength);
+			var b = BitSetArray.Size (maxLength);
 			bool first = true;
 			foreach (ICodeSet codeSet in sets) {
 				if (first) {
@@ -451,7 +543,7 @@ namespace DD.Collections
 				if (codeSet.Last > maxLength) { maxLength = codeSet.Last; }
 			}
 			++maxLength;
-			var bits = new BitSetArray (maxLength);
+			var bits = BitSetArray.Size (maxLength);
 			bool first = true;
 			// TEST: foreach item difference takes same time as time to create BitSetArray b (and then a.Not(b))
 			foreach (ICodeSet codeSet in sets) {
@@ -487,7 +579,7 @@ namespace DD.Collections
 			BitSetArray compact = self.ToCompact();
 			compact.Not();
 			Contract.Assert (compact.Count != 0);
-			var complement = new BitSetArray(self.Last);
+			var complement = BitSetArray.Size (self.Last);
 			foreach (var item in compact) {
 				complement.Set(item + self.First);
 			}
