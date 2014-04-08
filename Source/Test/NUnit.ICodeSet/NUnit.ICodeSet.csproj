@@ -59,7 +59,7 @@
     <Compile Include="Collections\CodeSetWideTest\Members.cs" />
     <Compile Include="Collections\CodeTest\AsICodeSet.cs" />
     <Compile Include="Collections\CodeTest\AsICollectionOfCode.cs" />
-    <Compile Include="Collections\CodeTest\AsIComparableToICodeSet.cs" />
+    <Compile Include="Collections\CodeTest\AsIComparableOfICodeSet.cs" />
     <Compile Include="Collections\CodeTest\AsIEnumerableOfCode.cs" />
     <Compile Include="Collections\CodeTest\AsIEqualityComparerOfCode.cs" />
     <Compile Include="Collections\CodeTest\AsIEqualityComparerOfICodeSet.cs" />
@@ -72,7 +72,7 @@
     <Compile Include="Collections\CodeTest\EncodeToString.cs" />
     <Compile Include="Collections\ICodeSetDictionaryTest\Constructors.cs" />
     <Compile Include="Collections\ICodeSetDictionaryTest\Members.cs" />
-    <Compile Include="Collections\ICodeSetFactoryTest\Members.cs" />
+    <Compile Include="Collections\ICodeSetStaticFactoryTest\Members.cs" />
     <Compile Include="Collections\ICodeSetRelations\Members\Compare.cs" />
     <Compile Include="Collections\ICodeSetRelations\Members\Equals.cs" />
     <Compile Include="Collections\ICodeSetRelations\Members\HashCode.cs" />
@@ -95,7 +95,7 @@
   <ItemGroup>
     <Folder Include="Collections" />
     <Folder Include="Collections\CodeTest" />
-    <Folder Include="Collections\ICodeSetFactoryTest" />
+    <Folder Include="Collections\ICodeSetStaticFactoryTest" />
     <Folder Include="Collections\CodeSetPairTest" />
     <Folder Include="Collections\CodeSetNullTest" />
     <Folder Include="Collections\CodeSetFullTest" />

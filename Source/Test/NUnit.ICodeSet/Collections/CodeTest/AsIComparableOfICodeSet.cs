@@ -10,7 +10,7 @@ using NUnit.Framework;
 namespace DD.Collections.CodeTest
 {
     [TestFixture]
-    public class AsIComparableToICodeSet
+    public class AsIComparableOfICodeSet
     {
         [Test]
         public void Compare()
@@ -23,7 +23,7 @@ namespace DD.Collections.CodeTest
             }
             ICodeSet iC = C;
             ICodeSet iD = D;
-            ICodeSet iX = ICodeSetFactory.From (C, D);
+            ICodeSet iX = new CodeSetPair (C, D);
 
             Assert.True (iC.CompareTo(iD) != 0); // not equal
             Assert.True (iD.CompareTo(iC) != 0); // not equal
