@@ -14,8 +14,8 @@ using System.Threading.Tasks;
 
 using DD.Diagnostics;
 
-namespace DD.Collections {
-
+namespace DD.Collections
+{
     /// <summary>Set of positive (0 included) Int32 integers with capacity of Int32.MaxValue
     /// <para>Like BitArray, with ISet&lt;int&gt; interface, on-bits counting and on-bits enumeration.</para>
     /// <para>On-bit represents positive integer set member</para>
@@ -695,18 +695,26 @@ namespace DD.Collections {
                 retValue = new BitSetArray ();
             }
             else {
+                int minValue = int.MaxValue;
                 int maxValue = int.MinValue;
                 foreach ( int item in items ) {
                     if ( item > maxValue )
                         maxValue = item;
+                    if ( item < minValue )
+                        minValue = item;
                 }
                 Contract.Assume (!items.IsEmpty ());
                 Contract.Assume (Contract.ForAll<int>(items, ValidMember));
+                Contract.Assume (minValue != int.MaxValue);
                 Contract.Assume (maxValue != int.MinValue);
                 retValue = new BitSetArray (maxValue + 1);
                 foreach ( int item in items ) {
                     retValue.Set (item, true);
                 }
+				retValue.startVersion = retValue.version;
+				retValue.startMemoize = minValue;
+				retValue.finalVersion = retValue.version;
+				retValue.finalMemoize = maxValue;
             }
             return retValue;
         }

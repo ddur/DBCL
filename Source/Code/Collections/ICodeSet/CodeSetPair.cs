@@ -10,7 +10,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using DD.Diagnostics;
 
-namespace DD.Collections
+namespace DD.Collections.ICodeSet
 {
 	/// <summary>Set of two items (codes)
 	/// <remarks>Space efficient, O(k)</remarks>

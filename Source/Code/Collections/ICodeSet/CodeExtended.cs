@@ -7,7 +7,7 @@
 using System;
 using System.Diagnostics.Contracts;
 
-namespace DD.Collections
+namespace DD.Collections.ICodeSet
 {
 	/// <summary>
 	/// Description of CodeExtensions.

@@ -11,7 +11,7 @@ using System.Linq;
 
 using DD.Diagnostics;
 
-namespace DD.Collections {
+namespace DD.Collections.ICodeSet {
 
 	/// <summary>CodeSetPage contains only codes within same unicode plane/page
 	/// </summary>

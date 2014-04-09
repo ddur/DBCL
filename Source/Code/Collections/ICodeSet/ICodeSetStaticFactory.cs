@@ -11,7 +11,7 @@ using System.Linq;
 
 using DD.Text;
 
-namespace DD.Collections
+namespace DD.Collections.ICodeSet
 {
 	/// <summary>Produces ICodeSet's
 	/// <para>If OutputDictionary is not null, methods in this class never return duplicate ICodeSet</para>

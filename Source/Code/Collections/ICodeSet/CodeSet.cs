@@ -11,7 +11,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
-namespace DD.Collections
+namespace DD.Collections.ICodeSet
 {
 	/// <summary>Abstract base class for ICodeSet implementations
 	/// <remarks>Implements ICodeSet inherited interfaces for derived classes</remarks>

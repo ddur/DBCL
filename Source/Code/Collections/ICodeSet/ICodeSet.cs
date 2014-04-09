@@ -13,7 +13,7 @@ using System.Linq;
 
 using DD.Diagnostics;
 
-namespace DD.Collections {
+namespace DD.Collections.ICodeSet {
 
 	/// <summary>ICodeSet interface
 	/// <remarks>ICodeSet implementation requires sorted/ordered IEnumerable&lt;Code&gt;</remarks>
@@ -46,7 +46,6 @@ namespace DD.Collections {
 
 		#region Ctor
 
-		// make sure this contract class cannot create instance's
 		private ICodeSetContractClass () {
 		}
 

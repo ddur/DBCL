@@ -10,7 +10,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using DD.Diagnostics;
 
-namespace DD.Collections {
+namespace DD.Collections.ICodeSet {
 
 	/// <summary>Space efficient ICodeSet, limited number of codes (items)
 	/// <remarks>Space efficient, O(log(n))</remarks>

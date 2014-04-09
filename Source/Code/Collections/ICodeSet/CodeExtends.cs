@@ -11,7 +11,7 @@ using System.Linq;
 
 using DD.Text;
 
-namespace DD.Collections
+namespace DD.Collections.ICodeSet
 {
 	/// <summary>
 	/// Description of CodeExtends.

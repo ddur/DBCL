@@ -12,8 +12,8 @@ using System.Linq;
 
 using DD.Diagnostics;
 
-namespace DD.Collections {
-
+namespace DD.Collections
+{
     public sealed partial class BitSetArray {
 
         /// <summary>Test Theory

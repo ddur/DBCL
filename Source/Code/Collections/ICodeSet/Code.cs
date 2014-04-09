@@ -12,9 +12,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
-namespace DD.Collections
+namespace DD.Collections.ICodeSet
 {
-
 	public struct Code : ICodeSet, IEquatable<Code>, IEqualityComparer<Code>, IComparable<Code> {
 
 		#region Ctor

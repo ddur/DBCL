@@ -10,7 +10,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using DD.Diagnostics;
 
-namespace DD.Collections
+namespace DD.Collections.ICodeSet
 {
 	/// <summary>CodeSet covering blocks of more than one unicode plane</summary>
 	public sealed class CodeSetWide : CodeSet, ICodeSet

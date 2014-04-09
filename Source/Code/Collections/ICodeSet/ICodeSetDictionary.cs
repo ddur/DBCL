@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
-namespace DD.Collections
+namespace DD.Collections.ICodeSet
 {
 	/// <summary>Stores ICodeSet's where (Value)Equals == SetEquals == SequenceEqual == ReferenceEquals
 	/// </summary>
@@ -126,22 +126,28 @@ namespace DD.Collections
 
 		bool ICollection<KeyValuePair<ICodeSet,int>>.Contains(KeyValuePair<ICodeSet, int> item)
 		{
-			throw new NotSupportedException();
+			return unique.Contains(new C5.KeyValuePair<ICodeSet,int>(item.Key,item.Value));
 		}
 		
 		void ICollection<KeyValuePair<ICodeSet,int>>.CopyTo(KeyValuePair<ICodeSet, int>[] array, int arrayIndex)
 		{
-			throw new NotSupportedException();
+			int index = arrayIndex;
+			foreach (var item in unique) {
+				array[index] = new KeyValuePair<ICodeSet, int> (item.Key, item.Value);
+ 				++index;
+			}
 		}
 		
 		IEnumerator<KeyValuePair<ICodeSet, int>> IEnumerable<KeyValuePair<ICodeSet,int>>.GetEnumerator()
 		{
-			throw new NotSupportedException();
+			foreach (var item in unique) {
+				yield return new KeyValuePair<ICodeSet, int> (item.Key, item.Value);
+			}
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()
 		{
-			throw new NotSupportedException();
+			return ((IEnumerable<KeyValuePair<ICodeSet,int>>)this).GetEnumerator();
 		}
 		
 		#endregion

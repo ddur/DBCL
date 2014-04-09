@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
-namespace DD.Collections {
+namespace DD.Collections.ICodeSet {
 
 	/// <summary>Full Range Set</summary>
 	public sealed class CodeSetFull : CodeSet {

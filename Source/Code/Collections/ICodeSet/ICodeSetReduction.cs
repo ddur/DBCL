@@ -7,7 +7,7 @@
 using System;
 using System.Diagnostics.Contracts;
 
-namespace DD.Collections
+namespace DD.Collections.ICodeSet
 {
 	/// <summary>
 	/// Description of ICodeSetReduction.
@@ -15,11 +15,6 @@ namespace DD.Collections
 	public static class ICodeSetReduction
 	{
 		#region Reduction
-
-		[Pure] public static int Span (this BitSetArray self)
-		{
-			return self.Count == 0 ? 0 : 1 + (int)self.Last - (int)self.First;
-		}
 
 		[Pure] private static ICodeSet ReducePartOne (this BitSetArray bitSet, int offset)
 		{
@@ -68,7 +63,6 @@ namespace DD.Collections
 		[Pure] private static ICodeSet ReducePartTwo(this BitSetArray self, int offset)
 		{
 			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
-			Contract.Ensures (!(Contract.Result<ICodeSet>() is CodeSetBits));
 
 			if (((Code)(self.First + offset)).UnicodePlane() == ((Code)(self.Last + offset)).UnicodePlane()) {
 				return new CodeSetPage(self, offset);
@@ -82,8 +76,7 @@ namespace DD.Collections
 		{
 			Contract.Requires<ArgumentException> (self.IsNull() || self.Length <= Code.MaxCount || self.Last <= Code.MaxValue);
 
-			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
-			Contract.Ensures(!(Contract.Result<ICodeSet>() is CodeSetBits));
+			Contract.Ensures(Contract.Result<ICodeSet>().Theory());
 			
 			ICodeSet retSet = self.ReducePartOne(offset);
 
@@ -128,6 +121,38 @@ namespace DD.Collections
 			}
 			
 			return retSet;
+		}
+
+		[Pure] private static bool Theory (this ICodeSet self) {
+
+			if (self.Is(null)) return false;
+			switch (self.Count) {
+				case ICodeSetService.NullCount:
+					return (self is CodeSetNull);
+				case ICodeSetService.UnitCount:
+					return (self is Code);
+				case ICodeSetService.PairCount:
+					return (self is CodeSetPair);
+				default:
+					Contract.Assert (self.Count > ICodeSetService.PairCount); 
+
+					if (self.Count == self.Length) {
+						return (self is CodeSetFull);
+					}
+					if (self.Count <= ICodeSetService.ListMaxCount) {
+						return (self is CodeSetList || self is CodeSetPage);
+					}
+					if (self is CodeSetDiff) {
+						return true;
+					}
+					if (self is CodeSetPage) {
+						return self.First.UnicodePlane() == self.Last.UnicodePlane();
+					}
+					if (self is CodeSetWide) {
+						return self.First.UnicodePlane() != self.Last.UnicodePlane();
+					}
+					return false;
+			}
 		}
 
 		[Pure] private static ICodeSet ReducePartOne (this CodeSetBits bitSet)
@@ -177,7 +202,6 @@ namespace DD.Collections
 		[Pure] private static ICodeSet ReducePartTwo(this CodeSetBits bitSet)
 		{
 			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
-			Contract.Ensures (!(Contract.Result<ICodeSet>() is CodeSetBits));
 
 			if (bitSet.First.UnicodePlane() == bitSet.Last.UnicodePlane()) {
 				return new CodeSetPage(bitSet);
@@ -190,7 +214,6 @@ namespace DD.Collections
 		[Pure] internal static ICodeSet Reduce (this CodeSetBits bitSet)
 		{
 			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
-			Contract.Ensures(!(Contract.Result<ICodeSet>() is CodeSetBits));
 			
 			ICodeSet retSet = ReducePartOne(bitSet);
 

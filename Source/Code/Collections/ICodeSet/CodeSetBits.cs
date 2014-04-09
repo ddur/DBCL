@@ -10,7 +10,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using DD.Diagnostics;
 
-namespace DD.Collections
+namespace DD.Collections.ICodeSet
 {
 	/// <summary>Intermediate ICodeSet that is later optimized into other ICodeSet implementations
 	/// </summary>
@@ -30,6 +30,7 @@ namespace DD.Collections
 
 		internal CodeSetBits (IEnumerable<Code> codes) {
 			Contract.Requires<ArgumentNullException> (codes.IsNot(null));
+
 			Contract.Ensures (Theory.Construct(codes, this));
 
 			if (!codes.IsEmpty()) {
@@ -174,6 +175,8 @@ namespace DD.Collections
 				// disable once ConvertToConstant.Local
 				Success success = true;
 
+				success.Assert (!self.sorted.IsNull());
+
 				success.Assert (self.sorted.Count == 0);
 				success.Assert (self.start == ICodeSetService.NullStart);
 				success.Assert (self.final == ICodeSetService.NullFinal);
@@ -186,7 +189,10 @@ namespace DD.Collections
 				// disable once ConvertToConstant.Local
 				Success success = true;
 				
-				if (!codes.IsNullOrEmpty()) {
+				success.Assert (!codes.IsNull());
+				success.Assert (!self.sorted.IsNull());
+
+				if (!codes.IsEmpty()) {
 					success.Assert (self.sorted.Count == codes.Distinct().Count());
 					success.Assert (self.start == codes.Min());
 					success.Assert (self.final == codes.Max());
@@ -206,10 +212,12 @@ namespace DD.Collections
 				// disable once ConvertToConstant.Local
 				Success success = true;
 
+				success.Assert (!bits.IsNull());
+				success.Assert (!self.sorted.IsNull());
+
 				success.Assert (self.sorted.Count == bits.Count);
 
 				if (bits.Count != 0) {
-					success.Assert (self.sorted.Count == bits.Count);
 					success.Assert (self.start == (int)bits.First + offset);
 					success.Assert (self.final == (int)bits.Last + offset);
 					foreach (var item in bits) {
@@ -229,7 +237,8 @@ namespace DD.Collections
 				Success success = true;
 				
 				// private
-				success.Assert (self.sorted.IsNot (null));
+				success.Assert (!self.sorted.IsNull());
+
 				success.Assert (self.sorted.Length <= Code.MaxCount);
 				success.Assert (self.sorted.Length == 1 + self.final - self.start);
 				success.Assert (self.sorted.IsCompact());

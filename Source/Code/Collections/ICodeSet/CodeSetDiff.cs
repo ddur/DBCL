@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using DD.Diagnostics;
 
-namespace DD.Collections {
+namespace DD.Collections.ICodeSet {
 
 	/// <summary>Difference set (Range-Set)</summary>
 	public sealed class CodeSetDiff : CodeSet {

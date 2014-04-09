@@ -10,7 +10,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 
-using DD.Collections;
+using DD.Collections.ICodeSet;
 using DD.Diagnostics;
 
 namespace DD.Text

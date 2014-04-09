@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using DD.Text;
-namespace DD.Collections
+namespace DD.Collections.ICodeSet
 {
 	public class ICodeSetUniqueFactory
 	{
@@ -89,8 +89,11 @@ namespace DD.Collections
 			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
 			Contract.Ensures(outputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
 
-			ICodeSet key = bits.Reduce();
+			if (bits.IsNullOrEmpty()) { return CodeSetNull.Singleton; }
+			
+			ICodeSet key = new CodeSetWrap(bits);
 			if (!outputDictionary.Find(ref key)) {
+				key = bits.Reduce();
 				outputDictionary.Add(key);
 			}
 			return key;
@@ -186,12 +189,12 @@ namespace DD.Collections
 
 		#region Complement bits.Not()
 
-		public ICodeSet Complement(ICodeSet self)
+		public ICodeSet Complement(ICodeSet that)
 		{
 			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
 			Contract.Ensures(outputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
 
-			return From(self.BitComplement());
+			return From(that.BitComplement());
 		}
 
 		#endregion

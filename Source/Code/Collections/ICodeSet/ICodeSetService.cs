@@ -9,15 +9,14 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
-namespace DD.Collections
+namespace DD.Collections.ICodeSet
 {
 	/// <summary>Provides conversion, relation and predicate services
 	/// <remarks>All public except methods returning ICodeSet</remarks>
 	/// </summary>
 	public static class ICodeSetService {
 		
-		private const bool ThisMethodHandlesNull = true;
-
+		public const int NullCount = 0;
 		public const int UnitCount = 1;
 		public const int PairCount = 2;
 		public const int ListMaxCount = 16; // NOTE: log(16) == 4 tests, TODO: check speed on 32 and 64
@@ -70,6 +69,11 @@ namespace DD.Collections
 					yield return code.Value; 
 				}
 			}
+		}
+
+		[Pure] public static int Span (this BitSetArray self)
+		{
+			return self.Count == 0 ? 0 : 1 + (int)self.Last - (int)self.First;
 		}
 
 		[Pure] public static bool IsCompact(this BitSetArray self)
@@ -139,26 +143,18 @@ namespace DD.Collections
 		#region Properties
 
 		[Pure] public static bool IsNullOrEmpty (this ICodeSet self) {
-			Contract.Requires<ArgumentNullException> (ThisMethodHandlesNull);
-
 			return self.IsNull() || self.Count == 0;
 		}
 
 		[Pure] public static bool IsNullOrEmpty (this BitSetArray self) {
-			Contract.Requires<ArgumentNullException> (ThisMethodHandlesNull);
-
 			return self.IsNull() || self.Count == 0;
 		}
 		
 		[Pure] internal static bool IsFull (this ICodeSet self) {
-			Contract.Requires<ArgumentNullException> (ThisMethodHandlesNull);
-
 			return !self.IsNull() && self.Count != 0 && self.Count == self.Length;
 		}
 
 		[Pure] internal static bool IsFull (this BitSetArray self) {
-			Contract.Requires<ArgumentNullException> (ThisMethodHandlesNull);
-
 			return !self.IsNull() && self.Count != 0 && (self.Count == (1 + (int)self.Last - (int)self.First));
 		}
 
