@@ -17,29 +17,35 @@ namespace DD.Collections.ICodeSet
 	{
 		#region Ctor
 
-		internal CodeSetWrap() : this (BitSetArray.Size())
+		internal CodeSetWrap()
 		{
 			Contract.Ensures (Theory.Construct(this));
+
+			this.sorted = BitSetArray.Size();
 		}
 
 		/// <summary>Quick shallow clone</summary>
 		/// <param name="wrap">CodeSetWrap</param>
-		internal CodeSetWrap(CodeSetWrap wrap) : this (wrap.sorted)
+		internal CodeSetWrap(CodeSetWrap wrap)
 		{
 			Contract.Requires<ArgumentNullException>(wrap.IsNot(null));
+
 			Contract.Ensures (Theory.Construct(wrap, this));
+
+			sorted = wrap.sorted;
 		}
 
-		internal CodeSetWrap(IEnumerable<Code> codes) : this (BitSetArray.From (codes.ToValues()))
+		internal CodeSetWrap(IEnumerable<Code> codes)
 		{
 			Contract.Requires<ArgumentNullException>(codes.IsNot(null));
+
 			Contract.Ensures (Theory.Construct(codes, this));
+
+			sorted = BitSetArray.From (codes.ToValues());
 		}
 
-		/// <summary>Quick shallow ICodeSet wrapper around BitSetArray
-		/// <remarks>Do not mutate BitSetArray!</remarks>
-		/// </summary>
-		/// <param name="bits">BitSetArray is used as reference, do not mutate!</param>
+		/// <summary>ICodeSet wrapper around BitSetArray</summary>
+		/// <param name="bits">BitSetArray</param>
 		internal CodeSetWrap(BitSetArray bits)
 		{
 			Contract.Requires<ArgumentNullException>(bits.IsNot(null));
@@ -47,8 +53,7 @@ namespace DD.Collections.ICodeSet
 
 			Contract.Ensures (Theory.Construct(bits, this));
 			
- 			version = bits.Version; // store to detect changes
-			sorted = bits; // external reference, do not change!
+			sorted = BitSetArray.Copy (bits);
 		}
 
 		#endregion
@@ -56,7 +61,6 @@ namespace DD.Collections.ICodeSet
 		#region Fields
 
 		readonly BitSetArray sorted;
-		readonly int version;
 
 		#endregion
 
@@ -64,28 +68,24 @@ namespace DD.Collections.ICodeSet
 
 		[Pure] public override bool this[Code code] {
 			get {
-				Contract.Assert (sorted.Version == version);
 				return sorted.Count != 0 && sorted[code.Value];
 			}
 		}
 
 		[Pure] public override int Count {
 			get {
-				Contract.Assert (sorted.Version == version);
 				return sorted.Count;
 			}
 		}
 
 		[Pure] public override int Length {
 			get {
-				Contract.Assert (sorted.Version == version);
 				return sorted.Span();
 			}
 		}
 
 		[Pure] public override Code First {
 			get {
-				Contract.Assert (sorted.Version == version);
 				if (sorted.Count != 0) return (int)sorted.First;
 				throw new InvalidOperationException();
 			}
@@ -93,7 +93,6 @@ namespace DD.Collections.ICodeSet
 
 		[Pure] public override Code Last {
 			get {
-				Contract.Assert (sorted.Version == version);
 				if (sorted.Count != 0) return (int)sorted.Last;
 				throw new InvalidOperationException();
 			}
@@ -101,7 +100,6 @@ namespace DD.Collections.ICodeSet
 
 		[Pure] public override IEnumerator<Code> GetEnumerator () {
 			foreach ( var code in sorted ) {
-				Contract.Assert (sorted.Version == version);
 				yield return (Code)code;
 			}
 		}
@@ -153,7 +151,8 @@ namespace DD.Collections.ICodeSet
 
 				success.Assert (!bits.IsNull());
 				success.Assert (!self.sorted.IsNull());
-				success.Assert (self.sorted.Is(bits));
+				success.Assert (!self.sorted.Is(bits));
+				success.Assert (self.sorted.SetEquals(bits));
 
 				if (bits.Count != 0) {
 					foreach (var item in bits) {

@@ -17,7 +17,6 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
         public void CreateUnique()
         {
             ICodeSetStaticFactory.OutputDictionary = new ICodeSetDictionary();
-            ICodeSetStaticFactory.InputDictionary = ICodeSetStaticFactory.OutputDictionary;
             
             ICodeSet aCode;
             ICodeSet bCode;
@@ -104,7 +103,6 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
                          ICodeSetStaticFactory.OutputDictionary[cCode]);
 
             ICodeSetStaticFactory.OutputDictionary = null;
-            ICodeSetStaticFactory.InputDictionary = null;
         }
     }
 }

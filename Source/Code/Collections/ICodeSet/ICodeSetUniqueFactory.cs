@@ -89,8 +89,9 @@ namespace DD.Collections.ICodeSet
 			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
 			Contract.Ensures(outputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
 
-			if (bits.IsNullOrEmpty()) { return CodeSetNull.Singleton; }
-			
+			if (bits.IsNullOrEmpty()) {
+				return CodeSetNull.Singleton;
+			} 
 			ICodeSet key = new CodeSetWrap(bits);
 			if (!outputDictionary.Find(ref key)) {
 				key = bits.Reduce();
