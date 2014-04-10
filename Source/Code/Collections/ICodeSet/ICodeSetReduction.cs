@@ -111,7 +111,7 @@ namespace DD.Collections.ICodeSet
 
 				var notSet = complement.ReducePartOne(offset);
 				if (notSet.IsNot(null)) {
-					// reduced, return DiffSet
+					// if reduced to Code/Pair/Full/List, return DiffSet
 					retSet = new CodeSetDiff(
 						new CodeSetFull((int)self.First + offset, (int)self.Last + offset),
 						notSet);
@@ -150,8 +150,8 @@ namespace DD.Collections.ICodeSet
 					if (self.Count == self.Length) {
 						return (self is CodeSetFull);
 					}
-					if (self.Count <= ICodeSetService.ListMaxCount) {
-						return (self is CodeSetList || self is CodeSetPage);
+					if (self is CodeSetList) {
+						return self.Count <= ICodeSetService.ListMaxCount;
 					}
 					if (self is CodeSetDiff) {
 						return true;
