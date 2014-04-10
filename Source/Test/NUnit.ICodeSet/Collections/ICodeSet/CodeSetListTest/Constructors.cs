@@ -23,7 +23,7 @@ namespace DD.Collections.ICodeSet.CodeSetListTest
             Assert.Throws<ArgumentNullException> (delegate{new CodeSetList((Code[])null);});
 
             // requires minimum 3 members
-            Assert.Throws<ArgumentException> (delegate{new CodeSetList(new Code[0]);});
+            Assert.Throws<ArgumentEmptyException> (delegate{new CodeSetList(new Code[0]);});
             Assert.Throws<ArgumentException> (delegate{new CodeSetList(new Code[] {1});});
             Assert.Throws<ArgumentException> (delegate{new CodeSetList(new Code[] {1,7});});
             Assert.Throws<ArgumentException> (delegate{new CodeSetList(new Code[] {1,7,7});});

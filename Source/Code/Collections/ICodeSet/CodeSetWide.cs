@@ -12,7 +12,7 @@ using DD.Diagnostics;
 
 namespace DD.Collections.ICodeSet
 {
-	/// <summary>CodeSet covering blocks of more than one unicode plane</summary>
+	/// <summary>CodeSet covering range larger than one unicode plane</summary>
 	public sealed class CodeSetWide : CodeSet, ICodeSet
 	{
 		
@@ -21,6 +21,7 @@ namespace DD.Collections.ICodeSet
 		internal CodeSetWide(IEnumerable<Code> codes)
 		{
 			Contract.Requires<ArgumentNullException> (!codes.Is(null));
+			Contract.Requires<ArgumentEmptyException> (!codes.IsEmpty());
 			Contract.Requires<ArgumentException> (codes.Distinct().Count() > ICodeSetService.PairCount);
 			Contract.Requires<ArgumentException> (codes.Distinct().Count() < (codes.Max() - codes.Min()));
 			Contract.Requires<ArgumentException> (codes.Min().UnicodePlane() != codes.Max().UnicodePlane());
@@ -49,11 +50,13 @@ namespace DD.Collections.ICodeSet
 		internal CodeSetWide(BitSetArray bits, int offset = 0)
 		{
 			Contract.Requires<ArgumentNullException> (!bits.Is(null));
-			Contract.Requires<ArgumentOutOfRangeException> (bits.Length <= Code.MaxCount || bits.Last <= Code.MaxValue);
-			Contract.Requires<ArgumentException> (((int)bits.First + offset).HasCodeValue() && ((int)bits.Last + offset).HasCodeValue());
+			Contract.Requires<ArgumentEmptyException> (bits.Count != 0);
+			Contract.Requires<ArgumentOutOfRangeException> (bits.Length <= Code.MaxCount);
+			Contract.Requires<ArgumentOutOfRangeException> ((bits.First + offset).HasCodeValue());
+			Contract.Requires<ArgumentOutOfRangeException> ((bits.Last + offset).HasCodeValue());
 			Contract.Requires<ArgumentException> (bits.Count > ICodeSetService.PairCount);
 			Contract.Requires<ArgumentException> (bits.Count < (bits.Last - bits.First));
-			Contract.Requires<ArgumentException> (((Code)(bits.First + offset)).UnicodePlane() != ((Code)(bits.Last + offset)).UnicodePlane());
+			Contract.Requires<ArgumentException> ((bits.First + offset).UnicodePlane() != (bits.Last + offset).UnicodePlane());
 
 			Contract.Ensures (Theory.Construct (bits, offset, this));
 			
@@ -171,6 +174,8 @@ namespace DD.Collections.ICodeSet
 
 		#endregion
 
+		#region Theory
+
 		private static class Theory {
 			
 			[Pure] public static bool Construct (IEnumerable<Code> codes, CodeSetWide self) {
@@ -215,7 +220,7 @@ namespace DD.Collections.ICodeSet
 				// private
 				success.Assert (self.planes.IsNot (null));
 				success.Assert (self.planes.Length > 1);
-				success.Assert (self.planes.Length <= 1 + ((Code)Code.MaxValue).UnicodePlane());
+				success.Assert (self.planes.Length <= 1 + Code.MaxValue.UnicodePlane());
 				foreach (var plane in self.planes) {
 					success.Assert (plane.IsNot (null));
 				}
@@ -250,5 +255,7 @@ namespace DD.Collections.ICodeSet
 				return success;
 			}
 		}
+
+		#endregion
 	}
 }

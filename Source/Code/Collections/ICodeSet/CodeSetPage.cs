@@ -13,8 +13,7 @@ using DD.Diagnostics;
 
 namespace DD.Collections.ICodeSet {
 
-	/// <summary>CodeSetPage contains only codes within same unicode plane/page
-	/// </summary>
+	/// <summary>CodeSetPage contains only codes within same unicode plane/page</summary>
 	public sealed class CodeSetPage : CodeSet {
 
 		#region Ctor
@@ -24,7 +23,7 @@ namespace DD.Collections.ICodeSet {
 		internal CodeSetPage (IEnumerable<Code> codes) {
 
 			Contract.Requires<ArgumentNullException> (!codes.Is(null));
-			Contract.Requires<ArgumentException> (!codes.IsEmpty());
+			Contract.Requires<ArgumentEmptyException> (!codes.IsEmpty());
 			Contract.Requires<ArgumentException> (codes.Distinct().Count() > ICodeSetService.PairCount); // not Null-Pair
 			Contract.Requires<ArgumentException> (codes.Distinct().Count() < (codes.Max() - codes.Min())); // not Full-Pair
 			Contract.Requires<ArgumentException> (codes.Min().UnicodePlane() == codes.Max().UnicodePlane()); // one Page
@@ -59,12 +58,12 @@ namespace DD.Collections.ICodeSet {
 		internal CodeSetPage (BitSetArray bits, int offset = 0) {
 
 			Contract.Requires<ArgumentNullException> (!bits.Is(null));
-			Contract.Requires<ArgumentException> (!bits.IsEmpty());
-			Contract.Requires<ArgumentOutOfRangeException> (bits.Length <= Code.MaxCount || bits.Last <= Code.MaxValue);
-			Contract.Requires<ArgumentException> (((int)bits.First + offset).HasCodeValue() && ((int)bits.Last + offset).HasCodeValue());
+			Contract.Requires<ArgumentEmptyException> (bits.Count != 0);
+			Contract.Requires<ArgumentOutOfRangeException> ((bits.First + offset).HasCodeValue());
+			Contract.Requires<ArgumentOutOfRangeException> ((bits.Last + offset).HasCodeValue());
 			Contract.Requires<ArgumentException> (bits.Count > ICodeSetService.PairCount);	// not Null-Pair
 			Contract.Requires<ArgumentException> (bits.Count < (bits.Last - bits.First));	// not Full-Pair
-			Contract.Requires<ArgumentException> (((Code)(bits.First + offset)).UnicodePlane() == ((Code)(bits.Last + offset)).UnicodePlane()); // one Page
+			Contract.Requires<ArgumentException> ((bits.First + offset).UnicodePlane() == (bits.Last + offset).UnicodePlane()); // one Page
 
 			Contract.Ensures (Theory.Construct(bits, offset, this));
 

@@ -7,6 +7,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
@@ -124,13 +125,17 @@ namespace DD.Collections.ICodeSet
 
 		#region Inherited Interface Methods
 
-		bool ICollection<KeyValuePair<ICodeSet,int>>.Contains(KeyValuePair<ICodeSet, int> item)
+		public bool Contains(KeyValuePair<ICodeSet, int> item)
 		{
 			return unique.Contains(new C5.KeyValuePair<ICodeSet,int>(item.Key,item.Value));
 		}
 		
-		void ICollection<KeyValuePair<ICodeSet,int>>.CopyTo(KeyValuePair<ICodeSet, int>[] array, int arrayIndex)
+		[SuppressMessage("Microsoft.Contracts", "CC1033", Justification = "Not same exceptions")]
+		public void CopyTo(KeyValuePair<ICodeSet, int>[] array, int arrayIndex)
 		{
+			Contract.Requires<ArgumentNullException>(!array.Is(null));
+			Contract.Requires<ArgumentOutOfRangeException>(arrayIndex >= 0);
+			Contract.Requires<ArgumentOutOfRangeException>(arrayIndex <= (array.Length - this.Count));
 			int index = arrayIndex;
 			foreach (var item in unique) {
 				array[index] = new KeyValuePair<ICodeSet, int> (item.Key, item.Value);
@@ -138,7 +143,7 @@ namespace DD.Collections.ICodeSet
 			}
 		}
 		
-		IEnumerator<KeyValuePair<ICodeSet, int>> IEnumerable<KeyValuePair<ICodeSet,int>>.GetEnumerator()
+		public IEnumerator<KeyValuePair<ICodeSet, int>> GetEnumerator()
 		{
 			foreach (var item in unique) {
 				yield return new KeyValuePair<ICodeSet, int> (item.Key, item.Value);

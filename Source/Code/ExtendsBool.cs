@@ -7,8 +7,8 @@
 using System;
 using System.Diagnostics.Contracts;
 
-namespace DD {
-
+namespace DD
+{
     public static class ExtendsBool {
         /// <summary>Fix possible invalid boolean
         /// <remarks>Apply on bool argument to fix Pex/CIL generated/injected bug into C#

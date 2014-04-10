@@ -25,17 +25,17 @@ namespace DD.Collections.ICodeSet.CodeSetPageTest
 			Assert.Throws <ArgumentNullException> (delegate{csp = new CodeSetPage ((BitSetArray)null);});
 
 			// requires at least 3 members (> ICodeSetService.PairCount)
-			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (BitSetArray.Size ());});
+			Assert.Throws <ArgumentEmptyException> (delegate{csp = new CodeSetPage (BitSetArray.Size ());});
 			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (BitSetArray.From (21));});
 			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (BitSetArray.From (12,5));});
 
-			// requires at least one NOT member
-			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (BitSetArray.From (1,2,3,4,5));});
+			// requires at least two NOT members
+			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (BitSetArray.From (1,2,3,4,6));});
 
 			// requires all codes within same unicode plane
 			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (BitSetArray.From (12,66000));});
 
-            // does not except full-range of codes
+            // does not except range of codes (full)
             Assert.Throws<ArgumentException> (delegate{csp = new CodeSetPage(BitSetArray.Size (10, true));});
 
 			csp = new CodeSetPage (BitSetArray.From (1,12,33));
@@ -50,7 +50,7 @@ namespace DD.Collections.ICodeSet.CodeSetPageTest
 			Assert.Throws <ArgumentNullException> (delegate{csp = new CodeSetPage ((IEnumerable<Code>)null);});
 
 			// requires at least 3 members (> ICodeSetService.PairCount)
-			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new Code[0]);});
+			Assert.Throws <ArgumentEmptyException> (delegate{csp = new CodeSetPage (new Code[0]);});
 			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new List<Code>() {21});});
 			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new List<Code>() {1,25});});
 
@@ -77,7 +77,7 @@ namespace DD.Collections.ICodeSet.CodeSetPageTest
 			Assert.Throws <ArgumentNullException> (delegate{csp = new CodeSetPage ((ICodeSet)null);});
 
 			// requires at least 3 members (> ICodeSetService.PairCount)
-			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new Code[0]);});
+			Assert.Throws <ArgumentEmptyException> (delegate{csp = new CodeSetPage (new Code[0]);});
 			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new List<Code>() {21});});
 			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new List<Code>() {1,25});});
 

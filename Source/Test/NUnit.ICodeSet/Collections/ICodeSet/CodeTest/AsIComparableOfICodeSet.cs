@@ -15,11 +15,11 @@ namespace DD.Collections.ICodeSet.CodeTest
         [Test]
         public void Compare()
         {
-            Random r = new Random();
-            Code C = r.Next(Code.MinValue, Code.MaxValue);
+            var r = new Random();
+            Code C = r.Next(Code.MinValue, Code.MaxValue/2);
             Code D = C;
-            while (D == C) {
-                D = r.Next(Code.MinValue, Code.MaxValue);
+            while (D <= C) {
+                D = r.Next(Code.MaxValue/2, Code.MaxValue);
             }
             ICodeSet iC = C;
             ICodeSet iD = D;

@@ -12,9 +12,7 @@ using DD.Diagnostics;
 
 namespace DD.Collections.ICodeSet
 {
-	/// <summary>Set of two items (codes)
-	/// <remarks>Space efficient, O(k)</remarks>
-	/// </summary>
+	/// <summary>Set of two codes (items)</summary>
 	public sealed class CodeSetPair : CodeSet {
 
 		#region Ctor

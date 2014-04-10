@@ -84,7 +84,7 @@ namespace DD.Collections.ICodeSet
 
 		public ICodeSet From(BitSetArray bits)
 		{
-			Contract.Requires<ArgumentException>(bits.Is(null) || bits.Length <= Code.MaxCount || bits.Last <= Code.MaxValue);
+			Contract.Requires<ArgumentException>(bits.IsNullOrEmpty() || bits.Length.IsCodesCount() || bits.Last.HasCodeValue());
 
 			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
 			Contract.Ensures(outputDictionary.ContainsKey(Contract.Result<ICodeSet>()));

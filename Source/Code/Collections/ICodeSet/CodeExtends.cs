@@ -55,6 +55,23 @@ namespace DD.Collections.ICodeSet
 		}
 	
 		[Pure]
+		public static bool HasCodeValue (this int? self)
+		{
+			Contract.Ensures (Contract.Result<bool> () == (self != null && ((int)self).InRange (Code.MinValue, Code.MaxValue)));
+			return (self != null && ((self & 0xFFFFF) == self || (self & 0x10FFFF) == self));
+		}
+	
+		[Pure]
+		public static int UnicodePlane (this int self) {
+			return self >> 16;
+		}
+
+		[Pure]
+		public static int? UnicodePlane (this int? self) {
+			return self == null ? self : (int)self >> 16;
+		}
+
+		[Pure]
 		public static int CastToCodeValue (this int self) {
 		    Contract.Ensures (Contract.Result<int>().HasCodeValue());
 		    if (self.HasCodeValue()) {
@@ -88,6 +105,7 @@ namespace DD.Collections.ICodeSet
 		/// <summary>Returns True if collection{int} Contains All (IsSupersetOf) specified characters.
 		/// <para>To treat characters as UTF16 encoded, use string argument.</para>
 		/// </summary>
+		/// <param name="self">IEnumerableOf(int)</param>
 		/// <param name="chrs">IEnumerableOf(char)</param>
 		/// <returns>bool</returns>
 		public static bool ContainsAll (this ICollection<int> self, IEnumerable<char> chrs)
@@ -109,6 +127,7 @@ namespace DD.Collections.ICodeSet
 		/// <para>Characters are decoded from UTF16 encoding.</para>
 		/// <para>To treat characters as items, cast string to IEnumerable&lt;char&gt;.</para>
 		/// </summary>
+		/// <param name="self">IEnumerableOf(int)</param>
 		/// <param name="utf16">string</param>
 		/// <returns>bool</returns>
 		public static bool ContainsAll(this ICollection<int> self, string utf16)

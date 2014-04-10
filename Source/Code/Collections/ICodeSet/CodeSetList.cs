@@ -12,9 +12,7 @@ using DD.Diagnostics;
 
 namespace DD.Collections.ICodeSet {
 
-	/// <summary>Space efficient ICodeSet, limited number of codes (items)
-	/// <remarks>Space efficient, O(log(n))</remarks>
-	/// </summary>
+	/// <summary>Small set, limited number of codes (items)</summary>
 	public sealed class CodeSetList : CodeSet {
 
 		#region Ctor
@@ -23,7 +21,7 @@ namespace DD.Collections.ICodeSet {
 
 		internal CodeSetList (IEnumerable<Code> codes) {
 			Contract.Requires<ArgumentNullException> (!codes.IsNull ());
-			Contract.Requires<ArgumentException> (!codes.IsEmpty ());
+			Contract.Requires<ArgumentEmptyException> (!codes.IsEmpty ());
 			Contract.Requires<ArgumentException> (codes.Distinct ().Count () > ICodeSetService.PairCount);
 			Contract.Requires<ArgumentException> (codes.Distinct ().Count () <= ICodeSetService.ListMaxCount);
 			Contract.Requires<ArgumentException> (1 + codes.Max() - codes.Min() != codes.Distinct().Count());

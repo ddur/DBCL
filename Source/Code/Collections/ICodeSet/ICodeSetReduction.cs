@@ -16,42 +16,48 @@ namespace DD.Collections.ICodeSet
 	{
 		#region Reduction
 
-		[Pure] private static ICodeSet ReducePartOne (this BitSetArray bitSet, int offset)
+		[Pure] private static ICodeSet ReducePartOne (this BitSetArray self, int offset)
 		{
+			Contract.Requires<ArgumentOutOfRangeException> (self.IsNullOrEmpty() || (self.First + offset).HasCodeValue());
+			Contract.Requires<ArgumentOutOfRangeException> (self.IsNullOrEmpty() || (self.Last + offset).HasCodeValue());
+
 			Contract.Ensures (Contract.Result<ICodeSet>().Is(null)||!(Contract.Result<ICodeSet>() is CodeSetBits));
 
 			#region Null
-			if (bitSet.IsNullOrEmpty()) {
+			if (self.IsNullOrEmpty()) {
 				return CodeSetNull.Singleton;
 			}
 			#endregion
 
 			#region Unit
-			else if (bitSet.Count == ICodeSetService.UnitCount) {
-				return new Code ((int)bitSet.First + offset);
+			else if (self.Count == ICodeSetService.UnitCount) {
+				return new Code ((int)self.First + offset);
 			}
 			#endregion
 
 			#region Pair
-			else if (bitSet.Count == ICodeSetService.PairCount) {
-				return new CodeSetPair ((int)bitSet.First + offset, (int)bitSet.Last + offset);
+			else if (self.Count == ICodeSetService.PairCount) {
+				return new CodeSetPair ((int)self.First + offset, (int)self.Last + offset);
 			}
 			#endregion
 
 			#region Full
-			else if (bitSet.Count == bitSet.Span()) {
-				return new CodeSetFull ((int)bitSet.First + offset, (int)bitSet.Last + offset);
+			else if (self.Count == self.Span()) {
+				return new CodeSetFull ((int)self.First + offset, (int)self.Last + offset);
 			}
 			#endregion
 
 			#region List
-			else if (bitSet.Count <= ICodeSetService.ListMaxCount) {
-				// List space less than 1/4 Bits space (bitSet.Span/8)*4
-				if ((bitSet.Count * sizeof(int)) < (bitSet.Span()/2)) {
-					return new CodeSetList (bitSet.ToCodes(offset));
+			else if (self.Count <= ICodeSetService.ListMaxCount) {
+				// List items spread over more than one unicode plane. (better than CodeSetWide) 
+				if (self.First.UnicodePlane() != self.Last.UnicodePlane()) {
+					return new CodeSetList (self.ToCodes(offset));
 				}
-				if (((Code)bitSet.First).UnicodePlane() != ((Code)bitSet.Last).UnicodePlane()) {
-					return new CodeSetList (bitSet.ToCodes(offset));
+				// List space less than 1/4 of Bits space. (better than CodeSetPage)
+				// list space in bytes == Count * sizeof(int)
+				// bits space in bytes == BitSetArray.GetLongArrayLength(self.Span())*sizeof(long)
+				if ((self.Count * sizeof(int)) < (BitSetArray.GetLongArrayLength(self.Span())*sizeof(long)/4)) {
+					return new CodeSetList (self.ToCodes(offset));
 				}
 			}
 			#endregion
@@ -62,19 +68,24 @@ namespace DD.Collections.ICodeSet
 
 		[Pure] private static ICodeSet ReducePartTwo(this BitSetArray self, int offset)
 		{
+			Contract.Requires<ArgumentNullException> (!self.IsNull());
+			Contract.Requires<ArgumentEmptyException> (self.Count != 0);
+			Contract.Requires<ArgumentOutOfRangeException> ((self.First + offset).HasCodeValue());
+			Contract.Requires<ArgumentOutOfRangeException> ((self.Last + offset).HasCodeValue());
+
 			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
 
-			if (((Code)(self.First + offset)).UnicodePlane() == ((Code)(self.Last + offset)).UnicodePlane()) {
+			if ((self.First + offset).UnicodePlane() == (self.Last + offset).UnicodePlane()) {
 				return new CodeSetPage(self, offset);
 			} else {
-				Contract.Assert(((Code)self.First).UnicodePlane() != ((Code)self.Last).UnicodePlane());
 				return new CodeSetWide(self, offset);
 			}
 		}
 		
 		[Pure] internal static ICodeSet Reduce (this BitSetArray self, int offset = 0)
 		{
-			Contract.Requires<ArgumentException> (self.IsNull() || self.Length <= Code.MaxCount || self.Last <= Code.MaxValue);
+			Contract.Requires<ArgumentOutOfRangeException> (self.IsNullOrEmpty() || (self.First + offset).HasCodeValue());
+			Contract.Requires<ArgumentOutOfRangeException> (self.IsNullOrEmpty() || (self.Last + offset).HasCodeValue());
 
 			Contract.Ensures(Contract.Result<ICodeSet>().Theory());
 			
@@ -189,7 +200,7 @@ namespace DD.Collections.ICodeSet
 				if ((bitSet.Count * sizeof(int)) < (bitSet.Length/2)) {
 					return new CodeSetList (bitSet);
 				}
-				if (((Code)bitSet.First).UnicodePlane() != ((Code)bitSet.Last).UnicodePlane()) {
+				if (bitSet.First.UnicodePlane() != bitSet.Last.UnicodePlane()) {
 					 return new CodeSetList (bitSet);
 				}
 			}

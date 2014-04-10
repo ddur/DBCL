@@ -59,6 +59,8 @@
     <Compile Include="Collections\ICodeSet\CodeSetPairTest\Members.cs" />
     <Compile Include="Collections\ICodeSet\CodeSetWideTest\Constructors.cs" />
     <Compile Include="Collections\ICodeSet\CodeSetWideTest\Members.cs" />
+    <Compile Include="Collections\ICodeSet\CodeSetWrapTest\Constructors.cs" />
+    <Compile Include="Collections\ICodeSet\CodeSetWrapTest\ConstructorsThrows.cs" />
     <Compile Include="Collections\ICodeSet\CodeTest\AsICodeSet.cs" />
     <Compile Include="Collections\ICodeSet\CodeTest\AsICollectionOfCode.cs" />
     <Compile Include="Collections\ICodeSet\CodeTest\AsIComparableOfICodeSet.cs" />

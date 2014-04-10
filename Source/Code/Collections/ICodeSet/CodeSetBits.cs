@@ -12,8 +12,6 @@ using DD.Diagnostics;
 
 namespace DD.Collections.ICodeSet
 {
-	/// <summary>Intermediate ICodeSet that is later optimized into other ICodeSet implementations
-	/// </summary>
 	public sealed class CodeSetBits : CodeSet
 	{
 		#region Ctor
@@ -73,9 +71,8 @@ namespace DD.Collections.ICodeSet
 		internal CodeSetBits (BitSetArray bits, int offset = 0) {
 
 			Contract.Requires<ArgumentNullException> (bits.IsNot(null));
-			Contract.Requires<ArgumentException> (
-				bits.Count == 0 ||
-				(offset.HasCodeValue() && ((int)bits.Last + offset).HasCodeValue()));
+			Contract.Requires<ArgumentException> (bits.Count == 0 || (bits.First + offset).HasCodeValue());
+			Contract.Requires<ArgumentException> (bits.Count == 0 || (bits.Last + offset).HasCodeValue());
 
 			Contract.Ensures (Theory.Construct(bits, offset, this));
 

@@ -132,6 +132,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArgumentEmptyException.cs" />
     <Compile Include="Collections\BitSetArray\BitSetArray.cs" />
     <Compile Include="Collections\BitSetArray\BitSetArray.Theory.cs" />
     <Compile Include="Collections\ICodeSet\Code.cs" />
