@@ -142,14 +142,7 @@ namespace DD.Collections.ICodeSet
 
 		#endregion
 
-		#region Invariant
-
-		[ContractInvariantMethod]
-		private void Invariant () {
-			Contract.Invariant (Theory.Invariant(this));
-		}
-
-		#endregion
+		#region Extended
 
 		internal BitSetArray ToCompact () {
 			return BitSetArray.Copy (this.sorted);
@@ -162,6 +155,17 @@ namespace DD.Collections.ICodeSet
 				}
 			}
 		}
+
+		#endregion
+
+		#region Invariant
+
+		[ContractInvariantMethod]
+		private void Invariant () {
+			Contract.Invariant (Theory.Invariant(this));
+		}
+
+		#endregion
 
 		#region Theory
 

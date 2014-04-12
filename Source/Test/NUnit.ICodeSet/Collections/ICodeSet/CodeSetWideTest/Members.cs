@@ -17,8 +17,8 @@ namespace DD.Collections.ICodeSet.CodeSetWideTest
 		static List<Code> list1 = new List<Code>() {0,65536,1114111};
 		static List<Code> list2 = new List<Code>() {32768,65536,65537};
 
-		CodeSetWide csw1 = new CodeSetWide(list1);
-		CodeSetWide csw2 = new CodeSetWide(list2);
+		readonly CodeSetWide csw1 = new CodeSetWide(list1);
+		readonly CodeSetWide csw2 = new CodeSetWide(list2);
 
 		[Test] public void AsEnumerable() {
 			
@@ -26,15 +26,6 @@ namespace DD.Collections.ICodeSet.CodeSetWideTest
 			Assert.True (csw2.SequenceEqual(list2));
 		}
 
-		[Test] public void FirstLast() {
-
-			Assert.True (csw1.First.Value == 0);
-			Assert.True (csw1.Last.Value == Code.MaxValue);
-
-			Assert.True (csw2.First.Value == 32768);
-			Assert.True (csw2.Last.Value == 65537);
-		}
-		
 		[Test]
 		public void Indexer()
 		{
@@ -76,6 +67,19 @@ namespace DD.Collections.ICodeSet.CodeSetWideTest
 			Assert.False (csw2[(Code)Code.MaxValue-1]);
 			Assert.False (csw2[(Code)Code.MaxValue]);
 
+		}
+		
+		[Test] public void Properties() {
+
+			Assert.True (csw1.Count == 3);
+			Assert.True (csw1.Length == Code.MaxCount);
+			Assert.True (csw1.First.Value == 0);
+			Assert.True (csw1.Last.Value == Code.MaxValue);
+
+			Assert.True (csw2.Count == 3);
+			Assert.True (csw2.Length == 1 + 65537 - 32768);
+			Assert.True (csw2.First.Value == 32768);
+			Assert.True (csw2.Last.Value == 65537);
 		}
 		
 	}

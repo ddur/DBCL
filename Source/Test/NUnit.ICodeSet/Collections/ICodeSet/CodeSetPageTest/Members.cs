@@ -40,11 +40,13 @@ namespace DD.Collections.ICodeSet.CodeSetPageTest
         }
         
         [Test]
-        public void FirstLast() {
+        public void Properties() {
 
             CodeSetPage csp;
 
             csp = new CodeSetPage (new List<Code>() {1,12,33,20});
+            Assert.True (csp.Count == 4);
+            Assert.True (csp.Length == 33);
             Assert.True (csp.First == 1);
             Assert.True (csp.Last == 33);
             

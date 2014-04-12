@@ -13,8 +13,8 @@ namespace DD.Collections.ICodeSet.CodeSetDiffTest
 	[TestFixture]
 	public class Members
 	{
-		static CodeSetDiff csd1 = new CodeSetDiff(new CodeSetFull(Code.MinValue, Code.MaxValue), new Code(Code.MaxValue/2));
-		static CodeSetDiff csd2 = new CodeSetDiff(new CodeSetFull(90, 203), new CodeSetFull(100, 200));
+		static readonly CodeSetDiff csd1 = new CodeSetDiff(new CodeSetFull(Code.MinValue, Code.MaxValue), new Code(Code.MaxValue/2));
+		static readonly CodeSetDiff csd2 = new CodeSetDiff(new CodeSetFull(90, 203), new CodeSetFull(100, 200));
 		
 		[Test]
 		public void AsEnumerable()
@@ -23,11 +23,15 @@ namespace DD.Collections.ICodeSet.CodeSetDiffTest
 		}
 
 		[Test]
-		public void FirstLast()
+		public void Properties()
 		{
+			Assert.True (csd1.Count == Code.MaxCount - 1);
+			Assert.True (csd1.Length == Code.MaxCount);
 			Assert.True (csd1.First.Value == Code.MinValue);
 			Assert.True (csd1.Last.Value == Code.MaxValue);
 			
+			Assert.True (csd2.Count == 13);
+			Assert.True (csd2.Length == 203-90+1);
 			Assert.True (csd2.First.Value == 90);
 			Assert.True (csd2.Last.Value == 203);
 			
@@ -36,7 +40,7 @@ namespace DD.Collections.ICodeSet.CodeSetDiffTest
 		[Test]
 		public void Indexer()
 		{
-			Code[] codes = new Code[] {90,91,92,93,94,95,96,97,98,99,201,202,203};
+			var codes = new Code[] {90,91,92,93,94,95,96,97,98,99,201,202,203};
 			foreach (var code in codes) {
 				Assert.True (csd2[code]);
 			}

@@ -42,7 +42,7 @@ namespace DD.Collections.ICodeSet.CodeSetBitsTest
         }
         
         [Test]
-        public void FirstLast() {
+        public void Properties() {
 
             CodeSetBits csb;
             Code C;
@@ -52,10 +52,14 @@ namespace DD.Collections.ICodeSet.CodeSetBitsTest
             Assert.Throws<InvalidOperationException> (delegate{C = csb.Last;});
             
             csb = new CodeSetBits (new List<Code>() {12});
+            Assert.True (csb.Count == 1);
+            Assert.True (csb.Length == 1);
             Assert.True (csb.First == 12);
             Assert.True (csb.Last == 12);
             
             csb = new CodeSetBits (new List<Code>() {1,12,33,20});
+            Assert.True (csb.Count == 4);
+            Assert.True (csb.Length == 33);
             Assert.True (csb.First == 1);
             Assert.True (csb.Last == 33);
             

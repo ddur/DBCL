@@ -106,6 +106,22 @@ namespace DD.Collections.ICodeSet
 
 		#endregion
 
+		#region Extended
+
+		internal BitSetArray ToBitSetArray () {
+			return BitSetArray.Copy (this.sorted);
+		}
+		
+		internal IEnumerable<Code> Complement {
+			get {
+				foreach (var item in this.sorted.Complement()) {
+					yield return item;
+				}
+			}
+		}
+
+		#endregion
+
 		#region Invariant
 
 		[ContractInvariantMethod]
@@ -194,9 +210,7 @@ namespace DD.Collections.ICodeSet
 				// private
 				success.Assert (!self.sorted.IsNull());
 
-				success.Assert (
-					self.sorted.Length <= Code.MaxCount
-				);
+				success.Assert (self.sorted.Length <= Code.MaxCount);
 	
 				if (self.sorted.Count != 0) {
 					success.Assert (self.sorted.First.HasCodeValue ());

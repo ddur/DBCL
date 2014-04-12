@@ -60,8 +60,8 @@ namespace DD.Collections.ICodeSet
 
 			Contract.Ensures (Theory.Construct (bits, offset, this));
 			
-			this.start = (Code)(bits.First + offset);
-			this.final = (Code)(bits.Last + offset);
+			this.start = (Code)((int)bits.First + offset);
+			this.final = (Code)((int)bits.Last + offset);
 
 			this.init (ref this.startPlane, ref this.finalPlane, ref this.planes);
 			this.init (bits, offset);
@@ -220,7 +220,7 @@ namespace DD.Collections.ICodeSet
 				// private
 				success.Assert (self.planes.IsNot (null));
 				success.Assert (self.planes.Length > 1);
-				success.Assert (self.planes.Length <= 1 + Code.MaxValue.UnicodePlane());
+				success.Assert (self.planes.Length <= 17);
 				foreach (var plane in self.planes) {
 					success.Assert (plane.IsNot (null));
 				}

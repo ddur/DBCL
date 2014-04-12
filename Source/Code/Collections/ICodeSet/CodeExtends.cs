@@ -47,47 +47,29 @@ namespace DD.Collections.ICodeSet
 		}
 	
 		[Pure]
-		public static bool HasCodeValue (this int self)
-		{
+		public static bool HasCodeValue (this int self) {
             Contract.Ensures (Contract.Result<bool> () == (self.InRange (Code.MinValue, Code.MaxValue)));
             // self.InRange (0, 1114111)
 			return ((self & 0xFFFFF) == self || (self & 0x10FFFF) == self);
 		}
 	
 		[Pure]
-		public static bool HasCodeValue (this int? self)
-		{
+		public static bool HasCodeValue (this int? self) {
 			Contract.Ensures (Contract.Result<bool> () == (self != null && ((int)self).InRange (Code.MinValue, Code.MaxValue)));
-			return (self != null && ((self & 0xFFFFF) == self || (self & 0x10FFFF) == self));
+			return (self != null && ((int)self).HasCodeValue());
 		}
 	
 		[Pure]
-		public static int UnicodePlane (this int self) {
-			return self >> 16;
-		}
-
-		[Pure]
 		public static int? UnicodePlane (this int? self) {
+			Contract.Requires <ArgumentException> (self == null || self.HasCodeValue());
+			Contract.Ensures (Contract.Result<int?>() == null || ((int)Contract.Result<int?>()).InRange(0,16));
 			return self == null ? self : (int)self >> 16;
 		}
 
 		[Pure]
-		public static int CastToCodeValue (this int self) {
-		    Contract.Ensures (Contract.Result<int>().HasCodeValue());
-		    if (self.HasCodeValue()) {
-		        return self;
-		    } else if ((self & 0x100000) != 0) {
-	                return (self & 0x10FFFF);
-		    } else {
-	                return (self & 0xFFFFF);
-		    }
-		}
-		
-		[Pure]
 		public static bool IsCodesCount (this int self) {
             Contract.Ensures (Contract.Result<bool> () == (self.InRange (Code.MinCount, Code.MaxCount)));
-	        if (self.HasCodeValue() || self == Code.MaxCount) { return true; }
-			return false;
+			return self.HasCodeValue() || self == Code.MaxCount;
 		}
 	
 		[Pure]
