@@ -95,7 +95,7 @@ namespace DD.Collections.ICodeSet
 		void init (IEnumerable<Code> codes) {
 			var bitPlanes = getBitPlanes();
 			foreach (Code code in codes) {
-				bitPlanes[(code >> 16) - this.startPlane].Set(code & 0xFFFF);
+				bitPlanes[code.UnicodePlane() - this.startPlane].Set(code & 0xFFFF);
 			}
 			initPlanes(bitPlanes);
 		}

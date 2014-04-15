@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <OutputType>Library</OutputType>
-    <RootNamespace>DD</RootNamespace>
+    <RootNamespace>DD.Collections.ICodeSet</RootNamespace>
     <AssemblyName>NUnit.ICodeSet</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <TargetFrameworkProfile>
@@ -43,80 +43,80 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Collections\ICodeSet\CodeSetAbstractTest\Members.cs" />
-    <Compile Include="Collections\ICodeSet\CodeSetBitsTest\Constructors.cs" />
-    <Compile Include="Collections\ICodeSet\CodeSetBitsTest\Members.cs" />
-    <Compile Include="Collections\ICodeSet\CodeSetDiffTest\Constructors.cs" />
-    <Compile Include="Collections\ICodeSet\CodeSetDiffTest\Members.cs" />
-    <Compile Include="Collections\ICodeSet\CodeSetFullTest\Constructors.cs" />
-    <Compile Include="Collections\ICodeSet\CodeSetFullTest\Members.cs" />
-    <Compile Include="Collections\ICodeSet\CodeSetListTest\Constructors.cs" />
-    <Compile Include="Collections\ICodeSet\CodeSetListTest\Members.cs" />
-    <Compile Include="Collections\ICodeSet\CodeSetNullTest\Members.cs" />
-    <Compile Include="Collections\ICodeSet\CodeSetPageTest\Constructors.cs" />
-    <Compile Include="Collections\ICodeSet\CodeSetPageTest\Members.cs" />
-    <Compile Include="Collections\ICodeSet\CodeSetPairTest\Constructors.cs" />
-    <Compile Include="Collections\ICodeSet\CodeSetPairTest\Members.cs" />
-    <Compile Include="Collections\ICodeSet\CodeSetWideTest\Constructors.cs" />
-    <Compile Include="Collections\ICodeSet\CodeSetWideTest\Members.cs" />
-    <Compile Include="Collections\ICodeSet\CodeSetWrapTest\Constructors.cs" />
-    <Compile Include="Collections\ICodeSet\CodeSetWrapTest\ConstructorsThrows.cs" />
-    <Compile Include="Collections\ICodeSet\CodeSetWrapTest\Members.cs" />
-    <Compile Include="Collections\ICodeSet\CodeTest\AsICodeSet.cs" />
-    <Compile Include="Collections\ICodeSet\CodeTest\AsICollectionOfCode.cs" />
-    <Compile Include="Collections\ICodeSet\CodeTest\AsIComparableOfICodeSet.cs" />
-    <Compile Include="Collections\ICodeSet\CodeTest\AsIEnumerableOfCode.cs" />
-    <Compile Include="Collections\ICodeSet\CodeTest\AsIEqualityComparerOfCode.cs" />
-    <Compile Include="Collections\ICodeSet\CodeTest\AsIEqualityComparerOfICodeSet.cs" />
-    <Compile Include="Collections\ICodeSet\CodeTest\CodeExtended.cs" />
-    <Compile Include="Collections\ICodeSet\CodeTest\CodeExtends.cs" />
-    <Compile Include="Collections\ICodeSet\CodeTest\CodeStruct.cs" />
-    <Compile Include="Collections\ICodeSet\CodeTest\Compiler.cs" />
-    <Compile Include="Collections\ICodeSet\CodeTest\DataSource.cs" />
-    <Compile Include="Collections\ICodeSet\CodeTest\DecodeString.cs" />
-    <Compile Include="Collections\ICodeSet\CodeTest\EncodeToString.cs" />
-    <Compile Include="Collections\ICodeSet\ICodeSetDictionaryTest\Constructors.cs" />
-    <Compile Include="Collections\ICodeSet\ICodeSetDictionaryTest\Members.cs" />
-    <Compile Include="Collections\ICodeSet\ICodeSetStaticFactoryTest\Members.cs" />
-    <Compile Include="Collections\ICodeSet\ICodeSetRelations\Members\Compare.cs" />
-    <Compile Include="Collections\ICodeSet\ICodeSetRelations\Members\Equals.cs" />
-    <Compile Include="Collections\ICodeSet\ICodeSetRelations\Members\HashCode.cs" />
-    <Compile Include="Collections\ICodeSet\ICodeSetRelations\Members\IsProperRangeSubSuperOf.cs" />
-    <Compile Include="Collections\ICodeSet\ICodeSetRelations\Members\IsRangeSubSuperOf.cs" />
-    <Compile Include="Collections\ICodeSet\ICodeSetRelations\Members\IsSuperSubSet.cs" />
-    <Compile Include="Collections\ICodeSet\ICodeSetRelations\Members\Overlaps.cs" />
-    <Compile Include="Collections\ICodeSet\ICodeSetRelations\Members\RangeEquals.cs" />
-    <Compile Include="Collections\ICodeSet\ICodeSetRelations\Members\RangeOverlaps.cs" />
-    <Compile Include="Collections\ICodeSet\ICodeSetServiceTest\Constants.cs" />
-    <Compile Include="Collections\ICodeSet\ICodeSetServiceTest\Members\IsCompact.cs" />
-    <Compile Include="Collections\ICodeSet\ICodeSetServiceTest\Members\IsFull_BitSetArray.cs" />
-    <Compile Include="Collections\ICodeSet\ICodeSetServiceTest\Members\IsFull_ICodeSet.cs" />
-    <Compile Include="Collections\ICodeSet\ICodeSetServiceTest\Members\IsNullOrEmpty_BitSetArray.cs" />
-    <Compile Include="Collections\ICodeSet\ICodeSetServiceTest\Members\IsNullOrEmpty_ICodeSet.cs" />
-    <Compile Include="Collections\ICodeSet\ICodeSetServiceTest\Members\ToBitSetArray.cs" />
-    <Compile Include="Collections\ICodeSet\ICodeSetServiceTest\Members\ToCompact.cs" />
+    <Compile Include="CodeSetAbstractTest\Members.cs" />
+    <Compile Include="CodeSetBitsTest\Constructors.cs" />
+    <Compile Include="CodeSetBitsTest\Members.cs" />
+    <Compile Include="CodeSetDiffTest\Constructors.cs" />
+    <Compile Include="CodeSetDiffTest\Members.cs" />
+    <Compile Include="CodeSetFullTest\Constructors.cs" />
+    <Compile Include="CodeSetFullTest\Members.cs" />
+    <Compile Include="CodeSetListTest\Constructors.cs" />
+    <Compile Include="CodeSetListTest\Members.cs" />
+    <Compile Include="CodeSetNullTest\Members.cs" />
+    <Compile Include="CodeSetPageTest\Constructors.cs" />
+    <Compile Include="CodeSetPageTest\Members.cs" />
+    <Compile Include="CodeSetPairTest\Constructors.cs" />
+    <Compile Include="CodeSetPairTest\Members.cs" />
+    <Compile Include="CodeSetWideTest\Constructors.cs" />
+    <Compile Include="CodeSetWideTest\Members.cs" />
+    <Compile Include="CodeSetWrapTest\Constructors.cs" />
+    <Compile Include="CodeSetWrapTest\ConstructorsThrows.cs" />
+    <Compile Include="CodeSetWrapTest\Members.cs" />
+    <Compile Include="CodeTest\AsICodeSet.cs" />
+    <Compile Include="CodeTest\AsICollectionOfCode.cs" />
+    <Compile Include="CodeTest\AsIComparableOfICodeSet.cs" />
+    <Compile Include="CodeTest\AsIEnumerableOfCode.cs" />
+    <Compile Include="CodeTest\AsIEqualityComparerOfCode.cs" />
+    <Compile Include="CodeTest\AsIEqualityComparerOfICodeSet.cs" />
+    <Compile Include="CodeTest\CodeExtended.cs" />
+    <Compile Include="CodeTest\CodeExtends.cs" />
+    <Compile Include="CodeTest\CodeStruct.cs" />
+    <Compile Include="CodeTest\Compiler.cs" />
+    <Compile Include="CodeTest\DataSource.cs" />
+    <Compile Include="CodeTest\DecodeString.cs" />
+    <Compile Include="CodeTest\EncodeToString.cs" />
+    <Compile Include="ICodeSetDictionaryTest\Constructors.cs" />
+    <Compile Include="ICodeSetDictionaryTest\Members.cs" />
+    <Compile Include="ICodeSetOperationsTest\Members.cs" />
+    <Compile Include="ICodeSetStaticFactoryTest\Members.cs" />
+    <Compile Include="ICodeSetRelationsTest\Members\Compare.cs" />
+    <Compile Include="ICodeSetRelationsTest\Members\Equals.cs" />
+    <Compile Include="ICodeSetRelationsTest\Members\HashCode.cs" />
+    <Compile Include="ICodeSetRelationsTest\Members\IsProperRangeSubSuperOf.cs" />
+    <Compile Include="ICodeSetRelationsTest\Members\IsRangeSubSuperOf.cs" />
+    <Compile Include="ICodeSetRelationsTest\Members\IsSuperSubSet.cs" />
+    <Compile Include="ICodeSetRelationsTest\Members\Overlaps.cs" />
+    <Compile Include="ICodeSetRelationsTest\Members\RangeEquals.cs" />
+    <Compile Include="ICodeSetRelationsTest\Members\RangeOverlaps.cs" />
+    <Compile Include="ICodeSetServiceTest\Constants.cs" />
+    <Compile Include="ICodeSetServiceTest\Members\IsCompact.cs" />
+    <Compile Include="ICodeSetServiceTest\Members\IsFull_BitSetArray.cs" />
+    <Compile Include="ICodeSetServiceTest\Members\IsFull_ICodeSet.cs" />
+    <Compile Include="ICodeSetServiceTest\Members\IsNullOrEmpty_BitSetArray.cs" />
+    <Compile Include="ICodeSetServiceTest\Members\IsNullOrEmpty_ICodeSet.cs" />
+    <Compile Include="ICodeSetServiceTest\Members\ToBitSetArray.cs" />
+    <Compile Include="ICodeSetServiceTest\Members\ToCompact.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Collections" />
-    <Folder Include="Collections\ICodeSet\CodeTest" />
-    <Folder Include="Collections\ICodeSet\ICodeSetStaticFactoryTest" />
-    <Folder Include="Collections\ICodeSet\CodeSetPairTest" />
-    <Folder Include="Collections\ICodeSet\CodeSetNullTest" />
-    <Folder Include="Collections\ICodeSet\CodeSetFullTest" />
-    <Folder Include="Collections\ICodeSet\CodeSetListTest" />
-    <Folder Include="Collections\ICodeSet\CodeSetPageTest" />
-    <Folder Include="Collections\ICodeSet\CodeSetWideTest" />
-    <Folder Include="Collections\ICodeSet\CodeSetDiffTest" />
-    <Folder Include="Collections\ICodeSet\CodeSetAbstractTest" />
-    <Folder Include="Collections\ICodeSet\ICodeSetDictionaryTest" />
-    <Folder Include="Collections\ICodeSet\ICodeSetRelations\Members" />
-    <Folder Include="Collections\ICodeSet\ICodeSetServiceTest" />
-    <Folder Include="Collections\ICodeSet\ICodeSetServiceTest\Members" />
-    <Folder Include="Collections\ICodeSet\ICodeSetRelations" />
-    <Folder Include="Collections\ICodeSet\CodeSetBitsTest" />
-    <Folder Include="Collections\ICodeSet\CodeSetWrapTest" />
-    <Folder Include="Collections\ICodeSet" />
+    <Folder Include="CodeTest" />
+    <Folder Include="ICodeSetStaticFactoryTest" />
+    <Folder Include="CodeSetPairTest" />
+    <Folder Include="CodeSetNullTest" />
+    <Folder Include="CodeSetFullTest" />
+    <Folder Include="CodeSetListTest" />
+    <Folder Include="CodeSetPageTest" />
+    <Folder Include="CodeSetWideTest" />
+    <Folder Include="CodeSetDiffTest" />
+    <Folder Include="CodeSetAbstractTest" />
+    <Folder Include="ICodeSetDictionaryTest" />
+    <Folder Include="ICodeSetRelationsTest\Members" />
+    <Folder Include="ICodeSetServiceTest" />
+    <Folder Include="ICodeSetServiceTest\Members" />
+    <Folder Include="ICodeSetRelationsTest" />
+    <Folder Include="CodeSetBitsTest" />
+    <Folder Include="CodeSetWrapTest" />
+    <Folder Include="ICodeSetOperationsTest" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Code\DBCL.csproj">

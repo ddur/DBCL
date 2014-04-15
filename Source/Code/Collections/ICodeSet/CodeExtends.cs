@@ -60,7 +60,7 @@ namespace DD.Collections.ICodeSet
 		}
 	
 		[Pure]
-		public static int? UnicodePlane (this int? self) {
+		internal static int? UnicodePlane (this int? self) {
 			Contract.Requires <ArgumentException> (self == null || self.HasCodeValue());
 			Contract.Ensures (Contract.Result<int?>() == null || ((int)Contract.Result<int?>()).InRange(0,16));
 			return self == null ? self : (int)self >> 16;

@@ -9,10 +9,10 @@ using System.Collections;
 using DD.Enumerables;
 using NUnit.Framework;
 
-namespace DD.Enumerables
+namespace DD.EnumerablesTest
 {
     [TestFixture]
-    public class EnumerablesTest
+    public class Members
     {
 	    [Test]
 	    public void LoopTest() {
