@@ -111,16 +111,19 @@ namespace DD.Collections.ICodeSet
 		
 		#region Union bit.Or(a,b,c...)
 
-		public static ICodeSet Union (this ICodeSet req, params ICodeSet[] opt)
+		public static ICodeSet Union (this ICodeSet self, ICodeSet that, params ICodeSet[] more)
 		{
 			Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
 			Contract.Ensures (OutputDictionary.Is(null) || OutputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
 
-			return From (req.BitUnion(opt)); 
+			return From (self.BitUnion(that, more)); 
 		}
 
 		public static ICodeSet Union (this IEnumerable<ICodeSet> sets)
 		{
+			Contract.Requires (!sets.IsNull());
+			Contract.Requires (sets.Count() >= 2);
+
 			Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
 			Contract.Ensures (OutputDictionary.Is(null) || OutputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
 
@@ -131,16 +134,19 @@ namespace DD.Collections.ICodeSet
 		
 		#region Intersection bit.And(((a,b),c),d...)
 		
-		public static ICodeSet Intersection (this ICodeSet req, params ICodeSet[] opt)
+		public static ICodeSet Intersection (this ICodeSet self, ICodeSet that, params ICodeSet[] more)
 		{
 			Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
 			Contract.Ensures (OutputDictionary.Is(null) || OutputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
 
-			return From (req.BitIntersection(opt));
+			return From (self.BitIntersection(that, more));
 		}
 
 		public static ICodeSet Intersection (this IEnumerable<ICodeSet> sets)
 		{
+			Contract.Requires (!sets.IsNull());
+			Contract.Requires (sets.Count() >= 2);
+
 			Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
 			Contract.Ensures (OutputDictionary.Is(null) || OutputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
 
@@ -151,16 +157,19 @@ namespace DD.Collections.ICodeSet
 		
 		#region Disjunction xor(((a,b),c),d...)
 
-		public static ICodeSet Disjunction (this ICodeSet req, params ICodeSet[] opt)
+		public static ICodeSet Disjunction (this ICodeSet self, ICodeSet that, params ICodeSet[] more)
 		{
 			Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
 			Contract.Ensures (OutputDictionary.Is(null) || OutputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
 
-			return From (req.BitDisjunction(opt)); 
+			return From (self.BitDisjunction(that, more)); 
 		}
 
 		public static ICodeSet Disjunction (this IEnumerable<ICodeSet> sets)
 		{
+			Contract.Requires (!sets.IsNull());
+			Contract.Requires (sets.Count() >= 2);
+
 			Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
 			Contract.Ensures (OutputDictionary.Is(null) || OutputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
 
@@ -171,16 +180,19 @@ namespace DD.Collections.ICodeSet
 
 		#region Difference (((a-b)-c)-d...)
 
-		public static ICodeSet Difference (this ICodeSet req, params ICodeSet[] opt)
+		public static ICodeSet Difference (this ICodeSet self, ICodeSet that, params ICodeSet[] more)
 		{
 			Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
 			Contract.Ensures (OutputDictionary.Is(null) || OutputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
 
-			return From (req.BitDifference(opt));
+			return From (self.BitDifference(that, more));
 		}
 
 		public static ICodeSet Difference (this IEnumerable<ICodeSet> sets)
 		{
+			Contract.Requires (!sets.IsNull());
+			Contract.Requires (sets.Count() >= 2);
+
 			Contract.Ensures (Contract.Result<ICodeSet>().IsNot(null));
 			Contract.Ensures (OutputDictionary.Is(null) || OutputDictionary.ContainsKey(Contract.Result<ICodeSet>()));
 
