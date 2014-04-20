@@ -29,8 +29,8 @@ namespace DD.Collections.ICodeSet.CodeSetPageTest
 			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (BitSetArray.From (21));});
 			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (BitSetArray.From (12,5));});
 
-			// requires at least two NOT members
-			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (BitSetArray.From (1,2,3,4,6));});
+			// requires at least one NOT member
+			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (BitSetArray.From (1,2,3,4,5));});
 
 			// requires all codes within same unicode plane
 			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (BitSetArray.From (12,66000));});

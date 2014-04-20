@@ -95,13 +95,13 @@ namespace DD.Collections.ICodeSet.CodeSetWideTest
 					0,70000});}
 			);
 			
-			// requires more than ICodeSetService.PairCount NOT members
+			// requires at least one NOT member
 			Assert.Throws<ArgumentException> (
 				delegate { csw = new CodeSetWide(new List<Code> () {
 					65525,65526,65527,65528,
 					65529,65530,65531,65532,
 					65533,65534,65535,65536,
-					65537,65538,65539,65540,65542});}
+					65537,65538,65539,65540,65541});}
 			);
 			
 			// requires to span over single unicode page
