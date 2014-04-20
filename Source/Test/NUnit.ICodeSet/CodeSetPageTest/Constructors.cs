@@ -22,23 +22,37 @@ namespace DD.Collections.ICodeSet.CodeSetPageTest
 			CodeSetPage csp;
 
 			// requires no null
-			Assert.Throws <ArgumentNullException> (delegate{csp = new CodeSetPage ((BitSetArray)null);});
+			Assert.Throws <ArgumentNullException>(delegate {
+				csp = new CodeSetPage((BitSetArray)null);
+			});
 
 			// requires at least 3 members (> ICodeSetService.PairCount)
-			Assert.Throws <ArgumentEmptyException> (delegate{csp = new CodeSetPage (BitSetArray.Size ());});
-			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (BitSetArray.From (21));});
-			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (BitSetArray.From (12,5));});
+			Assert.Throws <ArgumentEmptyException>(delegate {
+				csp = new CodeSetPage(BitSetArray.Size());
+			});
+			Assert.Throws <ArgumentException>(delegate {
+				csp = new CodeSetPage(BitSetArray.From(21));
+			});
+			Assert.Throws <ArgumentException>(delegate {
+				csp = new CodeSetPage(BitSetArray.From(12, 5));
+			});
 
 			// requires at least one NOT member
-			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (BitSetArray.From (1,2,3,4,5));});
+			Assert.Throws <ArgumentException>(delegate {
+				csp = new CodeSetPage(BitSetArray.From(1, 2, 3, 4, 5));
+			});
 
 			// requires all codes within same unicode plane
-			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (BitSetArray.From (12,66000));});
+			Assert.Throws <ArgumentException>(delegate {
+				csp = new CodeSetPage(BitSetArray.From(12, 66000));
+			});
 
-            // does not except range of codes (full)
-            Assert.Throws<ArgumentException> (delegate{csp = new CodeSetPage(BitSetArray.Size (10, true));});
+			// does not except range of codes (full)
+			Assert.Throws<ArgumentException>(delegate {
+				csp = new CodeSetPage(BitSetArray.Size(10, true));
+			});
 
-			csp = new CodeSetPage (BitSetArray.From (1,12,33));
+			csp = new CodeSetPage(BitSetArray.From(1, 12, 33));
 		}
 		
 		[Test]
@@ -47,24 +61,40 @@ namespace DD.Collections.ICodeSet.CodeSetPageTest
 			CodeSetPage csp;
 
 			// requires no null
-			Assert.Throws <ArgumentNullException> (delegate{csp = new CodeSetPage ((IEnumerable<Code>)null);});
+			Assert.Throws <ArgumentNullException>(delegate {
+				csp = new CodeSetPage((IEnumerable<Code>)null);
+			});
 
 			// requires at least 3 members (> ICodeSetService.PairCount)
-			Assert.Throws <ArgumentEmptyException> (delegate{csp = new CodeSetPage (new Code[0]);});
-			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new List<Code>() {21});});
-			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new List<Code>() {1,25});});
+			Assert.Throws <ArgumentEmptyException>(delegate {
+				csp = new CodeSetPage(new Code[0]);
+			});
+			Assert.Throws <ArgumentException>(delegate {
+				csp = new CodeSetPage(new List<Code>() { 21 });
+			});
+			Assert.Throws <ArgumentException>(delegate {
+				csp = new CodeSetPage(new List<Code>() { 1, 25 });
+			});
 
 			// requires more than ICodeSetService.ListMaxCount NOT members
-			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new List<Code>() {1,2,3,4,5});});
+			Assert.Throws <ArgumentException>(delegate {
+				csp = new CodeSetPage(new List<Code>() { 1, 2, 3, 4, 5 });
+			});
 
 			// requires all codes within same unicode plane
-			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new List<Code>() {12,25,66,66000});});
+			Assert.Throws <ArgumentException>(delegate {
+				csp = new CodeSetPage(new List<Code>() { 12, 25, 66, 66000 });
+			});
 
-            // does not except full-range of codes
-            Assert.Throws<ArgumentException> (delegate{csp = new CodeSetPage(1.To(80).Select(item => (Code)item));});
-            Assert.Throws<ArgumentException> (delegate{csp = new CodeSetPage((Code.MaxValue-10).To(Code.MaxValue).Select(item => (Code)item));});
+			// does not except full-range of codes
+			Assert.Throws<ArgumentException>(delegate {
+				csp = new CodeSetPage(1.To(80).Select(item => (Code)item));
+			});
+			Assert.Throws<ArgumentException>(delegate {
+				csp = new CodeSetPage((Code.MaxValue - 10).To(Code.MaxValue).Select(item => (Code)item));
+			});
 
-			csp = new CodeSetPage (new List<Code>() {0,1,12,33,65535});
+			csp = new CodeSetPage(new List<Code>() { 0, 1, 12, 33, 65535 });
 
 		}
 		
@@ -74,22 +104,36 @@ namespace DD.Collections.ICodeSet.CodeSetPageTest
 			CodeSetPage csp;
 
 			// requires no null
-			Assert.Throws <ArgumentNullException> (delegate{csp = new CodeSetPage ((ICodeSet)null);});
+			Assert.Throws <ArgumentNullException>(delegate {
+				csp = new CodeSetPage((ICodeSet)null);
+			});
 
 			// requires at least 3 members (> ICodeSetService.PairCount)
-			Assert.Throws <ArgumentEmptyException> (delegate{csp = new CodeSetPage (new Code[0]);});
-			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new List<Code>() {21});});
-			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new List<Code>() {1,25});});
+			Assert.Throws <ArgumentEmptyException>(delegate {
+				csp = new CodeSetPage(new Code[0]);
+			});
+			Assert.Throws <ArgumentException>(delegate {
+				csp = new CodeSetPage(new List<Code>() { 21 });
+			});
+			Assert.Throws <ArgumentException>(delegate {
+				csp = new CodeSetPage(new List<Code>() { 1, 25 });
+			});
 
 			// requires more than two NOT members
-			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new List<Code>() {1,2,3,4,5});});
-			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new List<Code>() {1,2,3,4,6});});
+			Assert.Throws <ArgumentException>(delegate {
+				csp = new CodeSetPage(new List<Code>() { 1, 2, 3, 4, 5 });
+			});
+			Assert.Throws <ArgumentException>(delegate {
+				csp = new CodeSetPage(new List<Code>() { 1, 2, 3, 4, 6 });
+			});
 
 			// requires all codes within same unicode plane
-			Assert.Throws <ArgumentException> (delegate{csp = new CodeSetPage (new List<Code>() {12,66000});});
+			Assert.Throws <ArgumentException>(delegate {
+				csp = new CodeSetPage(new List<Code>() { 12, 66000 });
+			});
 
-			csp = new CodeSetPage (BitSetArray.From (0,1,12,33,65535));
-			var clone = new CodeSetPage (csp);
+			csp = new CodeSetPage(BitSetArray.From(0, 1, 12, 33, 65535));
+			var clone = new CodeSetPage(csp);
 		}
 		
 	}
