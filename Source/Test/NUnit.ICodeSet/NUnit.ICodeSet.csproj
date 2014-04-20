@@ -78,6 +78,7 @@
     <Compile Include="ICodeSetDictionaryTest\Constructors.cs" />
     <Compile Include="ICodeSetDictionaryTest\Members.cs" />
     <Compile Include="ICodeSetOperationsTest\Members.cs" />
+    <Compile Include="ICodeSetReductionTest\Members.cs" />
     <Compile Include="ICodeSetStaticFactoryTest\Members.cs" />
     <Compile Include="ICodeSetRelationsTest\Members\Compare.cs" />
     <Compile Include="ICodeSetRelationsTest\Members\Equals.cs" />
@@ -117,6 +118,7 @@
     <Folder Include="CodeSetBitsTest" />
     <Folder Include="CodeSetWrapTest" />
     <Folder Include="ICodeSetOperationsTest" />
+    <Folder Include="ICodeSetReductionTest" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Code\DBCL.csproj">

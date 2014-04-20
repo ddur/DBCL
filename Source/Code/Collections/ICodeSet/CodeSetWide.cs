@@ -23,7 +23,7 @@ namespace DD.Collections.ICodeSet
 			Contract.Requires<ArgumentNullException> (!codes.Is(null));
 			Contract.Requires<ArgumentEmptyException> (!codes.IsEmpty());
 			Contract.Requires<ArgumentException> (codes.Distinct().Count() > ICodeSetService.PairCount);
-			Contract.Requires<ArgumentException> (codes.Distinct().Count() < (codes.Max() - codes.Min()));
+			Contract.Requires<ArgumentException> (codes.Distinct().Count() < (1 + codes.Max() - codes.Min()));
 			Contract.Requires<ArgumentException> (codes.Min().UnicodePlane() != codes.Max().UnicodePlane());
 
 			Contract.Ensures (Theory.Construct (codes, this));
@@ -239,8 +239,8 @@ namespace DD.Collections.ICodeSet
 				success.Assert (self.count == counter);
 				success.Assert ((self.start) == startPlane.First);
 				success.Assert ((self.final) == finalPlane.Last);
-				success.Assert (self.count > ICodeSetService.PairCount);// not Null-Pair
-				success.Assert (self.count < (self.final - self.start));// not Full-Pair
+				success.Assert (self.count > ICodeSetService.PairCount);		// not Null-Pair
+				success.Assert (self.count < (1 + self.final - self.start));	// not Full
 				
 				// public <- private
 				success.Assert (self.Count == self.count);
@@ -248,8 +248,8 @@ namespace DD.Collections.ICodeSet
 				success.Assert (self.Last == self.final);
 				
 				// constraints
-				success.Assert (self.Count > ICodeSetService.PairCount);// not Null-Pair
-				success.Assert (self.Count < (self.Length - 1)); 		// not Full-Pair
+				success.Assert (self.Count > ICodeSetService.PairCount);	// not Null-Pair
+				success.Assert (self.Count < self.Length); 					// not Full
 				success.Assert (self.First.UnicodePlane() != self.Last.UnicodePlane()); // spans over single unicode plane
 				
 				return success;

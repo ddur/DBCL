@@ -25,7 +25,7 @@ namespace DD.Collections.ICodeSet {
 			Contract.Requires<ArgumentNullException> (!codes.Is(null));
 			Contract.Requires<ArgumentEmptyException> (!codes.IsEmpty());
 			Contract.Requires<ArgumentException> (codes.Distinct().Count() > ICodeSetService.PairCount); // not Null-Pair
-			Contract.Requires<ArgumentException> (codes.Distinct().Count() < (codes.Max() - codes.Min())); // not Full-Pair
+			Contract.Requires<ArgumentException> (codes.Distinct().Count() < (codes.Max() - codes.Min())); // not Full
 			Contract.Requires<ArgumentException> (codes.Min().UnicodePlane() == codes.Max().UnicodePlane()); // one Page
 
 			Contract.Ensures (Theory.Construct(codes, this));
@@ -61,8 +61,8 @@ namespace DD.Collections.ICodeSet {
 			Contract.Requires<ArgumentEmptyException> (bits.Count != 0);
 			Contract.Requires<ArgumentOutOfRangeException> ((bits.First + offset).HasCodeValue());
 			Contract.Requires<ArgumentOutOfRangeException> ((bits.Last + offset).HasCodeValue());
-			Contract.Requires<ArgumentException> (bits.Count > ICodeSetService.PairCount);	// not Null-Pair
-			Contract.Requires<ArgumentException> (bits.Count < (bits.Last - bits.First));	// not Full-Pair
+			Contract.Requires<ArgumentException> (bits.Count > ICodeSetService.PairCount);		// not Null-Pair
+			Contract.Requires<ArgumentException> (bits.Count < (1 + bits.Last - bits.First));	// not Full
 			Contract.Requires<ArgumentException> ((bits.First + offset).UnicodePlane() == (bits.Last + offset).UnicodePlane()); // one Page
 
 			Contract.Ensures (Theory.Construct(bits, offset, this));
@@ -196,7 +196,7 @@ namespace DD.Collections.ICodeSet {
 				success.Assert (self.sorted.IsNot (null));
 				success.Assert (self.sorted.IsCompact());
 				success.Assert (self.sorted.Count > ICodeSetService.PairCount);	// not Null-Pair
-				success.Assert (self.sorted.Count < (self.sorted.Length - 1));	// not Full-Pair
+				success.Assert (self.sorted.Count < self.sorted.Length);		// not Full
 				success.Assert (self.start.UnicodePlane() == self.final.UnicodePlane());
 
 				// public <- private
@@ -207,7 +207,7 @@ namespace DD.Collections.ICodeSet {
 				
 				// constraints
 				success.Assert (self.Count > ICodeSetService.PairCount);// not Unit-Pair
-				success.Assert (self.Count < (self.Length - 1));		// not Full-Pair
+				success.Assert (self.Count < self.Length);				// not Full
 				success.Assert (self.First.UnicodePlane() == self.Last.UnicodePlane()); // one Page
 
 				return success;
