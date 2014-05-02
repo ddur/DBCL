@@ -77,8 +77,8 @@ namespace DD.Collections
 				}
 				this.ClearTail();
 				this.count = this.range;
-				this.First = 0;
-				this.Last = this.range - 1;
+				this.FirstSet(0);
+				this.LastSet(this.range - 1);
 			}
 		}
 
@@ -127,8 +127,10 @@ namespace DD.Collections
 					Array.Copy(that.array, this.array, thatRangeArrayLength);
 					if (this.range >= that.range || (int)that.Last < this.range) {
 						this.count = that.count;
-						this.First = that.First;
-						this.Last = that.Last;
+						this.startVersion = that.startVersion;
+						this.startMemoize = that.startMemoize;
+						this.finalVersion = that.finalVersion;
+						this.finalMemoize = that.finalMemoize;
 					} else {
 						this.ClearTail();
 						this.count = BitSetArray.CountOnBits(this.array);
@@ -2414,8 +2416,8 @@ namespace DD.Collections
 						Contract.Assert(this.count < this.range);
 						++this.count; // count cannot be 0 after this line
 						if (this.count == 1) {
-							this.First = item;
-							this.Last = item;
+							this.FirstSet(item);
+							this.LastSet(item);
 						}
 						else {
 							Contract.Assert(this.count > 1);
@@ -2489,8 +2491,8 @@ namespace DD.Collections
 				}
 				Contract.Assert(minValue != int.MaxValue);
 				Contract.Assert(maxValue != int.MinValue);
-				this.First = minValue;
-				this.Last = maxValue;
+				this.FirstSet(minValue);
+				this.LastSet(maxValue);
 			}
 		}
 
@@ -2515,8 +2517,8 @@ namespace DD.Collections
 									this.array[i] = -1L;
 							}
 							this.ClearTail();
-							this.First = 0;
-							this.Last = this.range - 1;
+							this.FirstSet(0);
+							this.LastSet(this.range - 1);
 						}
 					} else {
 						if (this.count != 0) {
@@ -3508,18 +3510,18 @@ namespace DD.Collections
 				(this.Count > 0 && start != null && this[(int)start]));
 				return start;
 			}
-			private set {
-				Contract.Requires<ArgumentNullException>(value != null);
-				Contract.Requires<ArgumentException>(this.InRange((int)value));
-				Contract.Requires<InvalidOperationException>(Count != 0);
+		}
 
-				Contract.Ensures(Theory.FirstSet(this, value));
-						
+		void FirstSet(int value) {
+			Contract.Requires<ArgumentException>(this.InRange((int)value));
+			Contract.Requires<InvalidOperationException>(Count != 0);
 
-				lock (SyncRoot) {
-					this.startMemoize = value;
-					this.startVersion = this.version;
-				}
+			Contract.Ensures(Theory.FirstSet(this, value));
+					
+
+			lock (SyncRoot) {
+				this.startMemoize = value;
+				this.startVersion = this.version;
 			}
 		}
 
@@ -3546,18 +3548,17 @@ namespace DD.Collections
 				(this.Count > 0 && final != null && this[(int)final]));
 				return final;
 			}
+		}
 
-			private set {
-				Contract.Requires<ArgumentNullException>(value != null);
-				Contract.Requires<ArgumentException>(this.InRange((int)value));
-				Contract.Requires<InvalidOperationException>(Count != 0);
+		void LastSet(int value) {
+			Contract.Requires<ArgumentException>(this.InRange((int)value));
+			Contract.Requires<InvalidOperationException>(Count != 0);
 
-				Contract.Ensures(Theory.LastSet(this, value));
+			Contract.Ensures(Theory.LastSet(this, value));
 
-				lock (SyncRoot) {
-					this.finalMemoize = value;
-					this.finalVersion = this.version;
-				}
+			lock (SyncRoot) {
+				this.finalMemoize = value;
+				this.finalVersion = this.version;
 			}
 		}
 
