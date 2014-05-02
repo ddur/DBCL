@@ -150,7 +150,7 @@ namespace DD.Collections.BitSetArrayTest {
         [Test]
         public void IsSynchronized () {
             BitSetArray bs = BitSetArray.Size ();
-            Assert.That (!bs.IsSynchronized);
+            Assert.That (bs.IsSynchronized);
         }
 
         [Test]

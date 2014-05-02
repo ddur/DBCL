@@ -113,6 +113,24 @@ namespace DD.Collections.BitSetArrayTest {
 					BitSetArray.From (new int[] { 1, 3, 5, 7, 9, 200 }),
 					BitSetArray.From (new int[] { 0, 2, 4, 6 })
 				);
+
+				// covers branch bits_result == array[index] 
+				yield return new TestCaseData (
+					BitSetArray.From (new int[] { 0, 2, 4, 6, 8, 201 }),
+					BitSetArray.From (new int[] { 1, 3, 5, 7, 9, 200 })
+				);
+				yield return new TestCaseData (
+					BitSetArray.From (new int[] { 1, 3, 5, 7, 9, 200 }),
+					BitSetArray.From (new int[] { 0, 2, 4, 6, 8, 201 })
+				);
+				yield return new TestCaseData (
+					BitSetArray.From (new int[] { 0, 2, 4, 6, 8, 120, 201 }),
+					BitSetArray.From (new int[] { 1, 3, 5, 7, 9,      200 })
+				);
+				yield return new TestCaseData (
+					BitSetArray.From (new int[] { 1, 3, 5, 7, 9,      200 }),
+					BitSetArray.From (new int[] { 0, 2, 4, 6, 8, 120, 201 })
+				);
 			}
 		}
 
