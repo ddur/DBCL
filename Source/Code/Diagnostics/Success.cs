@@ -45,23 +45,23 @@ namespace DD.Diagnostics {
         public bool Assert (bool condition, string message = "") {
 
             if ( !condition ) {
-                if ( this.result ) {
-                    this.result = false;
-                }
+				if (result) {
+					result = false;
+				}
 
 #if DEBUG && TRACE
                 foreach ( TraceListener tl in Trace.Listeners ) {
                     // default UI enabled listener exists?
                     if ( tl is DefaultTraceListener && ((DefaultTraceListener)tl).AssertUiEnabled ) {
                         // get call stack with file information.
-                        StackTrace trace = new StackTrace (true);
+                        var trace = new StackTrace (true);
                         if ( trace.FrameCount > 1 ) { // caller of this method exists?
                             // get caller StackFrame (first above this StackFrame)
                             StackFrame myFrame = trace.GetFrame (1);
 
                             // create "trace" message
                             string methodFullName = GetTypeName (myFrame.GetMethod ());
-                            StringBuilder traceMessage = new StringBuilder (String.Empty);
+                            var traceMessage = new StringBuilder (String.Empty);
                             traceMessage.AppendLine ("Method: " + methodFullName);
                             traceMessage.AppendLine ();
                             traceMessage.AppendLine ("Path: " + Path.GetDirectoryName (myFrame.GetFileName ()));
@@ -87,31 +87,29 @@ namespace DD.Diagnostics {
                 }
 #endif
             }
-            return this.result;
+			return result;
         }
 
         #endregion
 
         #region Private
 
-        private static string GetTypeName (Type dtype) {
-            if ( dtype.DeclaringType != null ) {
-                return GetTypeName (dtype.DeclaringType) + "." + dtype.Name;
-            }
-            else {
-                return dtype.Name;
-            }
-        }
+        private static string GetTypeName (Type dtype)
+		{
+			if (dtype.DeclaringType != null) {
+				return GetTypeName(dtype.DeclaringType) + "." + dtype.Name;
+			}
+			return dtype.Name;
+		}
 
-        private static string GetTypeName (MethodBase method) {
-            MethodInfo info = method as MethodInfo;
-            if ( info != null ) {
-                return info.ReturnType + " " + GetTypeName (info.DeclaringType) + "." + method.Name;
-            }
-            else {
-                return GetTypeName (method.DeclaringType) + "." + method.Name;
-            }
-        }
+        private static string GetTypeName (MethodBase method)
+		{
+			var info = method as MethodInfo;
+			if (info != null) {
+				return info.ReturnType + " " + GetTypeName(info.DeclaringType) + "." + method.Name;
+			}
+			return GetTypeName(method.DeclaringType) + "." + method.Name;
+		}
 
         #endregion
 

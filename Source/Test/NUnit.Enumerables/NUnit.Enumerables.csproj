@@ -7,9 +7,8 @@
     <OutputType>Library</OutputType>
     <RootNamespace>DD</RootNamespace>
     <AssemblyName>NUnit.Enumerables</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <NoWin32Manifest>False</NoWin32Manifest>
   </PropertyGroup>
