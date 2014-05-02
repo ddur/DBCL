@@ -14,20 +14,54 @@ namespace DD.Collections.ICodeSet.ICodeSetReductionTest
 	[TestFixture]
 	public class Members
 	{
+		[Test]
+		public void IsReduced() {
+			Assert.True(new Code(3).IsReduced());
+			Assert.True(CodeSetNull.Singleton.IsReduced());
+			Assert.True(new CodeSetPair(3,4).IsReduced());
+			Assert.True(new CodeSetFull(3,44).IsReduced());
+			Assert.True(new CodeSetList(3,7,9,15,80).IsReduced());
+			Assert.True(new CodeSetPage(3,7,9,15,80).IsReduced());
+			Assert.True(new CodeSetWide(new Code[]{3,7,9,15,80,70000}).IsReduced());
+			Assert.True(new CodeSetDiff(new CodeSetFull(1,80000),new CodeSetWide(new Code[]{3,7,9,15,80,70000})).IsReduced());
+
+			Assert.False(new CodeSetBits(3,7,9,15,80).IsReduced());
+			Assert.False(new CodeSetWrap(BitSetArray.From(3,7,9,15,80)).IsReduced());
+		}
+
 		[Test, TestCaseSource("Expected")]
-		public void Reduce(Tuple<BitSetArray, Type> tuple)
+		public void Reduce_ICodeSet(Tuple<BitSetArray, Type> tuple)
+		{
+			ICodeSet input = null;
+			if (tuple.Item1.IsNot(null)) {
+				input = new CodeSetWrap(tuple.Item1);
+			}
+			Type type = tuple.Item2;
+			ICodeSet result = input.Reduce();
+			Assert.NotNull(result);
+			Assert.True(result.IsReduced());
+			Assert.AreSame(type, result.GetType());
+			if (input.IsNot(null)) {
+				Assert.That (input.SequenceEqual(result));
+			}
+			result = result.Reduce(); // test already reduced
+			Assert.NotNull(result);
+		}
+
+		[Test, TestCaseSource("Expected")]
+		public void Reduce_BitSetArray(Tuple<BitSetArray, Type> tuple)
 		{
 			BitSetArray input = tuple.Item1;
 			Type type = tuple.Item2;
-			ICodeSet result = tuple.Item1.Reduce();
+			ICodeSet result = input.Reduce();
 			Assert.NotNull(result);
+			Assert.True(result.IsReduced());
 			Assert.AreSame(type, result.GetType());
 			if (input.IsNot(null)) {
 				Assert.That (input.SequenceEqual(result.ToValues()));
 			}
 		}
 
-		
 		IEnumerable<Tuple<BitSetArray,Type>> ToNull {
 			get {
 				// null -> Null

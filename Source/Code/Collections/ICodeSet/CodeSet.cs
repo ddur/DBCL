@@ -20,7 +20,7 @@ namespace DD.Collections.ICodeSet
 	{
 		#region Ctor
 
-		protected internal CodeSet () {}
+		protected CodeSet () {}
 
 		#endregion
 
@@ -154,7 +154,6 @@ namespace DD.Collections.ICodeSet
 		[Pure] bool ICollection<Code>.Remove(Code code) { throw new NotSupportedException(); }
 
 		#endregion
-
 	}
 
 }

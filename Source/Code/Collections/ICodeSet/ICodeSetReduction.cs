@@ -19,8 +19,14 @@ namespace DD.Collections.ICodeSet
 
 		[Pure] private static ICodeSet ReducePartOne(this BitSetArray self, int offset)
 		{
-			Contract.Requires<ArgumentOutOfRangeException>(self.IsNullOrEmpty() || (self.First + offset).HasCodeValue());
-			Contract.Requires<ArgumentOutOfRangeException>(self.IsNullOrEmpty() || (self.Last + offset).HasCodeValue());
+			Contract.Requires<ArgumentOutOfRangeException>
+			(
+				self.IsNullOrEmpty() ||
+				(
+				    (self.First + offset).HasCodeValue() &&
+				    (self.Last + offset).HasCodeValue()
+				)
+			);
 
 			Contract.Ensures(Contract.Result<ICodeSet>().Is(null) || !(Contract.Result<ICodeSet>() is CodeSetBits));
 
@@ -82,11 +88,42 @@ namespace DD.Collections.ICodeSet
 			}
 			return new CodeSetWide(self, offset);
 		}
-		
-		[Pure] internal static ICodeSet Reduce(this BitSetArray self, int offset = 0)
+
+		[Pure] public static ICodeSet Reduce(this ICodeSet self)
 		{
-			Contract.Requires<ArgumentOutOfRangeException>(self.IsNullOrEmpty() || (self.First + offset).HasCodeValue());
-			Contract.Requires<ArgumentOutOfRangeException>(self.IsNullOrEmpty() || (self.Last + offset).HasCodeValue());
+			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
+			Contract.Ensures(Contract.Result<ICodeSet>().Theory());
+
+			if (self.IsNullOrEmpty()) {
+				return CodeSetNull.Singleton;
+			}
+			return self.IsReduced() ? self : self.ToBitSetArray().Reduce();
+		}
+
+		[Pure] public static bool IsReduced(this ICodeSet self)
+		{
+			return (
+			    self is Code ||
+			    self is CodeSetNull ||
+			    self is CodeSetPair ||
+			    self is CodeSetFull ||
+			    self is CodeSetList ||
+			    self is CodeSetDiff ||
+			    self is CodeSetPage ||
+			    self is CodeSetWide
+			);
+		}
+		
+		[Pure] public static ICodeSet Reduce(this BitSetArray self, int offset = 0)
+		{
+			Contract.Requires<ArgumentOutOfRangeException>
+			(
+				self.IsNullOrEmpty() ||
+				(
+				    (self.First + offset).HasCodeValue() &&
+				    (self.Last + offset).HasCodeValue()
+				)
+			);
 
 			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
 			Contract.Ensures(Contract.Result<ICodeSet>().Theory());
@@ -108,7 +145,7 @@ namespace DD.Collections.ICodeSet
 					var complement = BitSetArray.Size(self.Length);
 					foreach (var item in self.Complement()) {
 						if (item.InRange(start, final)) {
-							complement.Set(item);
+							complement._Set(item);
 						}
 					}
 	
@@ -140,33 +177,31 @@ namespace DD.Collections.ICodeSet
 
 		[Pure] private static bool Theory(this ICodeSet self)
 		{
-			// disable once ConvertToConstant.Local
 			Success success = true;
-			success.Assert (!self.IsNull());
+
+			success.Assert(!self.IsNull());
+
 			switch (self.Count) {
 				case ICodeSetService.NullCount:
-					success.Assert (self is CodeSetNull);
+					success.Assert(self is CodeSetNull);
 					break;
 				case ICodeSetService.UnitCount:
-					success.Assert (self is Code);
+					success.Assert(self is Code);
 					break;
 				case ICodeSetService.PairCount:
-					success.Assert (self is CodeSetPair);
+					success.Assert(self is CodeSetPair);
 					break;
 				default:
-					success.Assert (self.Count > ICodeSetService.PairCount);
+					success.Assert(self.Count > ICodeSetService.PairCount);
 
 					if (self.Count == self.Length) {
-						success.Assert (self is CodeSetFull);
-					}
-					else if (self is CodeSetList) {
-						success.Assert (self.Count <= ICodeSetService.ListMaxCount);
-					}
-					else if (self is CodeSetDiff) {
-						success.Assert (self.Length > ICodeSetService.NoDiffLength);
-					}
-					else {
-						success.Assert (self is CodeSetPage || self is CodeSetWide);
+						success.Assert(self is CodeSetFull);
+					} else if (self is CodeSetList) {
+						success.Assert(self.Count <= ICodeSetService.ListMaxCount);
+					} else if (self is CodeSetDiff) {
+						success.Assert(self.Length > ICodeSetService.NoDiffLength);
+					} else {
+						success.Assert(self is CodeSetPage || self is CodeSetWide);
 					}
 					break;
 			}
@@ -174,6 +209,5 @@ namespace DD.Collections.ICodeSet
 		}
 
 		#endregion
-
 	}
 }

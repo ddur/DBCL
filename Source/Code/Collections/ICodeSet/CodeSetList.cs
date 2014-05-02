@@ -19,12 +19,16 @@ namespace DD.Collections.ICodeSet
 
 		#region Ctor
 
-		internal CodeSetList(params Code[] codes)
+		public CodeSetList(params Code[] codes)
 			: this((IEnumerable<Code>)codes)
 		{
+			Contract.Requires<ArgumentEmptyException>(!codes.IsEmpty());
+			Contract.Requires<ArgumentException>(codes.Distinct().Count() > ICodeSetService.PairCount);
+			Contract.Requires<ArgumentException>(codes.Distinct().Count() <= ICodeSetService.ListMaxCount);
+			Contract.Requires<ArgumentException>(codes.Distinct().Count() < (1 + codes.Max() - codes.Min()));
 		}
 
-		internal CodeSetList(IEnumerable<Code> codes)
+		public CodeSetList(IEnumerable<Code> codes)
 		{
 			Contract.Requires<ArgumentNullException>(!codes.IsNull());
 			Contract.Requires<ArgumentEmptyException>(!codes.IsEmpty());
@@ -104,7 +108,6 @@ namespace DD.Collections.ICodeSet
 			
 			[Pure] public static bool Construct(IEnumerable<Code> codes, CodeSetList self)
 			{
-				// disable once ConvertToConstant.Local
 				Success success = true;
 				
 				// Input -> private
@@ -122,7 +125,6 @@ namespace DD.Collections.ICodeSet
 			
 			[Pure] public static bool Invariant(CodeSetList self)
 			{
-				// disable once ConvertToConstant.Local
 				Success success = true;
 				
 				// private

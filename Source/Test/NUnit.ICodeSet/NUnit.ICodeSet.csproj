@@ -7,9 +7,8 @@
     <OutputType>Library</OutputType>
     <RootNamespace>DD.Collections.ICodeSet</RootNamespace>
     <AssemblyName>NUnit.ICodeSet</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <NoWin32Manifest>False</NoWin32Manifest>
   </PropertyGroup>
@@ -60,7 +59,6 @@
     <Compile Include="CodeSetWideTest\Constructors.cs" />
     <Compile Include="CodeSetWideTest\Members.cs" />
     <Compile Include="CodeSetWrapTest\Constructors.cs" />
-    <Compile Include="CodeSetWrapTest\ConstructorsThrows.cs" />
     <Compile Include="CodeSetWrapTest\Members.cs" />
     <Compile Include="CodeTest\AsICodeSet.cs" />
     <Compile Include="CodeTest\AsICollectionOfCode.cs" />

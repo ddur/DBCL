@@ -18,7 +18,7 @@ namespace DD.Collections.ICodeSet
 
 		#region Ctor
 
-		internal Code (byte value) {
+		public Code (byte value) {
 			#if COMPACT
 			this.b0 = value;
 			this.b1 = 0;
@@ -28,7 +28,7 @@ namespace DD.Collections.ICodeSet
 			#endif
 		}
 
-		internal Code (char value) {
+		public Code (char value) {
 			#if COMPACT
 			this.b0 = (byte)(value&0xFF);
 			this.b1 = (byte)((value>>8)&0xFF);
@@ -38,8 +38,8 @@ namespace DD.Collections.ICodeSet
 			#endif
 		}
 
-		internal Code (int value) {
-			Contract.Requires<ArgumentOutOfRangeException>(value.InRange(Code.MinValue, Code.MaxValue));
+		public Code (int value) {
+			Contract.Requires<InvalidCastException>(value.InRange(Code.MinValue, Code.MaxValue));
 
 			#if COMPACT
 			this.b0 = (byte)(value&0xFF);
@@ -330,9 +330,6 @@ namespace DD.Collections.ICodeSet
 		public static implicit operator int (Code code) {
 			return code.Value;
 		}
-//		public static implicit operator char[] (Code code) {
-//			return code.Encode().ToCharArray();
-//		}
 		public static implicit operator Code (byte value) {
 			return new Code(value);
 		}

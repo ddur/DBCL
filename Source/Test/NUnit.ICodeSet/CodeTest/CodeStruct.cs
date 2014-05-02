@@ -76,7 +76,7 @@ namespace DD.Collections.ICodeSet.CodeTest
 
 		[Test, TestCaseSource("InvalidCode")]
 		public void ConstructCastFromInvalidInt(int code) {
-			Assert.Throws<ArgumentOutOfRangeException> ( delegate { new Code(code); });
+			Assert.Throws<InvalidCastException> ( delegate { new Code(code); });
 			Assert.Throws<InvalidCastException> ( delegate { Code C = code; });
 		}
 

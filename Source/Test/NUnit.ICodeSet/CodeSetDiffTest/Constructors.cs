@@ -79,5 +79,6 @@ namespace DD.Collections.ICodeSet.CodeSetDiffTest
 				delegate { csd = new CodeSetDiff(new CodeSetFull(1,4), new CodeSetPair(2,3)); }
 			);
 		}
+
 	}
 }

@@ -86,7 +86,7 @@ namespace DD.Text
 			}
 		}
 	
-		public static bool CanDecode (this string chars)
+		[Pure] public static bool CanDecode (this string chars)
 		{
 			if (chars.IsNull()) return true;
 			char prev = (char)0;

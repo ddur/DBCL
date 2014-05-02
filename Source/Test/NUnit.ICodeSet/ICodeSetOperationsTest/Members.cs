@@ -29,15 +29,31 @@ namespace DD.Collections.ICodeSet.ICodeSetOperationsTest
 			if (bitsA.Count != 0) {
 				Assert.True(bitsA.First > a.First);
 				Assert.True(bitsA.Last < a.Last);
+				Assert.AreEqual(bitsA.Count + iCodeSetA.Count, iCodeSetA.Length);
+
+				iCodeSetA = new CodeSetWrap(bitsA);
+				Assert.False(bitsA.SequenceEqual(iCodeSetA.BitComplement()));
+
 				bitsA.Or(a);
 				Assert.True(bitsA.Count == bitsA.Span());
+				Assert.True(bitsA.Span() == a.Span());
+				Assert.True(bitsA.First == a.First);
+				Assert.True(bitsA.Last == a.Last);
 			}
  
 			if (bitsB.Count != 0) {
 				Assert.True(bitsB.First > b.First);
 				Assert.True(bitsB.Last < b.Last);
+				Assert.AreEqual(bitsB.Count + iCodeSetB.Count, iCodeSetB.Length);
+
+				iCodeSetB = new CodeSetWrap(bitsB);
+				Assert.False(bitsB.SequenceEqual(iCodeSetB.BitComplement()));
+
 				bitsB.Or(b);
 				Assert.True(bitsB.Count == bitsB.Span());
+				Assert.True(bitsB.Span() == b.Span());
+				Assert.True(bitsB.First == b.First);
+				Assert.True(bitsB.Last == b.Last);
 			}
 		}
 
@@ -74,34 +90,35 @@ namespace DD.Collections.ICodeSet.ICodeSetOperationsTest
 			var argument = OperationTestCases.First();
 			ICodeSet iCodeSetA = ((BitSetArray)(argument.Arguments[0])).Reduce();
 			ICodeSet iCodeSetB = ((BitSetArray)(argument.Arguments[1])).Reduce();
+			IEnumerable<ICodeSet> throws = null;
 
 			Assert.Throws<ArgumentNullException>(
 				delegate {
-					((ICodeSet[])null).BitDifference();
+					var x = throws.BitDifference();
 				}
 			);
 			Assert.Throws<ArgumentException>(
 				delegate {
-					new ICodeSet[0].BitDifference();
+					var x = new ICodeSet[0].BitDifference();
 				}
 			);
 			Assert.Throws<ArgumentException>(
 				delegate {
-					new[] {
+					var x = new[] {
 						iCodeSetA
 					}.BitDifference();
 				}
 			);
 			Assert.Throws<ArgumentException>(
 				delegate {
-					new[] {
+					var x = new[] {
 						iCodeSetB
 					}.BitDifference();
 				}
 			);
 			Assert.That(
 				delegate {
-					new ICodeSet[] {
+					var x = new ICodeSet[] {
 						iCodeSetA,
 						iCodeSetB
 					}.BitDifference();
@@ -110,7 +127,7 @@ namespace DD.Collections.ICodeSet.ICodeSetOperationsTest
 			);
 			Assert.That(
 				delegate {
-					new ICodeSet[] {
+					var x = new ICodeSet[] {
 						iCodeSetA,
 						iCodeSetB,
 						null

@@ -57,6 +57,9 @@ namespace DD.Collections.ICodeSet
 					}
 				}
 			}
+			else {
+				yield break;
+			}
 		}
 
 		public static IEnumerable<int> ToValues(this IEnumerable<Code> codes)
@@ -66,6 +69,9 @@ namespace DD.Collections.ICodeSet
 					yield return code.Value;
 				}
 			}
+			else {
+				yield break;
+			}
 		}
 
 		public static IEnumerable<int> ToValues(this IEnumerable<char> codes)
@@ -74,6 +80,9 @@ namespace DD.Collections.ICodeSet
 				foreach (Code code in codes) {
 					yield return code.Value;
 				}
+			}
+			else {
+				yield break;
 			}
 		}
 
@@ -100,20 +109,25 @@ namespace DD.Collections.ICodeSet
 		/// <returns></returns>
 		[Pure] public static BitSetArray ToBitSetArray(this ICodeSet self)
 		{
+			// TODO Ensures Theory
 			Contract.Ensures(Contract.Result<BitSetArray>().IsNot(null));
 			Contract.Ensures(((self.IsNull() || self.Count == 0)
 			&& Contract.Result<BitSetArray>().Count == 0)
 			||
-			(Contract.Result<BitSetArray>().Count == self.Count()
+			(Contract.Result<BitSetArray>().Count == self.Count
 			&& Contract.ForAll(self, item => Contract.Result<BitSetArray>()[item])
 			));
 
-			if (self.IsNull() || self.Count == 0)
+			if (self.IsNull() || self.Count == 0) {
 				return BitSetArray.Size();
-			
+			}
+			var icsWrap = self as CodeSetWrap;
+			if (!icsWrap.IsNull()) {
+				return icsWrap.ToBitSetArray();
+			}
 			var ret = BitSetArray.Size(self.Last + 1);
 			foreach (int code in self) {
-				ret.Set(code, true);
+				ret._Set(code, true);
 			}
 			return ret;
 		}
@@ -125,6 +139,7 @@ namespace DD.Collections.ICodeSet
 		/// <returns></returns>
 		[Pure] internal static BitSetArray ToCompact(this ICodeSet self)
 		{
+			// TODO Ensures Theory
 			Contract.Ensures(Contract.Result<BitSetArray>().IsNot(null));
 			Contract.Ensures(Contract.Result<BitSetArray>().IsCompact());
 
@@ -137,7 +152,7 @@ namespace DD.Collections.ICodeSet
 			
 			var ret = BitSetArray.Size(self.Length);
 			foreach (int code in self) {
-				ret.Set(code - self.First, true);
+				ret._Set(code - self.First, true);
 			}
 
 			// first and last bit set == compact

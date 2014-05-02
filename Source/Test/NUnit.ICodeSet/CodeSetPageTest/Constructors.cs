@@ -20,6 +20,13 @@ namespace DD.Collections.ICodeSet.CodeSetPageTest
 		public void FromBitSetArray()
 		{
 			CodeSetPage csp;
+			csp = new CodeSetPage(BitSetArray.From(1, 12, 33));
+		}
+
+		[Test]
+		public void FromBitSetArrayThrows()
+		{
+			CodeSetPage csp;
 
 			// requires no null
 			Assert.Throws <ArgumentNullException>(delegate {
@@ -52,11 +59,18 @@ namespace DD.Collections.ICodeSet.CodeSetPageTest
 				csp = new CodeSetPage(BitSetArray.Size(10, true));
 			});
 
-			csp = new CodeSetPage(BitSetArray.From(1, 12, 33));
 		}
 		
 		[Test]
 		public void FromCodes()
+		{
+			CodeSetPage csp;
+			csp = new CodeSetPage(new List<Code>() { 0, 1, 12, 33, 65535 });
+
+		}
+
+		[Test]
+		public void FromCodesThrows()
 		{
 			CodeSetPage csp;
 
@@ -94,47 +108,50 @@ namespace DD.Collections.ICodeSet.CodeSetPageTest
 				csp = new CodeSetPage((Code.MaxValue - 10).To(Code.MaxValue).Select(item => (Code)item));
 			});
 
-			csp = new CodeSetPage(new List<Code>() { 0, 1, 12, 33, 65535 });
-
 		}
 		
 		[Test]
 		public void FromICodeSet()
 		{
-			CodeSetPage csp;
+			ICodeSet icsp;
+			icsp = new CodeSetPage(BitSetArray.From(0, 1, 12, 33, 65535));
+			var clone = new CodeSetPage(icsp);
+		}
+
+		[Test]
+		public void FromICodeSetThrows()
+		{
+			ICodeSet icsp;
 
 			// requires no null
 			Assert.Throws <ArgumentNullException>(delegate {
-				csp = new CodeSetPage((ICodeSet)null);
+				icsp = new CodeSetPage((ICodeSet)null);
 			});
 
 			// requires at least 3 members (> ICodeSetService.PairCount)
 			Assert.Throws <ArgumentEmptyException>(delegate {
-				csp = new CodeSetPage(new Code[0]);
+				icsp = new CodeSetPage(new Code[0]);
 			});
 			Assert.Throws <ArgumentException>(delegate {
-				csp = new CodeSetPage(new List<Code>() { 21 });
+				icsp = new CodeSetPage(new List<Code>() { 21 });
 			});
 			Assert.Throws <ArgumentException>(delegate {
-				csp = new CodeSetPage(new List<Code>() { 1, 25 });
+				icsp = new CodeSetPage(new List<Code>() { 1, 25 });
 			});
 
 			// requires more than two NOT members
 			Assert.Throws <ArgumentException>(delegate {
-				csp = new CodeSetPage(new List<Code>() { 1, 2, 3, 4, 5 });
+				icsp = new CodeSetPage(new List<Code>() { 1, 2, 3, 4, 5 });
 			});
 			Assert.Throws <ArgumentException>(delegate {
-				csp = new CodeSetPage(new List<Code>() { 1, 2, 3, 4, 6 });
+				icsp = new CodeSetPage(new List<Code>() { 1, 2, 3, 4, 6 });
 			});
 
 			// requires all codes within same unicode plane
 			Assert.Throws <ArgumentException>(delegate {
-				csp = new CodeSetPage(new List<Code>() { 12, 66000 });
+				icsp = new CodeSetPage(new List<Code>() { 12, 66000 });
 			});
-
-			csp = new CodeSetPage(BitSetArray.From(0, 1, 12, 33, 65535));
-			var clone = new CodeSetPage(csp);
 		}
-		
+
 	}
 }

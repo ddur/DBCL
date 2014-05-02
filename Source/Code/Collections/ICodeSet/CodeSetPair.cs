@@ -13,14 +13,16 @@ using DD.Diagnostics;
 namespace DD.Collections.ICodeSet
 {
 	/// <summary>Set of two codes (items)</summary>
-	public sealed class CodeSetPair : CodeSet {
+	public sealed class CodeSetPair : CodeSet
+	{
 
 		#region Ctor
 
-		internal CodeSetPair (Code low, Code high) {
-			Contract.Requires<ArgumentException> (low < high);
+		public CodeSetPair(Code low, Code high)
+		{
+			Contract.Requires<ArgumentException>(low < high);
 
-			Contract.Ensures (Theory.Construct(low, high, this));
+			Contract.Ensures(Theory.Construct(low, high, this));
 
 			this.start = low;
 			this.final = high;
@@ -37,7 +39,7 @@ namespace DD.Collections.ICodeSet
 
 		#region ICodeSet
 
-		[Pure] public override bool this [Code code] {
+		[Pure] public override bool this[Code code] {
 			get { return code == this.start || code == this.final; }
 		}
 
@@ -57,7 +59,8 @@ namespace DD.Collections.ICodeSet
 			get { return this.final; }
 		}
 
-		[Pure] public override IEnumerator<Code> GetEnumerator() {
+		[Pure] public override IEnumerator<Code> GetEnumerator()
+		{
 			yield return this.start;
 			yield return this.final;
 		}
@@ -67,40 +70,42 @@ namespace DD.Collections.ICodeSet
 		#region Invariant
 		
 		[ContractInvariantMethod]
-		private void Invariant () {
-			Contract.Invariant (Theory.Invariant(this));
+		private void Invariant()
+		{
+			Contract.Invariant(Theory.Invariant(this));
 		}
 
 		#endregion
 		
-		private static class Theory {
+		private static class Theory
+		{
 
-			[Pure] public static bool Construct(Code low, Code high, CodeSetPair self) {
-				// disable once ConvertToConstant.Local
+			[Pure] public static bool Construct(Code low, Code high, CodeSetPair self)
+			{
 				Success success = true;
 				
 				// input -> private
-				success.Assert (self.start == low);
-				success.Assert (self.final == high);
-				success.Assert (self[low]);
-				success.Assert (self[high]);
+				success.Assert(self.start == low);
+				success.Assert(self.final == high);
+				success.Assert(self[low]);
+				success.Assert(self[high]);
 
 				return success;
 			}
 			
-			[Pure] public static bool Invariant (CodeSetPair self) {
-				// disable once ConvertToConstant.Local
+			[Pure] public static bool Invariant(CodeSetPair self)
+			{
 				Success success = true;
 				
 				// private
-				success.Assert (self.start < self.final);
+				success.Assert(self.start < self.final);
 
 				// public <- private
-				success.Assert (self.First == self.start);
-				success.Assert (self.Last == self.final);
+				success.Assert(self.First == self.start);
+				success.Assert(self.Last == self.final);
 				
 				// constraints
-				success.Assert (self.Count == ICodeSetService.PairCount);
+				success.Assert(self.Count == ICodeSetService.PairCount);
 
 				return success;
 			}

@@ -16,7 +16,7 @@ namespace DD.Collections.ICodeSet {
 
 		#region Ctor
 
-		internal CodeSetFull (Code first, Code last) {
+		public CodeSetFull (Code first, Code last) {
 			Contract.Requires<ArgumentException> ((first + ICodeSetService.PairCount) <= last);
 
 			// Input -> private
