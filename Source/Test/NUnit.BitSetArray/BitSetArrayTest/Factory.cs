@@ -24,15 +24,15 @@ namespace DD.Collections.BitSetArrayTest {
                 BitSetArray.From ((IEnumerable<int>)new int[] { 0, -1 });
             }, Throws.TypeOf<ArgumentOutOfRangeException> ());
 
-//            Assert.That (delegate {
-//                BitSetArray.From (-1);
-//            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
-//            Assert.That (delegate {
-//                BitSetArray.From (-1, 0, 1, 2);
-//            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
-//            Assert.That (delegate {
-//                BitSetArray.From (0, -1, -2, -3);
-//            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            Assert.That (delegate {
+                BitSetArray.From (-1);
+            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            Assert.That (delegate {
+                BitSetArray.From (-1, 0, 1, 2);
+            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            Assert.That (delegate {
+                BitSetArray.From (0, -1, -2, -3);
+            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
 
             BitSetArray test;
             List<int> list;
