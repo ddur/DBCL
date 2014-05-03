@@ -431,7 +431,7 @@ namespace DD.Collections
 
 				success.Assert(created.range == length);
 
-				if (length >= fromMask.Count() * intBits) {
+				if (length >= fromMask.Count() * int32Bits) {
 					success.Assert(Theory.CountOnBits(created.count, fromMask));
 				} else {
 					long index = 0;
@@ -442,12 +442,12 @@ namespace DD.Collections
 							break;
 						}
 						count += Theory.Count(unchecked ((uint)item));
-						index += intBits;
+						index += int32Bits;
 						store = item;
 					}
 					if (index != length && store != 0) {
 						count -= Theory.Count(unchecked ((uint)store));
-						store = (int)(store & (0xFFFFFFFF >> (intBits - (length & 0x1F))));
+						store = (int)(store & (0xFFFFFFFF >> (int32Bits - (length & 0x1F))));
 						count += Theory.Count(unchecked ((uint)store));
 					}
 					success.Assert(created.count == count);

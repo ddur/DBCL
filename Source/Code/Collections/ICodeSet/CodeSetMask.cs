@@ -15,30 +15,31 @@ namespace DD.Collections.ICodeSet
 	/// <summary>
 	/// Description of CodeSetCode.
 	/// </summary>
-	public class CodeSetCode : CodeSet
+	[Serializable]
+	public sealed class CodeSetMask : CodeSet
 	{
 		#region Ctor
 
-		public CodeSetCode(string utf16)
+		public CodeSetMask(string utf16)
 			: this(utf16.Decode())
 		{
 			Contract.Requires<ArgumentEmptyException>(string.IsNullOrEmpty(utf16));
 			Contract.Requires<ArgumentException>(utf16.CanDecode());
 			
 		}
-		public CodeSetCode(params Code[] codes)
+		public CodeSetMask(params Code[] codes)
 			: this(codes as IEnumerable<Code>)
 		{
 			Contract.Requires<ArgumentEmptyException>(codes.Length > 0);
 			
 		}
-		public CodeSetCode(params char[] chars)
+		public CodeSetMask(params char[] chars)
 			: this(chars.Cast<Code>())
 		{
 			Contract.Requires<ArgumentEmptyException>(chars.Length > 0);
 			
 		}
-		public CodeSetCode(IEnumerable<Code> codes)
+		public CodeSetMask(IEnumerable<Code> codes)
 		{
 			Contract.Requires<ArgumentNullException>(!codes.Is(null));
 			Contract.Requires<ArgumentEmptyException>(!codes.IsEmpty());
@@ -64,8 +65,8 @@ namespace DD.Collections.ICodeSet
 			uint mask = 0;
 			foreach (var code in codes) {
 				item = code.Value - start.Value;
-				mask = 1u << (item & maskFive);
-				index = item >> moveFive;
+				mask = 1u << (item & mask0x1F);
+				index = item >> log2of32;
 				if ((sorted[index] & mask) == 0) {
 					sorted[index] ^= mask;
 					++count;
@@ -73,17 +74,48 @@ namespace DD.Collections.ICodeSet
 			}
 		}
 
-		internal CodeSetCode(uint[] mask, Code offset)
+		internal CodeSetMask(uint[] mask, int offset = 0)
 		{
 			Contract.Requires<ArgumentNullException>(mask != null);
 			Contract.Requires<ArgumentEmptyException>(mask.Length > 0);
-			Contract.Requires<ArgumentException>((mask[0] & -1) != 0); // first bit set
-			Contract.Requires<ArgumentException>(mask[mask.Length - 1] != 0); // last block is not empty
-			// compute last bit Code.Value and check if larger than Code.MaxValue
+			Contract.Requires<ArgumentException>(LastBitIndex(mask) != null);
+			Contract.Requires<ArgumentException>(0 != (mask[0] & 1)); // first bit set
+			Contract.Requires<ArgumentException>(0 != (mask[mask.Length - 1])); // last bits-item is not empty
+			Contract.Requires<ArgumentException>(offset.HasCodeValue());
+			// compute offset + last-bit-index and check if HasCodeValue
+			Contract.Requires<ArgumentException>((offset + (int)LastBitIndex(mask)).HasCodeValue());
 
 			start = offset;
+			final = offset + (int)LastBitIndex(mask);
 			sorted = new uint[mask.Length];
 			Array.Copy(mask, sorted, sorted.Length); 
+		}
+
+		[Pure] internal static uint? LastBitIndex (uint[] bitMaskArray) {
+			if (bitMaskArray == null) {
+				return null;
+			}
+			if (bitMaskArray.Length == 0) {
+				return null;
+			}
+			for (int i = bitMaskArray.Length - 1; i >= 0; i--) {
+				if (bitMaskArray[i] != 0) {
+					return ((uint)(i) << log2of32) + LastBitIndex(bitMaskArray[i]);
+				}
+			}
+			return null;
+		}
+
+		[Pure] internal static byte? LastBitIndex (uint bitMask) {
+			if (bitMask == 0) {
+				return null;
+			}
+			byte lastBitIndex = 0;
+			while ((bitMask & 1u) == 0) {
+				bitMask >>= 1;
+				++lastBitIndex;
+			}
+			return lastBitIndex;
 		}
 
 		#endregion
@@ -94,8 +126,8 @@ namespace DD.Collections.ICodeSet
 		private readonly Code final = Code.MinValue;
 		private readonly int count = 0;
 		private readonly uint[] sorted;
-		const int moveFive = 5;
-		const int maskFive = 0x1F;
+		const int log2of32 = 5;
+		const int mask0x1F = 0x1F;
 
 		#endregion
 
@@ -105,8 +137,8 @@ namespace DD.Collections.ICodeSet
 			get {
 				if (code.Value.InRange(start.Value, final.Value)) {
 					int item = code.Value - start.Value;
-					int index = item >> moveFive;
-					uint mask = 1u << (item & maskFive);
+					int index = item >> log2of32;
+					uint mask = 1u << (item & mask0x1F);
 					return (sorted[index] & mask) != 0;
 				}
 				return false;

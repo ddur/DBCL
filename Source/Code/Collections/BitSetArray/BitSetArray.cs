@@ -123,8 +123,8 @@ namespace DD.Collections
 				this.range = length;
 				this.array = new long[BitSetArray.GetLongArrayLength(this.range)];
 				if (this.array.Length != 0
-				   && that.array.Length != 0
-				   && that.Count != 0) {
+				    && that.array.Length != 0
+				    && that.Count != 0) {
 					int thatRangeArrayLength = BitSetArray.GetLongArrayLength(that.range);
 					if (this.array.Length >= thatRangeArrayLength) {
 						Array.Copy(that.array, this.array, thatRangeArrayLength);
@@ -350,7 +350,7 @@ namespace DD.Collections
 						this.bitItems = unchecked ((ulong)this.enumerated.array[this.arrIndex]);
 						this.bitItems = ~this.bitItems;
 						if (this.arrIndex == (this.arrayLen - 1)) { // clear tail
-							this.bitItems &= ulong.MaxValue >> (longBits - (this.enumerated.range & mask_six));
+							this.bitItems &= ulong.MaxValue >> (longBits - (this.enumerated.range & mask0x3F));
 						}
 					}
 					this.bitStart = 0;
@@ -392,7 +392,7 @@ namespace DD.Collections
 								this.bitItems = unchecked ((ulong)this.enumerated.array[this.arrIndex]);
 								this.bitItems = ~this.bitItems;
 								if (this.arrIndex == (this.arrayLen - 1)) { // clear tail
-									this.bitItems &= ulong.MaxValue >> (longBits - (this.enumerated.range & mask_six));
+									this.bitItems &= ulong.MaxValue >> (longBits - (this.enumerated.range & mask0x3F));
 								}
 							}
 
@@ -695,19 +695,18 @@ namespace DD.Collections
 		[NonSerialized]
 		private const int byteBits = 8;
 		[NonSerialized]
-		private const int longBits = sizeof(long) * byteBits;
-		[NonSerialized]
-		private const int move_six = 6;
-		[NonSerialized]
-		private const int mask_six = 0x3F;
-		[NonSerialized]
-		private const int intBits = sizeof(int) * byteBits;
-		[NonSerialized]
 		private const int shortBits = sizeof(short) * byteBits;
 		[NonSerialized]
+		private const int int32Bits = sizeof(int) * byteBits;
+		[NonSerialized]
+		private const int longBits = sizeof(long) * byteBits;
+		[NonSerialized]
+		private const int log2of64 = 6;
+		[NonSerialized]
+		private const int mask0x3F = 0x3F;
+		[NonSerialized]
 		private const ulong table = 0x4332322132212110;
-		// bit counter table
-		//							FEDCBA9876543210
+		// bit counter table		  FEDCBA9876543210
 
 		[NonSerialized]
 		private int? startVersion = null;
@@ -718,7 +717,7 @@ namespace DD.Collections
 		[NonSerialized]
 		private int? finalMemoize = null;
 
-		#if DEBUG // enable test access to private members
+		#if DEBUG // enable read-only access to test private members state
 		public int? StartVersion { get { return startVersion; } }
 		public int? StartMemoize { get { return startMemoize; } }
 		public int? FinalVersion { get { return finalVersion; } }
@@ -1137,7 +1136,7 @@ namespace DD.Collections
 				(Contract.Result<int>() == (((length - 1) / longBits) + 1)))
 			);
 
-			return length == 0 ? 0 : ((--length) >> move_six) + 1;
+			return length == 0 ? 0 : ((--length) >> log2of64) + 1;
 		}
 
 		[Pure] public static int GetIntArrayLength(int length)
@@ -1147,9 +1146,9 @@ namespace DD.Collections
 				(length == 0 &&
 				Contract.Result<int>() == 0) ||
 				(length > 0 &&
-				(((long)Contract.Result<int>() * intBits) >= length) &&
-				((((long)Contract.Result<int>() - 1) * intBits) < length) &&
-				(Contract.Result<int>() == (((length - 1) / intBits) + 1)))
+				(((long)Contract.Result<int>() * int32Bits) >= length) &&
+				((((long)Contract.Result<int>() - 1) * int32Bits) < length) &&
+				(Contract.Result<int>() == (((length - 1) / int32Bits) + 1)))
 			);
 
 			return length == 0 ? 0 : ((--length) >> 5) + 1;
@@ -1356,7 +1355,7 @@ namespace DD.Collections
 						case 0:
 							break;
 						case uint.MaxValue:
-							retCount += intBits;
+							retCount += int32Bits;
 							break;
 						default:
 							do {
@@ -1388,7 +1387,7 @@ namespace DD.Collections
 						case 0:
 							break;
 						case uint.MaxValue:
-							retCount += intBits;
+							retCount += int32Bits;
 							break;
 						default:
 							do {
@@ -1399,7 +1398,7 @@ namespace DD.Collections
 					}
 				}
 				// mask last bit-block up to range and count
-				bitBlock = unchecked ((uint)mask[arrLength - 1]) & (uint.MaxValue >> (intBits - (length & 0x1F)));
+				bitBlock = unchecked ((uint)mask[arrLength - 1]) & (uint.MaxValue >> (int32Bits - (length & 0x1F)));
 				while (bitBlock != 0) {
 					retCount += (int)((table >> (int)((bitBlock & 0xF) << 2)) & 0xFul);
 					bitBlock >>= 4;
@@ -1475,7 +1474,7 @@ namespace DD.Collections
 					}
 				}
 				// mask last bit-block up to range and count
-				bitBlock = unchecked ((ulong)mask[arrLength - 1]) & (ulong.MaxValue >> (longBits - (length & mask_six)));
+				bitBlock = unchecked ((ulong)mask[arrLength - 1]) & (ulong.MaxValue >> (longBits - (length & mask0x3F)));
 				while (bitBlock != 0) {
 					retCount += (int)((table >> (int)((bitBlock & 0xFul) << 2)) & 0xFul);
 					bitBlock >>= 4;
@@ -1586,7 +1585,7 @@ namespace DD.Collections
 						case 0:
 							break;
 						case uint.MaxValue:
-							retCount += intBits;
+							retCount += int32Bits;
 							break;
 						default:
 							do {
@@ -1654,7 +1653,7 @@ namespace DD.Collections
 				Contract.Ensures(Theory.IndexerGetItemValue(this, item, Contract.Result<bool>()));
 
 				if (this.InRange(item)) {
-					Contract.Assert((item >> move_six).InRange(0, this.array.Length - 1));
+					Contract.Assert((item >> log2of64).InRange(0, this.array.Length - 1));
 					return this._Get(item);
 				} else {
 					return false;
@@ -2402,8 +2401,8 @@ namespace DD.Collections
 
 			bool value;
 			lock (SyncRoot) {
-				Contract.Assert(this.InRange(item),"Race condition");
-				value = 0 != (array[item >> move_six] & 1L << (item & mask_six));
+				Contract.Assert(this.InRange(item), "Race condition");
+				value = 0 != (array[item >> log2of64] & 1L << (item & mask0x3F));
 			}
 			return value;
 		}
@@ -2428,14 +2427,14 @@ namespace DD.Collections
 
 			lock (SyncRoot) {
 
-				Contract.Assert(this.InRange(item),"Race condition");
-				if (((array[item >> move_six] & 1L << (item & mask_six)) != 0) == value) {
+				Contract.Assert(this.InRange(item), "Race condition");
+				if (((array[item >> log2of64] & 1L << (item & mask0x3F)) != 0) == value) {
 					// no change
 				} else {
 					// flip bit value
 					int live_version = this.Version;
 					this.AddVersion();
-					array[item >> move_six] ^= 1L << (item & mask_six);
+					array[item >> log2of64] ^= 1L << (item & mask0x3F);
 
 					if (value) {
 						Contract.Assert(this.count < this.range);
@@ -2499,11 +2498,11 @@ namespace DD.Collections
 				int minValue = int.MaxValue;
 				int maxValue = int.MinValue;
 				foreach (var item in items) {
-					if ((array[item >> move_six] & 1L << (item & mask_six)) != 0) {
+					if ((array[item >> log2of64] & 1L << (item & mask0x3F)) != 0) {
 						// no bit change
 					} else {
 						// set bit value
-						array[item >> move_six] ^= 1L << (item & mask_six);
+						array[item >> log2of64] ^= 1L << (item & mask0x3F);
 						Contract.Assert(this.count < this.range);
 						this.count += 1;
 						if (item < minValue) {
@@ -3276,10 +3275,10 @@ namespace DD.Collections
 	
 				// clear tail bits
 				// if this.array.Length==0 => this.range==0 => !((this.range&longMask)!= 0)
-				if (((this.range & mask_six) != 0) && ((this.array[rangeLength - 1] & (-1L << (this.range & mask_six))) != 0)) {
+				if (((this.range & mask0x3F) != 0) && ((this.array[rangeLength - 1] & (-1L << (this.range & mask0x3F))) != 0)) {
 					// ATTN: -1L (0xFFFFFFFFFFFFFFFF) >> 63 !=  0x0000000000000001
 					// ATTN: -1L (0xFFFFFFFFFFFFFFFF) >> 63 ==  0xFFFFFFFFFFFFFFFF (-1L)
-					this.array[rangeLength - 1] &= unchecked ((long)(ulong.MaxValue >> (longBits - (this.range & mask_six))));
+					this.array[rangeLength - 1] &= unchecked ((long)(ulong.MaxValue >> (longBits - (this.range & mask0x3F))));
 					// checked by Ensures: Contract.Assert((this.array[rangeLength - 1] & (-1L << (this.range & longMask))) == 0);
 				}
 				// clear tail words(long)
