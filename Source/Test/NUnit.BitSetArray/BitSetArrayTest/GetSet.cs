@@ -199,6 +199,7 @@ namespace DD.Collections.BitSetArrayTest
 		{
 
 			#if DEBUG
+			// On RELEASE there is no access to private members
 			var test = BitSetArray.Size(10);
 
 			test.Set(5); // first/last cached
@@ -441,6 +442,45 @@ namespace DD.Collections.BitSetArrayTest
 				test.Set(int.MaxValue, false);
 			}, Throws.TypeOf<ArgumentOutOfRangeException>());
 
+		}
+
+		[Test]
+		public void Bit_SetItems () {
+			var test = BitSetArray.Size(2);
+
+			Assert.That(delegate {
+				test._SetItems(new int[] { 0 });
+			}, Throws.Nothing);
+
+			#if DEBUG // internal member Contract.Require<Exception> exists
+
+			Assert.That(delegate {
+				test._SetItems(null);
+			}, Throws.TypeOf<ArgumentNullException>());
+			Assert.That(delegate {
+				test._SetItems(new int[0]);
+			}, Throws.TypeOf<ArgumentEmptyException>());
+			Assert.That(delegate {
+				test._SetItems(new int[] { int.MinValue });
+			}, Throws.TypeOf<ArgumentOutOfRangeException>());
+			Assert.That(delegate {
+				test._SetItems(new int[] { -1 });
+			}, Throws.TypeOf<ArgumentOutOfRangeException>());
+			Assert.That(delegate {
+				test._SetItems(new int[] { int.MaxValue });
+			}, Throws.TypeOf<ArgumentOutOfRangeException>());
+
+			Assert.GreaterOrEqual(5, test.Length);
+			Assert.That(delegate {
+				test._SetItems(new int[] { 5 });
+			}, Throws.TypeOf<InvalidOperationException>());
+
+			Assert.AreNotEqual(0, test.Count);
+			Assert.That(delegate {
+				test._SetItems(new int[] { 0 });
+			}, Throws.TypeOf<InvalidOperationException>()); // Cont != 0
+
+			#endif
 		}
 
 		IEnumerable<BitSetArray> BitSetAllSource {
