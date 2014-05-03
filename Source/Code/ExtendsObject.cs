@@ -31,7 +31,7 @@ namespace DD {
         /// </summary>
         /// <param name="me"></param>
         /// <param name="that"></param>
-        /// <returns>bool object.ReferenceEquals(this, that)</returns>
+        /// <returns>bool !object.ReferenceEquals(this, that)</returns>
         [Pure]
         public static bool IsNot (this object self, object that) {
             Contract.Ensures (Contract.Result<System.Boolean> () == !object.ReferenceEquals (self, that));

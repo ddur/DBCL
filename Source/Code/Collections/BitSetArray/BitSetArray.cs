@@ -339,7 +339,7 @@ namespace DD.Collections
 					this.bitItems = unchecked ((ulong)this.enumerated.array[this.arrIndex]);
 					this.bitItems = ~this.bitItems;
 					if (this.arrIndex == (this.arrayLen - 1)) { // clear tail
-						this.bitItems &= ulong.MaxValue >> (longBits - (this.enumerated.range & longMask));
+						this.bitItems &= ulong.MaxValue >> (longBits - (this.enumerated.range & mask_six));
 					}
 				}
 				this.bitStart = 0;
@@ -379,7 +379,7 @@ namespace DD.Collections
 							this.bitItems = unchecked ((ulong)this.enumerated.array[this.arrIndex]);
 							this.bitItems = ~this.bitItems;
 							if (this.arrIndex == (this.arrayLen - 1)) { // clear tail
-								this.bitItems &= ulong.MaxValue >> (longBits - (this.enumerated.range & longMask));
+								this.bitItems &= ulong.MaxValue >> (longBits - (this.enumerated.range & mask_six));
 							}
 						}
 
@@ -678,9 +678,9 @@ namespace DD.Collections
 		[NonSerialized]
 		private const int longBits = sizeof(long) * byteBits;
 		[NonSerialized]
-		private const int longMove = 6;
+		private const int move_six = 6;
 		[NonSerialized]
-		private const int longMask = 0x3F;
+		private const int mask_six = 0x3F;
 		[NonSerialized]
 		private const int intBits = sizeof(int) * byteBits;
 		[NonSerialized]
@@ -1118,7 +1118,7 @@ namespace DD.Collections
 				(Contract.Result<int>() == (((length - 1) / longBits) + 1)))
 			);
 
-			return length == 0 ? 0 : ((--length) >> 6) + 1;
+			return length == 0 ? 0 : ((--length) >> move_six) + 1;
 		}
 
 		[Pure] public static int GetIntArrayLength(int length)
@@ -1456,7 +1456,7 @@ namespace DD.Collections
 					}
 				}
 				// mask last bit-block up to range and count
-				bitBlock = unchecked ((ulong)mask[arrLength - 1]) & (ulong.MaxValue >> (longBits - (length & longMask)));
+				bitBlock = unchecked ((ulong)mask[arrLength - 1]) & (ulong.MaxValue >> (longBits - (length & mask_six)));
 				while (bitBlock != 0) {
 					retCount += (int)((table >> (int)((bitBlock & 0xFul) << 2)) & 0xFul);
 					bitBlock >>= 4;
@@ -1635,7 +1635,7 @@ namespace DD.Collections
 				Contract.Ensures(Theory.IndexerGetItemValue(this, item, Contract.Result<bool>()));
 
 				if (this.InRange(item)) {
-					Contract.Assert((item >> 6).InRange(0, this.array.Length - 1));
+					Contract.Assert((item >> move_six).InRange(0, this.array.Length - 1));
 					return this._Get(item);
 				} else {
 					return false;
@@ -2381,7 +2381,7 @@ namespace DD.Collections
 			Contract.Requires<IndexOutOfRangeException>(this.InRange(item));
 			Contract.Ensures(Theory.Get(this, item, Contract.Result<bool>()));
 
-			return (array[item >> 6] & 1L << (item & longMask)) != 0;
+			return (array[item >> move_six] & 1L << (item & mask_six)) != 0;
 		}
 
 		public bool Set(int item, bool value = true)
@@ -2404,13 +2404,13 @@ namespace DD.Collections
 
 			lock (SyncRoot) {
 
-				if (((array[item >> 6] & 1L << (item & longMask)) != 0) == value) {
+				if (((array[item >> move_six] & 1L << (item & mask_six)) != 0) == value) {
 					// no change
 				} else {
 					// flip bit value
 					int live_version = this.Version;
 					this.AddVersion();
-					array[item >> 6] ^= 1L << (item & longMask);
+					array[item >> move_six] ^= 1L << (item & mask_six);
 
 					if (value) {
 						Contract.Assert(this.count < this.range);
@@ -2418,8 +2418,7 @@ namespace DD.Collections
 						if (this.count == 1) {
 							this.FirstSet(item);
 							this.LastSet(item);
-						}
-						else {
+						} else {
 							Contract.Assert(this.count > 1);
 							if (this.startVersion == live_version) {
 								// cache is not expired
@@ -2474,11 +2473,11 @@ namespace DD.Collections
 				int minValue = int.MaxValue;
 				int maxValue = int.MinValue;
 				foreach (var item in items) {
-					if ((array[item >> 6] & 1L << (item & longMask)) != 0) {
+					if ((array[item >> move_six] & 1L << (item & mask_six)) != 0) {
 						// no bit change
 					} else {
 						// set bit value
-						array[item >> 6] ^= 1L << (item & longMask);
+						array[item >> move_six] ^= 1L << (item & mask_six);
 						Contract.Assert(this.count < this.range);
 						this.count += 1;
 						if (item < minValue) {
@@ -3251,10 +3250,10 @@ namespace DD.Collections
 	
 				// clear tail bits
 				// if this.array.Length==0 => this.range==0 => !((this.range&longMask)!= 0)
-				if (((this.range & longMask) != 0) && ((this.array[rangeLength - 1] & (-1L << (this.range & longMask))) != 0)) {
+				if (((this.range & mask_six) != 0) && ((this.array[rangeLength - 1] & (-1L << (this.range & mask_six))) != 0)) {
 					// ATTN: -1L (0xFFFFFFFFFFFFFFFF) >> 63 !=  0x0000000000000001
 					// ATTN: -1L (0xFFFFFFFFFFFFFFFF) >> 63 ==  0xFFFFFFFFFFFFFFFF (-1L)
-					this.array[rangeLength - 1] &= unchecked ((long)(ulong.MaxValue >> (longBits - (this.range & longMask))));
+					this.array[rangeLength - 1] &= unchecked ((long)(ulong.MaxValue >> (longBits - (this.range & mask_six))));
 					// checked by Ensures: Contract.Assert((this.array[rangeLength - 1] & (-1L << (this.range & longMask))) == 0);
 				}
 				// clear tail words(long)
@@ -3490,7 +3489,7 @@ namespace DD.Collections
 		public int? First {
 			[Pure]
 			get {
-				Contract.Ensures(Theory.FirstGet(this,Contract.Result<int?>()));
+				Contract.Ensures(Theory.FirstGet(this, Contract.Result<int?>()));
 
 				int? start = null;
 				if (this.count != 0) {
@@ -3512,7 +3511,8 @@ namespace DD.Collections
 			}
 		}
 
-		void FirstSet(int value) {
+		void FirstSet(int value)
+		{
 			Contract.Requires<ArgumentException>(this.InRange((int)value));
 			Contract.Requires<InvalidOperationException>(Count != 0);
 
@@ -3528,7 +3528,7 @@ namespace DD.Collections
 		public int? Last {
 			[Pure]
 			get {
-				Contract.Ensures(Theory.LastGet(this,Contract.Result<int?>()));
+				Contract.Ensures(Theory.LastGet(this, Contract.Result<int?>()));
 
 				int? final = null;
 				if (this.count != 0) {
@@ -3550,7 +3550,8 @@ namespace DD.Collections
 			}
 		}
 
-		void LastSet(int value) {
+		void LastSet(int value)
+		{
 			Contract.Requires<ArgumentException>(this.InRange((int)value));
 			Contract.Requires<InvalidOperationException>(Count != 0);
 

@@ -1011,7 +1011,7 @@ namespace DD.Collections
 				} else {
 					// A.Not() == ~A
 					success.Assert(newState.count == (newState.range - oldState.count));
-					success.Assert(newState.Intersect(oldState).Count() == 0);
+					success.Assert(!newState.Intersect(oldState).Any());
 					success.Assert(newState.version != oldState.version);
 				}
 
@@ -1050,7 +1050,7 @@ namespace DD.Collections
 				if (self.count == 0 || that.IsNullOrEmpty()) {
 					success.Assert(overlaps == false);
 				} else {
-					success.Assert(overlaps == (self.Intersect(that).Count() != 0));
+					success.Assert(overlaps == (self.Intersect(that).Any()));
 				}
 
 				return success;
@@ -1557,7 +1557,7 @@ namespace DD.Collections
 				if (argument.IsNull()) {
 					success.Assert(isSupersetOf == false);
 				} else {
-					success.Assert(isSupersetOf == ((argument.Count() != 0) && ((self.Intersect(argument)).Count() == argument.Count())));
+					success.Assert(isSupersetOf == (argument.Any() && ((self.Intersect(argument)).Count() == argument.Count())));
 				}
 
 				return success;
@@ -1571,7 +1571,7 @@ namespace DD.Collections
 				if (argument.IsNull()) {
 					success.Assert(isProperSupersetOf == false);
 				} else {
-					success.Assert(isProperSupersetOf == ((argument.Count() != 0) && (self.Intersect(argument).Count() == argument.Count()) && (self.Count() > argument.Count())));
+					success.Assert(isProperSupersetOf == (argument.Any() && (self.Intersect(argument).Count() == argument.Count()) && (self.Count() > argument.Count())));
 				}
 
 				return success;
@@ -1585,7 +1585,7 @@ namespace DD.Collections
 				if (argument.IsNull()) {
 					success.Assert(isSubsetOf == false);
 				} else {
-					success.Assert(isSubsetOf == ((self.Count != 0) && (argument.Count() != 0) && ((self.Intersect(argument)).Count() == self.Count())));
+					success.Assert(isSubsetOf == ((self.Count != 0) && argument.Any() && ((self.Intersect(argument)).Count() == self.Count())));
 				}
 
 				return success;
@@ -1599,7 +1599,7 @@ namespace DD.Collections
 				if (argument.IsNull()) {
 					success.Assert(isProperSubsetOf == false);
 				} else {
-					success.Assert(isProperSubsetOf == ((self.Count != 0) && (argument.Count() != 0) && (self.Intersect(argument).Count() == self.Count()) && (self.Count() < argument.Count())));
+					success.Assert(isProperSubsetOf == ((self.Count != 0) && argument.Any() && (self.Intersect(argument).Count() == self.Count()) && (self.Count() < argument.Count())));
 				}
 
 				return success;

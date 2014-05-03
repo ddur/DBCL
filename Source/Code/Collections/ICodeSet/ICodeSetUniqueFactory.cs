@@ -16,15 +16,6 @@ namespace DD.Collections.ICodeSet
 {
 	public class ICodeSetUniqueFactory
 	{
-		#region Ctor
-
-		public ICodeSetUniqueFactory()
-		{
-			dictionary = new ICodeSetDictionary();
-		}
-
-		#endregion
-
 		#region Embed
 
 		/// <summary>ICodeSet QuickWrap over BitSetArray</summary>
@@ -163,7 +154,7 @@ namespace DD.Collections.ICodeSet
 
 		#region Fields
 
-		private readonly ICodeSetDictionary dictionary;
+		private readonly C5.HashSet<ICodeSet> dictionary = new C5.HashSet<ICodeSet>(); 
 
 		#endregion
 
@@ -253,7 +244,7 @@ namespace DD.Collections.ICodeSet
 
 		#region Sets Factored
 
-		public IEnumerable<KeyValuePair<ICodeSet,int>> Factored {
+		public IEnumerable<ICodeSet> Factored {
 			get {
 				foreach (var item in dictionary) {
 					yield return item;
@@ -372,7 +363,7 @@ namespace DD.Collections.ICodeSet
 		private void Invariant()
 		{
 			Contract.Invariant(dictionary.IsNot(null)); 
-			Contract.Invariant(!dictionary.ContainsKey(CodeSetNull.Singleton)); 
+			Contract.Invariant(!dictionary.Contains(CodeSetNull.Singleton)); 
 		}
 
 		#endregion
