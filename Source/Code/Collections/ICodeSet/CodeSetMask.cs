@@ -12,9 +12,8 @@ using DD.Text;
 
 namespace DD.Collections.ICodeSet
 {
-	/// <summary>
-	/// Description of CodeSetCode.
-	/// </summary>
+	/// <summary>Wraps around compact bitmask-array</summary>
+	/// <remarks>Cannot be empty, contains at least 1, up to <see cref="Code.MaxCodeCount">Code.MaxCodeCount-1</see> codes</remarks>
 	[Serializable]
 	public sealed class CodeSetMask : CodeSet
 	{

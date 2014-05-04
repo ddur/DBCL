@@ -11,7 +11,7 @@ using System.Diagnostics.Contracts;
 namespace DD.Collections.ICodeSet
 {
     /// <summary>Empty ICodeSet, private constructor
-    /// <remarks>Singleton</remarks>
+    /// <remarks>Allways empty, singleton</remarks>
     /// </summary>
     public sealed class CodeSetNull : CodeSet {
         

@@ -8,11 +8,14 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+
 using DD.Diagnostics;
 
 namespace DD.Collections.ICodeSet
 {
-	/// <summary>Set of two codes (items)</summary>
+	/// <summary>Set of two codes (items), no restrictions</summary>
+	/// <remarks>Cannot be empty, allways contains two codes</remarks>
+	[Serializable]
 	public sealed class CodeSetPair : CodeSet
 	{
 

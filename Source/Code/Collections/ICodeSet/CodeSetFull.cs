@@ -12,6 +12,8 @@ using System.Linq;
 namespace DD.Collections.ICodeSet {
 
 	/// <summary>Full Range Set</summary>
+	/// <remarks>Cannot be empty, allways full, contains at least 3, up to <see cref="Code.MaxCodeCount">Code.MaxCodeCount</see> codes</remarks>
+	[Serializable]
 	public sealed class CodeSetFull : CodeSet {
 
 		#region Ctor

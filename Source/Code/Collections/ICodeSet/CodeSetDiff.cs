@@ -12,7 +12,9 @@ using DD.Diagnostics;
 namespace DD.Collections.ICodeSet
 {
 
-	/// <summary>Difference set (Range-Set)</summary>
+	/// <summary>Difference of two sets (Range-Reduce(Set))</summary>
+	/// <remarks>Cannot be empty, cannot be full, contains at least 3, up to <see cref="Code.MaxCodeCount">Code.MaxCodeCount-1</see> codes</remarks>
+	[Serializable]
 	public sealed class CodeSetDiff : CodeSet
 	{
 

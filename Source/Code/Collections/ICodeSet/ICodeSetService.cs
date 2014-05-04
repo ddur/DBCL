@@ -91,6 +91,12 @@ namespace DD.Collections.ICodeSet
 			return self.Count == 0 ? 0 : 1 + (int)self.Last - (int)self.First;
 		}
 
+		/// <summary>IsCompact if:
+		/// <para>1) is not null</para>
+		/// <para>2) is not empty</para>
+		/// <para>3) has first[0] and last[length-1] bit set</para></summary>
+		/// <param name="self">BitSetArray</param>
+		/// <returns>bool</returns>
 		[Pure] public static bool IsCompact(this BitSetArray self)
 		{
 			if (self.IsNull())

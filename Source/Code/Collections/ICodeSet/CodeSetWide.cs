@@ -8,12 +8,17 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+
 using DD.Diagnostics;
 
 namespace DD.Collections.ICodeSet
 {
-	/// <summary>CodeSet covering range larger than one unicode plane</summary>
-	public sealed class CodeSetWide : CodeSet, ICodeSet
+	/// <summary>CodeSet covering full unicode range.
+	/// <para>Allways wider than one unicode plane</para>
+	/// <para>Composed of smaller sets, each for one unicode plane</para></summary>
+	/// <remarks>Cannot be empty, cannot be full, contains at least 3, up to <see cref="Code.MaxCodeCount">Code.MaxCodeCount-1</see> codes</remarks>
+	[Serializable]
+	public sealed class CodeSetWide : CodeSet
 	{
 		
 		#region Ctor

@@ -14,6 +14,7 @@ using System.Linq;
 
 namespace DD.Collections.ICodeSet
 {
+	[Serializable]
 	public struct Code : ICodeSet, IEquatable<Code>, IEqualityComparer<Code>, IComparable<Code> {
 
 		#region Ctor

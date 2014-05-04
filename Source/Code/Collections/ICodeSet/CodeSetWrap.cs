@@ -13,7 +13,10 @@ using DD.Diagnostics;
 
 namespace DD.Collections.ICodeSet
 {
-	/// <summary>Wraps BitSetArray</summary>
+	/// <summary>Wraps over (and converts to) cloned BitSetArray
+	/// <remarks>Can be empty, can be full, can contain up to <see cref="Code.MaxCodeCount">Code.MaxCodeCount-1</see> codes</remarks>
+	/// </summary>
+	[Serializable]
 	public sealed class CodeSetWrap : CodeSet
 	{
 		#region Ctor
@@ -45,7 +48,7 @@ namespace DD.Collections.ICodeSet
 			sorted = BitSetArray.From(codes.ToValues());
 		}
 
-		/// <summary>ICodeSet wrapper around BitSetArray</summary>
+		/// <summary>Copy(bits) &amp; bits.TrimExcess()</summary>
 		/// <param name="bits">BitSetArray</param>
 		public CodeSetWrap(BitSetArray bits)
 		{
@@ -55,6 +58,7 @@ namespace DD.Collections.ICodeSet
 			Contract.Ensures(Theory.Construct(bits, this));
 			
 			sorted = BitSetArray.Copy(bits);
+			sorted.TrimExcess();
 		}
 
 		#endregion

@@ -15,6 +15,8 @@ namespace DD.Collections.ICodeSet
 {
 
 	/// <summary>CodeSetPage contains only codes within same unicode plane/page</summary>
+	/// <remarks>Cannot be empty, cannot be full, contains at least 3, up to <see cref="char.MaxValue">char.MaxValue-1</see> codes</remarks>
+	[Serializable]
 	public sealed class CodeSetPage : CodeSet
 	{
 

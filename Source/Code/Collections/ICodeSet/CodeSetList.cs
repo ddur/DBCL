@@ -13,7 +13,10 @@ using DD.Diagnostics;
 namespace DD.Collections.ICodeSet
 {
 
-	/// <summary>Small set, limited number of codes (items)</summary>
+	/// <summary>Small set, limited number of codes (items)
+	/// <para>Wraps around sorted list, binary search for this[item]</para></summary>
+	/// <remarks>Cannot be empty, cannot be full, contains at least 3, up to <see cref="ICodeSetService.ListMaxCount">ICodeSetService.ListMaxCount</see> codes</remarks>
+	[Serializable]
 	public sealed class CodeSetList : CodeSet
 	{
 
@@ -23,9 +26,9 @@ namespace DD.Collections.ICodeSet
 			: this((IEnumerable<Code>)codes)
 		{
 			Contract.Requires<ArgumentEmptyException>(!codes.IsEmpty());
-			Contract.Requires<ArgumentException>(codes.Distinct().Count() > ICodeSetService.PairCount);
-			Contract.Requires<ArgumentException>(codes.Distinct().Count() <= ICodeSetService.ListMaxCount);
-			Contract.Requires<ArgumentException>(codes.Distinct().Count() < (1 + codes.Max() - codes.Min()));
+			Contract.Requires<ArgumentException>(codes.Distinct().Count() > ICodeSetService.PairCount); // at least 3 members
+			Contract.Requires<ArgumentException>(codes.Distinct().Count() <= ICodeSetService.ListMaxCount); // up to max members
+			Contract.Requires<ArgumentException>(codes.Distinct().Count() < (1 + codes.Max() - codes.Min())); // not full
 		}
 
 		public CodeSetList(IEnumerable<Code> codes)
