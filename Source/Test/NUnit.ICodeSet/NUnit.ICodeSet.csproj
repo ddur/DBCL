@@ -117,6 +117,7 @@
     <Folder Include="CodeSetWrapTest" />
     <Folder Include="ICodeSetOperationsTest" />
     <Folder Include="ICodeSetReductionTest" />
+    <Folder Include="CodeSetMask_Test" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Code\DBCL.csproj">

@@ -16,7 +16,6 @@ namespace DD.Collections
 {
 	public sealed partial class BitSetArray
 	{
-
 		/// <summary>Test Theory
 		/// <remarks>Contract Ensures &amp; Requires</remarks>
 		/// </summary>

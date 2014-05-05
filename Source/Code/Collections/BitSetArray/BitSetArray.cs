@@ -151,9 +151,9 @@ namespace DD.Collections
 
 		#region Embed
 
-		public sealed class Enumerator : IEnumerator<int>, IEnumerator, IDisposable
+		public abstract class EnumeratorForwardAbstract : IEnumerator<int>, IEnumerator, IDisposable
 		{
-			private readonly BitSetArray enumerated;
+			protected readonly BitSetArray enumerated;
 			private readonly int version;
 			private readonly int arrayLen;
 			private int arrIndex;
@@ -163,25 +163,40 @@ namespace DD.Collections
 			private bool doNext;
 			private bool invalid = true;
 
-			public Enumerator(BitSetArray that)
+			public EnumeratorForwardAbstract(BitSetArray that)
 			{
 				Contract.Requires<ArgumentNullException>(that.IsNot(null));
 				Contract.Ensures(Theory.Construct(this, that));
 
-				lock (that.SyncRoot) {
-					this.version = that.version;
-					this.enumerated = that;
+				this.init(that, ref this.version, ref this.enumerated, ref this.arrayLen);
+			}
 
-					this.arrayLen = BitSetArray.GetLongArrayLength(this.enumerated.range);
-					this.arrIndex = 0;
-					this.doNext = this.enumerated.count != 0;
-					if (this.doNext) {
-						Contract.Assert(this.arrayLen != 0);
-						this.bitItems = unchecked ((ulong)this.enumerated.array[this.arrIndex]);
-					}
-					this.bitStart = 0;
-					this.bitIndex = -1;
+			protected EnumeratorForwardAbstract(BitSetArray that, object thatSyncRoot)
+			{
+				Contract.Requires<ArgumentNullException>(!that.IsNull());
+				Contract.Requires<ArgumentNullException>(!thatSyncRoot.IsNull());
+				Contract.Ensures(Theory.Construct(this, that));
+
+				lock (thatSyncRoot) {
+					this.init(that, ref this.version, ref this.enumerated, ref this.arrayLen);
 				}
+			}
+
+			private void init(BitSetArray that, ref int this_version, ref BitSetArray this_enumerated, ref int this_arrayLen)
+			{
+
+				this_version = that.version;
+				this_enumerated = that;
+				this_arrayLen = BitSetArray.GetLongArrayLength(this.enumerated.range);
+
+				this.arrIndex = 0;
+				this.doNext = this.enumerated.count != 0;
+				if (this.doNext) {
+					Contract.Assert(this.arrayLen != 0);
+					this.bitItems = unchecked ((ulong)this.enumerated.array[this.arrIndex]);
+				}
+				this.bitStart = 0;
+				this.bitIndex = -1;
 			}
 
 			public void Reset()
@@ -194,46 +209,44 @@ namespace DD.Collections
 			{
 			}
 
-			public bool MoveNext()
+			public virtual bool MoveNext()
 			{
 				Contract.Ensures(Theory.MoveNext(this, Contract.Result<bool>()));
 				Contract.EnsuresOnThrow<InvalidOperationException>(Theory.MoveNextOnThrow(this));
 
-				lock (this.enumerated.SyncRoot) {
-					if (this.doNext && (this.version == this.enumerated.version)) {
-						if (this.bitItems == 0) {
-							// read/skip empty block(s)
-							while (true) {
-								++this.arrIndex;
-								if (this.arrIndex == this.arrayLen)
-									break;
-								if (this.enumerated.array[this.arrIndex] != 0)
-									break;
-							}
-							if (this.arrIndex != this.arrayLen) {
-								this.bitStart = this.arrIndex * longBits; // compute offset
-								this.bitIndex = -1; // reset bit index
-								this.bitItems = unchecked ((ulong)this.enumerated.array[this.arrIndex]);
-							}
+				if (this.doNext && (this.version == this.enumerated.version)) {
+					if (this.bitItems == 0) {
+						// read/skip empty block(s)
+						while (true) {
+							++this.arrIndex;
+							if (this.arrIndex == this.arrayLen)
+								break;
+							if (this.enumerated.array[this.arrIndex] != 0)
+								break;
+						}
+						if (this.arrIndex != this.arrayLen) {
+							this.bitStart = this.arrIndex * longBits; // compute offset
+							this.bitIndex = -1; // reset bit index
+							this.bitItems = unchecked ((ulong)this.enumerated.array[this.arrIndex]);
+						}
 
-						}
-						if (this.bitItems != 0) {
-							if (this.invalid) {
-								this.invalid = false;
-							}
-							++this.bitIndex;
-							while ((this.bitItems & 1ul) == 0) {
-								++this.bitIndex;
-								this.bitItems >>= 1;
-							}
-							this.bitItems >>= 1;
-						} else {
-							this.doNext = false; // break&stop .MoveNext
-							this.invalid = true; // invalidate .Current
-						}
-					} else if (this.version != this.enumerated.version) {
-						throw new InvalidOperationException("Collection was modified; enumeration operation may not execute.");
 					}
+					if (this.bitItems != 0) {
+						if (this.invalid) {
+							this.invalid = false;
+						}
+						++this.bitIndex;
+						while ((this.bitItems & 1ul) == 0) {
+							++this.bitIndex;
+							this.bitItems >>= 1;
+						}
+						this.bitItems >>= 1;
+					} else {
+						this.doNext = false; // break&stop .MoveNext
+						this.invalid = true; // invalidate .Current
+					}
+				} else if (this.version != this.enumerated.version) {
+					throw new InvalidOperationException("Collection was modified; enumeration operation may not execute.");
 				}
 				return this.doNext;
 			}
@@ -261,7 +274,7 @@ namespace DD.Collections
 
 			private static class Theory
 			{
-				[Pure] public static bool Construct(Enumerator me, BitSetArray that)
+				[Pure] public static bool Construct(EnumeratorForwardAbstract me, BitSetArray that)
 				{
 					Success success = true;
 
@@ -273,7 +286,7 @@ namespace DD.Collections
 					return success;
 				}
 
-				[Pure] public static bool MoveNext(Enumerator me, bool result)
+				[Pure] public static bool MoveNext(EnumeratorForwardAbstract me, bool result)
 				{
 					Success success = true;
 					if (result) {
@@ -285,7 +298,7 @@ namespace DD.Collections
 					return success;
 				}
 
-				[Pure] public static bool MoveNextOnThrow(Enumerator me)
+				[Pure] public static bool MoveNextOnThrow(EnumeratorForwardAbstract me)
 				{
 					Success success = true;
 
@@ -294,7 +307,7 @@ namespace DD.Collections
 					return success;
 				}
 
-				[Pure] public static bool Current(Enumerator me, int retValue)
+				[Pure] public static bool Current(EnumeratorForwardAbstract me, int retValue)
 				{
 					Success success = true;
 
@@ -307,7 +320,7 @@ namespace DD.Collections
 					return success;
 				}
 
-				[Pure] public static bool CurrentOnThrow(Enumerator me)
+				[Pure] public static bool CurrentOnThrow(EnumeratorForwardAbstract me)
 				{
 					Success success = true;
 
@@ -320,10 +333,39 @@ namespace DD.Collections
 
 		}
 
-		public sealed class EnumeratorComplement : IEnumerator<int>, IEnumerator, IDisposable
+		public sealed class EnumeratorForward : EnumeratorForwardAbstract
 		{
+			public EnumeratorForward(BitSetArray that)
+				: base(that)
+			{
+			}
+		}
 
-			private readonly BitSetArray enumerated;
+		public sealed class EnumeratorForwardSynchronised : EnumeratorForwardAbstract
+		{
+			public EnumeratorForwardSynchronised(BitSetArray that)
+				: base(that, that.SyncRoot)
+			{
+			}
+			public override bool MoveNext()
+			{
+				lock (enumerated.SyncRoot) {
+					return base.MoveNext();
+				}
+			}
+		}
+
+		public sealed class EnumeratorForwardReadOnly : EnumeratorForwardAbstract
+		{
+			public EnumeratorForwardReadOnly(BitSetArray that)
+				: base(BitSetArray.Copy(that))
+			{
+			}
+		}
+
+		public abstract class EnumeratorComplementAbstract : IEnumerator<int>, IEnumerator, IDisposable
+		{
+			protected readonly BitSetArray enumerated;
 			private readonly int version;
 			private readonly int arrayLen;
 			private int arrIndex;
@@ -333,29 +375,43 @@ namespace DD.Collections
 			private bool doNext;
 			private bool invalid = true;
 
-			public EnumeratorComplement(BitSetArray that)
+			protected EnumeratorComplementAbstract(BitSetArray that)
 			{
-				Contract.Requires<ArgumentNullException>(that.IsNot(null));
+				Contract.Requires<ArgumentNullException>(!that.IsNull());
 				Contract.Ensures(Theory.Construct(this, that));
 
-				lock (that.SyncRoot) {
-					this.version = that.version;
-					this.enumerated = that;
-				
-					this.arrayLen = BitSetArray.GetLongArrayLength(this.enumerated.range);
-					this.arrIndex = 0;
-					this.doNext = this.enumerated.count != this.enumerated.range;
-					if (this.doNext) {
-						Contract.Assert(this.arrayLen != 0);
-						this.bitItems = unchecked ((ulong)this.enumerated.array[this.arrIndex]);
-						this.bitItems = ~this.bitItems;
-						if (this.arrIndex == (this.arrayLen - 1)) { // clear tail
-							this.bitItems &= ulong.MaxValue >> (longBits - (this.enumerated.range & mask0x3F));
-						}
-					}
-					this.bitStart = 0;
-					this.bitIndex = -1;
+				this.init(that, ref this.version, ref this.enumerated, ref this.arrayLen);
+			}
+
+			protected EnumeratorComplementAbstract(BitSetArray that, object thatSyncRoot)
+			{
+				Contract.Requires<ArgumentNullException>(!that.IsNull());
+				Contract.Requires<ArgumentNullException>(!thatSyncRoot.IsNull());
+				Contract.Ensures(Theory.Construct(this, that));
+
+				lock (thatSyncRoot) {
+					this.init(that, ref this.version, ref this.enumerated, ref this.arrayLen);
 				}
+			}
+
+			private void init(BitSetArray that, ref int this_version, ref BitSetArray this_enumerated, ref int this_arrayLen)
+			{
+				this_version = that.version;
+				this_enumerated = that;
+				this_arrayLen = BitSetArray.GetLongArrayLength(this.enumerated.range);
+
+				this.arrIndex = 0;
+				this.doNext = this.enumerated.count != this.enumerated.range;
+				if (this.doNext) {
+					Contract.Assert(this.arrayLen != 0);
+					this.bitItems = unchecked ((ulong)this.enumerated.array[this.arrIndex]);
+					this.bitItems = ~this.bitItems;
+					if (this.arrIndex == (this.arrayLen - 1)) { // clear tail
+						this.bitItems &= ulong.MaxValue >> (longBits - (this.enumerated.range & mask0x3F));
+					}
+				}
+				this.bitStart = 0;
+				this.bitIndex = -1;
 			}
 
 			public void Reset()
@@ -368,52 +424,50 @@ namespace DD.Collections
 			{
 			}
 
-			public bool MoveNext()
+			public virtual bool MoveNext()
 			{
 				Contract.Ensures(Theory.MoveNext(this, Contract.Result<bool>()));
 				Contract.EnsuresOnThrow<InvalidOperationException>(Theory.MoveNextOnThrow(this));
 
-				lock (this.enumerated.SyncRoot) {
-					if (this.doNext && (this.version == this.enumerated.version)) {
-						if (this.bitItems == 0) {
-							// skip empty block(s)
-							while (true) {
-								++this.arrIndex;
-								if (this.arrIndex == this.arrayLen) {
-									break;
-								}
-								if (this.enumerated.array[this.arrIndex] != -1) {
-									break;
-								}
+				if (this.doNext && (this.version == this.enumerated.version)) {
+					if (this.bitItems == 0) {
+						// skip empty block(s)
+						while (true) {
+							++this.arrIndex;
+							if (this.arrIndex == this.arrayLen) {
+								break;
 							}
-							if (this.arrIndex != this.arrayLen) {
-								this.bitStart = this.arrIndex * longBits; // compute offset
-								this.bitIndex = -1; // reset bit index
-								this.bitItems = unchecked ((ulong)this.enumerated.array[this.arrIndex]);
-								this.bitItems = ~this.bitItems;
-								if (this.arrIndex == (this.arrayLen - 1)) { // clear tail
-									this.bitItems &= ulong.MaxValue >> (longBits - (this.enumerated.range & mask0x3F));
-								}
+							if (this.enumerated.array[this.arrIndex] != -1) {
+								break;
 							}
+						}
+						if (this.arrIndex != this.arrayLen) {
+							this.bitStart = this.arrIndex * longBits; // compute offset
+							this.bitIndex = -1; // reset bit index
+							this.bitItems = unchecked ((ulong)this.enumerated.array[this.arrIndex]);
+							this.bitItems = ~this.bitItems;
+							if (this.arrIndex == (this.arrayLen - 1)) { // clear tail
+								this.bitItems &= ulong.MaxValue >> (longBits - (this.enumerated.range & mask0x3F));
+							}
+						}
 
-						}
-						if (this.bitItems != 0) {
-							if (this.invalid) {
-								this.invalid = false;
-							}
-							++this.bitIndex;
-							while ((this.bitItems & 1ul) == 0) {
-								++this.bitIndex;
-								this.bitItems >>= 1;
-							}
-							this.bitItems >>= 1;
-						} else {
-							this.doNext = false; // break&stop .MoveNext
-							this.invalid = true; // invalidate .Current
-						}
-					} else if (this.version != this.enumerated.version) {
-						throw new InvalidOperationException("Collection was modified; enumeration operation may not execute.");
 					}
+					if (this.bitItems != 0) {
+						if (this.invalid) {
+							this.invalid = false;
+						}
+						++this.bitIndex;
+						while ((this.bitItems & 1ul) == 0) {
+							++this.bitIndex;
+							this.bitItems >>= 1;
+						}
+						this.bitItems >>= 1;
+					} else {
+						this.doNext = false; // break&stop .MoveNext
+						this.invalid = true; // invalidate .Current
+					}
+				} else if (this.version != this.enumerated.version) {
+					throw new InvalidOperationException("Collection was modified; enumeration operation may not execute.");
 				}
 				return this.doNext;
 			}
@@ -441,7 +495,7 @@ namespace DD.Collections
 
 			private static class Theory
 			{
-				[Pure] public static bool Construct(EnumeratorComplement me, BitSetArray that)
+				[Pure] public static bool Construct(EnumeratorComplementAbstract me, BitSetArray that)
 				{
 					Success success = true;
 
@@ -453,7 +507,7 @@ namespace DD.Collections
 					return success;
 				}
 
-				[Pure] public static bool MoveNext(EnumeratorComplement me, bool result)
+				[Pure] public static bool MoveNext(EnumeratorComplementAbstract me, bool result)
 				{
 					Success success = true;
 					if (result) {
@@ -465,7 +519,7 @@ namespace DD.Collections
 					return success;
 				}
 
-				[Pure] public static bool MoveNextOnThrow(EnumeratorComplement me)
+				[Pure] public static bool MoveNextOnThrow(EnumeratorComplementAbstract me)
 				{
 					Success success = true;
 
@@ -474,7 +528,7 @@ namespace DD.Collections
 					return success;
 				}
 
-				[Pure] public static bool Current(EnumeratorComplement me, int retValue)
+				[Pure] public static bool Current(EnumeratorComplementAbstract me, int retValue)
 				{
 					Success success = true;
 
@@ -487,7 +541,7 @@ namespace DD.Collections
 					return success;
 				}
 
-				[Pure] public static bool CurrentOnThrow(EnumeratorComplement me)
+				[Pure] public static bool CurrentOnThrow(EnumeratorComplementAbstract me)
 				{
 					Success success = true;
 
@@ -500,9 +554,40 @@ namespace DD.Collections
 
 		}
 
-		public sealed class EnumeratorReverse : IEnumerator<int>, IEnumerator, IDisposable
+		public sealed class EnumeratorComplement : EnumeratorComplementAbstract
 		{
-			private readonly BitSetArray enumerated;
+			public EnumeratorComplement(BitSetArray that)
+				: base(that)
+			{
+			}
+		}
+		
+		public sealed class EnumeratorComplementSynchronised : EnumeratorComplementAbstract
+		{
+			public EnumeratorComplementSynchronised(BitSetArray that)
+				: base(that, that.SyncRoot)
+			{
+			}
+
+			public override bool MoveNext()
+			{
+				lock (this.enumerated.SyncRoot) {
+					return base.MoveNext();
+				}
+			}
+		}
+
+		public sealed class EnumeratorComplementReadOnly : EnumeratorComplementAbstract
+		{
+			public EnumeratorComplementReadOnly(BitSetArray that)
+				: base(BitSetArray.Copy(that))
+			{
+			}
+		}
+
+		public abstract class EnumeratorReverseAbstract : IEnumerator<int>, IEnumerator, IDisposable
+		{
+			protected readonly BitSetArray enumerated;
 			private readonly int version;
 			private readonly int arrayLen;
 			private int arrIndex;
@@ -512,26 +597,39 @@ namespace DD.Collections
 			private bool doNext;
 			private bool invalid = true;
 
-			public EnumeratorReverse(BitSetArray that)
+			protected EnumeratorReverseAbstract(BitSetArray that)
 			{
-				Contract.Requires<ArgumentNullException>(that.IsNot(null));
-				// if range is int.MaxValue, initial position (this.bitStart+this.bitIndex) throws overflow exception
+				Contract.Requires<ArgumentNullException>(!that.IsNull());
 				Contract.Ensures(Theory.Construct(this, that));
 
-				lock (that.SyncRoot) {
-					this.version = that.version;
-					this.enumerated = that;
+				this.init(that, ref this.version, ref this.enumerated, ref this.arrayLen);
+			}
 
-					this.arrayLen = BitSetArray.GetLongArrayLength(this.enumerated.range);
-					this.arrIndex = this.arrayLen - 1;
-					this.doNext = this.enumerated.count != 0;
-					if (this.doNext) {
-						Contract.Assert(this.arrayLen != 0);
-						this.bitItems = this.enumerated.array[this.arrIndex];
-					}
-					this.bitStart = this.arrIndex * longBits; // set offset
-					this.bitIndex = longBits; // reset bit index counter
+			protected EnumeratorReverseAbstract(BitSetArray that, object thatSyncRoot)
+			{
+				Contract.Requires<ArgumentNullException>(!that.IsNull());
+				Contract.Requires<ArgumentNullException>(!thatSyncRoot.IsNull());
+				Contract.Ensures(Theory.Construct(this, that));
+
+				lock (thatSyncRoot) {
+					this.init(that, ref this.version, ref this.enumerated, ref this.arrayLen);
 				}
+			}
+
+			private void init(BitSetArray that, ref int this_version, ref BitSetArray this_enumerated, ref int this_arrayLen)
+			{
+				this_version = that.version;
+				this_enumerated = that;
+				this_arrayLen = BitSetArray.GetLongArrayLength(this.enumerated.range);
+
+				this.arrIndex = this.arrayLen - 1;
+				this.doNext = this.enumerated.count != 0;
+				if (this.doNext) {
+					Contract.Assert(this.arrayLen != 0);
+					this.bitItems = this.enumerated.array[this.arrIndex];
+				}
+				this.bitStart = this.arrIndex * longBits; // set offset
+				this.bitIndex = longBits; // reset bit index counter
 			}
 
 			public void Reset()
@@ -544,45 +642,43 @@ namespace DD.Collections
 			{
 			}
 
-			public bool MoveNext()
+			public virtual bool MoveNext()
 			{
 				Contract.Ensures(Theory.MoveNext(this, Contract.Result<bool>()));
 				Contract.EnsuresOnThrow<InvalidOperationException>(Theory.MoveNextOnThrow(this));
 
-				lock (this.enumerated.SyncRoot) {
-					if (this.doNext && (this.version == this.enumerated.version)) {
-						if (this.bitItems == 0) {
-							// skip empty block(s)
-							while (true) {
-								--this.arrIndex;
-								if (this.arrIndex < 0)
-									break;
-								if (this.enumerated.array[this.arrIndex] != 0)
-									break;
-							}
-							if (this.arrIndex >= 0) {
-								this.bitStart = this.arrIndex * longBits; // compute offset
-								this.bitIndex = longBits; // reset bit index
-								this.bitItems = this.enumerated.array[this.arrIndex];
-							}
+				if (this.doNext && (this.version == this.enumerated.version)) {
+					if (this.bitItems == 0) {
+						// skip empty block(s)
+						while (true) {
+							--this.arrIndex;
+							if (this.arrIndex < 0)
+								break;
+							if (this.enumerated.array[this.arrIndex] != 0)
+								break;
+						}
+						if (this.arrIndex >= 0) {
+							this.bitStart = this.arrIndex * longBits; // compute offset
+							this.bitIndex = longBits; // reset bit index
+							this.bitItems = this.enumerated.array[this.arrIndex];
+						}
 
-						}
-						if (this.bitItems != 0) {
-							if (this.invalid)
-								this.invalid = false;
-							--this.bitIndex;
-							while (this.bitItems > 0) {
-								--this.bitIndex;
-								this.bitItems <<= 1;
-							}
-							this.bitItems <<= 1;
-						} else {
-							this.doNext = false; // break&stop .MoveNext
-							this.invalid = true; // invalidate .Current
-						}
-					} else if (this.version != this.enumerated.version) {
-						throw new InvalidOperationException("Collection was modified; enumeration operation may not execute.");
 					}
+					if (this.bitItems != 0) {
+						if (this.invalid)
+							this.invalid = false;
+						--this.bitIndex;
+						while (this.bitItems > 0) {
+							--this.bitIndex;
+							this.bitItems <<= 1;
+						}
+						this.bitItems <<= 1;
+					} else {
+						this.doNext = false; // break&stop .MoveNext
+						this.invalid = true; // invalidate .Current
+					}
+				} else if (this.version != this.enumerated.version) {
+					throw new InvalidOperationException("Collection was modified; enumeration operation may not execute.");
 				}
 				return this.doNext;
 			}
@@ -610,7 +706,7 @@ namespace DD.Collections
 
 			private static class Theory
 			{
-				[Pure] public static bool Construct(EnumeratorReverse me, BitSetArray that)
+				[Pure] public static bool Construct(EnumeratorReverseAbstract me, BitSetArray that)
 				{
 					Success success = true;
 
@@ -622,7 +718,7 @@ namespace DD.Collections
 					return success;
 				}
 
-				[Pure] public static bool MoveNext(EnumeratorReverse me, bool result)
+				[Pure] public static bool MoveNext(EnumeratorReverseAbstract me, bool result)
 				{
 					Success success = true;
 
@@ -636,7 +732,7 @@ namespace DD.Collections
 					return success;
 				}
 
-				[Pure] public static bool MoveNextOnThrow(EnumeratorReverse me)
+				[Pure] public static bool MoveNextOnThrow(EnumeratorReverseAbstract me)
 				{
 					Success success = true;
 
@@ -645,7 +741,7 @@ namespace DD.Collections
 					return success;
 				}
 
-				[Pure] public static bool Current(EnumeratorReverse me, int retValue)
+				[Pure] public static bool Current(EnumeratorReverseAbstract me, int retValue)
 				{
 					Success success = true;
 
@@ -658,7 +754,7 @@ namespace DD.Collections
 					return success;
 				}
 
-				[Pure] public static bool CurrentOnThrow(EnumeratorReverse me)
+				[Pure] public static bool CurrentOnThrow(EnumeratorReverseAbstract me)
 				{
 					Success success = true;
 
@@ -668,7 +764,38 @@ namespace DD.Collections
 				}
 
 			}
+		}
 
+		public sealed class EnumeratorReverse : EnumeratorReverseAbstract
+		{
+			public EnumeratorReverse(BitSetArray that)
+				: base(that)
+			{
+			}
+
+		}
+
+		public sealed class EnumeratorReverseSynchronised : EnumeratorReverseAbstract
+		{
+			public EnumeratorReverseSynchronised(BitSetArray that)
+				: base(that, that.sRoot)
+			{
+			}
+
+			public override bool MoveNext()
+			{
+				lock (this.enumerated.SyncRoot) {
+					return base.MoveNext();
+				}
+			}
+		}
+
+		public sealed class EnumeratorReverseReadOnly : EnumeratorReverseAbstract
+		{
+			public EnumeratorReverseReadOnly(BitSetArray that)
+				: base(BitSetArray.Copy(that))
+			{
+			}
 		}
 
 		#endregion
@@ -2487,7 +2614,8 @@ namespace DD.Collections
 		#if DEBUG
 		[CLSCompliant(false)]
 		public
-		#else
+		
+#else
 		private
 		#endif
 		void _SetItems(IEnumerable<int> items)
@@ -2637,7 +2765,7 @@ namespace DD.Collections
 		[Pure]
 		public IEnumerator<int> GetEnumerator()
 		{
-			return new BitSetArray.Enumerator(this);
+			return new BitSetArray.EnumeratorForward(this);
 		}
 
 		[Pure]
