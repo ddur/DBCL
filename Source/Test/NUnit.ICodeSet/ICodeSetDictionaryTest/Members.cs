@@ -16,6 +16,7 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest
 	public class Members
 	{
 		ICodeSetDictionary icsDict;
+		ICodeSetDictionary<long> icsDictLong;
 
 		[Test]
 		public void Add_Key() {
@@ -40,12 +41,32 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest
 		}
 		
 		[Test]
-		public void Add_KeyAndValue_NotSupported() {
+		public void Add_KeyAndValue_NotSupported()
+		{
 			icsDict = new ICodeSetDictionary();
 			var icsIDictAsIDictionary = icsDict as IDictionary<ICodeSet, int>;
 			Assert.NotNull(icsIDictAsIDictionary);
-			Assert.Throws<NotSupportedException> (
-				delegate { icsIDictAsIDictionary.Add (CodeSetFull.From(0,5),8);}
+			Assert.Throws<NotSupportedException>(
+				delegate {
+					icsIDictAsIDictionary.Add(CodeSetFull.From(0, 5), 8);
+				}
+			);
+		}
+
+		[Test]
+		public void Add_KeyAndValue_Typed() {
+			icsDictLong = new ICodeSetDictionary<long>();
+			Assert.That (
+				delegate {
+					icsDictLong.Add(CodeSetFull.From(0,5),8);
+				},
+				Throws.Nothing
+			);
+			Assert.That (
+				delegate {
+					icsDictLong.Add(CodeSetFull.From(0,5),8);
+				},
+				Throws.TypeOf<ArgumentException>()
 			);
 		}
 
@@ -59,6 +80,23 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest
 			);
 		}
 		
+		[Test]
+		public void Add_KeyValuePair_Typed() {
+			icsDictLong = new ICodeSetDictionary<long>();
+			Assert.That (
+				delegate {
+					icsDictLong.Add(new KeyValuePair<ICodeSet, long>(CodeSetFull.From(0,5),8));
+				},
+				Throws.Nothing
+			);
+			Assert.That (
+				delegate {
+					icsDictLong.Add(new KeyValuePair<ICodeSet, long>(CodeSetFull.From(0,5),8));
+				},
+				Throws.TypeOf<ArgumentException>()
+			);
+		}
+
 		[Test]
 		public void Clear() {
 			icsDict = new ICodeSetDictionary();
@@ -128,6 +166,20 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest
 		}
 		
 		[Test]
+		public void Item_Set_Typed() {
+			icsDictLong = new ICodeSetDictionary<long>();
+			Assert.That (
+				delegate {
+					icsDictLong.Add(new KeyValuePair<ICodeSet, long>(CodeSetFull.From(0,5),8));
+				},
+				Throws.Nothing
+			);
+			Assert.AreEqual(icsDictLong[CodeSetFull.From(0, 5)], 8);
+			icsDictLong[CodeSetFull.From(0, 5)] = 9;
+			Assert.AreEqual(icsDictLong[CodeSetFull.From(0, 5)], 9);
+		}
+
+		[Test]
 		public void Keys_Get() {
 			icsDict = new ICodeSetDictionary();
 			ICodeSet set1 = CodeSetFull.From(0,4); 
@@ -162,6 +214,42 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest
 			);
 		}
 		
+		[Test]
+		public void Remove_KeyValuePair_Typed() {
+			icsDictLong = new ICodeSetDictionary<long>();
+			Assert.That (
+				delegate {
+					icsDictLong.Add(new KeyValuePair<ICodeSet, long>(CodeSetFull.From(0,5),8));
+				},
+				Throws.Nothing
+			);
+			bool result = false;
+
+			Assert.That (
+				delegate {
+					result = icsDictLong.Remove(new KeyValuePair<ICodeSet, long>(CodeSetFull.From(1,5),8));
+				},
+				Throws.Nothing
+			);
+			Assert.False(result);
+
+			Assert.That (
+				delegate {
+					result = icsDictLong.Remove(new KeyValuePair<ICodeSet, long>(CodeSetFull.From(0,5),7));
+				},
+				Throws.Nothing
+			);
+			Assert.False(result);
+
+			Assert.That (
+				delegate {
+					result = icsDictLong.Remove(new KeyValuePair<ICodeSet, long>(CodeSetFull.From(0,5),8));
+				},
+				Throws.Nothing
+			);
+			Assert.True(result);
+		}
+
 		[Test]
 		public void Contains() {
 			icsDict = new ICodeSetDictionary();

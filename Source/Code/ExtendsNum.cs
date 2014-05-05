@@ -8,7 +8,7 @@ using System.Diagnostics.Contracts;
 
 namespace DD {
 
-    public static class ExtendsInt {
+    public static class ExtendsNum {
 
         /// <summary>Extends value type int(Int32).
         /// <para>Returns true if extended value is between or equal to both values.</para>

@@ -18,16 +18,16 @@ namespace DD {
         [Test]
         public void IntInRange () {
 
-            this.Int_InRangeExtension (-100);
-            this.Int_InRangeExtension (0);
-            this.Int_InRangeExtension (100);
+            Int_InRangeExtension (-100);
+            Int_InRangeExtension (0);
+            Int_InRangeExtension (100);
 
             Assert.That (int.MinValue.InRange (int.MinValue, int.MinValue + 1), Is.True);
             Assert.That (int.MaxValue.InRange (int.MaxValue - 1, int.MaxValue), Is.True);
 
         }
 
-        public void Int_InRangeExtension (int testVal) {
+        public static void Int_InRangeExtension (int testVal) {
             Assert.That (testVal.InRange (testVal - 1, testVal + 1), Is.True);
             Assert.That (testVal.InRange (testVal + 1, testVal - 1), Is.False);
 
@@ -38,7 +38,17 @@ namespace DD {
             Assert.That (testVal.InRange (testVal - 2, testVal - 1), Is.False);
         }
 
-        // user defined enumerable class that is not collection<T> nor array<T> 
+		[Test]
+		public void LongInRange () {
+			Assert.True(((long)int.MinValue).InRange(int.MinValue, int.MaxValue));
+			Assert.True(((long)int.MaxValue).InRange(int.MinValue, int.MaxValue));
+			Assert.False(((long)int.MinValue - 1L).InRange(int.MinValue, int.MaxValue));
+			Assert.False(((long)int.MaxValue + 1L).InRange(int.MinValue, int.MaxValue));
+			Assert.False((long.MinValue).InRange(int.MinValue, int.MaxValue));
+			Assert.False((long.MaxValue).InRange(int.MinValue, int.MaxValue));
+		}
+
+		// user defined enumerable class that is not collection<T> nor array<T> 
         public class TestEnumClass<T> : IEnumerable<T> {
             IEnumerable<T> items = new T[0];
 

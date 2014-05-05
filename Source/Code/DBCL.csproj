@@ -162,7 +162,7 @@
     <Compile Include="Enumerables\Range.cs" />
     <Compile Include="ExtendsBool.cs" />
     <Compile Include="ExtendsIEnumerable.cs" />
-    <Compile Include="ExtendsInt.cs" />
+    <Compile Include="ExtendsNum.cs" />
     <Compile Include="ExtendsObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Text\CodeEncoding.cs" />
