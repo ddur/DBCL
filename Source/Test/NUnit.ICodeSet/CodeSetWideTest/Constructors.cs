@@ -20,8 +20,8 @@ namespace DD.Collections.ICodeSet.CodeSetWideTest
 			
 			CodeSetWide csw;
 
-			csw = new CodeSetWide(new Code[] { 0, 1, 1114111 });
-			csw = new CodeSetWide(BitSetArray.From(0, 1, 1114111));
+			csw = CodeSetWide.From(new Code[] { 0, 1, 1114111 });
+			csw = CodeSetWide.From(BitSetArray.From(0, 1, 1114111));
 
 		}
 
@@ -33,21 +33,21 @@ namespace DD.Collections.ICodeSet.CodeSetWideTest
 			// requires not null
 			Assert.Throws<ArgumentNullException>(
 				delegate {
-					csw = new CodeSetWide((BitSetArray)null);
+					csw = CodeSetWide.From((BitSetArray)null);
 				}
 			);
 
 			// requres more than ICodeSetService.PairCount members
 			Assert.Throws<ArgumentException>(
 				delegate {
-					csw = new CodeSetWide(BitSetArray.From(0, 70000));
+					csw = CodeSetWide.From(BitSetArray.From(0, 70000));
 				}
 			);
 			
 			// requires more than ICodeSetService.PairCount NOT members
 			Assert.Throws<ArgumentException>(
 				delegate {
-					csw = new CodeSetWide(BitSetArray.From(
+					csw = CodeSetWide.From(BitSetArray.From(
 						65525, 65526, 65527, 65528,
 						65529, 65530, 65531, 65532,
 						65533, 65534, 65535, 65536,
@@ -58,7 +58,7 @@ namespace DD.Collections.ICodeSet.CodeSetWideTest
 			// requires to span over unicode page
 			Assert.Throws<ArgumentException>(
 				delegate {
-					csw = new CodeSetWide(BitSetArray.From(
+					csw = CodeSetWide.From(BitSetArray.From(
 						0, 1, 2, 3,
 						4, 5, 6, 7,
 						8, 9, 10, 11,
@@ -70,7 +70,7 @@ namespace DD.Collections.ICodeSet.CodeSetWideTest
 			// requires valid codes
 			Assert.Throws<ArgumentOutOfRangeException>(
 				delegate {
-					csw = new CodeSetWide(BitSetArray.From(
+					csw = CodeSetWide.From(BitSetArray.From(
 						0, 1, 2, 3,
 						4, 5, 6, 7,
 						8, 9, 10, 11,
@@ -86,8 +86,8 @@ namespace DD.Collections.ICodeSet.CodeSetWideTest
 			
 			CodeSetWide csw;
 
-			csw = new CodeSetWide(new Code[] { 0, 1, 65536 });
-			csw = new CodeSetWide(new CodeSetList(new Code[] { 0, 1, 140000 }));
+			csw = CodeSetWide.From(new Code[] { 0, 1, 65536 });
+			csw = CodeSetWide.From(CodeSetList.From(new Code[] { 0, 1, 140000 }));
 
 		}
 
@@ -99,14 +99,14 @@ namespace DD.Collections.ICodeSet.CodeSetWideTest
 			// requires not null
 			Assert.Throws<ArgumentNullException>(
 				delegate {
-					csw = new CodeSetWide((IEnumerable<Code>)null);
+					csw = CodeSetWide.From((IEnumerable<Code>)null);
 				}
 			);
 
 			// requres more than ICodeSetService.ListMaxCount members
 			Assert.Throws<ArgumentException>(
 				delegate {
-					csw = new CodeSetWide(new List<Code>() {
+					csw = CodeSetWide.From(new List<Code>() {
 						0, 70000
 					});
 				}
@@ -115,7 +115,7 @@ namespace DD.Collections.ICodeSet.CodeSetWideTest
 			// requires at least one NOT member
 			Assert.Throws<ArgumentException>(
 				delegate {
-					csw = new CodeSetWide(new List<Code>() {
+					csw = CodeSetWide.From(new List<Code>() {
 						65525, 65526, 65527, 65528,
 						65529, 65530, 65531, 65532,
 						65533, 65534, 65535, 65536,
@@ -127,7 +127,7 @@ namespace DD.Collections.ICodeSet.CodeSetWideTest
 			// requires to span over single unicode page
 			Assert.Throws<ArgumentException>(
 				delegate {
-					csw = new CodeSetWide(new List<Code>() {
+					csw = CodeSetWide.From(new List<Code>() {
 						0, 1, 2, 3,
 						4, 5, 6, 7,
 						8, 9, 10, 11,

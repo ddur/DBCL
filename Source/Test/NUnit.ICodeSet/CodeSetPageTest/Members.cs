@@ -25,15 +25,15 @@ namespace DD.Collections.ICodeSet.CodeSetPageTest
                 D = r.Next(char.MinValue+10, char.MaxValue);
             }
 
-            csp  = new CodeSetPage(new List<Code>() {1,2,40});
+            csp  = CodeSetPage.From(new List<Code>() {1,2,40});
             Assert.False ( csp[C] );
             Assert.False ( csp[D] );
             
-            csp  = new CodeSetPage(new List<Code>() {1,2,50,C});
+            csp  = CodeSetPage.From(new List<Code>() {1,2,50,C});
             Assert.True ( csp[C] );
             Assert.False ( csp[D] );
             
-            csp  = new CodeSetPage(new List<Code>() {1,C,D});
+            csp  = CodeSetPage.From(new List<Code>() {1,C,D});
             Assert.True ( csp[C] );
             Assert.True ( csp[D] );
             
@@ -44,7 +44,7 @@ namespace DD.Collections.ICodeSet.CodeSetPageTest
 
             CodeSetPage csp;
 
-            csp = new CodeSetPage (new List<Code>() {1,12,33,20});
+            csp = CodeSetPage.From (new List<Code>() {1,12,33,20});
             Assert.True (csp.Count == 4);
             Assert.True (csp.Length == 33);
             Assert.True (csp.First == 1);
@@ -57,7 +57,7 @@ namespace DD.Collections.ICodeSet.CodeSetPageTest
             CodeSetPage csp;
             BitSetArray compact;
 
-            csp = new CodeSetPage (new List<Code>() {1,12,33,20});
+            csp = CodeSetPage.From (new List<Code>() {1,12,33,20});
             compact = csp.ToCompact();
             Assert.True (compact.Count == 4);
             Assert.True (compact.Length == 33);

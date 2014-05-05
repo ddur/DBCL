@@ -29,10 +29,10 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members
 		[Test]
 		public void NotFull_IsFalse()
 		{
-			ICodeSet isNotFull = new CodeSetList(1,2,3,5);
+			ICodeSet isNotFull = CodeSetList.From(1,2,3,5);
 			Assert.False (isNotFull.IsFull());
 
-			isNotFull = new CodeSetPair(0,7);
+			isNotFull = CodeSetPair.From(0,7);
 			Assert.False (isNotFull.IsFull());
 		}
 
@@ -42,10 +42,10 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members
 			ICodeSet isFull = new Code (9);
 			Assert.True (isFull.IsFull());
 
-			isFull = new CodeSetPair(1,2);
+			isFull = CodeSetPair.From(1,2);
 			Assert.True (isFull.IsFull());
 
-			isFull = new CodeSetFull(0,10);
+			isFull = CodeSetFull.From(0,10);
 			Assert.True (isFull.IsFull());
 		}
 	}

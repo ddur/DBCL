@@ -25,19 +25,19 @@ namespace DD.Collections.ICodeSet.CodeSetWrapTest
 				D = r.Next(Code.MinValue, Code.MaxValue);
 			}
 
-			var csw = new CodeSetWrap();
+			var csw = CodeSetWrap.From();
 			Assert.False ( csw[C] );
 			Assert.False ( csw[D] );
 			
-			csw  = new CodeSetWrap(BitSetArray.Size());
+			csw  = CodeSetWrap.From(BitSetArray.Size());
 			Assert.False ( csw[C] );
 			Assert.False ( csw[D] );
 			
-			csw  = new CodeSetWrap(BitSetArray.From (C));
+			csw  = CodeSetWrap.From(BitSetArray.From (C));
 			Assert.True ( csw[C] );
 			Assert.False ( csw[D] );
 			
-			csw  = new CodeSetWrap(BitSetArray.From (C,D));
+			csw  = CodeSetWrap.From(BitSetArray.From (C,D));
 			Assert.True ( csw[C] );
 			Assert.True ( csw[D] );
 			
@@ -49,17 +49,17 @@ namespace DD.Collections.ICodeSet.CodeSetWrapTest
 			CodeSetWrap csw;
 			Code C;
 
-			csw = new CodeSetWrap();
+			csw = CodeSetWrap.From();
 			Assert.Throws<InvalidOperationException> (delegate{C = csw.First;});
 			Assert.Throws<InvalidOperationException> (delegate{C = csw.Last;});
 			
-			csw = new CodeSetWrap (new List<Code>() {12});
+			csw = CodeSetWrap.From (new List<Code>() {12});
 			Assert.True (csw.Count == 1);
 			Assert.True (csw.Length == 1);
 			Assert.True (csw.First == 12);
 			Assert.True (csw.Last == 12);
 			
-			csw = new CodeSetWrap (new List<Code>() {1,12,33,20});
+			csw = CodeSetWrap.From (new List<Code>() {1,12,33,20});
 			Assert.True (csw.Count == 4);
 			Assert.True (csw.Length == 33);
 			Assert.True (csw.First == 1);
@@ -72,14 +72,14 @@ namespace DD.Collections.ICodeSet.CodeSetWrapTest
 			CodeSetWrap csw;
 			BitSetArray bsa;
 
-			csw = new CodeSetWrap();
+			csw = CodeSetWrap.From();
 			bsa = csw.ToBitSetArray();
 			Assert.True (bsa.Count == 0);
 			Assert.True (bsa.Length == 0);
 			Assert.True (bsa.First == null);
 			Assert.True (bsa.Last == null);
 
-			csw = new CodeSetWrap (new List<Code>() {12});
+			csw = CodeSetWrap.From (new List<Code>() {12});
 			bsa = csw.ToBitSetArray();
 			Assert.True (bsa.Count == 1);
 			Assert.True (bsa.First == 12);
@@ -87,7 +87,7 @@ namespace DD.Collections.ICodeSet.CodeSetWrapTest
 			Assert.True (bsa[12]);
 			Assert.True (csw.SequenceEqual(bsa.ToCodes()));
 
-			csw = new CodeSetWrap (new List<Code>() {1,12,33,20});
+			csw = CodeSetWrap.From (new List<Code>() {1,12,33,20});
 			bsa = csw.ToBitSetArray();
 			Assert.True (bsa.Count == 4);
 			Assert.True (bsa.First == 1);

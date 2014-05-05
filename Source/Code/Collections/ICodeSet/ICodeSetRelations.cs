@@ -77,7 +77,7 @@ namespace DD.Collections.ICodeSet
 		/// <param name="that">ICodeSet</param>
 		/// <returns>Same as IComparable.CompareTo</returns>
 		/// <remarks>Do not rename this extension method to "CompareTo"!</remarks>
-		[Pure] internal static int Compare (this ICodeSet self, ICodeSet that)
+		[Pure] public static int Compare (this ICodeSet self, ICodeSet that)
 		{
 			if (self.QuickSetEquals(that) == true) { return 0; }
 			Contract.Assert (!(self.IsNullOrEmpty() && that.IsNullOrEmpty()));
@@ -161,7 +161,7 @@ namespace DD.Collections.ICodeSet
 		/// <param name="self"></param>
 		/// <param name="that"></param>
 		/// <returns>true/false/maybe</returns>
-		[Pure] internal static bool? QuickSetEquals(this ICodeSet self, ICodeSet that)
+		[Pure] public static bool? QuickSetEquals(this ICodeSet self, ICodeSet that)
 		{
 			// ATTN! '==' operator can be overloaded to point indirectly here
 			// so using "ICodeSet == ICodeSet" here will create endless loop
@@ -204,7 +204,7 @@ namespace DD.Collections.ICodeSet
 		/// <param name="self"></param>
 		/// <param name="that"></param>
 		/// <returns>true/false/maybe</returns>
-		[Pure] internal static bool? QuickSetOverlaps(this ICodeSet self, ICodeSet that)
+		[Pure] public static bool? QuickSetOverlaps(this ICodeSet self, ICodeSet that)
 		{
 			// QuickEquals is allways checked before QuickOverlaps
 

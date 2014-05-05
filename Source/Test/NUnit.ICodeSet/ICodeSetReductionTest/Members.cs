@@ -18,15 +18,15 @@ namespace DD.Collections.ICodeSet.ICodeSetReductionTest
 		public void IsReduced() {
 			Assert.True(new Code(3).IsReduced());
 			Assert.True(CodeSetNull.Singleton.IsReduced());
-			Assert.True(new CodeSetPair(3,4).IsReduced());
-			Assert.True(new CodeSetFull(3,44).IsReduced());
-			Assert.True(new CodeSetList(3,7,9,15,80).IsReduced());
-			Assert.True(new CodeSetPage(3,7,9,15,80).IsReduced());
-			Assert.True(new CodeSetWide(new Code[]{3,7,9,15,80,70000}).IsReduced());
-			Assert.True(new CodeSetDiff(new CodeSetFull(1,80000),new CodeSetWide(new Code[]{3,7,9,15,80,70000})).IsReduced());
+			Assert.True(CodeSetPair.From(3,4).IsReduced());
+			Assert.True(CodeSetFull.From(3,44).IsReduced());
+			Assert.True(CodeSetList.From(3,7,9,15,80).IsReduced());
+			Assert.True(CodeSetPage.From(3,7,9,15,80).IsReduced());
+			Assert.True(CodeSetWide.From(new Code[]{3,7,9,15,80,70000}).IsReduced());
+			Assert.True(CodeSetDiff.From(CodeSetFull.From(1,80000),CodeSetWide.From(new Code[]{3,7,9,15,80,70000})).IsReduced());
 
-			Assert.False(new CodeSetBits(3,7,9,15,80).IsReduced());
-			Assert.False(new CodeSetWrap(BitSetArray.From(3,7,9,15,80)).IsReduced());
+			Assert.False(CodeSetBits.From(3,7,9,15,80).IsReduced());
+			Assert.False(CodeSetWrap.From(BitSetArray.From(3,7,9,15,80)).IsReduced());
 		}
 
 		[Test, TestCaseSource("Expected")]
@@ -34,7 +34,7 @@ namespace DD.Collections.ICodeSet.ICodeSetReductionTest
 		{
 			ICodeSet input = null;
 			if (tuple.Item1.IsNot(null)) {
-				input = new CodeSetWrap(tuple.Item1);
+				input = CodeSetWrap.From(tuple.Item1);
 			}
 			Type type = tuple.Item2;
 			ICodeSet result = input.Reduce();

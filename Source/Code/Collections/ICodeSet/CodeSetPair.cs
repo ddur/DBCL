@@ -21,7 +21,14 @@ namespace DD.Collections.ICodeSet
 
 		#region Ctor
 
-		public CodeSetPair(Code low, Code high)
+		public static CodeSetPair From(Code low, Code high)
+		{
+			Contract.Requires<ArgumentException>(low < high);
+
+			return new CodeSetPair(low, high);			
+		}
+
+		internal CodeSetPair(Code low, Code high)
 		{
 			Contract.Requires<ArgumentException>(low < high);
 

@@ -18,26 +18,38 @@ namespace DD.Collections.ICodeSet
 	public sealed class CodeSetBits : CodeSet
 	{
 		#region Ctor
-		
-		// TODO SAME CONTRACT: internal constructor, public factory? 
-		// Can use fast internals (static checked but no contracts at RELEASE)
-		// Then, test can use only public for 100% coverage 
 
 		/// <summary>Empty CodeSetBits</summary>
-		/// <remarks>Only CodeSetBits and CodeSetNull can be Empty</remarks>
-		public CodeSetBits()
+		/// <remarks>Only CodeSetBits/Wrap and CodeSetNull can be Empty</remarks>
+		public static CodeSetBits From()
 		{
-			Contract.Ensures(Theory.Construct(this));
-
-			this.sorted = BitSetArray.Size(0);
+			return CodeSetBits.From(BitSetArray.Size()); 
 		}
 
-		public CodeSetBits(params Code[] codes)
-			: this((IEnumerable<Code>)codes)
+		public static CodeSetBits From(params Code[] codes)
 		{
+			Contract.Requires<ArgumentNullException>(codes.IsNot(null));
+			return new CodeSetBits((IEnumerable<Code>)codes);
 		}
 
-		public CodeSetBits(IEnumerable<Code> codes)
+		public static CodeSetBits From(IEnumerable<Code> codes)
+		{
+			Contract.Requires<ArgumentNullException>(codes.IsNot(null));
+			return new CodeSetBits(codes);
+		}
+
+		/// <summary>From BitSetArray at Offset</summary>
+		/// <param name="bits">BitSetArray</param>
+		/// <param name="offset">int</param>
+		public static CodeSetBits From(BitSetArray bits, int offset = 0)
+		{
+			Contract.Requires<ArgumentNullException>(bits.IsNot(null));
+			Contract.Requires<ArgumentException>(bits.Count == 0 || (bits.First + offset).HasCodeValue());
+			Contract.Requires<ArgumentException>(bits.Count == 0 || (bits.Last + offset).HasCodeValue());
+			return new CodeSetBits(bits, offset);
+		}
+
+		private CodeSetBits(IEnumerable<Code> codes)
 		{
 			Contract.Requires<ArgumentNullException>(codes.IsNot(null));
 
@@ -70,14 +82,11 @@ namespace DD.Collections.ICodeSet
 					}
 				}
 			} else {
-				this.sorted = BitSetArray.Size(0);
+				this.sorted = BitSetArray.Size();
 			}
 		}
 
-		/// <summary>From BitSetArray</summary>
-		/// <param name="bits">BitSetArray</param>
-		/// <param name="offset">int</param>
-		public CodeSetBits(BitSetArray bits, int offset = 0)
+		private CodeSetBits(BitSetArray bits, int offset = 0)
 		{
 
 			Contract.Requires<ArgumentNullException>(bits.IsNot(null));

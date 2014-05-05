@@ -57,7 +57,7 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 			Assert.IsTrue (b.QuickSetEquals(a) == false);
 
 			a = CodeSetNull.Singleton;
-			b = new CodeSetPair(0,100);
+			b = CodeSetPair.From(0,100);
 			Assert.IsFalse (a.SetEquals(b));
 			Assert.IsFalse (b.SetEquals(a));
 			Assert.IsFalse (a.SequenceEqual(b));
@@ -66,7 +66,7 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 			Assert.IsTrue (b.QuickSetEquals(a) == false);
 
 			a = CodeSetNull.Singleton;
-			b = new CodeSetList(0,100,1000);
+			b = CodeSetList.From(0,100,1000);
 			Assert.IsFalse (a.SetEquals(b));
 			Assert.IsFalse (b.SetEquals(a));
 			Assert.IsFalse (a.SequenceEqual(b));
@@ -83,7 +83,7 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 			Assert.IsTrue (a.QuickSetEquals(b) == false);
 			Assert.IsTrue (b.QuickSetEquals(a) == false);
 
-			a = new CodeSetPair(0,100);
+			a = CodeSetPair.From(0,100);
 			b = CodeSetNull.Singleton;
 			Assert.IsFalse (a.SetEquals(b));
 			Assert.IsFalse (b.SetEquals(a));
@@ -92,7 +92,7 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 			Assert.IsTrue (a.QuickSetEquals(b) == false);
 			Assert.IsTrue (b.QuickSetEquals(a) == false);
 
-			a = new CodeSetList(0,100,1000);
+			a = CodeSetList.From(0,100,1000);
 			b = CodeSetNull.Singleton;
 			Assert.IsFalse (a.SetEquals(b));
 			Assert.IsFalse (b.SetEquals(a));
@@ -123,8 +123,8 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 			Assert.IsTrue (a.QuickSetEquals(b) == false);
 			Assert.IsTrue (b.QuickSetEquals(a) == false);
 
-			a = new CodeSetList(0,1,2,3,4,5,6,8);
-			b = new CodeSetList(0,1,2,3,4,5,6,9);
+			a = CodeSetList.From(0,1,2,3,4,5,6,8);
+			b = CodeSetList.From(0,1,2,3,4,5,6,9);
 			Assert.IsFalse (a.SetEquals(b));
 			Assert.IsFalse (b.SetEquals(a));
 			Assert.IsFalse (a.SequenceEqual(b));
@@ -132,8 +132,8 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 			Assert.IsTrue (a.QuickSetEquals(b) == false);
 			Assert.IsTrue (b.QuickSetEquals(a) == false);
 
-			a = new CodeSetList(0,1,2,3,4,5,6,90);
-			b = new CodeSetList(0,1,2,3,4,5,6,8);
+			a = CodeSetList.From(0,1,2,3,4,5,6,90);
+			b = CodeSetList.From(0,1,2,3,4,5,6,8);
 			Assert.IsFalse (a.SetEquals(b));
 			Assert.IsFalse (b.SetEquals(a));
 			Assert.IsFalse (a.SequenceEqual(b));
@@ -150,8 +150,8 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 			Assert.IsTrue (a.QuickSetEquals(b) == true);
 			Assert.IsTrue (b.QuickSetEquals(a) == true);
 
-			a = new CodeSetPair(0,6);
-			b = new CodeSetPair(0,6);
+			a = CodeSetPair.From(0,6);
+			b = CodeSetPair.From(0,6);
 			Assert.IsTrue (a.SetEquals(b));
 			Assert.IsTrue (b.SetEquals(a));
 			Assert.IsTrue (a.SequenceEqual(b));
@@ -159,8 +159,8 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 			Assert.IsTrue (a.QuickSetEquals(b) == true);
 			Assert.IsTrue (b.QuickSetEquals(a) == true);
 
-			a = new CodeSetList(0,1,2,3,4,5,6,9);
-			b = new CodeSetPage(0,1,2,3,4,5,6,9);
+			a = CodeSetList.From(0,1,2,3,4,5,6,9);
+			b = CodeSetPage.From(0,1,2,3,4,5,6,9);
 			Assert.IsTrue (a.SetEquals(b));
 			Assert.IsTrue (b.SetEquals(a));
 			Assert.IsTrue (a.SequenceEqual(b));
@@ -168,8 +168,8 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 			Assert.IsTrue (a.QuickSetEquals(b) == null);
 			Assert.IsTrue (b.QuickSetEquals(a) == null);
 
-			a = new CodeSetList(0,2,3,4,5,6,7,9);
-			b = new CodeSetList(0,1,2,3,4,5,6,9);
+			a = CodeSetList.From(0,2,3,4,5,6,7,9);
+			b = CodeSetList.From(0,1,2,3,4,5,6,9);
 			Assert.IsFalse (a.SetEquals(b));
 			Assert.IsFalse (b.SetEquals(a));
 			Assert.IsFalse (a.SequenceEqual(b));
@@ -177,8 +177,8 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 			Assert.IsTrue (a.QuickSetEquals(b) == null);
 			Assert.IsTrue (b.QuickSetEquals(a) == null);
 
-			a = new CodeSetList(0,1,2,3,4,5,6,90);
-			b = new CodeSetList(0,2,3,4,5,6,90);
+			a = CodeSetList.From(0,1,2,3,4,5,6,90);
+			b = CodeSetList.From(0,2,3,4,5,6,90);
 			Assert.IsFalse (a.SetEquals(b));
 			Assert.IsFalse (b.SetEquals(a));
 			Assert.IsFalse (a.SequenceEqual(b));

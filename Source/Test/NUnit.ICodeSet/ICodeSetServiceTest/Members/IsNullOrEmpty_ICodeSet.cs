@@ -30,7 +30,7 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members
 		[Test]
 		public void IsFalse() {
 			Assert.False ((new Code(9)).IsNullOrEmpty());
-			Assert.False ((new CodeSetPair(10,11)).IsNullOrEmpty());
+			Assert.False ((CodeSetPair.From(10,11)).IsNullOrEmpty());
 		}
 	}
 }

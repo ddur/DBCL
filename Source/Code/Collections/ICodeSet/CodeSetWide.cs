@@ -22,8 +22,44 @@ namespace DD.Collections.ICodeSet
 	{
 		
 		#region Ctor
-		
-		public CodeSetWide(IEnumerable<Code> codes)
+
+		public static CodeSetWide From(params Code[] codes)
+		{
+			Contract.Requires<ArgumentNullException>(!codes.Is(null));
+			Contract.Requires<ArgumentEmptyException>(!codes.IsEmpty());
+			Contract.Requires<ArgumentException>(codes.Distinct().Count() > ICodeSetService.PairCount);
+			Contract.Requires<ArgumentException>(codes.Distinct().Count() < (1 + codes.Max() - codes.Min()));
+			Contract.Requires<ArgumentException>(codes.Min().UnicodePlane() != codes.Max().UnicodePlane());
+
+			return new CodeSetWide(codes as IEnumerable<Code>);
+		}
+
+		public static CodeSetWide From(IEnumerable<Code> codes)
+		{
+			Contract.Requires<ArgumentNullException>(!codes.Is(null));
+			Contract.Requires<ArgumentEmptyException>(!codes.IsEmpty());
+			Contract.Requires<ArgumentException>(codes.Distinct().Count() > ICodeSetService.PairCount);
+			Contract.Requires<ArgumentException>(codes.Distinct().Count() < (1 + codes.Max() - codes.Min()));
+			Contract.Requires<ArgumentException>(codes.Min().UnicodePlane() != codes.Max().UnicodePlane());
+
+			return new CodeSetWide(codes);
+		}
+
+		public static CodeSetWide From(BitSetArray bits, int offset = 0)
+		{
+			Contract.Requires<ArgumentNullException>(!bits.Is(null));
+			Contract.Requires<ArgumentEmptyException>(bits.Count != 0);
+			Contract.Requires<ArgumentOutOfRangeException>(bits.Length <= Code.MaxCount);
+			Contract.Requires<ArgumentOutOfRangeException>((bits.First + offset).HasCodeValue());
+			Contract.Requires<ArgumentOutOfRangeException>((bits.Last + offset).HasCodeValue());
+			Contract.Requires<ArgumentException>(bits.Count > ICodeSetService.PairCount);
+			Contract.Requires<ArgumentException>(bits.Count < (bits.Last - bits.First));
+			Contract.Requires<ArgumentException>((bits.First + offset).UnicodePlane() != (bits.Last + offset).UnicodePlane());
+
+			return new CodeSetWide(bits, offset);
+		}
+
+		internal CodeSetWide(IEnumerable<Code> codes)
 		{
 			Contract.Requires<ArgumentNullException>(!codes.Is(null));
 			Contract.Requires<ArgumentEmptyException>(!codes.IsEmpty());
@@ -53,7 +89,7 @@ namespace DD.Collections.ICodeSet
 
 		}
 
-		public CodeSetWide(BitSetArray bits, int offset = 0)
+		internal CodeSetWide(BitSetArray bits, int offset = 0)
 		{
 			Contract.Requires<ArgumentNullException>(!bits.Is(null));
 			Contract.Requires<ArgumentEmptyException>(bits.Count != 0);
@@ -76,7 +112,7 @@ namespace DD.Collections.ICodeSet
 			}
 		}
 
-		BitSetArray[] getBitPlanes()
+		private BitSetArray[] getBitPlanes()
 		{
 			var bitPlanes = new BitSetArray[this.planes.Length];
 			for (int i = 0; i < this.planes.Length; i++) {
@@ -85,14 +121,14 @@ namespace DD.Collections.ICodeSet
 			return bitPlanes;
 		}
 
-		void init(ref int thisStartPlane, ref int thisFinalPlane, ref ICodeSet[] thisPlanes)
+		private void init(ref int thisStartPlane, ref int thisFinalPlane, ref ICodeSet[] thisPlanes)
 		{
 			thisStartPlane = this.start.UnicodePlane();
 			thisFinalPlane = this.final.UnicodePlane();
 			thisPlanes = new ICodeSet[1 + thisFinalPlane - thisStartPlane];
 		}
 
-		void init(IEnumerable<int> bits, int offset)
+		private void init(IEnumerable<int> bits, int offset)
 		{
 			var bitPlanes = getBitPlanes();
 			foreach (var item in bits) {
@@ -101,7 +137,7 @@ namespace DD.Collections.ICodeSet
 			initPlanes(bitPlanes, offset);
 		}
 
-		void init(IEnumerable<Code> codes)
+		private void init(IEnumerable<Code> codes)
 		{
 			var bitPlanes = getBitPlanes();
 			foreach (Code code in codes) {
@@ -110,7 +146,7 @@ namespace DD.Collections.ICodeSet
 			initPlanes(bitPlanes);
 		}
 
-		void initPlanes(BitSetArray[] bitPlanes, int offset = 0)
+		private void initPlanes(BitSetArray[] bitPlanes, int offset = 0)
 		{
 			int index = 0;
 			foreach (var bitPlane in bitPlanes) {

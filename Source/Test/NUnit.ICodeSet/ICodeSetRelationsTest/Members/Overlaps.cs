@@ -51,7 +51,7 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 
 			Assert.IsTrue (a.Overlaps(b) == b.Overlaps(a)); 
 
-			b = new CodeSetPair(0,7); 
+			b = CodeSetPair.From(0,7); 
 
 			Assert.IsTrue (a.QuickSetOverlaps(b) == false); // null/empty never overlaps
 			Assert.IsTrue (b.QuickSetOverlaps(a) == false); // null/empty never overlaps
@@ -80,7 +80,7 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 		[Test]
 		public void ReferenceEqual()
 		{
-			ICodeSet a = new CodeSetList(0,2,4);
+			ICodeSet a = CodeSetList.From(0,2,4);
 
 			Assert.IsTrue (a.Overlaps(a));
 
@@ -90,8 +90,8 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 		[Test]
 		public void SetEqual()
 		{
-			ICodeSet a = new CodeSetPage(1,2,5);
-			ICodeSet b = new CodeSetList(1,2,5);
+			ICodeSet a = CodeSetPage.From(1,2,5);
+			ICodeSet b = CodeSetList.From(1,2,5);
 
 			Assert.IsTrue (a.Overlaps(b));
 			Assert.IsTrue (b.Overlaps(a));
@@ -105,8 +105,8 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 		[Test]
 		public void Overlaps_IsTrue()
 		{
-			ICodeSet a = new CodeSetPage(1,2,3,4,5,7,10);
-			ICodeSet b = new CodeSetPage(0,4,9);
+			ICodeSet a = CodeSetPage.From(1,2,3,4,5,7,10);
+			ICodeSet b = CodeSetPage.From(0,4,9);
 
 			Assert.IsTrue (a.Overlaps(b));
 			Assert.IsTrue (b.Overlaps(a));
@@ -116,7 +116,7 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 
 			Assert.IsTrue (a.Overlaps(b) == b.Overlaps(a));
 
-			b = new CodeSetPair(2,5);
+			b = CodeSetPair.From(2,5);
 
 			Assert.IsTrue (a.Overlaps(b));
 			Assert.IsTrue (b.Overlaps(a));
@@ -140,8 +140,8 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 		[Test]
 		public void Overlaps_IsFalse()
 		{
-			ICodeSet a = new CodeSetPage(1,3,5);
-			ICodeSet b = new CodeSetPage(0,2,4);
+			ICodeSet a = CodeSetPage.From(1,3,5);
+			ICodeSet b = CodeSetPage.From(0,2,4);
 
 			Assert.IsFalse (a.Overlaps(b));
 			Assert.IsFalse (b.Overlaps(a));
@@ -151,7 +151,7 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 
 			Assert.IsTrue (a.Overlaps(b) == b.Overlaps(a));
 
-			b = new CodeSetPair(0,7);
+			b = CodeSetPair.From(0,7);
 
 			Assert.IsFalse (a.Overlaps(b));
 			Assert.IsFalse (b.Overlaps(a));

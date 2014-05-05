@@ -43,7 +43,7 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members
 			Assert.IsTrue (output.First == a.First);
 			Assert.IsTrue (output.Last == a.Last);
 
-			a = new CodeSetPair(25,90);
+			a = CodeSetPair.From(25,90);
 			output = a.ToBitSetArray();
 
 			Assert.IsTrue (output.Count == a.Count);
@@ -51,7 +51,7 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members
 			Assert.IsTrue (output.First == a.First);
 			Assert.IsTrue (output.Last == a.Last);
 
-			a = new CodeSetList(11,25,90,130);
+			a = CodeSetList.From(11,25,90,130);
 			output = a.ToBitSetArray();
 
 			Assert.IsTrue (output.Count == a.Count);
@@ -59,7 +59,7 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members
 			Assert.IsTrue (output.First == a.First);
 			Assert.IsTrue (output.Last == a.Last);
 
-			a = new CodeSetPage(11,25,90,130,132,132,133,134,150,151,152,153,154,155,156,157,158,159,160);
+			a = CodeSetPage.From(11,25,90,130,132,132,133,134,150,151,152,153,154,155,156,157,158,159,160);
 			output = a.ToBitSetArray();
 
 			Assert.IsTrue (output.Count == a.Count);

@@ -21,8 +21,8 @@ namespace DD.Collections
 	/// <para>On-bit represents positive integer set member</para>
 	/// <remarks>Instance with maximum capacity takes 256MB</remarks>
 	/// </summary>
-	// TODO? Shift
-	// TODO? Parallel
+	// TODO? BitShift
+	// TODO? Parallel.ForEach
 	[Serializable]
 	public sealed partial class BitSetArray :
 		ISet<int>, ICollection<int>, IEnumerable<int>,
@@ -2484,7 +2484,13 @@ namespace DD.Collections
 			return isChanged;
 		}
 
-		internal void _SetItems(IEnumerable<int> items)
+		#if DEBUG
+		[CLSCompliant(false)]
+		public
+		#else
+		private
+		#endif
+		void _SetItems(IEnumerable<int> items)
 		{
 			Contract.Requires<ArgumentNullException>(items != null);
 			Contract.Requires<ArgumentEmptyException>(!items.IsEmpty());

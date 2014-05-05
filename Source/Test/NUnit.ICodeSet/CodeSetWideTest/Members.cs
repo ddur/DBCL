@@ -17,8 +17,8 @@ namespace DD.Collections.ICodeSet.CodeSetWideTest
 		static List<Code> list1 = new List<Code>() {0,65536,1114111};
 		static List<Code> list2 = new List<Code>() {32768,65536,65537};
 
-		readonly CodeSetWide csw1 = new CodeSetWide(list1);
-		readonly CodeSetWide csw2 = new CodeSetWide(list2);
+		readonly CodeSetWide csw1 = CodeSetWide.From(list1);
+		readonly CodeSetWide csw2 = CodeSetWide.From(list2);
 
 		[Test] public void AsEnumerable() {
 			

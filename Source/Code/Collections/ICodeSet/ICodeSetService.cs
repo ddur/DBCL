@@ -143,7 +143,7 @@ namespace DD.Collections.ICodeSet
 		/// </summary>
 		/// <param name="self"></param>
 		/// <returns></returns>
-		[Pure] internal static BitSetArray ToCompact(this ICodeSet self)
+		[Pure] public static BitSetArray ToCompact(this ICodeSet self)
 		{
 			// TODO Ensures Theory
 			Contract.Ensures(Contract.Result<BitSetArray>().IsNot(null));
@@ -194,12 +194,12 @@ namespace DD.Collections.ICodeSet
 			return self.IsNull() || self.Count == 0;
 		}
 		
-		[Pure] internal static bool IsFull(this ICodeSet self)
+		[Pure] public static bool IsFull(this ICodeSet self)
 		{
 			return !self.IsNull() && self.Count != 0 && self.Count == self.Length;
 		}
 
-		[Pure] internal static bool IsFull(this BitSetArray self)
+		[Pure] public static bool IsFull(this BitSetArray self)
 		{
 			return !self.IsNull() && self.Count != 0 && (self.Count == self.Span());
 		}

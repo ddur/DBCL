@@ -21,7 +21,7 @@ namespace DD.Collections.ICodeSet.CodeSetFullTest
         {
             CodeSetFull codeSetFull;
 
-            codeSetFull = new CodeSetFull(1, 7);
+            codeSetFull = CodeSetFull.From(1, 7);
 
             // enumerator
             Assert.True (codeSetFull.SequenceEqual(new Code[7] {1,2,3,4,5,6,7}));
@@ -42,7 +42,7 @@ namespace DD.Collections.ICodeSet.CodeSetFullTest
             Assert.False (codeSetFull[Code.MaxValue]);
 
             
-            codeSetFull = new CodeSetFull(Code.MinValue, Code.MaxValue);
+            codeSetFull = CodeSetFull.From(Code.MinValue, Code.MaxValue);
 
             // enumerator -> SequenceEqual
 			var range = Enumerable.Range(0, Code.MaxCount);

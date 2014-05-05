@@ -33,15 +33,15 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 			hashCode = notEmpty.HashCode();
 			Assert.True (new Code(6).HashCode() == hashCode);
 
-			notEmpty = new CodeSetPair(1,7);
+			notEmpty = CodeSetPair.From(1,7);
 			Assert.True (notEmpty.HashCode() != 0);
 			hashCode = notEmpty.HashCode();
-			Assert.True (new CodeSetPair(1, 7).HashCode() == hashCode);
+			Assert.True (CodeSetPair.From(1, 7).HashCode() == hashCode);
 			
-			notEmpty = new CodeSetList(1, 7, 80);
+			notEmpty = CodeSetList.From(1, 7, 80);
 			Assert.True (notEmpty.HashCode() != 0);
 			hashCode = notEmpty.HashCode();
-			Assert.True (new CodeSetList(1, 7, 80).HashCode() == hashCode);
+			Assert.True (CodeSetList.From(1, 7, 80).HashCode() == hashCode);
 			
 		}
 	}

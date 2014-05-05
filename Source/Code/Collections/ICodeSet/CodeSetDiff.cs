@@ -20,10 +20,31 @@ namespace DD.Collections.ICodeSet
 
 		#region Ctor
 
-		/// <summary>Constructor</summary>
+		public static CodeSetDiff From(ICodeSet a, ICodeSet b) {
+			Contract.Requires<ArgumentNullException>(!a.IsNull());
+			Contract.Requires<ArgumentNullException>(!b.IsNull());
+
+			Contract.Requires<ArgumentException>(!a.IsEmpty());
+			Contract.Requires<ArgumentException>(!b.IsEmpty());
+
+			// a is full range
+			Contract.Requires<ArgumentException>(a.Count == a.Length);
+			Contract.Requires<ArgumentException>(a is CodeSetFull);
+
+			// b is proper-inner range subset of a
+			Contract.Requires<ArgumentException>(a.First < b.First);
+			Contract.Requires<ArgumentException>(b.Last < a.Last);
+			
+			// this.count > PairCount
+			Contract.Requires<ArgumentException>((a.Count - b.Count) > ICodeSetService.PairCount);
+
+			return new CodeSetDiff(a, b);			
+		}
+
+		/// <summary>Internal Constructor for Reduction</summary>
 		/// <param name="a">CodeRange</param>
 		/// <param name="b">CodeSet</param>
-		public CodeSetDiff(ICodeSet a, ICodeSet b)
+		internal CodeSetDiff(ICodeSet a, ICodeSet b)
 		{
 			Contract.Requires<ArgumentNullException>(!a.IsNull());
 			Contract.Requires<ArgumentNullException>(!b.IsNull());

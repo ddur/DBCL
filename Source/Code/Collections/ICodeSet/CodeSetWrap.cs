@@ -21,16 +21,43 @@ namespace DD.Collections.ICodeSet
 	{
 		#region Ctor
 
-		public CodeSetWrap()
+		public static CodeSetWrap From ()
 		{
-			Contract.Ensures(Theory.Construct(this));
+			return new CodeSetWrap(BitSetArray.Size());
+		}
 
-			this.sorted = BitSetArray.Size();
+		public static CodeSetWrap From (CodeSetWrap wrap)
+		{
+			Contract.Requires<ArgumentNullException>(wrap.IsNot(null));
+
+			return new CodeSetWrap(wrap);
+		}
+
+		public static CodeSetWrap From (params Code[] codes)
+		{
+			Contract.Requires<ArgumentNullException>(codes.IsNot(null));
+
+			return new CodeSetWrap(codes as IEnumerable<Code>);
+		}
+
+		public static CodeSetWrap From (IEnumerable<Code> codes)
+		{
+			Contract.Requires<ArgumentNullException>(codes.IsNot(null));
+
+			return new CodeSetWrap(codes);
+		}
+
+		public static CodeSetWrap From(BitSetArray bits)
+		{
+			Contract.Requires<ArgumentNullException>(bits.IsNot(null));
+			Contract.Requires<ArgumentOutOfRangeException>(bits.Count == 0 || bits.Length.IsCodesCount() || bits.Last.HasCodeValue());
+
+			return new CodeSetWrap(bits);
 		}
 
 		/// <summary>Quick shallow clone</summary>
 		/// <param name="wrap">CodeSetWrap</param>
-		public CodeSetWrap(CodeSetWrap wrap)
+		private CodeSetWrap(CodeSetWrap wrap)
 		{
 			Contract.Requires<ArgumentNullException>(wrap.IsNot(null));
 
@@ -39,7 +66,7 @@ namespace DD.Collections.ICodeSet
 			sorted = wrap.sorted;
 		}
 
-		public CodeSetWrap(IEnumerable<Code> codes)
+		private CodeSetWrap(IEnumerable<Code> codes)
 		{
 			Contract.Requires<ArgumentNullException>(codes.IsNot(null));
 
@@ -50,7 +77,7 @@ namespace DD.Collections.ICodeSet
 
 		/// <summary>Copy(bits) &amp; bits.TrimExcess()</summary>
 		/// <param name="bits">BitSetArray</param>
-		public CodeSetWrap(BitSetArray bits)
+		private CodeSetWrap(BitSetArray bits)
 		{
 			Contract.Requires<ArgumentNullException>(bits.IsNot(null));
 			Contract.Requires<ArgumentOutOfRangeException>(bits.Count == 0 || bits.Length.IsCodesCount() || bits.Last.HasCodeValue());

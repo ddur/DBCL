@@ -13,8 +13,8 @@ namespace DD.Collections.ICodeSet.CodeSetDiffTest
 	[TestFixture]
 	public class Members
 	{
-		static readonly CodeSetDiff csd1 = new CodeSetDiff(new CodeSetFull(Code.MinValue, Code.MaxValue), new Code(Code.MaxValue/2));
-		static readonly CodeSetDiff csd2 = new CodeSetDiff(new CodeSetFull(90, 203), new CodeSetFull(100, 200));
+		static readonly CodeSetDiff csd1 = CodeSetDiff.From(CodeSetFull.From(Code.MinValue, Code.MaxValue), new Code(Code.MaxValue/2));
+		static readonly CodeSetDiff csd2 = CodeSetDiff.From(CodeSetFull.From(90, 203), CodeSetFull.From(100, 200));
 		
 		[Test]
 		public void AsEnumerable()

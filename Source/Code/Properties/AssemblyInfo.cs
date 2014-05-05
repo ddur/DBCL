@@ -11,12 +11,6 @@ using System.Diagnostics.Contracts;
 [assembly: CLSCompliant(true)]
 [assembly: ContractVerification ( false )]
 
-[assembly: InternalsVisibleTo("NUnit.BitSetArray")]
-[assembly: InternalsVisibleTo("NUnit.Enumerables")]
-[assembly: InternalsVisibleTo("NUnit.Diagnostics")]
-[assembly: InternalsVisibleTo("NUnit.Extensions")]
-[assembly: InternalsVisibleTo("NUnit.ICodeSet")]
-
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.

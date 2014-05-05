@@ -17,9 +17,9 @@ namespace DD.Collections.ICodeSet.CodeSetDiffTest
 		{
 			CodeSetDiff csd;
 			
-			csd = new CodeSetDiff(new CodeSetFull(Code.MinValue, Code.MaxValue), new Code(Code.MaxValue/2));
-			csd = new CodeSetDiff(new CodeSetFull(Code.MinValue, Code.MaxValue), new CodeSetPair(100, 200));
-			csd = new CodeSetDiff(new CodeSetFull(Code.MinValue, Code.MaxValue), new CodeSetFull(100, 200));
+			csd = CodeSetDiff.From(CodeSetFull.From(Code.MinValue, Code.MaxValue), new Code(Code.MaxValue/2));
+			csd = CodeSetDiff.From(CodeSetFull.From(Code.MinValue, Code.MaxValue), CodeSetPair.From(100, 200));
+			csd = CodeSetDiff.From(CodeSetFull.From(Code.MinValue, Code.MaxValue), CodeSetFull.From(100, 200));
 
 		}
 
@@ -30,53 +30,53 @@ namespace DD.Collections.ICodeSet.CodeSetDiffTest
 
 			// requires no null
 			Assert.Throws<ArgumentNullException> (
-				delegate { csd = new CodeSetDiff((ICodeSet)null,new CodeSetPair(0,100)); }
+				delegate { csd = CodeSetDiff.From((ICodeSet)null,CodeSetPair.From(0,100)); }
 			);
 			Assert.Throws<ArgumentNullException> (
-				delegate { csd = new CodeSetDiff(new CodeSetFull(0,100),(ICodeSet)null); }
+				delegate { csd = CodeSetDiff.From(CodeSetFull.From(0,100),(ICodeSet)null); }
 			);
 
 			// requires no empty
 			Assert.Throws<ArgumentException> (
-				delegate { csd = new CodeSetDiff(CodeSetNull.Singleton,new CodeSetPair(0,100)); }
+				delegate { csd = CodeSetDiff.From(CodeSetNull.Singleton,CodeSetPair.From(0,100)); }
 			);
 			Assert.Throws<ArgumentException> (
-				delegate { csd = new CodeSetDiff(new CodeSetFull(0,100),CodeSetNull.Singleton); }
+				delegate { csd = CodeSetDiff.From(CodeSetFull.From(0,100),CodeSetNull.Singleton); }
 			);
 			
 			// requires a.Count = a.Length
 			Assert.Throws<ArgumentException> (
-				delegate { csd = new CodeSetDiff(new CodeSetPage(new Code[]{0,1,3,4}),new CodeSetPair(1,3)); }
+				delegate { csd = CodeSetDiff.From(CodeSetPage.From(new Code[]{0,1,3,4}),CodeSetPair.From(1,3)); }
 			);
 			// requires a is CodeSetFull
 			Assert.Throws<ArgumentException> (
-				delegate { csd = new CodeSetDiff(new CodeSetPage(new Code[]{0,1,2,3,4}),new CodeSetPair(1,3)); }
+				delegate { csd = CodeSetDiff.From(CodeSetPage.From(new Code[]{0,1,2,3,4}),CodeSetPair.From(1,3)); }
 			);
 			
 			// requires a.Last > b.Last  
 			Assert.Throws<ArgumentException> (
-				delegate { csd = new CodeSetDiff(new CodeSetFull(0,100), new CodeSetPair(1,100)); }
+				delegate { csd = CodeSetDiff.From(CodeSetFull.From(0,100), CodeSetPair.From(1,100)); }
 			);
 			Assert.Throws<ArgumentException> (
-				delegate { csd = new CodeSetDiff(new CodeSetFull(0,100), new CodeSetPair(1,101)); }
+				delegate { csd = CodeSetDiff.From(CodeSetFull.From(0,100), CodeSetPair.From(1,101)); }
 			);
 
 			// requires a.First < b.First  
 			Assert.Throws<ArgumentException> (
-				delegate { csd = new CodeSetDiff(new CodeSetFull(1,100), new CodeSetPair(1,99)); }
+				delegate { csd = CodeSetDiff.From(CodeSetFull.From(1,100), CodeSetPair.From(1,99)); }
 			);
 			Assert.Throws<ArgumentException> (
-				delegate { csd = new CodeSetDiff(new CodeSetFull(1,100), new CodeSetPair(0,99)); }
+				delegate { csd = CodeSetDiff.From(CodeSetFull.From(1,100), CodeSetPair.From(0,99)); }
 			);
 			
 			// requires !(b is CodeSetNull)
 			Assert.Throws<ArgumentException> (
-				delegate { csd = new CodeSetDiff(new CodeSetFull(0,100), CodeSetNull.Singleton); }
+				delegate { csd = CodeSetDiff.From(CodeSetFull.From(0,100), CodeSetNull.Singleton); }
 			);
 			
 			// requires .Count > 2
 			Assert.Throws<ArgumentException> (
-				delegate { csd = new CodeSetDiff(new CodeSetFull(1,4), new CodeSetPair(2,3)); }
+				delegate { csd = CodeSetDiff.From(CodeSetFull.From(1,4), CodeSetPair.From(2,3)); }
 			);
 		}
 

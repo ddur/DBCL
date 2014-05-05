@@ -448,11 +448,12 @@ namespace DD.Collections.BitSetArrayTest
 		public void Bit_SetItems () {
 			var test = BitSetArray.Size(2);
 
+			#if DEBUG // _SetItems private to public. 
+			// Only public members contains Contract.Require<Exception>
 			Assert.That(delegate {
 				test._SetItems(new int[] { 0 });
 			}, Throws.Nothing);
 
-			#if DEBUG // internal member Contract.Require<Exception> exists
 
 			Assert.That(delegate {
 				test._SetItems(null);

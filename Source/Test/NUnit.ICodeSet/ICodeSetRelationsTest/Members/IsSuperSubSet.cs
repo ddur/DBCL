@@ -81,7 +81,7 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 			Assert.IsTrue (a.IsProperSubsetOf(b) == b.IsProperSupersetOf(a)); 
 			Assert.IsTrue (b.IsProperSubsetOf(a) == a.IsProperSupersetOf(b)); 
 
-			b = new CodeSetPair(1,5);
+			b = CodeSetPair.From(1,5);
 
 			Assert.IsFalse (a.IsSubsetOf(b)); 
 			Assert.IsFalse (b.IsSubsetOf(a)); 
@@ -130,7 +130,7 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 		[Test]
 		public void ReferenceEqual()
 		{
-			ICodeSet a = new CodeSetPage(0,2,11);
+			ICodeSet a = CodeSetPage.From(0,2,11);
 
 			Assert.IsTrue (a.IsSubsetOf(a));
 			Assert.IsTrue (a.IsSupersetOf(a));
@@ -145,8 +145,8 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 		[Test]
 		public void SetEqual()
 		{
-			ICodeSet a = new CodeSetPage(0,2,4);
-			ICodeSet b = new CodeSetList(0,2,4);
+			ICodeSet a = CodeSetPage.From(0,2,4);
+			ICodeSet b = CodeSetList.From(0,2,4);
 
 			Assert.IsTrue (a.IsSubsetOf(b));
 			Assert.IsTrue (b.IsSubsetOf(a));
@@ -170,8 +170,8 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 		[Test]
 		public void ProperSubset()
 		{
-			ICodeSet a = new CodeSetList(1,2,7);
-			ICodeSet b = new CodeSetPair(1,7);
+			ICodeSet a = CodeSetList.From(1,2,7);
+			ICodeSet b = CodeSetPair.From(1,7);
 
 			Assert.IsFalse (a.IsSubsetOf(b));
 			Assert.IsTrue (b.IsSubsetOf(a));

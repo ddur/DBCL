@@ -22,16 +22,38 @@ namespace DD.Collections.ICodeSet
 
 		#region Ctor
 
-		public CodeSetPage(params Code[] codes)
-			: this((IEnumerable<Code>)codes)
-		{
+		public static CodeSetPage From(params Code[] codes) {
 			Contract.Requires<ArgumentEmptyException>(!codes.IsEmpty());
 			Contract.Requires<ArgumentException>(codes.Distinct().Count() > ICodeSetService.PairCount); // not Null-Pair
 			Contract.Requires<ArgumentException>(codes.Distinct().Count() < (codes.Max() - codes.Min())); // not Full
 			Contract.Requires<ArgumentException>(codes.Min().UnicodePlane() == codes.Max().UnicodePlane()); // one Page
+
+			return new CodeSetPage((IEnumerable<Code>)codes);
 		}
 
-		public CodeSetPage(IEnumerable<Code> codes)
+		public static CodeSetPage From(IEnumerable<Code> codes) {
+			Contract.Requires<ArgumentEmptyException>(!codes.IsEmpty());
+			Contract.Requires<ArgumentException>(codes.Distinct().Count() > ICodeSetService.PairCount); // not Null-Pair
+			Contract.Requires<ArgumentException>(codes.Distinct().Count() < (codes.Max() - codes.Min())); // not Full
+			Contract.Requires<ArgumentException>(codes.Min().UnicodePlane() == codes.Max().UnicodePlane()); // one Page
+
+			return new CodeSetPage(codes);
+		}
+
+		public static CodeSetPage From(BitSetArray bits, int offset = 0)
+		{
+			Contract.Requires<ArgumentNullException>(!bits.Is(null));
+			Contract.Requires<ArgumentEmptyException>(bits.Count != 0);
+			Contract.Requires<ArgumentOutOfRangeException>((bits.First + offset).HasCodeValue());
+			Contract.Requires<ArgumentOutOfRangeException>((bits.Last + offset).HasCodeValue());
+			Contract.Requires<ArgumentException>(bits.Count > ICodeSetService.PairCount);		// not Null-Pair
+			Contract.Requires<ArgumentException>(bits.Count < (1 + bits.Last - bits.First));	// not Full
+			Contract.Requires<ArgumentException>((bits.First + offset).UnicodePlane() == (bits.Last + offset).UnicodePlane()); // one Page
+
+			return new CodeSetPage(bits, offset);
+		}
+
+		internal CodeSetPage(IEnumerable<Code> codes)
 		{
 			Contract.Requires<ArgumentNullException>(!codes.Is(null));
 			Contract.Requires<ArgumentEmptyException>(!codes.IsEmpty());
@@ -64,7 +86,7 @@ namespace DD.Collections.ICodeSet
 			}
 		}
 
-		public CodeSetPage(BitSetArray bits, int offset = 0)
+		internal CodeSetPage(BitSetArray bits, int offset = 0)
 		{
 
 			Contract.Requires<ArgumentNullException>(!bits.Is(null));

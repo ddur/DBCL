@@ -19,26 +19,34 @@ namespace DD.Collections.ICodeSet
 	{
 		#region Ctor
 
-		public CodeSetMask(string utf16)
-			: this(utf16.Decode())
-		{
-			Contract.Requires<ArgumentEmptyException>(string.IsNullOrEmpty(utf16));
+		public static CodeSetMask From(string utf16) {
+			Contract.Requires<ArgumentNullException>(!utf16.IsNull());
+			Contract.Requires<ArgumentEmptyException>(!utf16.IsEmpty());
 			Contract.Requires<ArgumentException>(utf16.CanDecode());
-			
+
+			return new CodeSetMask(utf16.Decode());
 		}
-		public CodeSetMask(params Code[] codes)
-			: this(codes as IEnumerable<Code>)
-		{
+
+		public static CodeSetMask From(params Code[] codes) {
 			Contract.Requires<ArgumentEmptyException>(codes.Length > 0);
-			
+
+			return new CodeSetMask(codes as IEnumerable<Code>);
 		}
-		public CodeSetMask(params char[] chars)
-			: this(chars.Cast<Code>())
-		{
+
+		public static CodeSetMask From(params char[] chars) {
 			Contract.Requires<ArgumentEmptyException>(chars.Length > 0);
-			
+
+			return new CodeSetMask(chars.Cast<Code>());
 		}
-		public CodeSetMask(IEnumerable<Code> codes)
+
+		public static CodeSetMask From(IEnumerable<Code> codes) {
+			Contract.Requires<ArgumentNullException>(!codes.Is(null));
+			Contract.Requires<ArgumentEmptyException>(!codes.IsEmpty());
+
+			return new CodeSetMask(codes);
+		}
+
+		private CodeSetMask(IEnumerable<Code> codes)
 		{
 			Contract.Requires<ArgumentNullException>(!codes.Is(null));
 			Contract.Requires<ArgumentEmptyException>(!codes.IsEmpty());
@@ -73,7 +81,7 @@ namespace DD.Collections.ICodeSet
 			}
 		}
 
-		internal CodeSetMask(uint[] mask, int offset = 0)
+		private CodeSetMask(uint[] mask, int offset = 0)
 		{
 			Contract.Requires<ArgumentNullException>(mask != null);
 			Contract.Requires<ArgumentEmptyException>(mask.Length > 0);
@@ -90,7 +98,7 @@ namespace DD.Collections.ICodeSet
 			Array.Copy(mask, sorted, sorted.Length); 
 		}
 
-		[Pure] internal static uint? LastBitIndex (uint[] bitMaskArray) {
+		[Pure] private static uint? LastBitIndex (uint[] bitMaskArray) {
 			if (bitMaskArray == null) {
 				return null;
 			}
@@ -105,7 +113,7 @@ namespace DD.Collections.ICodeSet
 			return null;
 		}
 
-		[Pure] internal static byte? LastBitIndex (uint bitMask) {
+		[Pure] private static byte? LastBitIndex (uint bitMask) {
 			if (bitMask == 0) {
 				return null;
 			}

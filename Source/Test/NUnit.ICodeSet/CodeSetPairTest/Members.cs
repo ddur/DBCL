@@ -18,7 +18,7 @@ namespace DD.Collections.ICodeSet.CodeSetPairTest
         {
             CodeSetPair csp;
 
-            csp = new CodeSetPair(1, 7);
+            csp = CodeSetPair.From(1, 7);
 
             // enumerator
             Assert.True (csp.SequenceEqual(new Code[2] {1,7}));
@@ -38,7 +38,7 @@ namespace DD.Collections.ICodeSet.CodeSetPairTest
             Assert.False (csp[Code.MaxValue]);
 
             
-            csp = new CodeSetPair(Code.MinValue, Code.MaxValue);
+            csp = CodeSetPair.From(Code.MinValue, Code.MaxValue);
 
             // enumerator
             Assert.True (csp.SequenceEqual(new Code[2] {Code.MinValue,Code.MaxValue}));

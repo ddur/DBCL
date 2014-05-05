@@ -18,7 +18,7 @@ namespace DD.Collections.ICodeSet.CodeSetListTest
         {
             CodeSetList csl;
             var input = new Code[] {1114111,2,2,22,50,100,200,500,1000,10000,100000,1000000,1,0,65536,128000,512000};
-            csl = new CodeSetList (input);
+            csl = CodeSetList.From (input);
             
             // indexer
             foreach (var code in input) {

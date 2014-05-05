@@ -23,7 +23,7 @@ namespace DD.Collections.ICodeSet.CodeTest
             }
             ICodeSet iC = C;
             ICodeSet iD = D;
-            ICodeSet iX = new CodeSetPair (C, D);
+            ICodeSet iX = CodeSetPair.From (C, D);
 
             Assert.True (iC.CompareTo(iD) != 0); // not equal
             Assert.True (iD.CompareTo(iC) != 0); // not equal

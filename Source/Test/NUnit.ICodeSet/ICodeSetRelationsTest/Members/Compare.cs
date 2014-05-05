@@ -40,22 +40,22 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 			Assert.True (a.Compare(b) == -1);
 
 			a = CodeSetNull.Singleton;
-			b = new CodeSetPair(0,100);
+			b = CodeSetPair.From(0,100);
 			Assert.True (a.Compare(b) == -1);
 
 			a = CodeSetNull.Singleton;
-			b = new CodeSetList(0,100,1000);
+			b = CodeSetList.From(0,100,1000);
 			Assert.True (a.Compare(b) == -1);
 
 			a = new Code(0);
 			b = null; 
 			Assert.True (a.Compare(b) == 1);
 
-			a = new CodeSetPair(0,100);
+			a = CodeSetPair.From(0,100);
 			b = CodeSetNull.Singleton;
 			Assert.True (a.Compare(b) == 1);
 
-			a = new CodeSetList(0,100,1000);
+			a = CodeSetList.From(0,100,1000);
 			b = CodeSetNull.Singleton;
 			Assert.True (a.Compare(b) == 1);
 
@@ -72,12 +72,12 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 			b = new Code(1);
 			Assert.True (a.Compare(b) == 1);
 
-			a = new CodeSetList(0,1,2,3,4,5,6,8);
-			b = new CodeSetList(0,1,2,3,4,5,6,9);
+			a = CodeSetList.From(0,1,2,3,4,5,6,8);
+			b = CodeSetList.From(0,1,2,3,4,5,6,9);
 			Assert.True (a.Compare(b) == -1);
 
-			a = new CodeSetList(0,1,2,3,4,5,6,90);
-			b = new CodeSetList(0,1,2,3,4,5,6,8);
+			a = CodeSetList.From(0,1,2,3,4,5,6,90);
+			b = CodeSetList.From(0,1,2,3,4,5,6,8);
 			Assert.True (a.Compare(b) == 1);
 		}			
 
@@ -88,16 +88,16 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 			ICodeSet b = new Code(0);
 			Assert.True (a.Compare(b) == 0);
 
-			a = new CodeSetList(0,1,2,3,4,5,6,9);
-			b = new CodeSetList(0,1,2,3,4,5,6,9);
+			a = CodeSetList.From(0,1,2,3,4,5,6,9);
+			b = CodeSetList.From(0,1,2,3,4,5,6,9);
 			Assert.True (a.Compare(b) == 0);
 
-			a = new CodeSetList(0,2,3,4,5,6,9);
-			b = new CodeSetList(0,1,2,3,4,5,6,9);
+			a = CodeSetList.From(0,2,3,4,5,6,9);
+			b = CodeSetList.From(0,1,2,3,4,5,6,9);
 			Assert.True (a.Compare(b) == -1);
 
-			a = new CodeSetList(0,1,2,3,4,5,6,90);
-			b = new CodeSetList(0,2,3,4,5,6,90);
+			a = CodeSetList.From(0,1,2,3,4,5,6,90);
+			b = CodeSetList.From(0,2,3,4,5,6,90);
 			Assert.True (a.Compare(b) == 1);
 		}			
 	}
