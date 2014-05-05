@@ -341,9 +341,9 @@ namespace DD.Collections
 			}
 		}
 
-		public sealed class EnumeratorForwardSynchronised : EnumeratorForwardAbstract
+		public sealed class EnumeratorForwardSynchronized : EnumeratorForwardAbstract
 		{
-			public EnumeratorForwardSynchronised(BitSetArray that)
+			public EnumeratorForwardSynchronized(BitSetArray that)
 				: base(that, that.SyncRoot)
 			{
 			}
@@ -562,9 +562,9 @@ namespace DD.Collections
 			}
 		}
 		
-		public sealed class EnumeratorComplementSynchronised : EnumeratorComplementAbstract
+		public sealed class EnumeratorComplementSynchronized : EnumeratorComplementAbstract
 		{
-			public EnumeratorComplementSynchronised(BitSetArray that)
+			public EnumeratorComplementSynchronized(BitSetArray that)
 				: base(that, that.SyncRoot)
 			{
 			}
@@ -775,9 +775,9 @@ namespace DD.Collections
 
 		}
 
-		public sealed class EnumeratorReverseSynchronised : EnumeratorReverseAbstract
+		public sealed class EnumeratorReverseSynchronized : EnumeratorReverseAbstract
 		{
-			public EnumeratorReverseSynchronised(BitSetArray that)
+			public EnumeratorReverseSynchronized(BitSetArray that)
 				: base(that, that.sRoot)
 			{
 			}
@@ -2765,19 +2765,19 @@ namespace DD.Collections
 		[Pure]
 		public IEnumerator<int> GetEnumerator()
 		{
-			return new BitSetArray.EnumeratorForward(this);
+			return new BitSetArray.EnumeratorForwardSynchronized(this);
 		}
 
 		[Pure]
 		public IEnumerator<int> GetEnumeratorReverse()
 		{
-			return new BitSetArray.EnumeratorReverse(this);
+			return new BitSetArray.EnumeratorReverseSynchronized(this);
 		}
 
 		[Pure]
 		public IEnumerator<int> GetEnumeratorComplement()
 		{
-			return new BitSetArray.EnumeratorComplement(this);
+			return new BitSetArray.EnumeratorComplementSynchronized(this);
 		}
 
 		[Pure]
