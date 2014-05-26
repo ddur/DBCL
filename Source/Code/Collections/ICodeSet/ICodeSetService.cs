@@ -88,7 +88,11 @@ namespace DD.Collections.ICodeSet
 
 		[Pure] public static int Span(this BitSetArray self)
 		{
-			return self.Count == 0 ? 0 : 1 + (int)self.Last - (int)self.First;
+			if (self.IsNull())
+				return 0;
+			if (self.Count == 0)
+				return 0;
+			return 1 + (int)self.Last - (int)self.First;
 		}
 
 		/// <summary>IsCompact if:

@@ -857,7 +857,7 @@ namespace DD.Collections
 
 		#region Invariant
 
-		[ContractInvariantMethod]
+		[ContractInvariantMethod] [Pure]
 		private void BitSetArrayInvariant()
 		{
 			Contract.Invariant(Theory.Invariant(this));
