@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using DD.Enumerables;
 using NUnit.Framework;
 
 namespace DD.Collections.ICodeSet.CodeTest
@@ -23,9 +22,9 @@ namespace DD.Collections.ICodeSet.CodeTest
 
         public static IEnumerable<int> ValidByteValue {
 	        get {
-		        foreach (var byteVal in 0.To(255) ) {
-		            yield return byteVal;
-		        }
+                for ( int i = 0; i <= 255; i++ ) {
+                    yield return i;
+                }
 		    }
 		}
 		
@@ -37,21 +36,24 @@ namespace DD.Collections.ICodeSet.CodeTest
 	            yield return char.MaxValue - 1;
 	            yield return char.MaxValue;
 
-	            foreach (int v in 0x10.Times().By(0x100)) {
-	                yield return v;
-	                yield return v|0xFF;
-	            }
-	
-	            foreach (int v in 0xF.Times().From(0x1000).By(0x1000)) {
-	                yield return v;
-	                yield return v|0xFFF;
-	            }
+                int v = 0;
+                for ( int i = 1; i <= 10; i++ ) {
+                    yield return v;
+                    yield return v | 0xFF;
+                    v += 0x100;
+                }
+
+                v = 0x1000;
+                for ( int i = 1; i <= 0xF; i++ ) {
+                    yield return v;
+                    yield return v | 0xFFF;
+                    v += 0x1000;
+                }
 	            
 	            Random r = new Random();
-	            var loop = 100.Times();
-	            foreach (var v in loop) {
-	                yield return r.Next(char.MinValue, char.MaxValue);
-	            }
+                for ( int i = 1; i <= 100; i++ ) {
+                    yield return r.Next (char.MinValue, char.MaxValue);
+                }
 	        }
 	    }
 	    
@@ -69,47 +71,47 @@ namespace DD.Collections.ICodeSet.CodeTest
 	            yield return Code.MaxValue;
 
 	            // byte values
-	            foreach(var byteVal in 0.To(127)) {
-	                yield return byteVal;
-	            }
-	            foreach(var byteVal in 255.To(128)) {
-	                yield return byteVal;
-	            }
+                for ( int ascii7 = 0; ascii7 <= 127; ascii7++ ) {
+                    yield return ascii7;
+                }
+                for ( int codepage = 128; codepage <= 255; codepage++ ) {
+                    yield return codepage;
+                }
 
 	            // permanently unassigned block FDD0-FDEF
-	            foreach(var unassigned in 0xFDD0.To(0xFDEF)) {
-	                yield return unassigned;
-	            }
+                for ( int unassigned = 0xFDD0; unassigned <= 0xFDEF; unassigned++ ) {
+                    yield return unassigned;
+                }
 
 	            // for each page 0000 and permanently unassigned xFFFE/xFFFF items
-	            foreach(var page in 17.Times()) {
-	                yield return (page<<16);
-	                yield return (page<<16|0xFFFE);
-	                yield return (page<<16|0xFFFF);
-	            }
+                for ( int page = 0; page <= 17; page++ ) {
+                    yield return (page << 16);
+                    yield return (page << 16 | 0xFFFE);
+                    yield return (page << 16 | 0xFFFF);
+                }
 
 	            Random r = new Random();
 
 	            // 10 random high surrogates 0xD800-0xDBFF
-	            foreach(var @do in 10.Times()) {
+                for ( int times = 1; times <= 10; times++ ) {
 	                yield return r.Next(0xD800, 0xDBFF);
 	            }
 	            
 	            // 10 random low surrogates 0xDC00-0xDFFF
-	            foreach(var @do in 10.Times()) {
-	                yield return r.Next(0xDC00, 0xDFFF);
+                for ( int times = 1; times <= 10; times++ ) {
+                    yield return r.Next (0xDC00, 0xDFFF);
 	            }
 
 	            // 10 random codes for each plane
-	            foreach(var page in 17.Times()) {
-    	            foreach(var @do in 10.Times()) {
+                for ( int page = 0; page <= 17; page++ ) {
+                    for ( int times = 1; times <= 10; times++ ) {
     	                yield return (page<<16|r.Next(char.MinValue+1, char.MaxValue-1));
 	                }
 	            }
 	
 	            // 100 random Codes
-	            foreach(var @do in 100.Times()) {
-	                yield return r.Next(Code.MinValue, Code.MaxValue);
+                for ( int times = 1; times <= 100; times++ ) {
+                    yield return r.Next (Code.MinValue, Code.MaxValue);
 	            }
 
 	        }

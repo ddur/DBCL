@@ -28,13 +28,15 @@ namespace DD.Collections.ICodeSet
 		}
 
 		public static CodeSetMask From(params Code[] codes) {
-			Contract.Requires<ArgumentEmptyException>(codes.Length > 0);
+            Contract.Requires<ArgumentNullException> (!codes.IsNull ());
+            Contract.Requires<ArgumentEmptyException> (codes.Length > 0);
 
 			return new CodeSetMask(codes as IEnumerable<Code>);
 		}
 
 		public static CodeSetMask From(params char[] chars) {
-			Contract.Requires<ArgumentEmptyException>(chars.Length > 0);
+            Contract.Requires<ArgumentNullException> (!chars.IsNull ());
+            Contract.Requires<ArgumentEmptyException> (chars.Length > 0);
 
 			return new CodeSetMask(chars.Cast<Code>());
 		}

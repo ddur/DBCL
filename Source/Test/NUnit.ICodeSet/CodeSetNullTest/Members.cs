@@ -8,8 +8,6 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 
-using DD.Enumerables;
-
 namespace DD.Collections.ICodeSet.CodeSetNullTest
 {
     [TestFixture]
@@ -28,8 +26,8 @@ namespace DD.Collections.ICodeSet.CodeSetNullTest
             Assert.True (csn.SequenceEqual(new Code[0]));
             
             Random r = new Random();
-            foreach (var item in 10.Times()) {
-                Assert.False (csn[r.Next(Code.MinValue, Code.MaxValue)]);
+            for ( int i = 1; i <= 10; i++ ) {
+                Assert.False (csn[r.Next (Code.MinValue, Code.MaxValue)]);
             }
 
         }

@@ -18,21 +18,32 @@ namespace DD.Collections.ICodeSet
 	{
 		#region Embed
 
-		/// <summary>ICodeSet QuickWrap over BitSetArray</summary>
-		private class QuickWrap : CodeSet
+        /// <summary>QuickWrap ICodeSet over BitSetArray</summary>
+        class QuickWrap : CodeSet
 		{
-
 			#region Ctor
 
-			public QuickWrap(BitSetArray bits)
+			internal QuickWrap(BitSetArray bits)
 			{
-				Contract.Requires<ArgumentNullException>(bits.IsNot(null));
-				Contract.Requires<ArgumentOutOfRangeException>(bits.Count == 0 || bits.Length.IsCodesCount() || bits.Last.HasCodeValue());
+				Contract.Requires<ArgumentNullException>(!bits.IsNull());
+                Contract.Requires<ArgumentEmptyException> (bits.Count != 0);
+                Contract.Requires<ArgumentOutOfRangeException> ((int)bits.Last <= Code.MaxValue);
 
 				Contract.Ensures(Theory.Construct(bits, this));
-		
-				sorted = bits;
-			}
+
+                this.sorted = bits;
+
+                Contract.Assume (sorted.Count > 0);
+                Contract.Assume (sorted.First.HasValue);
+                Contract.Assume (sorted.Last.HasValue);
+                Contract.Assume (sorted.First.HasCodeValue ());
+                Contract.Assume (sorted.Last.HasCodeValue ());
+
+                this.count = sorted.Count;
+                this.length = sorted.Span ();
+                this.start = (Code)sorted.First;
+                this.final = (Code)sorted.Last;
+            }
 
 			#endregion
 
@@ -40,7 +51,13 @@ namespace DD.Collections.ICodeSet
 
 			readonly BitSetArray sorted;
 
-			#endregion
+            // stupid but so far this helps static checker to pass
+            readonly int count;
+            readonly int length;
+            readonly Code start;
+            readonly Code final;
+
+            #endregion
 
 			#region ICodeSet
 	
@@ -52,25 +69,25 @@ namespace DD.Collections.ICodeSet
 	
 			[Pure] public override int Count {
 				get {
-					return sorted.Count;
+					return this.count;
 				}
 			}
 	
 			[Pure] public override int Length {
 				get {
-					return sorted.Span();
+					return this.length;
 				}
 			}
 	
 			[Pure] public override Code First {
 				get {
-					return (Code)sorted.First;
+					return this.start;
 				}
 			}
 	
 			[Pure] public override Code Last {
 				get {
-					return (Code)sorted.Last;
+                    return this.final;
 				}
 			}
 	
@@ -97,7 +114,7 @@ namespace DD.Collections.ICodeSet
 			[ContractInvariantMethod]
 			private void Invariant()
 			{
-				Contract.Invariant(Theory.Invariant(this));
+				//Contract.Invariant(Theory.Invariant(this));
 			}
 	
 			#endregion
@@ -110,14 +127,17 @@ namespace DD.Collections.ICodeSet
 				[Pure] public static bool Construct(BitSetArray bits, QuickWrap self)
 				{
 					Success success = true;
-	
-					success.Assert(!bits.IsNull());
-					success.Assert(bits.Count != 0);
-					success.Assert(
-						bits.Length <= Code.MaxCount ||
-						bits.Last <= Code.MaxCount
-					);
-					success.Assert(self.sorted.Is(bits));
+
+                    success.Assert (!bits.IsNull ());
+                    success.Assert (bits.Count > 0);
+
+                    success.Assert (bits.First.HasValue);
+                    success.Assert (bits.Last.HasValue);
+
+                    success.Assert (self.sorted.First.HasCodeValue ());
+                    success.Assert (self.sorted.Last.HasCodeValue ());
+
+                    success.Assert (self.sorted.Is (bits));
 	
 					return success;
 				}
@@ -128,20 +148,21 @@ namespace DD.Collections.ICodeSet
 					
 					// private
 					success.Assert(!self.sorted.IsNull());
-					success.Assert(self.sorted.Count != 0);
-					success.Assert(
-						self.sorted.Length <= Code.MaxCount ||
-						self.sorted.Last <= Code.MaxCount
-					);
-		
-					success.Assert(self.sorted.First.HasCodeValue());
-					success.Assert(self.sorted.Last.HasCodeValue());
-					
+					success.Assert(self.sorted.Count > 0);
+
+                    success.Assert (self.sorted.First.HasValue);
+                    success.Assert (self.sorted.Last.HasValue);
+                    Contract.Assume (self.sorted.First.HasValue);
+                    Contract.Assume (self.sorted.Last.HasValue);
+
+                    success.Assert (self.sorted.First.HasCodeValue ());
+                    success.Assert (self.sorted.Last.HasCodeValue ());
+
 					// public <- private
-					success.Assert(self.Length == self.sorted.Span());
-					success.Assert(self.Count == self.sorted.Count);
-					success.Assert(self.First == (Code)self.sorted.First);
-					success.Assert(self.Last == (Code)self.sorted.Last);
+                    success.Assert (self.Length == self.sorted.Span ());
+                    success.Assert (self.Count == self.sorted.Count);
+                    success.Assert (self.First == (Code)self.sorted.First);
+                    success.Assert (self.Last == (Code)self.sorted.Last);
 					
 					return success;
 				}
@@ -200,7 +221,7 @@ namespace DD.Collections.ICodeSet
 			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
 			Contract.Ensures(Theory.From(values, this, Contract.Result<ICodeSet>()));
 
-			return values.IsNullOrEmpty() ? CodeSetNull.Singleton : From(BitSetArray.From(values));
+			return values.IsNullOrEmpty() ? CodeSetNull.Singleton : QuickFrom(BitSetArray.From(values));
 		}
 
 		public ICodeSet From(IEnumerable<int> values)
@@ -210,18 +231,27 @@ namespace DD.Collections.ICodeSet
 			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
 			Contract.Ensures(Theory.From(values, this, Contract.Result<ICodeSet>()));
 
-			return values.IsNullOrEmpty() ? CodeSetNull.Singleton : From(BitSetArray.From(values));
+			return values.IsNullOrEmpty() ? CodeSetNull.Singleton : QuickFrom(BitSetArray.From(values));
 		}
 
-		public ICodeSet From(BitSetArray bits)
+        public ICodeSet From (BitSetArray bits) {
+            Contract.Requires<ArgumentException> (bits.IsNullOrEmpty () || bits.Length <= Code.MaxCount || (int)bits.Last <= Code.MaxValue);
+
+            Contract.Ensures (Theory.Result (this, Contract.Result<ICodeSet> ()));
+            Contract.Ensures (Theory.From (bits, this, Contract.Result<ICodeSet> ()));
+
+            return bits.IsNullOrEmpty () ? CodeSetNull.Singleton : From ((ICodeSet)CodeSetBits.From (bits, 0));
+        }
+
+        ICodeSet QuickFrom (BitSetArray bits)
 		{
-			Contract.Requires<ArgumentException>(bits.IsNullOrEmpty() || bits.Length.IsCodesCount() || bits.Last.HasCodeValue());
+            Contract.Requires<ArgumentException> (bits.IsNullOrEmpty() || bits.Length <= Code.MaxCount || (int)bits.Last <= Code.MaxValue);
 
 			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
 			Contract.Ensures(Theory.From(bits, this, Contract.Result<ICodeSet>()));
 
-			return bits.IsNullOrEmpty() ? CodeSetNull.Singleton : From(new QuickWrap(bits)); 
-		}
+            return bits.IsNullOrEmpty () ? CodeSetNull.Singleton : From ((ICodeSet)new QuickWrap(bits));
+        }
 
 		public ICodeSet From(ICodeSet iset)
 		{
@@ -266,7 +296,7 @@ namespace DD.Collections.ICodeSet
 		{
 			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
 
-			return From(lhs.BitUnion(rhs, opt));
+			return QuickFrom(lhs.BitUnion(rhs, opt));
 		}
 
 		public ICodeSet Union(IEnumerable<ICodeSet> sets)
@@ -276,7 +306,7 @@ namespace DD.Collections.ICodeSet
 
 			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
 
-			return From(sets.BitUnion());
+			return QuickFrom(sets.BitUnion());
 		}
 
 		#endregion
@@ -287,7 +317,7 @@ namespace DD.Collections.ICodeSet
 		{
 			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
 
-			return From(lhs.BitIntersection(rhs, opt));
+			return QuickFrom(lhs.BitIntersection(rhs, opt));
 		}
 
 		public ICodeSet Intersection(IEnumerable<ICodeSet> sets)
@@ -297,7 +327,7 @@ namespace DD.Collections.ICodeSet
 
 			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
 
-			return From(sets.BitIntersection());
+			return QuickFrom(sets.BitIntersection());
 		}
 
 		#endregion
@@ -308,7 +338,7 @@ namespace DD.Collections.ICodeSet
 		{
 			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
 
-			return From(lhs.BitDisjunction(rhs, opt));
+			return QuickFrom(lhs.BitDisjunction(rhs, opt));
 		}
 
 		public ICodeSet Disjunction(IEnumerable<ICodeSet> sets)
@@ -318,7 +348,7 @@ namespace DD.Collections.ICodeSet
 
 			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
 
-			return From(sets.BitDisjunction());
+			return QuickFrom(sets.BitDisjunction());
 		}
 
 		#endregion
@@ -327,9 +357,9 @@ namespace DD.Collections.ICodeSet
 
 		public ICodeSet Difference(ICodeSet lhs, ICodeSet rhs, params ICodeSet[] opt)
 		{
-			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
+            Contract.Ensures (Theory.Result (this, Contract.Result<ICodeSet> ()));
 
-			return From(lhs.BitDifference(rhs, opt));
+			return QuickFrom(lhs.BitDifference(rhs, opt));
 		}
 
 		public ICodeSet Difference(IEnumerable<ICodeSet> sets)
@@ -339,7 +369,7 @@ namespace DD.Collections.ICodeSet
 
 			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
 
-			return From(sets.BitDifference());
+			return QuickFrom(sets.BitDifference());
 		}
 
 		#endregion
@@ -348,9 +378,10 @@ namespace DD.Collections.ICodeSet
 
 		public ICodeSet Complement(ICodeSet that)
 		{
-			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
+            Contract.Requires<ArgumentNullException> (!that.IsNull());
+            Contract.Ensures (Theory.Result (this, Contract.Result<ICodeSet> ()));
 
-			return From(that.BitComplement());
+			return QuickFrom(that.BitComplement());
 		}
 
 		#endregion

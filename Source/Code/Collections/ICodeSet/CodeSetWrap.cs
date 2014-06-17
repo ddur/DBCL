@@ -23,7 +23,9 @@ namespace DD.Collections.ICodeSet
 
 		public static CodeSetWrap From ()
 		{
-			return new CodeSetWrap(BitSetArray.Size());
+            var bits = BitSetArray.Size();
+            Contract.Assume (bits.Count == 0);
+			return new CodeSetWrap(bits);
 		}
 
 		public static CodeSetWrap From (CodeSetWrap wrap)
@@ -118,16 +120,20 @@ namespace DD.Collections.ICodeSet
 
 		[Pure] public override Code First {
 			get {
-				if (sorted.Count != 0)
-					return (int)sorted.First;
+                if ( sorted.Count != 0 ) {
+                    Contract.Assume (sorted.First.HasValue);
+                    return (int)sorted.First;
+                }
 				throw new InvalidOperationException();
 			}
 		}
 
 		[Pure] public override Code Last {
 			get {
-				if (sorted.Count != 0)
-					return (int)sorted.Last;
+                if ( sorted.Count != 0 ) {
+                    Contract.Assume (sorted.Last.HasValue);
+                    return (int)sorted.Last;
+                }
 				throw new InvalidOperationException();
 			}
 		}
@@ -255,7 +261,9 @@ namespace DD.Collections.ICodeSet
 				success.Assert(self.Length == self.sorted.Span());
 				success.Assert(self.Count == self.sorted.Count);
 				if (self.Count != 0) {
-					success.Assert(self.First == (Code)self.sorted.First);
+                    Contract.Assume (self.sorted.First.HasValue);
+                    Contract.Assume (self.sorted.Last.HasValue);
+                    success.Assert (self.First == (Code)self.sorted.First);
 					success.Assert(self.Last == (Code)self.sorted.Last);
 				}
 				

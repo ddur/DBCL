@@ -125,7 +125,9 @@ namespace DD.Collections
 				if (this.array.Length != 0
 				    && that.array.Length != 0
 				    && that.Count != 0) {
-					int thatRangeArrayLength = BitSetArray.GetLongArrayLength(that.range);
+                    Contract.Assume (that.First.HasValue);
+                    Contract.Assume (that.Last.HasValue);
+                    int thatRangeArrayLength = BitSetArray.GetLongArrayLength (that.range);
 					if (this.array.Length >= thatRangeArrayLength) {
 						Array.Copy(that.array, this.array, thatRangeArrayLength);
 						if (this.range >= that.range || (int)that.Last < this.range) {
@@ -338,7 +340,8 @@ namespace DD.Collections
 			public EnumeratorForward(BitSetArray that)
 				: base(that)
 			{
-			}
+                Contract.Requires<ArgumentNullException> (that.IsNot (null));
+            }
 		}
 
 		public sealed class EnumeratorForwardSynchronized : EnumeratorForwardAbstract
@@ -346,6 +349,7 @@ namespace DD.Collections
 			public EnumeratorForwardSynchronized(BitSetArray that)
 				: base(that, that.SyncRoot)
 			{
+                Contract.Requires<ArgumentNullException> (!that.IsNull ());
 			}
 			public override bool MoveNext()
 			{
@@ -360,7 +364,8 @@ namespace DD.Collections
 			public EnumeratorForwardReadOnly(BitSetArray that)
 				: base(BitSetArray.Copy(that))
 			{
-			}
+                Contract.Requires<ArgumentNullException> (that.IsNot (null));
+            }
 		}
 
 		public abstract class EnumeratorComplementAbstract : IEnumerator<int>, IEnumerator, IDisposable
@@ -559,7 +564,8 @@ namespace DD.Collections
 			public EnumeratorComplement(BitSetArray that)
 				: base(that)
 			{
-			}
+                Contract.Requires<ArgumentNullException> (that.IsNot (null));
+            }
 		}
 		
 		public sealed class EnumeratorComplementSynchronized : EnumeratorComplementAbstract
@@ -567,7 +573,8 @@ namespace DD.Collections
 			public EnumeratorComplementSynchronized(BitSetArray that)
 				: base(that, that.SyncRoot)
 			{
-			}
+                Contract.Requires<ArgumentNullException> (!that.IsNull ());
+            }
 
 			public override bool MoveNext()
 			{
@@ -582,7 +589,8 @@ namespace DD.Collections
 			public EnumeratorComplementReadOnly(BitSetArray that)
 				: base(BitSetArray.Copy(that))
 			{
-			}
+                Contract.Requires<ArgumentNullException> (that.IsNot (null));
+            }
 		}
 
 		public abstract class EnumeratorReverseAbstract : IEnumerator<int>, IEnumerator, IDisposable
@@ -771,7 +779,8 @@ namespace DD.Collections
 			public EnumeratorReverse(BitSetArray that)
 				: base(that)
 			{
-			}
+                Contract.Requires<ArgumentNullException> (that.IsNot (null));
+            }
 
 		}
 
@@ -780,7 +789,8 @@ namespace DD.Collections
 			public EnumeratorReverseSynchronized(BitSetArray that)
 				: base(that, that.sRoot)
 			{
-			}
+                Contract.Requires<ArgumentNullException> (!that.IsNull ());
+            }
 
 			public override bool MoveNext()
 			{
@@ -795,7 +805,8 @@ namespace DD.Collections
 			public EnumeratorReverseReadOnly(BitSetArray that)
 				: base(BitSetArray.Copy(that))
 			{
-			}
+                Contract.Requires<ArgumentNullException> (that.IsNot (null));
+            }
 		}
 
 		#endregion
@@ -829,7 +840,13 @@ namespace DD.Collections
 		private const int longBits = sizeof(long) * byteBits;
 		[NonSerialized]
 		private const int log2of64 = 6;
-		[NonSerialized]
+        [NonSerialized]
+        private const int log2of32 = 5;
+        [NonSerialized]
+        private const int log2of16 = 4;
+        [NonSerialized]
+        private const int log2of8 = 3;
+        [NonSerialized]
 		private const int mask0x3F = 0x3F;
 		[NonSerialized]
 		private const ulong table = 0x4332322132212110;
@@ -915,8 +932,9 @@ namespace DD.Collections
 		{
 			Contract.Requires<ArgumentOutOfRangeException>(
 				ValidMember(required));
+            Contract.Requires<ArgumentNullException> (optional != null);
 			Contract.Requires<ArgumentOutOfRangeException>(
-				optional == null || optional.Length == 0 ||
+				optional.Length == 0 ||
 				ValidMembers(optional));
 
 			Contract.Ensures(
@@ -1253,62 +1271,46 @@ namespace DD.Collections
 
 		[Pure] public static int GetLongArrayLength(int length)
 		{
-			Contract.Requires<ArgumentOutOfRangeException>(ValidLength(length));
-			Contract.Ensures(
-				(length == 0 &&
-				Contract.Result<int>() == 0) ||
-				(length > 0 &&
-				(((long)Contract.Result<int>() * longBits) >= length) &&
-				((((long)Contract.Result<int>() - 1) * longBits) < length) &&
-				(Contract.Result<int>() == (((length - 1) / longBits) + 1)))
-			);
+            Contract.Requires<ArgumentOutOfRangeException> (length >= 0);
+            Contract.Ensures (length == 0 || Contract.Result<int> () == (((length - 1) / longBits) + 1));
+            Contract.Ensures (length == 0 || ((long)Contract.Result<int> () * longBits) >= length);
+            Contract.Ensures (length == 0 || (((long)Contract.Result<int> () - 1) * longBits) < length);
+            Contract.Ensures (length != 0 || Contract.Result<int> () == 0);
 
-			return length == 0 ? 0 : ((--length) >> log2of64) + 1;
+            return length == 0 ? 0 : ((length - 1) >> log2of64) + 1;
 		}
 
 		[Pure] public static int GetIntArrayLength(int length)
 		{
-			Contract.Requires<ArgumentOutOfRangeException>(ValidLength(length));
-			Contract.Ensures(
-				(length == 0 &&
-				Contract.Result<int>() == 0) ||
-				(length > 0 &&
-				(((long)Contract.Result<int>() * int32Bits) >= length) &&
-				((((long)Contract.Result<int>() - 1) * int32Bits) < length) &&
-				(Contract.Result<int>() == (((length - 1) / int32Bits) + 1)))
-			);
+			Contract.Requires<ArgumentOutOfRangeException>(length >= 0);
+            Contract.Ensures (length == 0 || Contract.Result<int> () == (((length - 1) / int32Bits) + 1));
+            Contract.Ensures (length == 0 || ((long)Contract.Result<int> () * int32Bits) >= length);
+            Contract.Ensures (length == 0 || (((long)Contract.Result<int>() - 1) * int32Bits) < length);
+            Contract.Ensures (length != 0 || Contract.Result<int> () == 0);
 
-			return length == 0 ? 0 : ((--length) >> 5) + 1;
+            return length == 0 ? 0 : ((length - 1) >> log2of32) + 1;
 		}
 
 		[Pure] public static int GetShortArrayLength(int length)
 		{
-			Contract.Requires<ArgumentOutOfRangeException>(ValidLength(length));
-			Contract.Ensures(
-				(length == 0 &&
-				Contract.Result<int>() == 0) ||
-				(length > 0 &&
-				(((long)Contract.Result<int>() * shortBits) >= length) &&
-				((((long)Contract.Result<int>() - 1) * shortBits) < length) &&
-				(Contract.Result<int>() == (((length - 1) / shortBits) + 1)))
-			);
+            Contract.Requires<ArgumentOutOfRangeException> (length >= 0);
+            Contract.Ensures (length == 0 || Contract.Result<int> () == (((length - 1) / shortBits) + 1));
+            Contract.Ensures (length == 0 || ((long)Contract.Result<int> () * shortBits) >= length);
+            Contract.Ensures (length == 0 || (((long)Contract.Result<int> () - 1) * shortBits) < length);
+            Contract.Ensures (length != 0 || Contract.Result<int> () == 0);
 
-			return length == 0 ? 0 : ((--length) >> 4) + 1;
+            return length == 0 ? 0 : ((length - 1) >> log2of16) + 1;
 		}
 
 		[Pure] public static int GetByteArrayLength(int length)
 		{
-			Contract.Requires<ArgumentOutOfRangeException>(ValidLength(length));
-			Contract.Ensures(
-				(length == 0 &&
-				Contract.Result<int>() == 0) ||
-				(length > 0 &&
-				(((long)Contract.Result<int>() * byteBits) >= length) &&
-				((((long)Contract.Result<int>() - 1) * byteBits) < length) &&
-				(Contract.Result<int>() == (((length - 1) / byteBits) + 1)))
-			);
+			Contract.Requires<ArgumentOutOfRangeException>(length >= 0);
+            Contract.Ensures (length == 0 || Contract.Result<int> () == (((length - 1) / byteBits) + 1));
+            Contract.Ensures (length == 0 || ((long)Contract.Result<int> () * byteBits) >= length);
+            Contract.Ensures (length == 0 || (((long)Contract.Result<int> () - 1) * byteBits) < length);
+            Contract.Ensures (length != 0 || Contract.Result<int> () == 0);
 
-			return length == 0 ? 0 : ((--length) >> 3) + 1;
+            return length == 0 ? 0 : ((length - 1) >> log2of8) + 1;
 		}
 
 		#endregion
@@ -2620,13 +2622,17 @@ namespace DD.Collections
 		#endif
 		void _SetItems(IEnumerable<int> items)
 		{
-			Contract.Requires<ArgumentNullException>(items != null);
-			Contract.Requires<ArgumentEmptyException>(!items.IsEmpty());
-			Contract.Requires<ArgumentOutOfRangeException>(ValidMembers(items));
-			Contract.Requires<InvalidOperationException>(Contract.ForAll(items, item => item < this.Length));
-			Contract.Requires<InvalidOperationException>(this.Count == 0);
+            Contract.Requires<InvalidOperationException> (this.Length != 0);
+            Contract.Requires<InvalidOperationException> (this.Count == 0);
+            Contract.Requires<ArgumentNullException> (items != null);
+			Contract.Requires<ArgumentEmptyException> (items.Any());
+			Contract.Requires<ArgumentOutOfRangeException> (Contract.ForAll(items, item => this.InRange(item)));
 
-			lock (SyncRoot) {
+            Contract.Ensures (this.Count > 0);
+            Contract.Ensures (this.First.HasValue);
+            Contract.Ensures (this.Last.HasValue);
+
+            lock (SyncRoot) {
 
 				this.AddVersion(); // (!items.IsEmpty() && this.Count == 0)
 				int minValue = int.MaxValue;
@@ -2647,11 +2653,10 @@ namespace DD.Collections
 						}
 					}
 				}
-				Contract.Assert(minValue != int.MaxValue);
-				Contract.Assert(maxValue != int.MinValue);
 				this.FirstSet(minValue);
 				this.LastSet(maxValue);
-			}
+                Contract.Assume (this.Count > 0);
+            }
 		}
 
 		public void SetAll(bool value)
@@ -2661,6 +2666,7 @@ namespace DD.Collections
 			Contract.Ensures(Theory.SetAll(Contract.OldValue<BitSetArray>(BitSetArray.Copy(this)), value, this));
 
 			if (this.array.Length != 0) {
+
 				value = value.Bool();
 
 				lock (SyncRoot) {
@@ -2699,9 +2705,8 @@ namespace DD.Collections
 			lock (SyncRoot) {
 				int trimmedRange = 0;
 				if (this.count != 0) {
-					int? last = this.Last;
-					Contract.Assert(last != null);
-					trimmedRange = (int)last;
+					Contract.Assume(this.Last.HasValue);
+					trimmedRange = (int)this.Last;
 					++trimmedRange;
 				}
 				int newArrayLength = BitSetArray.GetLongArrayLength(trimmedRange);
@@ -3581,7 +3586,9 @@ namespace DD.Collections
 					lock (SyncRoot) {
 
 						if (this.count != 0) {
-							if (value <= (int)this.Last) {
+                            Contract.Assume (this.First.HasValue);
+                            Contract.Assume (this.Last.HasValue);
+                            if ( value <= (int)this.Last ) {
 								this.AddVersion();
 							}
 						}
@@ -3638,17 +3645,18 @@ namespace DD.Collections
 		public int Count {
 			[Pure]
 			get {
-				Contract.Ensures(
-					ValidLength(Contract.Result<int>()));
-				Contract.Ensures(Contract.Result<int>() == this.count);
-				return count;
+                Contract.Ensures (ValidLength (Contract.Result<int> ()));
+                Contract.Ensures (Contract.Result<int> () == this.count);
+                return count;
 			}
 		}
 
 		public int? First {
 			[Pure]
 			get {
-				Contract.Ensures(Theory.FirstGet(this, Contract.Result<int?>()));
+                Contract.Ensures (Theory.FirstGet (this, Contract.Result<int?> ()));
+                Contract.Ensures (this.Count == 0 || Contract.Result<int?> ().HasValue);
+                Contract.Ensures (this.Count != 0 || !Contract.Result<int?> ().HasValue);
 
 				int? start = null;
 				if (this.count != 0) {
@@ -3664,16 +3672,16 @@ namespace DD.Collections
 					}
 				}
 
-				Contract.Assume((this.Count == 0 && start == null) ||
-				(this.Count > 0 && start != null && this[(int)start]));
+				Contract.Assert((this.Count == 0 && !start.HasValue) ||
+				(this.Count > 0 && start.HasValue && this[(int)start]));
 				return start;
 			}
 		}
 
 		void FirstSet(int value)
 		{
-			Contract.Requires<ArgumentException>(this.InRange((int)value));
-			Contract.Requires<InvalidOperationException>(Count != 0);
+            Contract.Requires<InvalidOperationException> (Length != 0);
+            Contract.Requires<ArgumentException> (this.InRange (value));
 
 			Contract.Ensures(Theory.FirstSet(this, value));
 					
@@ -3687,7 +3695,9 @@ namespace DD.Collections
 		public int? Last {
 			[Pure]
 			get {
-				Contract.Ensures(Theory.LastGet(this, Contract.Result<int?>()));
+                Contract.Ensures (Theory.LastGet (this, Contract.Result<int?> ()));
+                Contract.Ensures (this.Count == 0 || Contract.Result<int?> ().HasValue && Contract.Result<int?>() < this.Length);
+                Contract.Ensures (this.Count != 0 || !Contract.Result<int?> ().HasValue);
 
 				int? final = null;
 				if (this.count != 0) {
@@ -3703,16 +3713,16 @@ namespace DD.Collections
 					}
 				}
 
-				Contract.Assume((this.Count == 0 && final == null) ||
-				(this.Count > 0 && final != null && this[(int)final]));
+				Contract.Assume((this.Count == 0 && !final.HasValue) ||
+				(this.Count > 0 && final.HasValue && this[(int)final]));
 				return final;
 			}
 		}
 
 		void LastSet(int value)
 		{
-			Contract.Requires<ArgumentException>(this.InRange((int)value));
-			Contract.Requires<InvalidOperationException>(Count != 0);
+            Contract.Requires<InvalidOperationException> (Length != 0);
+            Contract.Requires<ArgumentException> (this.InRange (value));
 
 			Contract.Ensures(Theory.LastSet(this, value));
 

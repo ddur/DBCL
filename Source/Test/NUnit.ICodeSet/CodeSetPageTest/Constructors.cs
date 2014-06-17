@@ -7,7 +7,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DD.Enumerables;
 using NUnit.Framework;
 
 namespace DD.Collections.ICodeSet.CodeSetPageTest
@@ -102,10 +101,10 @@ namespace DD.Collections.ICodeSet.CodeSetPageTest
 
 			// does not except full-range of codes
 			Assert.Throws<ArgumentException>(delegate {
-				csp = CodeSetPage.From(1.To(80).Select(item => (Code)item));
+				csp = CodeSetPage.From(Enumerable.Range(1,80).Select(item => (Code)item));
 			});
 			Assert.Throws<ArgumentException>(delegate {
-				csp = CodeSetPage.From((Code.MaxValue - 10).To(Code.MaxValue).Select(item => (Code)item));
+				csp = CodeSetPage.From(Enumerable.Range(Code.MaxValue - 10,Code.MaxValue).Select(item => (Code)item));
 			});
 
 		}

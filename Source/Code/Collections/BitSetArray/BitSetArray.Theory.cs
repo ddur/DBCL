@@ -82,7 +82,7 @@ namespace DD.Collections
 				}
 				success.Assert(Theory.IsTailCleared(self));
 
-				#if TESTCOUNT 
+                #if TESTCOUNT
                 // Too slow with CodeCoverage
                 success.Assert (self.count == Theory.Count(self));
 				#endif
@@ -1663,12 +1663,13 @@ namespace DD.Collections
 				if (self.count == 0) {
 					success.Assert(getValue == null);
 				} else {
+					success.Assert(getValue != null);
 					success.Assert((int)self.startVersion == self.version);
 					success.Assert(self.startMemoize.Equals(getValue));
-					foreach (var item in self) {
-						success.Assert((int)getValue == item);
-						break; 
-					}
+//					foreach (var item in self) {
+//						success.Assert((int)getValue == item);
+//						break; 
+//					}
 				}
 
 				return success;
@@ -1683,10 +1684,10 @@ namespace DD.Collections
 				success.Assert(self.startMemoize.Equals(setValue));
 				success.Assert(setValue != null);
 				success.Assert(self.count != 0);
-				foreach (var item in self) {
-					success.Assert((int)setValue == item);
-					break; 
-				}
+//				foreach (var item in self) {
+//					success.Assert((int)setValue == item);
+//					break; 
+//				}
 
 				return success;
 			}
@@ -1699,6 +1700,7 @@ namespace DD.Collections
 				if (self.count == 0) {
 					success.Assert(getValue == null);
 				} else {
+					success.Assert(getValue != null);
 					success.Assert((int)self.finalVersion == self.version);
 					success.Assert(self.finalMemoize.Equals(getValue));
 					foreach (var item in self.Reverse()) {

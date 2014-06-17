@@ -23,19 +23,17 @@ namespace DD.Collections.ICodeSet
 		#region Ctor
 
 		public static CodeSetPage From(params Code[] codes) {
-			Contract.Requires<ArgumentEmptyException>(!codes.IsEmpty());
-			Contract.Requires<ArgumentException>(codes.Distinct().Count() > ICodeSetService.PairCount); // not Null-Pair
-			Contract.Requires<ArgumentException>(codes.Distinct().Count() < (codes.Max() - codes.Min())); // not Full
-			Contract.Requires<ArgumentException>(codes.Min().UnicodePlane() == codes.Max().UnicodePlane()); // one Page
+            Contract.Requires<ArgumentNullException> (!codes.IsNull ());
+            Contract.Requires<InvalidOperationException> (codes.Distinct ().Count ().InRange (ICodeSetService.PairCount + 1, codes.Span () - 1));	// not Null/Code/Pair/Full
+            Contract.Requires<InvalidOperationException> (codes.Min ().UnicodePlane () == codes.Max ().UnicodePlane ()); // one Page
 
 			return new CodeSetPage((IEnumerable<Code>)codes);
 		}
 
 		public static CodeSetPage From(IEnumerable<Code> codes) {
-			Contract.Requires<ArgumentEmptyException>(!codes.IsEmpty());
-			Contract.Requires<ArgumentException>(codes.Distinct().Count() > ICodeSetService.PairCount); // not Null-Pair
-			Contract.Requires<ArgumentException>(codes.Distinct().Count() < (codes.Max() - codes.Min())); // not Full
-			Contract.Requires<ArgumentException>(codes.Min().UnicodePlane() == codes.Max().UnicodePlane()); // one Page
+            Contract.Requires<ArgumentNullException> (!codes.IsNull ());
+            Contract.Requires<InvalidOperationException> (codes.Distinct ().Count ().InRange (ICodeSetService.PairCount + 1, codes.Span () - 1));	// not Null/Code/Pair/Full
+            Contract.Requires<InvalidOperationException> (codes.Min ().UnicodePlane () == codes.Max ().UnicodePlane ()); // one Page
 
 			return new CodeSetPage(codes);
 		}
@@ -43,67 +41,64 @@ namespace DD.Collections.ICodeSet
 		public static CodeSetPage From(BitSetArray bits, int offset = 0)
 		{
 			Contract.Requires<ArgumentNullException>(!bits.Is(null));
-			Contract.Requires<ArgumentEmptyException>(bits.Count != 0);
-			Contract.Requires<ArgumentOutOfRangeException>((bits.First + offset).HasCodeValue());
-			Contract.Requires<ArgumentOutOfRangeException>((bits.Last + offset).HasCodeValue());
-			Contract.Requires<ArgumentException>(bits.Count > ICodeSetService.PairCount);		// not Null-Pair
-			Contract.Requires<ArgumentException>(bits.Count < (1 + bits.Last - bits.First));	// not Full
-			Contract.Requires<ArgumentException>((bits.First + offset).UnicodePlane() == (bits.Last + offset).UnicodePlane()); // one Page
+            Contract.Requires<InvalidOperationException> (bits.Count.InRange(ICodeSetService.PairCount+1, bits.Span() - 1));	// not Null/Code/Pair/Full
+            Contract.Requires<ArgumentOutOfRangeException> (offset.InRange (0, Code.MaxValue - (int)bits.Last));
+            Contract.Requires<InvalidOperationException> ((bits.First + offset).UnicodePlane () == (bits.Last + offset).UnicodePlane ()); // one Page
 
-			return new CodeSetPage(bits, offset);
+            return new CodeSetPage (bits, offset);
 		}
 
-		internal CodeSetPage(IEnumerable<Code> codes)
+		CodeSetPage(IEnumerable<Code> codes)
 		{
 			Contract.Requires<ArgumentNullException>(!codes.Is(null));
-			Contract.Requires<ArgumentEmptyException>(!codes.IsEmpty());
-			Contract.Requires<ArgumentException>(codes.Distinct().Count() > ICodeSetService.PairCount); // not Null-Pair
-			Contract.Requires<ArgumentException>(codes.Distinct().Count() < (codes.Max() - codes.Min())); // not Full
-			Contract.Requires<ArgumentException>(codes.Min().UnicodePlane() == codes.Max().UnicodePlane()); // one Page
+            Contract.Requires<InvalidOperationException> (codes.Distinct ().Count ().InRange (ICodeSetService.PairCount + 1, codes.Span () - 1));	// not Null/Code/Pair/Full
+            Contract.Requires<InvalidOperationException> (codes.Min ().UnicodePlane () == codes.Max ().UnicodePlane ()); // one Page
 
 			Contract.Ensures(Theory.Construct(codes, this));
 
-			var iCodeSet = codes as ICodeSet;
+            var iCodeSet = codes as ICodeSet;
 			if (iCodeSet.IsNot(null)) {
 				this.start = iCodeSet.First;
 				this.final = iCodeSet.Last;
 			} else {
-				foreach (Code code in codes) {
+                this.start = Code.MaxValue;
+                this.final = Code.MinValue;
+                foreach ( Code code in codes ) {
 					if (code < this.start)
 						this.start = code;
 					if (code > this.final)
 						this.final = code;
 				}
 			}
-			if (codes is CodeSetPage) {
+            Contract.Assume (start <= final);
+            if ( codes is CodeSetPage ) {
 				// ICodeSet is ReadOnly => can share
 				this.sorted = ((CodeSetPage)codes).sorted;
 			} else {
 				this.sorted = BitSetArray.Size(1 + this.final - this.start);
-				foreach (Code code in codes) {
+				foreach (var code in codes) {
 					this.sorted._Set(code - this.start, true);
 				}
 			}
 		}
 
-		internal CodeSetPage(BitSetArray bits, int offset = 0)
+		CodeSetPage(BitSetArray bits, int offset = 0)
 		{
+            Contract.Requires<ArgumentNullException> (!bits.Is (null));
+            Contract.Requires<InvalidOperationException> (bits.Count.InRange (ICodeSetService.PairCount + 1, bits.Span () - 1));	// not Null/Code/Pair/Full
+            Contract.Requires<ArgumentOutOfRangeException> (offset.InRange (0, Code.MaxValue - (int)bits.Last));
+            Contract.Requires<InvalidOperationException> ((bits.First + offset).UnicodePlane () == (bits.Last + offset).UnicodePlane ()); // one Page
 
-			Contract.Requires<ArgumentNullException>(!bits.Is(null));
-			Contract.Requires<ArgumentEmptyException>(bits.Count != 0);
-			Contract.Requires<ArgumentOutOfRangeException>((bits.First + offset).HasCodeValue());
-			Contract.Requires<ArgumentOutOfRangeException>((bits.Last + offset).HasCodeValue());
-			Contract.Requires<ArgumentException>(bits.Count > ICodeSetService.PairCount);		// not Null-Pair
-			Contract.Requires<ArgumentException>(bits.Count < (1 + bits.Last - bits.First));	// not Full
-			Contract.Requires<ArgumentException>((bits.First + offset).UnicodePlane() == (bits.Last + offset).UnicodePlane()); // one Page
+            Contract.Ensures (Theory.Construct (bits, offset, this));
 
-			Contract.Ensures(Theory.Construct(bits, offset, this));
+            Contract.Assume (bits.First.HasValue);
+            Contract.Assume (bits.Last.HasValue);
 
-			this.start = (int)bits.First + offset;
-			this.final = (int)bits.Last + offset;
-			this.sorted = BitSetArray.Size(this.final - this.start + 1);
-			foreach (Code code in bits) {
-				this.sorted._Set(code + offset - this.start, true);
+            this.start = ((int)bits.First) + offset;
+			this.final = ((int)bits.Last) + offset;
+			this.sorted = BitSetArray.Size(bits.Span());
+			foreach (var item in bits) {
+				this.sorted._Set(item + offset - this.start, true);
 			}
 		}
 
@@ -112,8 +107,8 @@ namespace DD.Collections.ICodeSet
 		#region Fields
 
 		private readonly BitSetArray sorted;
-		private readonly Code start = Code.MaxValue;
-		private readonly Code final = Code.MinValue;
+		private readonly Code start;
+		private readonly Code final;
 
 		#endregion
 
@@ -160,11 +155,10 @@ namespace DD.Collections.ICodeSet
 
 		#region Invariant
 
-		[ContractInvariantMethod]
-		private void Invariant()
-		{
-			Contract.Invariant(Theory.Invariant(this));
-		}
+        [ContractInvariantMethod]
+        private void Invariant () {
+            Contract.Invariant (Theory.Invariant (this));
+        }
 
 		#endregion
 
@@ -215,7 +209,9 @@ namespace DD.Collections.ICodeSet
 					success.Assert(self.sorted[item + offset - self.start]);
 				}
 
-				success.Assert(self.start == (int)bits.First + offset);
+                Contract.Assume (bits.First.HasValue);
+                Contract.Assume (bits.Last.HasValue);
+                success.Assert (self.start == (int)bits.First + offset);
 				success.Assert(self.final == (int)bits.Last + offset);
 				
 				return success;

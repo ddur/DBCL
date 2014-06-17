@@ -23,7 +23,8 @@ namespace DD.Collections.ICodeSet
 		#region Ctor
 
 		public static CodeSetList From(params Code[] codes) {
-			Contract.Requires<ArgumentEmptyException>(!codes.IsEmpty());
+            Contract.Requires<ArgumentNullException> (!codes.IsNull ());
+            Contract.Requires<ArgumentEmptyException> (!codes.IsEmpty ());
 			Contract.Requires<ArgumentException>(codes.Distinct().Count() > ICodeSetService.PairCount); // at least 3 members
 			Contract.Requires<ArgumentException>(codes.Distinct().Count() <= ICodeSetService.ListMaxCount); // up to max members
 			Contract.Requires<ArgumentException>(codes.Distinct().Count() < (1 + codes.Max() - codes.Min())); // not full
@@ -32,7 +33,8 @@ namespace DD.Collections.ICodeSet
 		}
 
 		public static CodeSetList From(IEnumerable<Code> codes) {
-			Contract.Requires<ArgumentEmptyException>(!codes.IsEmpty());
+            Contract.Requires<ArgumentNullException> (!codes.IsNull ());
+            Contract.Requires<ArgumentEmptyException> (!codes.IsEmpty ());
 			Contract.Requires<ArgumentException>(codes.Distinct().Count() > ICodeSetService.PairCount); // at least 3 members
 			Contract.Requires<ArgumentException>(codes.Distinct().Count() <= ICodeSetService.ListMaxCount); // up to max members
 			Contract.Requires<ArgumentException>(codes.Distinct().Count() < (1 + codes.Max() - codes.Min())); // not full

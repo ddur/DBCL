@@ -32,15 +32,14 @@ namespace DD.Collections.ICodeSet
 			Contract.Ensures(Contract.Result<ICodeSet>().IsReduced());
 
 			List<Code> codeList;
-			if (opt.Length > 0) { // keyword "params" never returns null
+			if (!opt.IsNull() && opt.Length > 0) {
 				codeList = new List<Code>(1 + opt.Length);
 				codeList.Add(req);
 				foreach (Code code in opt) {
 					codeList.Add(code);
 				}
-			} else { // type char is never null
-				codeList = new List<Code>(1);
-				codeList.Add(req);
+			} else {
+				codeList = new List<Code>() {req};
 			}
 			return From(codeList);
 		}
@@ -59,13 +58,12 @@ namespace DD.Collections.ICodeSet
 			Contract.Ensures(Contract.Result<ICodeSet>().IsReduced());
 
 			List<Code> codeList;
-			if (opt.Length > 0) { // array from keyword "params" is never null
+			if (!opt.IsNull() && opt.Length > 0) {
 				codeList = new List<Code>(1 + opt.Length);
 				codeList.Add(req);
 				codeList.AddRange(opt);
 			} else { // type Code is never null
-				codeList = new List<Code>(1);
-				codeList.Add(req);
+				codeList = new List<Code>() {req};
 			}
 			return From(codeList);
 		}

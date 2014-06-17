@@ -95,7 +95,16 @@ namespace DD.Collections.ICodeSet
 			return 1 + (int)self.Last - (int)self.First;
 		}
 
-		/// <summary>IsCompact if:
+        [Pure]
+        public static int Span (this IEnumerable<Code> self) {
+            if ( self.IsNull () )
+                return 0;
+            if ( !self.Any() )
+                return 0;
+            return 1 + self.Max() - self.Min();
+        }
+
+        /// <summary>IsCompact if:
 		/// <para>1) is not null</para>
 		/// <para>2) is not empty</para>
 		/// <para>3) has first[0] and last[length-1] bit set</para></summary>
@@ -119,18 +128,19 @@ namespace DD.Collections.ICodeSet
 		/// <returns></returns>
 		[Pure] public static BitSetArray ToBitSetArray(this ICodeSet self)
 		{
-			// TODO Ensures Theory
-			Contract.Ensures(Contract.Result<BitSetArray>().IsNot(null));
-			Contract.Ensures(((self.IsNull() || self.Count == 0)
-			&& Contract.Result<BitSetArray>().Count == 0)
-			||
-			(Contract.Result<BitSetArray>().Count == self.Count
-			&& Contract.ForAll(self, item => Contract.Result<BitSetArray>()[item])
-			));
+            Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
+            Contract.Ensures (
+                self.IsNull () || self.Count == 0 ||
+                Contract.ForAll (self, item => Contract.Result<BitSetArray> ()[item])
+            );
+            Contract.Ensures (
+                (!self.IsNull () && self.Count != 0) ||
+                Contract.Result<BitSetArray> ().Count == 0
+            );
 
-			if (self.IsNull() || self.Count == 0) {
-				return BitSetArray.Size();
-			}
+            if ( self.IsNull () || self.Count == 0 ) {
+                return BitSetArray.Size ();
+            }
 			var icsWrap = self as CodeSetWrap;
 			if (!icsWrap.IsNull()) {
 				return icsWrap.ToBitSetArray();

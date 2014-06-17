@@ -44,9 +44,9 @@ namespace DD.Collections.ICodeSet
 		public static CodeSetBits From(BitSetArray bits, int offset = 0)
 		{
 			Contract.Requires<ArgumentNullException>(bits.IsNot(null));
-			Contract.Requires<ArgumentException>(bits.Count == 0 || (bits.First + offset).HasCodeValue());
-			Contract.Requires<ArgumentException>(bits.Count == 0 || (bits.Last + offset).HasCodeValue());
-			return new CodeSetBits(bits, offset);
+            Contract.Requires<ArgumentOutOfRangeException> (bits.Count == 0 || ((int)bits.Last + offset) <= Code.MaxValue);
+
+            return new CodeSetBits(bits, offset);
 		}
 
 		private CodeSetBits(IEnumerable<Code> codes)
@@ -96,7 +96,9 @@ namespace DD.Collections.ICodeSet
 			Contract.Ensures(Theory.Construct(bits, offset, this));
 
 			if (bits.Count != 0) {
-				this.start = (int)bits.First + offset;
+                Contract.Assume (bits.First.HasValue);
+                Contract.Assume (bits.Last.HasValue);
+                this.start = (int)bits.First + offset;
 				this.final = (int)bits.Last + offset;
 				this.sorted = BitSetArray.Size(this.final - this.start + 1);
 				foreach (Code code in bits) {
@@ -239,7 +241,9 @@ namespace DD.Collections.ICodeSet
 				success.Assert(self.sorted.Count == bits.Count);
 
 				if (bits.Count != 0) {
-					success.Assert(self.start == (int)bits.First + offset);
+                    Contract.Assume (bits.First.HasValue);
+                    Contract.Assume (bits.Last.HasValue);
+                    success.Assert (self.start == (int)bits.First + offset);
 					success.Assert(self.final == (int)bits.Last + offset);
 					foreach (var item in bits) {
 						success.Assert(self.sorted[item + offset - self.start]);

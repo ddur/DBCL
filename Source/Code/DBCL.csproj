@@ -55,7 +55,7 @@
     <CodeContractsArithmeticObligations>True</CodeContractsArithmeticObligations>
     <CodeContractsEnumObligations>False</CodeContractsEnumObligations>
     <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
-    <CodeContractsMissingPublicRequiresAsWarnings>False</CodeContractsMissingPublicRequiresAsWarnings>
+    <CodeContractsMissingPublicRequiresAsWarnings>True</CodeContractsMissingPublicRequiresAsWarnings>
     <CodeContractsInferRequires>False</CodeContractsInferRequires>
     <CodeContractsInferEnsures>False</CodeContractsInferEnsures>
     <CodeContractsInferObjectInvariants>False</CodeContractsInferObjectInvariants>
@@ -63,7 +63,7 @@
     <CodeContractsSuggestRequires>False</CodeContractsSuggestRequires>
     <CodeContractsSuggestEnsures>False</CodeContractsSuggestEnsures>
     <CodeContractsSuggestObjectInvariants>False</CodeContractsSuggestObjectInvariants>
-    <CodeContractsRunInBackground>False</CodeContractsRunInBackground>
+    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
     <CodeContractsShowSquigglies>True</CodeContractsShowSquigglies>
     <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
     <CodeContractsEmitXMLDocs>False</CodeContractsEmitXMLDocs>
@@ -159,9 +159,6 @@
     <Compile Include="Collections\ICodeSet\ICodeSetService.cs" />
     <Compile Include="Collections\ICodeSet\ICodeSetUniqueFactory.cs" />
     <Compile Include="Diagnostics\Success.cs" />
-    <Compile Include="Enumerables\Extensions.cs" />
-    <Compile Include="Enumerables\Loop.cs" />
-    <Compile Include="Enumerables\Range.cs" />
     <Compile Include="ExtendsBool.cs" />
     <Compile Include="ExtendsIEnumerable.cs" />
     <Compile Include="ExtendsNum.cs" />

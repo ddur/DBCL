@@ -38,19 +38,25 @@ namespace DD.Collections.ICodeSet
 
 			#region Unit
 			if (self.Count == ICodeSetService.UnitCount) {
-				return new Code((int)self.First + offset);
+                Contract.Assume (self.First.HasValue);
+                Contract.Assume (self.Last.HasValue);
+                return (Code)((int)self.First + offset);
 			}
 			#endregion
 
 			#region Pair
 			if (self.Count == ICodeSetService.PairCount) {
-				return new CodeSetPair((int)self.First + offset, (int)self.Last + offset);
+                Contract.Assume (self.First.HasValue);
+                Contract.Assume (self.Last.HasValue);
+                return CodeSetPair.From ((int)self.First + offset, (int)self.Last + offset);
 			}
 			#endregion
 
 			#region Full
 			if (self.Count == self.Span()) {
-				return new CodeSetFull((int)self.First + offset, (int)self.Last + offset);
+                Contract.Assume (self.First.HasValue);
+                Contract.Assume (self.Last.HasValue);
+                return CodeSetFull.From ((int)self.First + offset, (int)self.Last + offset);
 			}
 			#endregion
 
@@ -58,13 +64,13 @@ namespace DD.Collections.ICodeSet
 			if (self.Count <= ICodeSetService.ListMaxCount) {
 				// List items spread over more than one unicode plane. (better than CodeSetWide)
 				if (self.First.UnicodePlane() != self.Last.UnicodePlane()) {
-					return new CodeSetList(self.ToCodes(offset));
+					return CodeSetList.From (self.ToCodes(offset));
 				}
 				// List space less than 1/4 of Bits space. (better than CodeSetPage)
 				// list space in bytes == Count * sizeof(int)
 				// bits space in bytes == BitSetArray.GetLongArrayLength(self.Span())*sizeof(long)
 				if ((self.Count * sizeof(int)) < (BitSetArray.GetLongArrayLength(self.Span()) * sizeof(long) / 4)) {
-					return new CodeSetList(self.ToCodes(offset));
+					return CodeSetList.From (self.ToCodes(offset));
 				}
 			}
 			#endregion
@@ -76,17 +82,16 @@ namespace DD.Collections.ICodeSet
 		[Pure] private static ICodeSet ReducePartTwo(this BitSetArray self, int offset)
 		{
 			Contract.Requires<ArgumentNullException>(!self.IsNull());
-			Contract.Requires<ArgumentEmptyException>(self.Count != 0);
-			Contract.Requires<ArgumentOutOfRangeException>((self.First + offset).HasCodeValue());
-			Contract.Requires<ArgumentOutOfRangeException>((self.Last + offset).HasCodeValue());
+            Contract.Requires<InvalidOperationException> (self.Count.InRange (ICodeSetService.PairCount + 1, self.Span () - 1));	// not Null/Code/Pair/Full
+            Contract.Requires<ArgumentOutOfRangeException> (offset.InRange (0, Code.MaxValue - (int)self.Last));
 
 			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
 			Contract.Ensures(Contract.Result<ICodeSet>() is CodeSetPage || Contract.Result<ICodeSet>() is CodeSetWide);
 
-			if (((Code)((int)self.First + offset)).UnicodePlane() == ((Code)((int)self.Last + offset)).UnicodePlane()) {
-				return new CodeSetPage(self, offset);
-			}
-			return new CodeSetWide(self, offset);
+            if ((self.First + offset).UnicodePlane () == (self.Last + offset).UnicodePlane()) {
+                return CodeSetPage.From (self, offset);
+            }
+			return CodeSetWide.From (self, offset);
 		}
 
 		[Pure] public static ICodeSet Reduce(this ICodeSet self)
@@ -140,7 +145,9 @@ namespace DD.Collections.ICodeSet
 					retSet = self.ReducePartTwo(offset);
 				} else {
 					// create complement
-					int start = (int)self.First;
+                    Contract.Assume (self.First.HasValue);
+                    Contract.Assume (self.Last.HasValue);
+                    int start = (int)self.First;
 					int final = (int)self.Last;
 					var complement = BitSetArray.Size(self.Length);
 					foreach (var item in self.Complement()) {
@@ -154,15 +161,15 @@ namespace DD.Collections.ICodeSet
 					var notSet = complement.ReducePartOne(offset);
 					if (notSet.IsNot(null)) {
 						// if reduced to Code/Pair/Full/List, return DiffSet
-						retSet = new CodeSetDiff(
-							new CodeSetFull((int)self.First + offset, (int)self.Last + offset),
+						retSet = CodeSetDiff.From (
+							CodeSetFull.From ((int)self.First + offset, (int)self.Last + offset),
 							notSet);
 					} else {
 						// not reduced, check size
 						if (complement.Span() < (self.Span() / 4)) {
 							// can save at least 3/4 of space
-							retSet = new CodeSetDiff(
-								new CodeSetFull((int)self.First + offset, (int)self.Last + offset),
+							retSet = CodeSetDiff.From (
+								CodeSetFull.From ((int)self.First + offset, (int)self.Last + offset),
 								complement.ReducePartTwo(offset));
 						} else {
 							// final choice

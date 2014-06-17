@@ -301,8 +301,8 @@ namespace DD.Collections.BitSetArrayTest
 			var ignore = test.First;
 			Assert.AreEqual(expected_version, test.Version);
 
-			Assert.AreEqual(test.Version, test.StartVersion); 
-			Assert.AreNotEqual(test.Version, test.FinalVersion); 
+			Assert.AreEqual(test.Version, test.StartVersion);
+			Assert.AreNotEqual(test.Version, test.FinalVersion);
 
 			Assert.AreEqual(4, test.StartMemoize); 
 			Assert.AreEqual(7, test.FinalMemoize); 
@@ -446,15 +446,15 @@ namespace DD.Collections.BitSetArrayTest
 
 		[Test]
 		public void Bit_SetItems () {
-			var test = BitSetArray.Size(2);
 
 			#if DEBUG // _SetItems private to public. 
 			// Only public members contains Contract.Require<Exception>
 			Assert.That(delegate {
-				test._SetItems(new int[] { 0 });
+				BitSetArray.Size(2)._SetItems(new int[] { 0 });
 			}, Throws.Nothing);
 
 
+			var test = BitSetArray.Size(2);
 			Assert.That(delegate {
 				test._SetItems(null);
 			}, Throws.TypeOf<ArgumentNullException>());
@@ -474,12 +474,13 @@ namespace DD.Collections.BitSetArrayTest
 			Assert.GreaterOrEqual(5, test.Length);
 			Assert.That(delegate {
 				test._SetItems(new int[] { 5 });
-			}, Throws.TypeOf<InvalidOperationException>());
+			}, Throws.TypeOf<ArgumentOutOfRangeException>());
 
+			test._SetItems(new int[] { 0 });
 			Assert.AreNotEqual(0, test.Count);
 			Assert.That(delegate {
 				test._SetItems(new int[] { 0 });
-			}, Throws.TypeOf<InvalidOperationException>()); // Cont != 0
+			}, Throws.TypeOf<InvalidOperationException>()); // Count != 0
 
 			#endif
 		}

@@ -98,35 +98,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="CodeTest" />
-    <Folder Include="ICodeSetStaticFactoryTest" />
-    <Folder Include="CodeSetPairTest" />
-    <Folder Include="CodeSetNullTest" />
-    <Folder Include="CodeSetFullTest" />
-    <Folder Include="CodeSetListTest" />
-    <Folder Include="CodeSetPageTest" />
-    <Folder Include="CodeSetWideTest" />
-    <Folder Include="CodeSetDiffTest" />
-    <Folder Include="CodeSetAbstractTest" />
-    <Folder Include="ICodeSetDictionaryTest" />
-    <Folder Include="ICodeSetRelationsTest\Members" />
-    <Folder Include="ICodeSetServiceTest" />
-    <Folder Include="ICodeSetServiceTest\Members" />
-    <Folder Include="ICodeSetRelationsTest" />
-    <Folder Include="CodeSetBitsTest" />
-    <Folder Include="CodeSetWrapTest" />
-    <Folder Include="ICodeSetOperationsTest" />
-    <Folder Include="ICodeSetReductionTest" />
-    <Folder Include="CodeSetMask_Test" />
+    <Folder Include="CodeSetMask_Test\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Code\DBCL.csproj">
       <Project>{CA42DDC3-D6A2-4A7C-9F5C-E3E8DC0DE55E}</Project>
       <Name>DBCL</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

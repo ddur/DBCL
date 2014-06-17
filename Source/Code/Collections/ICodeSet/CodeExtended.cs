@@ -35,7 +35,7 @@ namespace DD.Collections.ICodeSet
 
 		[Pure]
 		public static bool IsLowSurrogate (this Code self) {
-   			Contract.Ensures (Contract.Result<bool>() == (( 0xDC00 <= self ) && ( self <= 0xDFFF )));
+            Contract.Ensures (Contract.Result<bool> () == (self.Value.InRange (0xDC00, 0xDFFF)));
 			return (self.HasCharValue() && char.IsLowSurrogate((char)self));
 		}
 

@@ -1,9 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-# SharpDevelop 5.0
-VisualStudioVersion = 12.0.20827.3
-MinimumVisualStudioVersion = 10.0.40219.1
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBCL", "Source\Code\DBCL.csproj", "{CA42DDC3-D6A2-4A7C-9F5C-E3E8DC0DE55E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnit.BitSetArray", "Source\Test\NUnit.BitSetArray\NUnit.BitSetArray.csproj", "{D7187DBD-ADD3-4C5B-90BE-D0635C2E102A}"
@@ -11,8 +8,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnit.Extensions", "Source\Test\NUnit.Extensions\NUnit.Extensions.csproj", "{FDEDA1F6-CF70-4735-9135-C3B160B7A93E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnit.Diagnostics", "Source\Test\NUnit.Diagnostics\NUnit.Diagnostics.csproj", "{22D971E9-9879-4783-893E-881F16918E88}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnit.Enumerables", "Source\Test\NUnit.Enumerables\NUnit.Enumerables.csproj", "{85D31930-0D0E-427E-8F72-011FF14213F3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnit.ICodeSet", "Source\Test\NUnit.ICodeSet\NUnit.ICodeSet.csproj", "{C747B273-B3A0-4FAB-B4F9-D2FC99521425}"
 EndProject
@@ -43,13 +38,12 @@ Global
 		{22D971E9-9879-4783-893E-881F16918E88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22D971E9-9879-4783-893E-881F16918E88}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22D971E9-9879-4783-893E-881F16918E88}.Release|Any CPU.Build.0 = Release|Any CPU
-		{85D31930-0D0E-427E-8F72-011FF14213F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{85D31930-0D0E-427E-8F72-011FF14213F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{85D31930-0D0E-427E-8F72-011FF14213F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{85D31930-0D0E-427E-8F72-011FF14213F3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C747B273-B3A0-4FAB-B4F9-D2FC99521425}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C747B273-B3A0-4FAB-B4F9-D2FC99521425}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C747B273-B3A0-4FAB-B4F9-D2FC99521425}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C747B273-B3A0-4FAB-B4F9-D2FC99521425}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal

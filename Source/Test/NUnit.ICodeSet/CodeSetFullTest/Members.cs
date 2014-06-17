@@ -8,7 +8,6 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-using DD.Enumerables;
 using NUnit.Framework;
 
 namespace DD.Collections.ICodeSet.CodeSetFullTest

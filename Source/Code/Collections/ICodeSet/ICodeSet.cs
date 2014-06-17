@@ -79,11 +79,10 @@ namespace DD.Collections.ICodeSet
 
 		#region Contract Invariant
 
-		[ContractInvariantMethod]
-		private void Invariant()
-		{
-			Contract.Invariant(Theory.Invariant(this));
-		}
+        [ContractInvariantMethod]
+        private void Invariant () {
+            Contract.Invariant (Theory.Invariant (this));
+        }
 
 		#endregion
 
@@ -135,7 +134,7 @@ namespace DD.Collections.ICodeSet
 			
 			/// <summary>ICodeSet Contract Invariant</summary>
 			/// <remarks>ICodeSet is ReadOnly and all methods are [Pure]</remarks>
-			/// <remarks>Invariant is checked only after construction?</remarks>
+			/// <remarks>Invariant is checked only after construction</remarks>
 			/// <param name="self">ICodeSet</param>
 			/// <returns>bool</returns>
 			[Pure] public static bool Invariant(ICodeSet self)
