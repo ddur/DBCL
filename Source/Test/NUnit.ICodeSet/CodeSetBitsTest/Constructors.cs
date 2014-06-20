@@ -117,10 +117,11 @@ namespace DD.Collections.ICodeSet.CodeSetBitsTest
 					csb = CodeSetBits.From ((BitSetArray)null);});
 
 			// Requires valid members
-			Assert.Throws <ArgumentException> (
+			Assert.Throws <ArgumentOutOfRangeException> (
 				delegate{
 					csb = CodeSetBits.From (BitSetArray.From (0,1,12, Code.MaxCount));});
-			Assert.Throws <ArgumentException> (
+
+			Assert.Throws <ArgumentOutOfRangeException> (
 				delegate{
 					csb = CodeSetBits.From (BitSetArray.From (0,1,12, int.MaxValue-1));});
 		}
@@ -155,10 +156,10 @@ namespace DD.Collections.ICodeSet.CodeSetBitsTest
 			Assert.Throws <ArgumentNullException> (delegate{csb = CodeSetBits.From ((BitSetArray)null, 0);});
 
 			// Requires valid members&offset
-			Assert.Throws <ArgumentException> (delegate{csb = CodeSetBits.From (BitSetArray.From (0,1), -1);});
-			Assert.Throws <ArgumentException> (delegate{csb = CodeSetBits.From (BitSetArray.From (0,1,12,33), -1);});
-			Assert.Throws <ArgumentException> (delegate{csb = CodeSetBits.From (BitSetArray.From (0,1,12,Code.MaxCount), 0);});
-			Assert.Throws <ArgumentException> (delegate{csb = CodeSetBits.From (BitSetArray.From (0,1,12,Code.MaxValue), 1);});
+			Assert.Throws <ArgumentOutOfRangeException> (delegate{csb = CodeSetBits.From (BitSetArray.From (0,1), -1);});
+			Assert.Throws <ArgumentOutOfRangeException> (delegate{csb = CodeSetBits.From (BitSetArray.From (0,1,12,33), -1);});
+			Assert.Throws <ArgumentOutOfRangeException> (delegate{csb = CodeSetBits.From (BitSetArray.From (0,1,12,Code.MaxCount), 0);});
+			Assert.Throws <ArgumentOutOfRangeException> (delegate{csb = CodeSetBits.From (BitSetArray.From (0,1,12,Code.MaxValue), 1);});
 		}
 	}
 }

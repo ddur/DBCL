@@ -38,25 +38,25 @@ namespace DD.Collections.ICodeSet.CodeSetWideTest
 			);
 
 			// requres more than ICodeSetService.PairCount members
-			Assert.Throws<ArgumentException>(
+			Assert.Throws<InvalidOperationException>(
 				delegate {
 					csw = CodeSetWide.From(BitSetArray.From(0, 70000));
 				}
 			);
 			
-			// requires more than ICodeSetService.PairCount NOT members
-			Assert.Throws<ArgumentException>(
+			// requires at least one NOT member
+			Assert.Throws<InvalidOperationException>(
 				delegate {
 					csw = CodeSetWide.From(BitSetArray.From(
 						65525, 65526, 65527, 65528,
 						65529, 65530, 65531, 65532,
 						65533, 65534, 65535, 65536,
-						65537, 65538, 65539, 65540, 65542));
+						65537, 65538, 65539, 65540));
 				}
 			);
 			
-			// requires to span over unicode page
-			Assert.Throws<ArgumentException>(
+			// requires to span over two or more unicode pages
+			Assert.Throws<InvalidOperationException>(
 				delegate {
 					csw = CodeSetWide.From(BitSetArray.From(
 						0, 1, 2, 3,
@@ -104,7 +104,7 @@ namespace DD.Collections.ICodeSet.CodeSetWideTest
 			);
 
 			// requres more than ICodeSetService.ListMaxCount members
-			Assert.Throws<ArgumentException>(
+			Assert.Throws<InvalidOperationException>(
 				delegate {
 					csw = CodeSetWide.From(new List<Code>() {
 						0, 70000
@@ -113,7 +113,7 @@ namespace DD.Collections.ICodeSet.CodeSetWideTest
 			);
 			
 			// requires at least one NOT member
-			Assert.Throws<ArgumentException>(
+			Assert.Throws<InvalidOperationException>(
 				delegate {
 					csw = CodeSetWide.From(new List<Code>() {
 						65525, 65526, 65527, 65528,
@@ -124,8 +124,8 @@ namespace DD.Collections.ICodeSet.CodeSetWideTest
 				}
 			);
 			
-			// requires to span over single unicode page
-			Assert.Throws<ArgumentException>(
+			// requires to span over two or more unicode pages
+			Assert.Throws<InvalidOperationException>(
 				delegate {
 					csw = CodeSetWide.From(new List<Code>() {
 						0, 1, 2, 3,

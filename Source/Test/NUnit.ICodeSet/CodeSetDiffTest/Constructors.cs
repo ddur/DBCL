@@ -36,46 +36,42 @@ namespace DD.Collections.ICodeSet.CodeSetDiffTest
 				delegate { csd = CodeSetDiff.From(CodeSetFull.From(0,100),(ICodeSet)null); }
 			);
 
-			// requires no empty
-			Assert.Throws<ArgumentException> (
+			// requires no empty arguments
+			Assert.Throws<ArgumentEmptyException> (
 				delegate { csd = CodeSetDiff.From(CodeSetNull.Singleton,CodeSetPair.From(0,100)); }
 			);
-			Assert.Throws<ArgumentException> (
+			Assert.Throws<ArgumentEmptyException> (
 				delegate { csd = CodeSetDiff.From(CodeSetFull.From(0,100),CodeSetNull.Singleton); }
 			);
 			
+			
 			// requires a.Count = a.Length
-			Assert.Throws<ArgumentException> (
+			Assert.Throws<InvalidOperationException> (
 				delegate { csd = CodeSetDiff.From(CodeSetPage.From(new Code[]{0,1,3,4}),CodeSetPair.From(1,3)); }
 			);
 			// requires a is CodeSetFull
-			Assert.Throws<ArgumentException> (
-				delegate { csd = CodeSetDiff.From(CodeSetPage.From(new Code[]{0,1,2,3,4}),CodeSetPair.From(1,3)); }
+			Assert.Throws<InvalidOperationException> (
+				delegate { csd = CodeSetDiff.From(CodeSetBits.From(new Code[]{0,1,2,3,4}),CodeSetPair.From(1,3)); }
 			);
 			
 			// requires a.Last > b.Last  
-			Assert.Throws<ArgumentException> (
+			Assert.Throws<InvalidOperationException> (
 				delegate { csd = CodeSetDiff.From(CodeSetFull.From(0,100), CodeSetPair.From(1,100)); }
 			);
-			Assert.Throws<ArgumentException> (
+			Assert.Throws<InvalidOperationException> (
 				delegate { csd = CodeSetDiff.From(CodeSetFull.From(0,100), CodeSetPair.From(1,101)); }
 			);
 
 			// requires a.First < b.First  
-			Assert.Throws<ArgumentException> (
+			Assert.Throws<InvalidOperationException> (
 				delegate { csd = CodeSetDiff.From(CodeSetFull.From(1,100), CodeSetPair.From(1,99)); }
 			);
-			Assert.Throws<ArgumentException> (
+			Assert.Throws<InvalidOperationException> (
 				delegate { csd = CodeSetDiff.From(CodeSetFull.From(1,100), CodeSetPair.From(0,99)); }
 			);
 			
-			// requires !(b is CodeSetNull)
-			Assert.Throws<ArgumentException> (
-				delegate { csd = CodeSetDiff.From(CodeSetFull.From(0,100), CodeSetNull.Singleton); }
-			);
-			
 			// requires .Count > 2
-			Assert.Throws<ArgumentException> (
+			Assert.Throws<InvalidOperationException> (
 				delegate { csd = CodeSetDiff.From(CodeSetFull.From(1,4), CodeSetPair.From(2,3)); }
 			);
 		}

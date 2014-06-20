@@ -33,33 +33,49 @@ namespace DD.Collections.ICodeSet.CodeSetPageTest
 			});
 
 			// requires at least 3 members (> ICodeSetService.PairCount)
-			Assert.Throws <ArgumentEmptyException>(delegate {
+			Assert.Throws <InvalidOperationException>(delegate {
 				csp = CodeSetPage.From(BitSetArray.Size());
 			});
-			Assert.Throws <ArgumentException>(delegate {
+			Assert.Throws <InvalidOperationException>(delegate {
 				csp = CodeSetPage.From(BitSetArray.From(21));
 			});
-			Assert.Throws <ArgumentException>(delegate {
+			Assert.Throws <InvalidOperationException>(delegate {
 				csp = CodeSetPage.From(BitSetArray.From(12, 5));
 			});
 
 			// requires at least one NOT member
-			Assert.Throws <ArgumentException>(delegate {
+			Assert.Throws <InvalidOperationException>(delegate {
 				csp = CodeSetPage.From(BitSetArray.From(1, 2, 3, 4, 5));
 			});
-
-			// requires all codes within same unicode plane
-			Assert.Throws <ArgumentException>(delegate {
-				csp = CodeSetPage.From(BitSetArray.From(12, 66000));
-			});
-
-			// does not except range of codes (full)
-			Assert.Throws<ArgumentException>(delegate {
+			// as above, does not except range of codes (full)
+			Assert.Throws<InvalidOperationException>(delegate {
 				csp = CodeSetPage.From(BitSetArray.Size(10, true));
 			});
 
+			// requires all codes within same unicode plane
+			Assert.Throws <InvalidOperationException>(delegate {
+				csp = CodeSetPage.From(BitSetArray.From(12, 66000));
+			});
+
 		}
-		
+
+		[Test]
+		public void FromBitSetArrayAtOffsetThrows()
+		{
+			CodeSetPage csp;
+
+			// requires valid offset
+			Assert.Throws<ArgumentOutOfRangeException>(delegate {
+				csp = CodeSetPage.From(BitSetArray.From(1, 2, 3, 4, 7), -1);
+			});
+
+			// requires valid offset
+			Assert.Throws<ArgumentOutOfRangeException>(delegate {
+				csp = CodeSetPage.From(BitSetArray.From(Code.MaxValue-10, Code.MaxValue-7, Code.MaxValue-5), 10);
+			});
+
+		}
+
 		[Test]
 		public void FromCodes()
 		{
@@ -79,32 +95,32 @@ namespace DD.Collections.ICodeSet.CodeSetPageTest
 			});
 
 			// requires at least 3 members (> ICodeSetService.PairCount)
-			Assert.Throws <ArgumentEmptyException>(delegate {
+			Assert.Throws <InvalidOperationException>(delegate {
 				csp = CodeSetPage.From(new Code[0]);
 			});
-			Assert.Throws <ArgumentException>(delegate {
+			Assert.Throws <InvalidOperationException>(delegate {
 				csp = CodeSetPage.From(new List<Code>() { 21 });
 			});
-			Assert.Throws <ArgumentException>(delegate {
+			Assert.Throws <InvalidOperationException>(delegate {
 				csp = CodeSetPage.From(new List<Code>() { 1, 25 });
 			});
 
 			// requires more than ICodeSetService.ListMaxCount NOT members
-			Assert.Throws <ArgumentException>(delegate {
+			Assert.Throws <InvalidOperationException>(delegate {
 				csp = CodeSetPage.From(new List<Code>() { 1, 2, 3, 4, 5 });
 			});
 
 			// requires all codes within same unicode plane
-			Assert.Throws <ArgumentException>(delegate {
+			Assert.Throws <InvalidOperationException>(delegate {
 				csp = CodeSetPage.From(new List<Code>() { 12, 25, 66, 66000 });
 			});
 
 			// does not except full-range of codes
-			Assert.Throws<ArgumentException>(delegate {
+			Assert.Throws<InvalidOperationException>(delegate {
 				csp = CodeSetPage.From(Enumerable.Range(1,80).Select(item => (Code)item));
 			});
-			Assert.Throws<ArgumentException>(delegate {
-				csp = CodeSetPage.From(Enumerable.Range(Code.MaxValue - 10,Code.MaxValue).Select(item => (Code)item));
+			Assert.Throws<InvalidOperationException>(delegate {
+				csp = CodeSetPage.From(Enumerable.Range(Code.MaxValue-10, 10).Select(item => (Code)item));
 			});
 
 		}
@@ -128,26 +144,23 @@ namespace DD.Collections.ICodeSet.CodeSetPageTest
 			});
 
 			// requires at least 3 members (> ICodeSetService.PairCount)
-			Assert.Throws <ArgumentEmptyException>(delegate {
+			Assert.Throws <InvalidOperationException>(delegate {
 				icsp = CodeSetPage.From(new Code[0]);
 			});
-			Assert.Throws <ArgumentException>(delegate {
+			Assert.Throws <InvalidOperationException>(delegate {
 				icsp = CodeSetPage.From(new List<Code>() { 21 });
 			});
-			Assert.Throws <ArgumentException>(delegate {
+			Assert.Throws <InvalidOperationException>(delegate {
 				icsp = CodeSetPage.From(new List<Code>() { 1, 25 });
 			});
 
-			// requires more than two NOT members
-			Assert.Throws <ArgumentException>(delegate {
+			// requires at least one NOT member
+			Assert.Throws <InvalidOperationException>(delegate {
 				icsp = CodeSetPage.From(new List<Code>() { 1, 2, 3, 4, 5 });
-			});
-			Assert.Throws <ArgumentException>(delegate {
-				icsp = CodeSetPage.From(new List<Code>() { 1, 2, 3, 4, 6 });
 			});
 
 			// requires all codes within same unicode plane
-			Assert.Throws <ArgumentException>(delegate {
+			Assert.Throws <InvalidOperationException>(delegate {
 				icsp = CodeSetPage.From(new List<Code>() { 12, 66000 });
 			});
 		}

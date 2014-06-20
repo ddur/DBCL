@@ -19,12 +19,12 @@ namespace DD.Collections.ICodeSet {
 		#region Ctor
 
 		public static CodeSetFull From(Code first, Code last) {
-			Contract.Requires<ArgumentException> ((first + ICodeSetService.PairCount) <= last);
+			Contract.Requires<InvalidOperationException> ((first + ICodeSetService.PairCount) <= last);
 			return new CodeSetFull(first, last);
 		}
 
 		internal CodeSetFull (Code first, Code last) {
-			Contract.Requires<ArgumentException> ((first + ICodeSetService.PairCount) <= last);
+			Contract.Requires<InvalidOperationException> ((first + ICodeSetService.PairCount) <= last);
 
 			// Input -> private
 			Contract.Ensures (this.start == first);

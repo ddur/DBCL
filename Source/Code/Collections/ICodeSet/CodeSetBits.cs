@@ -44,6 +44,7 @@ namespace DD.Collections.ICodeSet
 		public static CodeSetBits From(BitSetArray bits, int offset = 0)
 		{
 			Contract.Requires<ArgumentNullException>(bits.IsNot(null));
+            Contract.Requires<ArgumentOutOfRangeException> (offset >= 0);
             Contract.Requires<ArgumentOutOfRangeException> (bits.Count == 0 || ((int)bits.Last + offset) <= Code.MaxValue);
 
             return new CodeSetBits(bits, offset);
@@ -90,8 +91,8 @@ namespace DD.Collections.ICodeSet
 		{
 
 			Contract.Requires<ArgumentNullException>(bits.IsNot(null));
-			Contract.Requires<ArgumentException>(bits.Count == 0 || (bits.First + offset).HasCodeValue());
-			Contract.Requires<ArgumentException>(bits.Count == 0 || (bits.Last + offset).HasCodeValue());
+            Contract.Requires<ArgumentOutOfRangeException> (offset >= 0);
+            Contract.Requires<ArgumentOutOfRangeException> (bits.Count == 0 || ((int)bits.Last + offset) <= Code.MaxValue);
 
 			Contract.Ensures(Theory.Construct(bits, offset, this));
 

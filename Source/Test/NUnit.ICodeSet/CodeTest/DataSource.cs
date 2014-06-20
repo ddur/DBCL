@@ -84,7 +84,7 @@ namespace DD.Collections.ICodeSet.CodeTest
                 }
 
 	            // for each page 0000 and permanently unassigned xFFFE/xFFFF items
-                for ( int page = 0; page <= 17; page++ ) {
+                for ( int page = 0; page <= 16; page++ ) {
                     yield return (page << 16);
                     yield return (page << 16 | 0xFFFE);
                     yield return (page << 16 | 0xFFFF);
@@ -103,7 +103,7 @@ namespace DD.Collections.ICodeSet.CodeTest
 	            }
 
 	            // 10 random codes for each plane
-                for ( int page = 0; page <= 17; page++ ) {
+                for ( int page = 0; page <= 16; page++ ) {
                     for ( int times = 1; times <= 10; times++ ) {
     	                yield return (page<<16|r.Next(char.MinValue+1, char.MaxValue-1));
 	                }
