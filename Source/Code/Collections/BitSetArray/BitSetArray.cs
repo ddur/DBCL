@@ -253,7 +253,7 @@ namespace DD.Collections
 				return this.doNext;
 			}
 
-			int IEnumerator<int>.Current {
+			public int Current {
 				get {
 					Contract.Ensures(Theory.Current(this, Contract.Result<int>()));
 					Contract.EnsuresOnThrow<InvalidOperationException>(Theory.CurrentOnThrow(this));
@@ -353,9 +353,11 @@ namespace DD.Collections
 			}
 			public override bool MoveNext()
 			{
+				bool result = false;
 				lock (enumerated.SyncRoot) {
-					return base.MoveNext();
+					result = base.MoveNext();
 				}
+				return result;
 			}
 		}
 
@@ -477,7 +479,7 @@ namespace DD.Collections
 				return this.doNext;
 			}
 
-			int IEnumerator<int>.Current {
+			public int Current {
 				get {
 					Contract.Ensures(Theory.Current(this, Contract.Result<int>()));
 					Contract.EnsuresOnThrow<InvalidOperationException>(Theory.CurrentOnThrow(this));
@@ -578,9 +580,11 @@ namespace DD.Collections
 
 			public override bool MoveNext()
 			{
+				bool result = false;
 				lock (this.enumerated.SyncRoot) {
-					return base.MoveNext();
+					result = base.MoveNext();
 				}
+				return result;
 			}
 		}
 
@@ -691,7 +695,7 @@ namespace DD.Collections
 				return this.doNext;
 			}
 
-			int IEnumerator<int>.Current {
+			public int Current {
 				get {
 					Contract.Ensures(Theory.Current(this, Contract.Result<int>()));
 					Contract.EnsuresOnThrow<InvalidOperationException>(Theory.CurrentOnThrow(this));
@@ -794,9 +798,11 @@ namespace DD.Collections
 
 			public override bool MoveNext()
 			{
+				bool result = false;
 				lock (this.enumerated.SyncRoot) {
-					return base.MoveNext();
+					result = base.MoveNext();
 				}
+				return result;
 			}
 		}
 
