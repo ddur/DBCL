@@ -85,7 +85,7 @@ namespace DD.Collections.ICodeSet.CodeSetWrapTest
 			Assert.True (bsa.First == 12);
 			Assert.True (bsa.Last == 12);
 			Assert.True (bsa[12]);
-			Assert.True (csw.SequenceEqual(bsa.ToCodes()));
+			Assert.True (bsa.SequenceEqual(csw.ToValues()));
 
 			csw = CodeSetWrap.From (new List<Code>() {1,12,33,20});
 			bsa = csw.ToBitSetArray();

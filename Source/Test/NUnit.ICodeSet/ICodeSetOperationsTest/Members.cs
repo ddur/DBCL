@@ -77,6 +77,9 @@ namespace DD.Collections.ICodeSet.ICodeSetOperationsTest
 			Assert.That(iCodeSetA.BitDifference((ICodeSet)null).SequenceEqual(a));
 			Assert.That(((ICodeSet)null).BitDifference(iCodeSetA).IsEmpty());
 
+			Assert.That(iCodeSetA.BitDifference((ICodeSet)null, (ICodeSet[])null).SequenceEqual(a));
+			Assert.That(((ICodeSet)null).BitDifference(iCodeSetA, (ICodeSet[])null).IsEmpty());
+
 			Assert.That(iCodeSetB.BitDifference(iCodeSetA).SequenceEqual(b - a));
 			Assert.That(iCodeSetB.BitDifference(iCodeSetA, iCodeSetA).SequenceEqual(b - a - a));
 
@@ -148,6 +151,9 @@ namespace DD.Collections.ICodeSet.ICodeSetOperationsTest
 
 			Assert.That(iCodeSetA.BitDisjunction((ICodeSet)null).SequenceEqual(a));
 			Assert.That(((ICodeSet)null).BitDisjunction(iCodeSetA).SequenceEqual(a));
+
+			Assert.That(iCodeSetA.BitDisjunction((ICodeSet)null, (ICodeSet[])null).SequenceEqual(a));
+			Assert.That(((ICodeSet)null).BitDisjunction(iCodeSetA, (ICodeSet[])null).SequenceEqual(a));
 
 			Assert.That(iCodeSetB.BitDisjunction(iCodeSetA).SequenceEqual(b ^ a));
 			Assert.That(iCodeSetB.BitDisjunction(iCodeSetA, iCodeSetA).SequenceEqual(b ^ a ^ a));
@@ -221,6 +227,9 @@ namespace DD.Collections.ICodeSet.ICodeSetOperationsTest
 			Assert.That(iCodeSetA.BitIntersection((ICodeSet)null).IsEmpty());
 			Assert.That(((ICodeSet)null).BitIntersection(iCodeSetA).IsEmpty());
 
+			Assert.That(iCodeSetA.BitIntersection((ICodeSet)null, (ICodeSet[])null).IsEmpty());
+			Assert.That(((ICodeSet)null).BitIntersection(iCodeSetA, (ICodeSet[])null).IsEmpty());
+
 			Assert.That(iCodeSetB.BitIntersection(iCodeSetA).SequenceEqual(b & a));
 			Assert.That(iCodeSetB.BitIntersection(iCodeSetA, iCodeSetA).SequenceEqual(b & a & a));
 
@@ -291,6 +300,9 @@ namespace DD.Collections.ICodeSet.ICodeSetOperationsTest
 
 			Assert.That(iCodeSetA.BitUnion((ICodeSet)null).SequenceEqual(a));
 			Assert.That(((ICodeSet)null).BitUnion(iCodeSetA).SequenceEqual(a));
+
+			Assert.That(iCodeSetA.BitUnion((ICodeSet)null, (ICodeSet[])null).SequenceEqual(a));
+			Assert.That(((ICodeSet)null).BitUnion(iCodeSetA, (ICodeSet[])null).SequenceEqual(a));
 
 			Assert.That(iCodeSetB.BitUnion(iCodeSetA).SequenceEqual(b | a));
 			Assert.That(iCodeSetB.BitUnion(iCodeSetA, iCodeSetA).SequenceEqual(b | a | a));

@@ -17,8 +17,8 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest
 		{
 			Assert.AreEqual (ICodeSetService.UnitCount, 1);
 			Assert.AreEqual (ICodeSetService.PairCount, 2);
-			Assert.AreEqual (ICodeSetService.NullStart,-1);
-			Assert.AreEqual (ICodeSetService.NullFinal,-2);
+			Assert.AreEqual (ICodeSetService.NoneStart,-1);
+			Assert.AreEqual (ICodeSetService.NoneFinal,-2);
 		}
 	}
 }

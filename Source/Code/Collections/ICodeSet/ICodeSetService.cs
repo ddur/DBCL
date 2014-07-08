@@ -27,27 +27,10 @@ namespace DD.Collections.ICodeSet
 
 		public const int NoDiffLength = 256;
 
-		public const int NullStart = -1;
-		public const int NullFinal = -2;
+		public const int NoneStart = -1;
+		public const int NoneFinal = -2;
 
 		#region To Service
-
-		public static IEnumerable<Code> ToCodes(this string chars)
-		{
-			Contract.Requires<ArgumentException>(chars.CanDecode());
-			Contract.Ensures(Contract.Result<IEnumerable<Code>>() != null);
-			return chars.Decode();
-		}
-
-		public static IEnumerable<Code> ToCodes(this IEnumerable<char> chars)
-		{
-			Contract.Ensures(Contract.Result<IEnumerable<Code>>() != null);
-			if (chars.IsNot(null)) {
-				foreach (Code code in chars) {
-					yield return code;
-				}
-			}
-		}
 
 		internal static IEnumerable<Code> ToCodes(this IEnumerable<int> ints, int offset = 0)
 		{

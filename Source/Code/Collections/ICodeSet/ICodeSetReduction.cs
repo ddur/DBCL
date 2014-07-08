@@ -88,7 +88,9 @@ namespace DD.Collections.ICodeSet
 			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
 			Contract.Ensures(Contract.Result<ICodeSet>() is CodeSetPage || Contract.Result<ICodeSet>() is CodeSetWide);
 
-            if ((self.First + offset).UnicodePlane () == (self.Last + offset).UnicodePlane()) {
+			Code start = (int)self.First + offset;
+			Code final = (int)self.Last + offset;
+			if (start.UnicodePlane () == final.UnicodePlane()) {
                 return CodeSetPage.From (self, offset);
             }
 			return CodeSetWide.From (self, offset);

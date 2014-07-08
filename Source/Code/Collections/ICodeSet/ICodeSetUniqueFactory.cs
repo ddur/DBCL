@@ -435,7 +435,7 @@ namespace DD.Collections.ICodeSet
 				Success success = true;
 
 				if (!chars.IsNullOrEmpty()) {
-					success.Assert(chars.ToCodes().Distinct().OrderBy(item => (item)).SequenceEqual(result));
+					success.Assert(chars.Distinct().OrderBy(item => (item)).Cast<Code>().SequenceEqual(result));
 				} else {
 					success.Assert(result.Count == 0);
 				}

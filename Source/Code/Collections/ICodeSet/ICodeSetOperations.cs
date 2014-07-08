@@ -43,7 +43,8 @@ namespace DD.Collections.ICodeSet
 			Contract.Ensures(Contract.Result<BitSetArray>().IsNot(null));
 			Contract.Ensures(Contract.Result<BitSetArray>().Length <= Code.MaxCount);
 
-			var e = sets.GetEnumerator(); e.MoveNext();
+			var e = sets.GetEnumerator();
+			e.MoveNext();
 			BitSetArray result = e.Current.ToBitSetArray();
 			while (e.MoveNext()) {
 				result.Or(e.Current.ToBitSetArray());
@@ -63,7 +64,7 @@ namespace DD.Collections.ICodeSet
 			var setList = new List<ICodeSet>();
 			setList.Add(self);
 			setList.Add(that);
-            if ( !list.IsNull () && list.Length != 0 )
+			if (!list.IsNull() && list.Length != 0)
 				setList.AddRange(list);
 			return setList.BitIntersection();
 		}
@@ -76,7 +77,8 @@ namespace DD.Collections.ICodeSet
 			Contract.Ensures(Contract.Result<BitSetArray>().IsNot(null));
 			Contract.Ensures(Contract.Result<BitSetArray>().Length <= Code.MaxCount);
 
-			var e = sets.GetEnumerator(); e.MoveNext();
+			var e = sets.GetEnumerator();
+			e.MoveNext();
 			BitSetArray result = e.Current.ToBitSetArray();
 			while (e.MoveNext()) {
 				if (result.IsEmpty()) {
@@ -99,7 +101,7 @@ namespace DD.Collections.ICodeSet
 			var setList = new List<ICodeSet>();
 			setList.Add(self);
 			setList.Add(that);
-            if ( !list.IsNull () && list.Length != 0 )
+			if (!list.IsNull() && list.Length != 0)
 				setList.AddRange(list);
 			return setList.BitDisjunction();
 		}
@@ -112,7 +114,8 @@ namespace DD.Collections.ICodeSet
 			Contract.Ensures(Contract.Result<BitSetArray>().IsNot(null));
 			Contract.Ensures(Contract.Result<BitSetArray>().Length <= Code.MaxCount);
 
-			var e = sets.GetEnumerator(); e.MoveNext();
+			var e = sets.GetEnumerator();
+			e.MoveNext();
 			BitSetArray result = e.Current.ToBitSetArray();
 			while (e.MoveNext()) {
 				result.Xor(e.Current.ToBitSetArray());
@@ -126,7 +129,7 @@ namespace DD.Collections.ICodeSet
 
 		public static BitSetArray BitDifference(this ICodeSet self, ICodeSet that, params ICodeSet[] list)
 		{
-            Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
+			Contract.Ensures(Contract.Result<BitSetArray>().IsNot(null));
 			Contract.Ensures(Contract.Result<BitSetArray>().Length <= Code.MaxCount);
 
 			var setList = new List<ICodeSet>();
@@ -139,14 +142,14 @@ namespace DD.Collections.ICodeSet
 
 		public static BitSetArray BitDifference(this IEnumerable<ICodeSet> sets)
 		{
-            Contract.Requires<ArgumentException> (sets.Count () >= 2);
+			Contract.Requires<ArgumentNullException>(!sets.IsNull());
+			Contract.Requires<ArgumentException>(sets.Count() >= 2);
 
 			Contract.Ensures(Contract.Result<BitSetArray>().IsNot(null));
 			Contract.Ensures(Contract.Result<BitSetArray>().Length <= Code.MaxCount);
 
-            if ( sets.IsNullOrEmpty () )
-                return BitSetArray.Size ();
-			var e = sets.GetEnumerator(); e.MoveNext();
+			var e = sets.GetEnumerator();
+			e.MoveNext();
 			BitSetArray result = e.Current.ToBitSetArray();
 			while (e.MoveNext()) {
 				if (result.IsEmpty()) {
@@ -169,7 +172,7 @@ namespace DD.Collections.ICodeSet
 			if (self.Is(null) || ((self.Length - self.Count) == 0))
 				return NoBits;
 
-			// TODO: performance test between two options below
+			// TODO? performance test between two options below
 			var complement = BitSetArray.Size(self.Last);
 			if ((self.Length - self.Count) < (self.Length / 2)) {
 				BitSetArray compact = self.ToCompact();
@@ -177,8 +180,7 @@ namespace DD.Collections.ICodeSet
 				foreach (var item in compact) {
 					complement._Set(item + self.First);
 				}
-			}
-			else {
+			} else {
 				for (int item = self.First + 1; item < self.Last; item++) {
 					if (!self[item]) {
 						complement._Set(item);
