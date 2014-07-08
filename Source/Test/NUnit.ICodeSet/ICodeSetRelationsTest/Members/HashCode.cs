@@ -18,7 +18,7 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 			ICodeSet nullOrEmpty = null;
 			Assert.True (nullOrEmpty.HashCode() == 0);
 
-			nullOrEmpty = CodeSetNull.Singleton;
+			nullOrEmpty = CodeSetNone.Singleton;
 			Assert.True (nullOrEmpty.HashCode() == 0);
 		}
 

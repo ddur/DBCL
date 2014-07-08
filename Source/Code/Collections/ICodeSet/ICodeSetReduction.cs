@@ -32,7 +32,7 @@ namespace DD.Collections.ICodeSet
 
 			#region Null
 			if (self.IsNullOrEmpty()) {
-				return CodeSetNull.Singleton;
+				return CodeSetNone.Singleton;
 			}
 			#endregion
 
@@ -100,7 +100,7 @@ namespace DD.Collections.ICodeSet
 			Contract.Ensures(Contract.Result<ICodeSet>().Theory());
 
 			if (self.IsNullOrEmpty()) {
-				return CodeSetNull.Singleton;
+				return CodeSetNone.Singleton;
 			}
 			return self.IsReduced() ? self : self.ToBitSetArray().Reduce();
 		}
@@ -109,7 +109,7 @@ namespace DD.Collections.ICodeSet
 		{
 			return (
 			    self is Code ||
-			    self is CodeSetNull ||
+			    self is CodeSetNone ||
 			    self is CodeSetPair ||
 			    self is CodeSetFull ||
 			    self is CodeSetList ||
@@ -190,7 +190,7 @@ namespace DD.Collections.ICodeSet
 
 			switch (self.Count) {
 				case ICodeSetService.NullCount:
-					success.Assert(self is CodeSetNull);
+					success.Assert(self is CodeSetNone);
 					break;
 				case ICodeSetService.UnitCount:
 					success.Assert(self is Code);

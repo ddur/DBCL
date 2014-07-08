@@ -154,7 +154,7 @@ namespace DD.Collections.ICodeSet
 
 				if (self.Count != 0) {
 					success.Assert(!(
-					    self is CodeSetNull ||
+					    self is CodeSetNone ||
 					    self is CodeSetBits ||
 					    self is CodeSetWrap
 					));
@@ -178,7 +178,7 @@ namespace DD.Collections.ICodeSet
 				} else {
 					success.Assert(self.Length == 0);
 					success.Assert(
-						self is CodeSetNull ||
+						self is CodeSetNone ||
 						self is CodeSetBits ||
 						self is CodeSetWrap
 					);

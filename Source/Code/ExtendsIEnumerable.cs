@@ -17,13 +17,13 @@ namespace DD {
         /// <para>Returns true if IEnumerable&lt;T&gt; is empty (no items/count==0).</para>
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="me">Extended IEnumerable&lt;T&gt;</param>
+        /// <param name="self">Extended IEnumerable&lt;T&gt;</param>
         /// <returns>True if IEnumerable&lt;T&gt; is empty</returns>
         [Pure]
         public static bool IsEmpty<T> (this IEnumerable<T> self) {
             Contract.Requires<ArgumentNullException> (self.IsNot (null));
 
-            ICollection<T> collection = self as ICollection<T>;
+            var collection = self as ICollection<T>;
             if ( !collection.IsNull () ) {
                 return collection.Count == 0;
             }

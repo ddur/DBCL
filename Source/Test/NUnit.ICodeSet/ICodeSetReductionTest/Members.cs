@@ -17,7 +17,7 @@ namespace DD.Collections.ICodeSet.ICodeSetReductionTest
 		[Test]
 		public void IsReduced() {
 			Assert.True(new Code(3).IsReduced());
-			Assert.True(CodeSetNull.Singleton.IsReduced());
+			Assert.True(CodeSetNone.Singleton.IsReduced());
 			Assert.True(CodeSetPair.From(3,4).IsReduced());
 			Assert.True(CodeSetFull.From(3,44).IsReduced());
 			Assert.True(CodeSetList.From(3,7,9,15,80).IsReduced());
@@ -65,11 +65,11 @@ namespace DD.Collections.ICodeSet.ICodeSetReductionTest
 		IEnumerable<Tuple<BitSetArray,Type>> ToNull {
 			get {
 				// null -> Null
-				yield return new Tuple<BitSetArray, Type>((BitSetArray)null, typeof(CodeSetNull));
+				yield return new Tuple<BitSetArray, Type>((BitSetArray)null, typeof(CodeSetNone));
 
 				// empty -> Null
-				yield return new Tuple<BitSetArray, Type>(BitSetArray.Size(), typeof(CodeSetNull));
-				yield return new Tuple<BitSetArray, Type>(BitSetArray.Size(100), typeof(CodeSetNull));
+				yield return new Tuple<BitSetArray, Type>(BitSetArray.Size(), typeof(CodeSetNone));
+				yield return new Tuple<BitSetArray, Type>(BitSetArray.Size(100), typeof(CodeSetNone));
 			}
 		}
 

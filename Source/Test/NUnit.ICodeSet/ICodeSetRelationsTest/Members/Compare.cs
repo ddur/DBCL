@@ -19,16 +19,16 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 			ICodeSet b = null;
 			Assert.True (a.Compare(b) == 0);
 			
-			a = CodeSetNull.Singleton;
+			a = CodeSetNone.Singleton;
 			b = null;
 			Assert.True (a.Compare(b) == 0);
 
-			a = CodeSetNull.Singleton;
-			b = CodeSetNull.Singleton;
+			a = CodeSetNone.Singleton;
+			b = CodeSetNone.Singleton;
 			Assert.True (a.Compare(b) == 0);
 
 			a = null;
-			b = CodeSetNull.Singleton;
+			b = CodeSetNone.Singleton;
 			Assert.True (a.Compare(b) == 0);
 		}
 
@@ -39,11 +39,11 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 			ICodeSet b = new Code(0);
 			Assert.True (a.Compare(b) == -1);
 
-			a = CodeSetNull.Singleton;
+			a = CodeSetNone.Singleton;
 			b = CodeSetPair.From(0,100);
 			Assert.True (a.Compare(b) == -1);
 
-			a = CodeSetNull.Singleton;
+			a = CodeSetNone.Singleton;
 			b = CodeSetList.From(0,100,1000);
 			Assert.True (a.Compare(b) == -1);
 
@@ -52,11 +52,11 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 			Assert.True (a.Compare(b) == 1);
 
 			a = CodeSetPair.From(0,100);
-			b = CodeSetNull.Singleton;
+			b = CodeSetNone.Singleton;
 			Assert.True (a.Compare(b) == 1);
 
 			a = CodeSetList.From(0,100,1000);
-			b = CodeSetNull.Singleton;
+			b = CodeSetNone.Singleton;
 			Assert.True (a.Compare(b) == 1);
 
 		}

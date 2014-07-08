@@ -265,7 +265,7 @@ namespace DD.Collections.ICodeSet
 
 				success.Assert(self.sorted.Length <= Code.MaxCount);
 				success.Assert(self.sorted.Length == 1 + self.final - self.start);
-				success.Assert(self.sorted.IsCompact());
+				success.Assert(self.sorted.IsCodeCompact());
 	
 				if (self.sorted.Count != 0) {
 					success.Assert(self.start.HasCodeValue());

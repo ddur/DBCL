@@ -32,8 +32,8 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 
 		[Test]
 		public void Empty() {
-			ICodeSet a = CodeSetNull.Singleton;
-			ICodeSet b = CodeSetNull.Singleton;
+			ICodeSet a = CodeSetNone.Singleton;
+			ICodeSet b = CodeSetNone.Singleton;
 
 			Assert.False (a.IsProperRangeSubsetOf(b));
 			Assert.False (b.IsProperRangeSubsetOf(a));
@@ -51,7 +51,7 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 		[Test]
 		public void NullOrEmpty() {
 			ICodeSet a = null;
-			ICodeSet b = CodeSetNull.Singleton;
+			ICodeSet b = CodeSetNone.Singleton;
 
 			Assert.False (a.IsProperRangeSubsetOf(b));
 			Assert.False (b.IsProperRangeSubsetOf(a));

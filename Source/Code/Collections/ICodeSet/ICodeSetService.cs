@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using DD.Text;
 
 namespace DD.Collections.ICodeSet
 {
@@ -20,8 +21,10 @@ namespace DD.Collections.ICodeSet
 		public const int NullCount = 0;
 		public const int UnitCount = 1;
 		public const int PairCount = 2;
-		public const int ListMaxCount = 16;
+
 		// NOTE: log(16) == 4 tests, TODO: check speed on 32 and 64
+		public const int ListMaxCount = 16;
+
 		public const int NoDiffLength = 256;
 
 		public const int NullStart = -1;
@@ -29,8 +32,16 @@ namespace DD.Collections.ICodeSet
 
 		#region To Service
 
+		public static IEnumerable<Code> ToCodes(this string chars)
+		{
+			Contract.Requires<ArgumentException>(chars.CanDecode());
+			Contract.Ensures(Contract.Result<IEnumerable<Code>>() != null);
+			return chars.Decode();
+		}
+
 		public static IEnumerable<Code> ToCodes(this IEnumerable<char> chars)
 		{
+			Contract.Ensures(Contract.Result<IEnumerable<Code>>() != null);
 			if (chars.IsNot(null)) {
 				foreach (Code code in chars) {
 					yield return code;
@@ -38,50 +49,47 @@ namespace DD.Collections.ICodeSet
 			}
 		}
 
-		public static IEnumerable<Code> ToCodes(this IEnumerable<int> ints, int offset = 0)
+		internal static IEnumerable<Code> ToCodes(this IEnumerable<int> ints, int offset = 0)
 		{
+			Contract.Requires<ArgumentException>(ints == null || Contract.ForAll(ints, x => (x + offset).HasCodeValue()));
+			Contract.Ensures(Contract.Result<IEnumerable<Code>>() != null);
 			if (ints.IsNot(null)) {
 				if (offset == 0) {
 					foreach (var code in ints) {
-						if (code.HasCodeValue()) {
-							yield return (Code)code;
-						}
+						yield return (Code)code;
 					}
 				} else {
 					int shifted;
 					foreach (var code in ints) {
 						shifted = code + offset;
-						if (shifted.HasCodeValue()) {
-							yield return (Code)shifted;
-						}
+						yield return (Code)shifted;
 					}
 				}
-			}
-			else {
+			} else {
 				yield break;
 			}
 		}
 
 		public static IEnumerable<int> ToValues(this IEnumerable<Code> codes)
 		{
+			Contract.Ensures(Contract.Result<IEnumerable<int>>() != null);
 			if (codes.IsNot(null)) {
 				foreach (Code code in codes) {
 					yield return code.Value;
 				}
-			}
-			else {
+			} else {
 				yield break;
 			}
 		}
 
 		public static IEnumerable<int> ToValues(this IEnumerable<char> codes)
 		{
+			Contract.Ensures(Contract.Result<IEnumerable<int>>() != null);
 			if (codes.IsNot(null)) {
 				foreach (Code code in codes) {
 					yield return code.Value;
 				}
-			}
-			else {
+			} else {
 				yield break;
 			}
 		}
@@ -95,31 +103,31 @@ namespace DD.Collections.ICodeSet
 			return 1 + (int)self.Last - (int)self.First;
 		}
 
-        [Pure]
-        public static int Span (this IEnumerable<Code> self) {
-            if ( self.IsNull () )
-                return 0;
-            if ( !self.Any() )
-                return 0;
-            return 1 + self.Max() - self.Min();
-        }
+		[Pure]
+		public static int Span(this IEnumerable<Code> self)
+		{
+			if (self.IsNull())
+				return 0;
+			if (!self.Any())
+				return 0;
+			return 1 + self.Max() - self.Min();
+		}
 
-        /// <summary>IsCompact if:
+		/// <summary>IsCompact if:
 		/// <para>1) is not null</para>
 		/// <para>2) is not empty</para>
 		/// <para>3) has first[0] and last[length-1] bit set</para></summary>
 		/// <param name="self">BitSetArray</param>
 		/// <returns>bool</returns>
-		[Pure] public static bool IsCompact(this BitSetArray self)
+		[Pure] public static bool IsCodeCompact(this BitSetArray self)
 		{
-			if (self.IsNull())
+			if (self.IsNull()) {
 				return false;
-			
+			}
 			if (self.Count == 0) {
 				return self.Length == 0;
-			} else {
-				return self.Length.IsCodesCount() && self[0] && self[self.Length - 1];
 			}
+			return self[0] && self[self.Length - 1] && self.Length.IsCodesCount();
 		}
 		
 		/// <summary>Returns BitSetArray(self.Last+1) where BitSetArray.Item == self.Item
@@ -128,19 +136,19 @@ namespace DD.Collections.ICodeSet
 		/// <returns></returns>
 		[Pure] public static BitSetArray ToBitSetArray(this ICodeSet self)
 		{
-            Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
-            Contract.Ensures (
-                self.IsNull () || self.Count == 0 ||
-                Contract.ForAll (self, item => Contract.Result<BitSetArray> ()[item])
-            );
-            Contract.Ensures (
-                (!self.IsNull () && self.Count != 0) ||
-                Contract.Result<BitSetArray> ().Count == 0
-            );
+			Contract.Ensures(Contract.Result<BitSetArray>().IsNot(null));
+			Contract.Ensures(
+				self.IsNull() || self.Count == 0 ||
+				Contract.ForAll(self, item => Contract.Result<BitSetArray>()[item])
+			);
+			Contract.Ensures(
+				(!self.IsNull() && self.Count != 0) ||
+				Contract.Result<BitSetArray>().Count == 0
+			);
 
-            if ( self.IsNull () || self.Count == 0 ) {
-                return BitSetArray.Size ();
-            }
+			if (self.IsNull() || self.Count == 0) {
+				return BitSetArray.Size();
+			}
 			var icsWrap = self as CodeSetWrap;
 			if (!icsWrap.IsNull()) {
 				return icsWrap.ToBitSetArray();
@@ -161,7 +169,7 @@ namespace DD.Collections.ICodeSet
 		{
 			// TODO Ensures Theory
 			Contract.Ensures(Contract.Result<BitSetArray>().IsNot(null));
-			Contract.Ensures(Contract.Result<BitSetArray>().IsCompact());
+			Contract.Ensures(Contract.Result<BitSetArray>().IsCodeCompact());
 
 			if (self.IsNull() || self.Count == 0)
 				return BitSetArray.Size();

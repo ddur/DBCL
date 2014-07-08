@@ -16,7 +16,7 @@ namespace DD.Collections.ICodeSet.CodeSetNullTest
         [Test]
         public void AllMembers()
         {
-            CodeSetNull csn = CodeSetNull.Singleton;
+            CodeSetNone csn = CodeSetNone.Singleton;
 
             Assert.Throws<InvalidOperationException> (delegate{Code c = csn.First;});
             Assert.Throws<InvalidOperationException> (delegate{Code c = csn.Last;});

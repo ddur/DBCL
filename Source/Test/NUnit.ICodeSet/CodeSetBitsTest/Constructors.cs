@@ -77,7 +77,7 @@ namespace DD.Collections.ICodeSet.CodeSetBitsTest
 			CodeSetBits csb;
 
 			ICodeSet input;
-			input = CodeSetNull.Singleton;
+			input = CodeSetNone.Singleton;
 			csb = CodeSetBits.From (input);
 
 			input = CodeSetList.From(new List<Code>() {1,12,33,20});

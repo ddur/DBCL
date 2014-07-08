@@ -38,10 +38,10 @@ namespace DD.Collections.ICodeSet.CodeSetDiffTest
 
 			// requires no empty arguments
 			Assert.Throws<ArgumentEmptyException> (
-				delegate { csd = CodeSetDiff.From(CodeSetNull.Singleton,CodeSetPair.From(0,100)); }
+				delegate { csd = CodeSetDiff.From(CodeSetNone.Singleton,CodeSetPair.From(0,100)); }
 			);
 			Assert.Throws<ArgumentEmptyException> (
-				delegate { csd = CodeSetDiff.From(CodeSetFull.From(0,100),CodeSetNull.Singleton); }
+				delegate { csd = CodeSetDiff.From(CodeSetFull.From(0,100),CodeSetNone.Singleton); }
 			);
 			
 			

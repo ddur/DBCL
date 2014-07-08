@@ -22,7 +22,7 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members
 		[Test]
 		public void Empty_IsFalse()
 		{
-			ICodeSet isEmpty = CodeSetNull.Singleton;
+			ICodeSet isEmpty = CodeSetNone.Singleton;
 			Assert.False (isEmpty.IsFull());
 		}
 

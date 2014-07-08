@@ -13,17 +13,17 @@ namespace DD.Collections.ICodeSet
     /// <summary>Empty ICodeSet, private constructor
     /// <remarks>Allways empty, singleton</remarks>
     /// </summary>
-    public sealed class CodeSetNull : CodeSet {
+    public sealed class CodeSetNone : CodeSet {
         
         #region Ctor
 
-        private CodeSetNull() {}
+        private CodeSetNone() {}
 
         #endregion
         
         #region Fields
 
-        public static readonly CodeSetNull Singleton = new CodeSetNull();
+        public static readonly CodeSetNone Singleton = new CodeSetNone();
 
         #endregion
 

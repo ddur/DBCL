@@ -187,7 +187,7 @@ namespace DD.Collections.ICodeSet
 			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
 			Contract.Ensures(Theory.From(utf16, this, Contract.Result<ICodeSet>()));
 
-			return string.IsNullOrEmpty(utf16) ? CodeSetNull.Singleton : From(utf16.Decode());
+			return string.IsNullOrEmpty(utf16) ? CodeSetNone.Singleton : From(utf16.Decode());
 		}
 
 		public ICodeSet From(params char[] chars)
@@ -195,7 +195,7 @@ namespace DD.Collections.ICodeSet
 			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
 			Contract.Ensures(Theory.From(chars, this, Contract.Result<ICodeSet>()));
 
-			return chars.IsNullOrEmpty() ? CodeSetNull.Singleton : From(chars.ToValues());
+			return chars.IsNullOrEmpty() ? CodeSetNone.Singleton : From(chars.ToValues());
 		}
 
 		public ICodeSet From(IEnumerable<char> chars)
@@ -203,7 +203,7 @@ namespace DD.Collections.ICodeSet
 			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
 			Contract.Ensures(Theory.From(chars, this, Contract.Result<ICodeSet>()));
 
-			return chars.IsNullOrEmpty() ? CodeSetNull.Singleton : From(chars.ToValues());
+			return chars.IsNullOrEmpty() ? CodeSetNone.Singleton : From(chars.ToValues());
 		}
 
 		public ICodeSet From(IEnumerable<Code> codes)
@@ -211,7 +211,7 @@ namespace DD.Collections.ICodeSet
 			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
 			Contract.Ensures(Theory.From(codes, this, Contract.Result<ICodeSet>()));
 
-			return codes.IsNullOrEmpty() ? CodeSetNull.Singleton : From(codes.ToValues());
+			return codes.IsNullOrEmpty() ? CodeSetNone.Singleton : From(codes.ToValues());
 		}
 
 		public ICodeSet From(params int[] values)
@@ -221,7 +221,7 @@ namespace DD.Collections.ICodeSet
 			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
 			Contract.Ensures(Theory.From(values, this, Contract.Result<ICodeSet>()));
 
-			return values.IsNullOrEmpty() ? CodeSetNull.Singleton : QuickFrom(BitSetArray.From(values));
+			return values.IsNullOrEmpty() ? CodeSetNone.Singleton : QuickFrom(BitSetArray.From(values));
 		}
 
 		public ICodeSet From(IEnumerable<int> values)
@@ -231,7 +231,7 @@ namespace DD.Collections.ICodeSet
 			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
 			Contract.Ensures(Theory.From(values, this, Contract.Result<ICodeSet>()));
 
-			return values.IsNullOrEmpty() ? CodeSetNull.Singleton : QuickFrom(BitSetArray.From(values));
+			return values.IsNullOrEmpty() ? CodeSetNone.Singleton : QuickFrom(BitSetArray.From(values));
 		}
 
         public ICodeSet From (BitSetArray bits) {
@@ -240,7 +240,7 @@ namespace DD.Collections.ICodeSet
             Contract.Ensures (Theory.Result (this, Contract.Result<ICodeSet> ()));
             Contract.Ensures (Theory.From (bits, this, Contract.Result<ICodeSet> ()));
 
-            return bits.IsNullOrEmpty () ? CodeSetNull.Singleton : From ((ICodeSet)CodeSetBits.From (bits, 0));
+            return bits.IsNullOrEmpty () ? CodeSetNone.Singleton : From ((ICodeSet)CodeSetBits.From (bits, 0));
         }
 
         ICodeSet QuickFrom (BitSetArray bits)
@@ -250,7 +250,7 @@ namespace DD.Collections.ICodeSet
 			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
 			Contract.Ensures(Theory.From(bits, this, Contract.Result<ICodeSet>()));
 
-            return bits.IsNullOrEmpty () ? CodeSetNull.Singleton : From ((ICodeSet)new QuickWrap(bits));
+            return bits.IsNullOrEmpty () ? CodeSetNone.Singleton : From ((ICodeSet)new QuickWrap(bits));
         }
 
 		public ICodeSet From(ICodeSet iset)
@@ -259,7 +259,7 @@ namespace DD.Collections.ICodeSet
 			Contract.Ensures(Theory.From(iset, this, Contract.Result<ICodeSet>()));
 
 			if (iset.IsNull()) {
-				return CodeSetNull.Singleton;
+				return CodeSetNone.Singleton;
 			}
 			ICodeSet key = iset;
 			if (!dictionary.Find(ref key)) {
@@ -394,7 +394,7 @@ namespace DD.Collections.ICodeSet
 		private void Invariant()
 		{
 			Contract.Invariant(dictionary.IsNot(null)); 
-			Contract.Invariant(!dictionary.Contains(CodeSetNull.Singleton)); 
+			Contract.Invariant(!dictionary.Contains(CodeSetNone.Singleton)); 
 		}
 
 		#endregion

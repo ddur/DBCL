@@ -16,7 +16,7 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members
 		public void IsTrue()
 		{
 			Assert.True (((ICodeSet)null).IsNullOrEmpty());
-			Assert.True (((CodeSetNull)null).IsNullOrEmpty());
+			Assert.True (((CodeSetNone)null).IsNullOrEmpty());
 			Assert.True (((CodeSetPair)null).IsNullOrEmpty());
 			Assert.True (((CodeSetList)null).IsNullOrEmpty());
 			Assert.True (((CodeSetFull)null).IsNullOrEmpty());
@@ -24,7 +24,7 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members
 			Assert.True (((CodeSetPage)null).IsNullOrEmpty());
 			Assert.True (((CodeSetWide)null).IsNullOrEmpty());
 
-			Assert.True ((CodeSetNull.Singleton).IsNullOrEmpty());
+			Assert.True ((CodeSetNone.Singleton).IsNullOrEmpty());
 		}
 
 		[Test]

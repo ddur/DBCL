@@ -223,7 +223,7 @@ namespace DD.Collections.ICodeSet
 				
 				// private
 				success.Assert(self.sorted.IsNot(null));
-				success.Assert(self.sorted.IsCompact());
+				success.Assert(self.sorted.IsCodeCompact());
 				success.Assert(self.sorted.Count > ICodeSetService.PairCount);	// not Null-Pair
 				success.Assert(self.sorted.Count < self.sorted.Length);		// not Full
 				success.Assert(self.start.UnicodePlane() == self.final.UnicodePlane());

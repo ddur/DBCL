@@ -25,7 +25,7 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 			Assert.IsTrue (a.QuickSetEquals(b) == true);
 			Assert.IsTrue (b.QuickSetEquals(a) == true);
 			
-			a = CodeSetNull.Singleton;
+			a = CodeSetNone.Singleton;
 			b = null;
 			Assert.IsTrue (a.SetEquals(b));
 			Assert.IsTrue (b.SetEquals(a));
@@ -35,7 +35,7 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 			Assert.IsTrue (b.QuickSetEquals(a) == true);
 
 			a = null;
-			b = CodeSetNull.Singleton;
+			b = CodeSetNone.Singleton;
 			Assert.IsTrue (a.SetEquals(b));
 			Assert.IsTrue (b.SetEquals(a));
 			Assert.IsTrue (a.SequenceEqual(b));
@@ -56,7 +56,7 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 			Assert.IsTrue (a.QuickSetEquals(b) == false);
 			Assert.IsTrue (b.QuickSetEquals(a) == false);
 
-			a = CodeSetNull.Singleton;
+			a = CodeSetNone.Singleton;
 			b = CodeSetPair.From(0,100);
 			Assert.IsFalse (a.SetEquals(b));
 			Assert.IsFalse (b.SetEquals(a));
@@ -65,7 +65,7 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 			Assert.IsTrue (a.QuickSetEquals(b) == false);
 			Assert.IsTrue (b.QuickSetEquals(a) == false);
 
-			a = CodeSetNull.Singleton;
+			a = CodeSetNone.Singleton;
 			b = CodeSetList.From(0,100,1000);
 			Assert.IsFalse (a.SetEquals(b));
 			Assert.IsFalse (b.SetEquals(a));
@@ -84,7 +84,7 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 			Assert.IsTrue (b.QuickSetEquals(a) == false);
 
 			a = CodeSetPair.From(0,100);
-			b = CodeSetNull.Singleton;
+			b = CodeSetNone.Singleton;
 			Assert.IsFalse (a.SetEquals(b));
 			Assert.IsFalse (b.SetEquals(a));
 			Assert.IsFalse (a.SequenceEqual(b));
@@ -93,7 +93,7 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members
 			Assert.IsTrue (b.QuickSetEquals(a) == false);
 
 			a = CodeSetList.From(0,100,1000);
-			b = CodeSetNull.Singleton;
+			b = CodeSetNone.Singleton;
 			Assert.IsFalse (a.SetEquals(b));
 			Assert.IsFalse (b.SetEquals(a));
 			Assert.IsFalse (a.SequenceEqual(b));

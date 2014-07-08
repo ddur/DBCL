@@ -23,8 +23,8 @@ namespace DD.Collections.ICodeSet.CodeSetAbstractTest
 			ICodeSet icset = CodeSetPage.From(new Code[] {1,5,7});
 			Assert.True (acset.CompareTo(icset) == 0);
 
-			acset = CodeSetNull.Singleton;
-			icset = CodeSetNull.Singleton;
+			acset = CodeSetNone.Singleton;
+			icset = CodeSetNone.Singleton;
 			Assert.True (acset.CompareTo(icset) == 0);
 
 			icset = null;
@@ -41,7 +41,7 @@ namespace DD.Collections.ICodeSet.CodeSetAbstractTest
 			icset = CodeSetPage.From(new Code[] {0,1,5,7});
 			Assert.True (acset.CompareTo(icset) < 0);
 
-			acset = CodeSetNull.Singleton;
+			acset = CodeSetNone.Singleton;
 			Assert.True (acset.CompareTo(icset) < 0);
 		}
 
@@ -52,7 +52,7 @@ namespace DD.Collections.ICodeSet.CodeSetAbstractTest
 			ICodeSet icset = new Code(5);
 			Assert.True (acset.CompareTo(icset) > 0);
 
-			icset = CodeSetNull.Singleton;
+			icset = CodeSetNone.Singleton;
 			Assert.True (acset.CompareTo(icset) > 0);
 
 			icset = null;
@@ -184,7 +184,7 @@ namespace DD.Collections.ICodeSet.CodeSetAbstractTest
 		public void IsReadOnly_Get() {
 			CodeSet cset_a = CodeSetList.From(new Code[] {0,1,5,7});
 			CodeSet cset_b = CodeSetPage.From(new Code[] {0,1,5,7});
-			CodeSet cset_c = CodeSetNull.Singleton;
+			CodeSet cset_c = CodeSetNone.Singleton;
 
 			Assert.True (cset_a.IsReadOnly);
 			Assert.True (cset_b.IsReadOnly);
@@ -215,8 +215,8 @@ namespace DD.Collections.ICodeSet.CodeSetAbstractTest
 			Assert.True (cset_a == cset_b);
 			Assert.True (cset_b == cset_a);
 			
-			cset_a = CodeSetNull.Singleton;
-			cset_b = CodeSetNull.Singleton;
+			cset_a = CodeSetNone.Singleton;
+			cset_b = CodeSetNone.Singleton;
 
 			Assert.True (cset_a == cset_b);
 			Assert.True (cset_b == cset_a);
@@ -240,7 +240,7 @@ namespace DD.Collections.ICodeSet.CodeSetAbstractTest
 			Assert.True (cset_a != cset_b);
 			Assert.True (cset_b != cset_a);
 			
-			cset_a = CodeSetNull.Singleton;
+			cset_a = CodeSetNone.Singleton;
 
 			Assert.True (cset_a != cset_b);
 			Assert.True (cset_b != cset_a);
