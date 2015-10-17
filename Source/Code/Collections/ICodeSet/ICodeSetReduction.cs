@@ -83,12 +83,16 @@ namespace DD.Collections.ICodeSet
 		{
 			Contract.Requires<ArgumentNullException>(!self.IsNull());
             Contract.Requires<InvalidOperationException> (self.Count.InRange (ICodeSetService.PairCount + 1, self.Span () - 1));	// not Null/Code/Pair/Full
+            Contract.Requires<ArgumentOutOfRangeException> (self.Length <= Code.MaxCount || self.Last <= Code.MaxValue);
             Contract.Requires<ArgumentOutOfRangeException> (offset.InRange (0, Code.MaxValue - (int)self.Last));
 
 			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
 			Contract.Ensures(Contract.Result<ICodeSet>() is CodeSetPage || Contract.Result<ICodeSet>() is CodeSetWide);
 
-			Code start = (int)self.First + offset;
+            Contract.Assume (self.First.HasValue);
+            Contract.Assume (self.Last.HasValue);
+
+            Code start = (int)self.First + offset;
 			Code final = (int)self.Last + offset;
 			if (start.UnicodePlane () == final.UnicodePlane()) {
                 return CodeSetPage.From (self, offset);
