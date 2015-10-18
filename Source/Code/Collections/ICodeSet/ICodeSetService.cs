@@ -102,7 +102,7 @@ namespace DD.Collections.ICodeSet
 		/// <para>3) has first[0] and last[length-1] bit set</para></summary>
 		/// <param name="self">BitSetArray</param>
 		/// <returns>bool</returns>
-		[Pure] public static bool IsCodeCompact(this BitSetArray self)
+		[Pure] public static bool IsCompact(this BitSetArray self)
 		{
 			if (self.IsNull()) {
 				return false;
@@ -152,7 +152,7 @@ namespace DD.Collections.ICodeSet
 		{
 			// TODO Ensures Theory
 			Contract.Ensures(Contract.Result<BitSetArray>().IsNot(null));
-			Contract.Ensures(Contract.Result<BitSetArray>().IsCodeCompact());
+			Contract.Ensures(Contract.Result<BitSetArray>().IsCompact());
 
 			if (self.IsNull() || self.Count == 0)
 				return BitSetArray.Size();

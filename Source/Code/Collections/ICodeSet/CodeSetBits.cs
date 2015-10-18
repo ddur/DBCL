@@ -13,7 +13,7 @@ using DD.Diagnostics;
 namespace DD.Collections.ICodeSet
 {
 	/// <summary>Wraps over <see cref="ICodeSetService.IsCompact">Compact</see> BitSetArray</summary>
-	/// <remarks>Can be empty, can be full, can contain up to <see cref="Code.MaxCodeCount">Code.MaxCodeCount</see> codes</remarks>
+	/// <remarks>Can be empty, can be full, can contain up to <see cref="Code.MaxCount">Code.MaxCount</see> codes</remarks>
 	[Serializable]
 	public sealed class CodeSetBits : CodeSet
 	{
@@ -265,7 +265,7 @@ namespace DD.Collections.ICodeSet
 
 				success.Assert(self.sorted.Length <= Code.MaxCount);
 				success.Assert(self.sorted.Length == 1 + self.final - self.start);
-				success.Assert(self.sorted.IsCodeCompact());
+				success.Assert(self.sorted.IsCompact());
 	
 				if (self.sorted.Count != 0) {
 					success.Assert(self.start.HasCodeValue());

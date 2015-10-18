@@ -23,7 +23,7 @@ namespace DD.Diagnostics {
 
 #if DEBUG && TRACE
             // store an remove listeners
-            List<TraceListener> tListeners = new List<TraceListener> ();
+            var tListeners = new List<TraceListener> ();
             foreach ( TraceListener tl in Trace.Listeners ) {
                 tListeners.Add (tl);
             }

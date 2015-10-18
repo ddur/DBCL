@@ -15,8 +15,8 @@ namespace DD
 		public ArgumentEmptyException() {}
 		public ArgumentEmptyException(string message) : base (message) {}
 		public ArgumentEmptyException(string message, Exception innerException) : base (message, innerException) {}
-		public ArgumentEmptyException(string message, string paramName, Exception innerException) : base (message, paramName, innerException) {}
-		public ArgumentEmptyException(string message, string paramName) : base (message, paramName) {}
-		public ArgumentEmptyException(SerializationInfo info, StreamingContext context) : base (info, context) {}
+		public ArgumentEmptyException(string message, string parameter, Exception innerException) : base (message, parameter, innerException) {}
+		public ArgumentEmptyException(string message, string parameter) : base (message, parameter) {}
+		protected ArgumentEmptyException(SerializationInfo info, StreamingContext context) : base (info, context) {}
 	}
 }
