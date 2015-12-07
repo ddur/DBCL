@@ -1,6 +1,8 @@
 ﻿version: 1.0.{build}
 configuration: Debug
 platform: Any CPU
+before_build:
+- cmd: nuget restore
 build:
   project: DBCL.sln
   parallel: true
