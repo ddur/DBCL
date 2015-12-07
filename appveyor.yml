@@ -1,0 +1,8 @@
+﻿configuration: Debug
+
+before_build:
+  - nuget restore
+
+build:
+  parallel: true
+  project: DBCL.sln
