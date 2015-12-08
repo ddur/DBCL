@@ -15,8 +15,8 @@ namespace DD.Collections.BitSetArrayTest.Interfaces {
 
         [Test]
         public void CompareTo () {
-            var bsA = BitSetArray.Size ();
-            var bsB = BitSetArray.Size ();
+            var bsA = BitSetArray.Empty ();
+            var bsB = BitSetArray.Empty ();
 
             Assert.That (bsA.CompareTo ((BitSetArray)null) == 0);
             Assert.That (bsA.Equals ((BitSetArray)null));

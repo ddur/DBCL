@@ -44,7 +44,7 @@ namespace DD.Collections.BitSetArrayTest {
         public void LeftOperandIsNull () {
             a = null;
             b = BitSetArray.From (1, 2, 3);
-            c = BitSetArray.Size ();
+            c = BitSetArray.Empty ();
 
             Assert.That ((a | b).SetEquals (b));
             Assert.That ((a & b).SetEquals (a));
@@ -85,7 +85,7 @@ namespace DD.Collections.BitSetArrayTest {
             Assert.That (b != c);
             Assert.That (c != b);
 
-            c = BitSetArray.Size ();
+            c = BitSetArray.Empty ();
 
             Assert.That (a == b);
             Assert.That (b == a);
@@ -167,7 +167,7 @@ namespace DD.Collections.BitSetArrayTest {
             Assert.That (c >= b);
             Assert.That (!(c <= b));
 
-            b = BitSetArray.Size ();
+            b = BitSetArray.Empty ();
 
             Assert.That (a == b);
             Assert.That (b == a);
@@ -251,7 +251,7 @@ namespace DD.Collections.BitSetArrayTest {
             b = BitSetArray.From (3, 4, 5);
             c = BitSetArray.From (new int[] { 0, 1, 2 });
 
-            Assert.That ((~a) == BitSetArray.Size ());
+            Assert.That ((~a) == BitSetArray.Empty ());
             Assert.That ((~a) == BitSetArray.Size (10));
             Assert.That ((~b) == c);
 

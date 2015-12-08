@@ -23,7 +23,7 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members
 		[Test]
 		public void BitSetArray_Empty()
 		{
-			Assert.AreEqual(0, BitSetArray.Size().Span());
+			Assert.AreEqual(0, BitSetArray.Empty ().Span());
 			Assert.AreEqual(0, BitSetArray.Size(1).Span());
 			Assert.AreEqual(0, BitSetArray.Size(1000).Span());
 		}

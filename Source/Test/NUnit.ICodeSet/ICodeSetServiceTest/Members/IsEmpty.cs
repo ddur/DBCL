@@ -26,7 +26,7 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members
 		[Test]
 		public void BitSetArray_Empty()
 		{
-			Assert.True (BitSetArray.Size().IsEmpty());
+			Assert.True (BitSetArray.Empty ().IsEmpty());
 			Assert.True (BitSetArray.Size(10).IsEmpty());
 		}
 

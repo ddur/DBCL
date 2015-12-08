@@ -29,7 +29,7 @@ namespace DD.Collections.ICodeSet.CodeSetWrapTest
 		[Test]
 		public void From_BitSetArray()
 		{
-			var x = CodeSetWrap.From (BitSetArray.Size ());
+			var x = CodeSetWrap.From (BitSetArray.Empty ());
 			var y = CodeSetWrap.From (BitSetArray.From (1,2,3));
 		}
 		

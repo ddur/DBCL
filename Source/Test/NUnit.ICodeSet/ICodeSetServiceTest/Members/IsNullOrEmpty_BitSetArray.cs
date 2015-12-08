@@ -16,7 +16,7 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members
 		public void IsTrue()
 		{
 			Assert.True (((BitSetArray)null).IsNullOrEmpty());
-			Assert.True ((BitSetArray.Size()).IsNullOrEmpty());
+			Assert.True ((BitSetArray.Empty ()).IsNullOrEmpty());
 			Assert.True ((BitSetArray.Size(100)).IsNullOrEmpty());
 		}
 

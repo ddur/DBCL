@@ -100,7 +100,7 @@ namespace DD.Collections.ICodeSet.CodeSetBitsTest
 		{
 			CodeSetBits csb;
 
-			csb = CodeSetBits.From (BitSetArray.Size ());
+			csb = CodeSetBits.From (BitSetArray.Empty ());
 			csb = CodeSetBits.From (BitSetArray.From (33));
 			csb = CodeSetBits.From (BitSetArray.From (1,12,33));
 			csb = CodeSetBits.From (BitSetArray.From (1,12,33));
@@ -131,9 +131,9 @@ namespace DD.Collections.ICodeSet.CodeSetBitsTest
 		{
 			CodeSetBits csb;
 
-			csb = CodeSetBits.From (BitSetArray.Size (), Code.MinValue);
-			csb = CodeSetBits.From (BitSetArray.Size (), Code.MaxValue);
-			csb = CodeSetBits.From (BitSetArray.Size (), Code.MaxCount);
+			csb = CodeSetBits.From (BitSetArray.Empty (), Code.MinValue);
+			csb = CodeSetBits.From (BitSetArray.Empty (), Code.MaxValue);
+			csb = CodeSetBits.From (BitSetArray.Empty (), Code.MaxCount);
 
 			csb = CodeSetBits.From (BitSetArray.From (0), Code.MaxValue);
 			csb = CodeSetBits.From (BitSetArray.From (0), Code.MaxCount-1);

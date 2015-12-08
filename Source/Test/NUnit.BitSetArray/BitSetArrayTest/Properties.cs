@@ -26,7 +26,7 @@ namespace DD.Collections.BitSetArrayTest {
         [Test]
         public void LengthSet () {
             BitSetArray bs;
-            bs = BitSetArray.Size ();
+            bs = BitSetArray.Empty ();
             Assert.That (delegate {
                 bs.Length = -1;
             }, Throws.TypeOf<ArgumentOutOfRangeException> ());
@@ -37,7 +37,7 @@ namespace DD.Collections.BitSetArrayTest {
 #if MAXCOVERAGE
 			bs.Length = int.MaxValue;
 #endif
-            bs = BitSetArray.Size ();
+            bs = BitSetArray.Empty ();
             Assert.That (bs.Count == 0);
             Assert.That (bs.Length == 0);
             Assert.That (bs.Capacity == 0);
@@ -111,7 +111,7 @@ namespace DD.Collections.BitSetArrayTest {
 
         [Test]
         public void FirstGet () {
-            BitSetArray bs = BitSetArray.Size ();
+            BitSetArray bs = BitSetArray.Empty ();
             Assert.True (bs.First == null);
             Assert.True (bs.Last == null);
             bs.Add (12);
@@ -127,7 +127,7 @@ namespace DD.Collections.BitSetArrayTest {
 
         [Test]
         public void LastGet () {
-            BitSetArray bs = BitSetArray.Size ();
+            BitSetArray bs = BitSetArray.Empty ();
             Assert.True (bs.First == null);
             Assert.True (bs.Last == null);
             bs.Add (12);
@@ -143,19 +143,19 @@ namespace DD.Collections.BitSetArrayTest {
 
         [Test]
         public void IsReadonly () {
-            BitSetArray bs = BitSetArray.Size ();
+            BitSetArray bs = BitSetArray.Empty ();
             Assert.That (!bs.IsReadOnly);
         }
 
         [Test]
         public void IsSynchronized () {
-            BitSetArray bs = BitSetArray.Size ();
+            BitSetArray bs = BitSetArray.Empty ();
             Assert.That (bs.IsSynchronized);
         }
 
         [Test]
         public void SyncRoot () {
-            BitSetArray bs = BitSetArray.Size ();
+            BitSetArray bs = BitSetArray.Empty ();
             Assert.That (!bs.SyncRoot.IsNull ());
         }
 

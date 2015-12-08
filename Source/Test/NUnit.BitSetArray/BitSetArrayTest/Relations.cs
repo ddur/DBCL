@@ -16,7 +16,7 @@ namespace DD.Collections.BitSetArrayTest {
         public static IEnumerable<BitSetArray> SetValueSource {
             get {
                 yield return (BitSetArray)null;
-                yield return BitSetArray.Size ();
+                yield return BitSetArray.Empty ();
                 yield return BitSetArray.From (1);
                 yield return BitSetArray.From (2, 3, 4, 5, 6, 7, 8, 65);
                 yield return BitSetArray.From (2, 3, 4, 5, 6, 7, 8, 1028);

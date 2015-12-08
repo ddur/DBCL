@@ -23,7 +23,7 @@ namespace DD.Collections.ICodeSet
 
 		public static CodeSetWrap From ()
 		{
-            var bits = BitSetArray.Size();
+            var bits = BitSetArray.Empty ();
             Contract.Assume (bits.Count == 0);
 			return new CodeSetWrap(bits);
 		}

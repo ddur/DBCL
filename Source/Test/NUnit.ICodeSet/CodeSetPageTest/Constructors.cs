@@ -34,7 +34,7 @@ namespace DD.Collections.ICodeSet.CodeSetPageTest
 
 			// requires at least 3 members (> ICodeSetService.PairCount)
 			Assert.Throws <InvalidOperationException>(delegate {
-				csp = CodeSetPage.From(BitSetArray.Size());
+				csp = CodeSetPage.From(BitSetArray.Empty ());
 			});
 			Assert.Throws <InvalidOperationException>(delegate {
 				csp = CodeSetPage.From(BitSetArray.From(21));

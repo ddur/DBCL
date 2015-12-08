@@ -159,7 +159,7 @@ namespace DD.Collections.BitSetArrayTest {
 			}, Throws.Nothing);
 			Assert.That (testSet.Count == 0);
 
-			testSet = BitSetArray.Size ();
+			testSet = BitSetArray.Empty ();
 			Assert.That (delegate {
 				testSet.And ((BitSetArray)null);
 			}, Throws.Nothing);

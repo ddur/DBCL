@@ -977,7 +977,12 @@ namespace DD.Collections
 			return new BitSetArray(that);
 		}
 
-		[Pure] public static BitSetArray Size(int length = 0, bool value = false)
+		[Pure] public static BitSetArray Empty()
+		{
+			return BitSetArray.Size (0);
+		}
+
+		[Pure] public static BitSetArray Size(int length, bool value = false)
 		{
 			Contract.Requires<ArgumentOutOfRangeException>(ValidLength(length));
 			Contract.Requires<ArgumentException>(

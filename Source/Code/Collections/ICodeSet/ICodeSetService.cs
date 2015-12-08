@@ -121,16 +121,12 @@ namespace DD.Collections.ICodeSet
 		{
 			Contract.Ensures(Contract.Result<BitSetArray>().IsNot(null));
 			Contract.Ensures(
-				self.IsNull() || self.Count == 0 ||
-				Contract.ForAll(self, item => Contract.Result<BitSetArray>()[item])
-			);
-			Contract.Ensures(
-				(!self.IsNull() && self.Count != 0) ||
-				Contract.Result<BitSetArray>().Count == 0
+				(self.IsNull() && Contract.Result<BitSetArray>().Count == 0) || 
+				(self.Count == Contract.Result<BitSetArray>().Count)
 			);
 
 			if (self.IsNull() || self.Count == 0) {
-				return BitSetArray.Size();
+				return BitSetArray.Empty ();
 			}
 			var icsWrap = self as CodeSetWrap;
 			if (!icsWrap.IsNull()) {
@@ -155,7 +151,7 @@ namespace DD.Collections.ICodeSet
 			Contract.Ensures(Contract.Result<BitSetArray>().IsCompact());
 
 			if (self.IsNull() || self.Count == 0)
-				return BitSetArray.Size();
+				return BitSetArray.Empty ();
 			
 			var bits = self as CodeSetPage;
 			if (bits.IsNot(null))

@@ -15,7 +15,7 @@ namespace DD.Collections.BitSetArrayTest {
         [Test]
         public void ConstructEmptyEmpty () {
             BitSetArray test;
-            test = BitSetArray.Size ();
+            test = BitSetArray.Empty ();
             Assert.That (test.Count == 0, Is.True);
             Assert.That (test.Length == 0, Is.True);
             Assert.That (test.First == null, Is.True);
@@ -41,7 +41,7 @@ namespace DD.Collections.BitSetArrayTest {
 
             BitSetArray test;
 
-            test = BitSetArray.Size ();
+            test = BitSetArray.Empty ();
             Assert.That (test.Count == 0, Is.True);
             Assert.That (test.Length == 0, Is.True);
             Assert.That (test.First == null, Is.True);

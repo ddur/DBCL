@@ -29,7 +29,7 @@ namespace DD.Collections.ICodeSet.CodeSetWrapTest
 			Assert.False ( csw[C] );
 			Assert.False ( csw[D] );
 			
-			csw  = CodeSetWrap.From(BitSetArray.Size());
+			csw  = CodeSetWrap.From(BitSetArray.Empty ());
 			Assert.False ( csw[C] );
 			Assert.False ( csw[D] );
 			

@@ -23,7 +23,7 @@ namespace DD.Collections.ICodeSet
 		/// <remarks>Only CodeSetBits/Wrap and CodeSetNull can be Empty</remarks>
 		public static CodeSetBits From()
 		{
-			return CodeSetBits.From(BitSetArray.Size()); 
+			return CodeSetBits.From(BitSetArray.Empty ()); 
 		}
 
 		public static CodeSetBits From(params Code[] codes)
@@ -83,7 +83,7 @@ namespace DD.Collections.ICodeSet
 					}
 				}
 			} else {
-				this.sorted = BitSetArray.Size();
+				this.sorted = BitSetArray.Empty ();
 			}
 		}
 
@@ -106,7 +106,7 @@ namespace DD.Collections.ICodeSet
 					this.sorted._Set(code + offset - this.start, true);
 				}
 			} else {
-				this.sorted = BitSetArray.Size();
+				this.sorted = BitSetArray.Empty ();
 			}
 		}
 

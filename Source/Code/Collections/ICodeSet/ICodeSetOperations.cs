@@ -17,7 +17,7 @@ namespace DD.Collections.ICodeSet
 	public static class ICodeSetOperations
 	{
 		private static BitSetArray NoBits {
-			get { return BitSetArray.Size(); }
+			get { return BitSetArray.Empty (); }
 		}
 
 		#region Union or(a,b,c...)

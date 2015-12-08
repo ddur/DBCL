@@ -23,7 +23,7 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members
 		[Test]
 		public void Empty_Returns_True()
 		{
-			var isEmpty = BitSetArray.Size ();
+			var isEmpty = BitSetArray.Empty ();
 			Assert.True (isEmpty.IsCompact());
 		}
 

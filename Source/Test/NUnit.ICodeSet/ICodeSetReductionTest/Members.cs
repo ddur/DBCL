@@ -68,7 +68,7 @@ namespace DD.Collections.ICodeSet.ICodeSetReductionTest
 				yield return new Tuple<BitSetArray, Type>((BitSetArray)null, typeof(CodeSetNone));
 
 				// empty -> Null
-				yield return new Tuple<BitSetArray, Type>(BitSetArray.Size(), typeof(CodeSetNone));
+				yield return new Tuple<BitSetArray, Type>(BitSetArray.Empty (), typeof(CodeSetNone));
 				yield return new Tuple<BitSetArray, Type>(BitSetArray.Size(100), typeof(CodeSetNone));
 			}
 		}
