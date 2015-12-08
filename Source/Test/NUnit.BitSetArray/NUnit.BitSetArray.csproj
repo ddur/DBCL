@@ -7,7 +7,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>DD.Collections</RootNamespace>
     <AssemblyName>NUnit.BitSetArray</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <AppDesignerFolder>Properties</AppDesignerFolder>
