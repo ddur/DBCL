@@ -1,12 +1,11 @@
 DBCL
 ====
-[![Build status](https://img.shields.io/appveyor/ci/ddur/dbcl.svg)](https://ci.appveyor.com/project/ddur/dbcl)
 
 Dragon Base Class Library 
 
-[![Version](https://img.shields.io/badge/version-alpha-red.svg)]()
+[![Build status](https://ci.appveyor.com/api/projects/status/r6itkcob69p9g6ro?svg=true)](https://ci.appveyor.com/project/ddur/dbcl)
 
-Version Alpha (in development)
+[![Version](https://img.shields.io/badge/version-alpha-red.svg)]()
 
 
 Small library of usefull (at least for me ;) classes/structs I want to share 
