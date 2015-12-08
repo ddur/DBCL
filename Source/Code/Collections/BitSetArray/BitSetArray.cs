@@ -1516,7 +1516,12 @@ namespace DD.Collections
 
 			int retCount = 0;
 			if (mask != null && mask.Length != 0 && length != 0) {
-				int arrLength = BitSetArray.GetIntArrayLength(length);
+
+                Contract.Assume(mask != null);
+                Contract.Assume(mask.Length > 0);
+                Contract.Assume(length > 0);
+
+                int arrLength = BitSetArray.GetIntArrayLength(length);
 				if (arrLength > mask.Length) {
 					arrLength = mask.Length;
 				}
@@ -1591,7 +1596,12 @@ namespace DD.Collections
 
 			int retCount = 0;
 			if (mask != null && mask.Length != 0 && length != 0) {
-				int arrLength = BitSetArray.GetLongArrayLength(length);
+
+                Contract.Assume(mask != null);
+                Contract.Assume(mask.Length > 0);
+                Contract.Assume(length > 0);
+
+                int arrLength = BitSetArray.GetLongArrayLength(length);
 				if (arrLength > mask.Length) {
 					arrLength = mask.Length;
 				}
@@ -3666,7 +3676,7 @@ namespace DD.Collections
 			[Pure]
 			get {
                 Contract.Ensures (Theory.FirstGet (this, Contract.Result<int?> ()));
-                Contract.Ensures (this.Count == 0 || Contract.Result<int?> ().HasValue);
+                Contract.Ensures(this.Count == 0 || Contract.Result<int?>().HasValue && Contract.Result<int?>() == this.FirstOrDefault());
                 Contract.Ensures (this.Count != 0 || !Contract.Result<int?> ().HasValue);
 
 				int? start = null;
@@ -3683,8 +3693,6 @@ namespace DD.Collections
 					}
 				}
 
-				Contract.Assert((this.Count == 0 && !start.HasValue) ||
-				(this.Count > 0 && start.HasValue && this[(int)start]));
 				return start;
 			}
 		}

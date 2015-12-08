@@ -187,7 +187,7 @@ namespace DD.Collections.ICodeSet
 					}
 				}
 			}
-			Contract.Assert(complement.Count != 0);
+			Contract.Assume(complement.Count != 0);
 			return complement;
 		}
 		

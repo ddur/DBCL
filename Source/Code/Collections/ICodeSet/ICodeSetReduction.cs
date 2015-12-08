@@ -36,46 +36,50 @@ namespace DD.Collections.ICodeSet
 			}
 			#endregion
 
-			#region Unit
+            Contract.Assume(self.First.HasValue);
+            Contract.Assume(self.Last.HasValue);
+
+            #region Unit
 			if (self.Count == ICodeSetService.UnitCount) {
-                Contract.Assume (self.First.HasValue);
-                Contract.Assume (self.Last.HasValue);
                 return (Code)((int)self.First + offset);
 			}
 			#endregion
 
 			#region Pair
 			if (self.Count == ICodeSetService.PairCount) {
-                Contract.Assume (self.First.HasValue);
-                Contract.Assume (self.Last.HasValue);
                 return CodeSetPair.From ((int)self.First + offset, (int)self.Last + offset);
 			}
 			#endregion
 
 			#region Full
 			if (self.Count == self.Span()) {
-                Contract.Assume (self.First.HasValue);
-                Contract.Assume (self.Last.HasValue);
                 return CodeSetFull.From ((int)self.First + offset, (int)self.Last + offset);
 			}
 			#endregion
 
 			#region List
-			if (self.Count <= ICodeSetService.ListMaxCount) {
-				// List items spread over more than one unicode plane. (better than CodeSetWide)
-				if (self.First.UnicodePlane() != self.Last.UnicodePlane()) {
-					return CodeSetList.From (self.ToCodes(offset));
-				}
-				// List space less than 1/4 of Bits space. (better than CodeSetPage)
-				// list space in bytes == Count * sizeof(int)
-				// bits space in bytes == BitSetArray.GetLongArrayLength(self.Span())*sizeof(long)
-				if ((self.Count * sizeof(int)) < (BitSetArray.GetLongArrayLength(self.Span()) * sizeof(long) / 4)) {
-					return CodeSetList.From (self.ToCodes(offset));
-				}
-			}
-			#endregion
+            if (self.Count <= ICodeSetService.ListMaxCount)
+            {
+                Contract.Assert(self.Count > ICodeSetService.PairCount);
 
-			return null;
+                // List space less than 1/4 of Bits space. (better than CodeSetPage)
+                // List space in bytes == Count * sizeof(int)
+                // Bits space in bytes == BitSetArray.GetLongArrayLength(self.Span())*sizeof(long)
+                Contract.Assert((self.Count * sizeof(int)) < (BitSetArray.GetLongArrayLength(self.Span()) * sizeof(long) / 4));
+
+                // (CodeSetList is better than CodeSetWide)
+                //// List items spread over more than one unicode plane?
+                ////if (self.First.UnicodePlane() != self.Last.UnicodePlane()) {
+                ////    return CodeSetWide.From (self.ToCodes(offset));
+                ////}
+
+                return CodeSetList.From(self.ToCodes(offset));
+            }
+
+            Contract.Assert (self.Count > ICodeSetService.ListMaxCount) ;
+            return null;
+
+            #endregion
 
 		}
 
@@ -144,8 +148,8 @@ namespace DD.Collections.ICodeSet
 			if (retSet.Is(null)) {
 
 				Contract.Assert(self.IsNot(null)); // not null
-				Contract.Assert(self.Count > ICodeSetService.PairCount); // not Code, not Pair
-				Contract.Assert(self.Span() != self.Count); // not Full -> has complement items
+				Contract.Assume(self.Count > ICodeSetService.PairCount); // not Code, not Pair
+				Contract.Assume(self.Span() != self.Count); // not Full -> has complement items
 				
 				if (self.Span() <= ICodeSetService.NoDiffLength) {
 					retSet = self.ReducePartTwo(offset);

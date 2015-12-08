@@ -111,7 +111,7 @@ namespace DD.Collections.ICodeSet
 					return true; // both NullOrEmpty or both QuickSetEquals
 
 				default:
-					Contract.Assert (IsEqual == null);
+					Contract.Assume (IsEqual == null);
 
 					// none empty, same count, same first, same last
 					Contract.Assume (!self.IsNullOrEmpty());
@@ -191,8 +191,8 @@ namespace DD.Collections.ICodeSet
 				return false;
 			}
 
-			Contract.Assert (!self.IsNullOrEmpty());
-			Contract.Assert (!that.IsNullOrEmpty());
+			Contract.Assume (!self.IsNullOrEmpty());
+			Contract.Assume (!that.IsNullOrEmpty());
 			Contract.Assert (self.Count == that.Count);
 			Contract.Assert (self.First == that.First);
 			Contract.Assert (self.Last == that.Last);
