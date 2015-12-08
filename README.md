@@ -6,6 +6,6 @@ Dragon Base Class Library
 
 Version Alpha (in development)
 
-[https://img.shields.io/badge/version-alpha-red.svg]
+[![Version](https://img.shields.io/badge/version-alpha-red.svg)]()
 
 Small library of usefull (at least for me ;) classes/structs I want to share 
