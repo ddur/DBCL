@@ -21,8 +21,8 @@ namespace DD.Collections.ICodeSet
 		#region Ctor
 
 		public static CodeSetDiff From(ICodeSet a, ICodeSet b) {
-			Contract.Requires<ArgumentNullException>(!a.IsNull());
-			Contract.Requires<ArgumentNullException>(!b.IsNull());
+            Contract.Requires<ArgumentNullException>(a != null);
+            Contract.Requires<ArgumentNullException>(b != null);
 
 			Contract.Requires<ArgumentEmptyException>(!a.IsEmpty());
 			Contract.Requires<ArgumentEmptyException>(!b.IsEmpty());
@@ -48,8 +48,8 @@ namespace DD.Collections.ICodeSet
 		/// <param name="b">CodeSet</param>
 		internal CodeSetDiff(ICodeSet a, ICodeSet b)
 		{
-			Contract.Requires<ArgumentNullException>(!a.IsNull());
-			Contract.Requires<ArgumentNullException>(!b.IsNull());
+            Contract.Requires<ArgumentNullException>(a != null);
+            Contract.Requires<ArgumentNullException>(b != null);
 
 			Contract.Requires<ArgumentException>(!a.IsEmpty());
 			Contract.Requires<ArgumentException>(!b.IsEmpty());

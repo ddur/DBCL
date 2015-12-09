@@ -129,11 +129,12 @@ namespace DD.Collections.ICodeSet
 		{
 			return unique.Contains(new C5.KeyValuePair<ICodeSet,T>(item.Key, item.Value));
 		}
-		
-		[SuppressMessage("Microsoft.Contracts", "CC1033", Justification = "Not same exceptions")]
-		public void CopyTo(KeyValuePair<ICodeSet, T>[] array, int arrayIndex)
+
+        [Pure]
+        [SuppressMessage("Microsoft.Contracts", "CC1033", Justification = "Debug/Release exceptions not same")]
+        public void CopyTo(KeyValuePair<ICodeSet, T>[] array, int arrayIndex)
 		{
-			Contract.Requires<ArgumentNullException>(!array.Is(null));
+			Contract.Requires<ArgumentNullException>(array != null);
 			Contract.Requires<IndexOutOfRangeException>(arrayIndex >= 0);
 			Contract.Requires<IndexOutOfRangeException>(arrayIndex <= (array.Length - this.Count));
 			int index = arrayIndex;

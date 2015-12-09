@@ -88,7 +88,7 @@ namespace DD.Collections
 		/// <param name="that"></param>
 		private BitSetArray(BitSetArray that)
 		{
-			Contract.Requires<ArgumentNullException>(that.IsNot(null));
+            Contract.Requires<ArgumentNullException>(that != null);
 
 			Contract.Ensures(Theory.Construct(this, that));
 
@@ -114,7 +114,7 @@ namespace DD.Collections
 		/// <param name="length"></param>
 		private BitSetArray(BitSetArray that, int length)
 		{
-			Contract.Requires<ArgumentNullException>(that.IsNot(null));
+			Contract.Requires<ArgumentNullException>(that != null);
 			Contract.Requires<IndexOutOfRangeException>(ValidLength(length));
 
 			Contract.Ensures(Theory.Construct(this, that, length));
@@ -167,7 +167,7 @@ namespace DD.Collections
 
 			public EnumeratorForwardAbstract(BitSetArray that)
 			{
-				Contract.Requires<ArgumentNullException>(that.IsNot(null));
+				Contract.Requires<ArgumentNullException>(that != null);
 				Contract.Ensures(Theory.Construct(this, that));
 
 				this.init(that, ref this.version, ref this.enumerated, ref this.arrayLen);
@@ -175,8 +175,8 @@ namespace DD.Collections
 
 			protected EnumeratorForwardAbstract(BitSetArray that, object thatSyncRoot)
 			{
-				Contract.Requires<ArgumentNullException>(!that.IsNull());
-				Contract.Requires<ArgumentNullException>(!thatSyncRoot.IsNull());
+				Contract.Requires<ArgumentNullException>(that != null);
+				Contract.Requires<ArgumentNullException>(thatSyncRoot != null);
 				Contract.Ensures(Theory.Construct(this, that));
 
 				lock (thatSyncRoot) {
@@ -340,7 +340,7 @@ namespace DD.Collections
 			public EnumeratorForward(BitSetArray that)
 				: base(that)
 			{
-                Contract.Requires<ArgumentNullException> (that.IsNot (null));
+                Contract.Requires<ArgumentNullException> (that != null);
             }
 		}
 
@@ -349,7 +349,7 @@ namespace DD.Collections
 			public EnumeratorForwardSynchronized(BitSetArray that)
 				: base(that, that.SyncRoot)
 			{
-                Contract.Requires<ArgumentNullException> (!that.IsNull ());
+                Contract.Requires<ArgumentNullException> (that != null);
 			}
 			public override bool MoveNext()
 			{
@@ -366,7 +366,7 @@ namespace DD.Collections
 			public EnumeratorForwardReadOnly(BitSetArray that)
 				: base(BitSetArray.Copy(that))
 			{
-                Contract.Requires<ArgumentNullException> (that.IsNot (null));
+                Contract.Requires<ArgumentNullException> (that != null);
             }
 		}
 
@@ -384,7 +384,7 @@ namespace DD.Collections
 
 			protected EnumeratorComplementAbstract(BitSetArray that)
 			{
-				Contract.Requires<ArgumentNullException>(!that.IsNull());
+				Contract.Requires<ArgumentNullException>(that != null);
 				Contract.Ensures(Theory.Construct(this, that));
 
 				this.init(that, ref this.version, ref this.enumerated, ref this.arrayLen);
@@ -392,8 +392,8 @@ namespace DD.Collections
 
 			protected EnumeratorComplementAbstract(BitSetArray that, object thatSyncRoot)
 			{
-				Contract.Requires<ArgumentNullException>(!that.IsNull());
-				Contract.Requires<ArgumentNullException>(!thatSyncRoot.IsNull());
+				Contract.Requires<ArgumentNullException>(that != null);
+				Contract.Requires<ArgumentNullException>(thatSyncRoot != null);
 				Contract.Ensures(Theory.Construct(this, that));
 
 				lock (thatSyncRoot) {
@@ -566,7 +566,7 @@ namespace DD.Collections
 			public EnumeratorComplement(BitSetArray that)
 				: base(that)
 			{
-                Contract.Requires<ArgumentNullException> (that.IsNot (null));
+                Contract.Requires<ArgumentNullException> (that != null);
             }
 		}
 		
@@ -575,7 +575,7 @@ namespace DD.Collections
 			public EnumeratorComplementSynchronized(BitSetArray that)
 				: base(that, that.SyncRoot)
 			{
-                Contract.Requires<ArgumentNullException> (!that.IsNull ());
+                Contract.Requires<ArgumentNullException> (that != null);
             }
 
 			public override bool MoveNext()
@@ -593,7 +593,7 @@ namespace DD.Collections
 			public EnumeratorComplementReadOnly(BitSetArray that)
 				: base(BitSetArray.Copy(that))
 			{
-                Contract.Requires<ArgumentNullException> (that.IsNot (null));
+                Contract.Requires<ArgumentNullException>(that != null);
             }
 		}
 
@@ -611,7 +611,7 @@ namespace DD.Collections
 
 			protected EnumeratorReverseAbstract(BitSetArray that)
 			{
-				Contract.Requires<ArgumentNullException>(!that.IsNull());
+                Contract.Requires<ArgumentNullException>(that != null);
 				Contract.Ensures(Theory.Construct(this, that));
 
 				this.init(that, ref this.version, ref this.enumerated, ref this.arrayLen);
@@ -619,8 +619,8 @@ namespace DD.Collections
 
 			protected EnumeratorReverseAbstract(BitSetArray that, object thatSyncRoot)
 			{
-				Contract.Requires<ArgumentNullException>(!that.IsNull());
-				Contract.Requires<ArgumentNullException>(!thatSyncRoot.IsNull());
+                Contract.Requires<ArgumentNullException>(that != null);
+                Contract.Requires<ArgumentNullException>(thatSyncRoot != null);
 				Contract.Ensures(Theory.Construct(this, that));
 
 				lock (thatSyncRoot) {
@@ -783,7 +783,7 @@ namespace DD.Collections
 			public EnumeratorReverse(BitSetArray that)
 				: base(that)
 			{
-                Contract.Requires<ArgumentNullException> (that.IsNot (null));
+                Contract.Requires<ArgumentNullException>(that != null);
             }
 
 		}
@@ -793,7 +793,7 @@ namespace DD.Collections
 			public EnumeratorReverseSynchronized(BitSetArray that)
 				: base(that, that.sRoot)
 			{
-                Contract.Requires<ArgumentNullException> (!that.IsNull ());
+                Contract.Requires<ArgumentNullException>(that != null);
             }
 
 			public override bool MoveNext()
@@ -811,7 +811,7 @@ namespace DD.Collections
 			public EnumeratorReverseReadOnly(BitSetArray that)
 				: base(BitSetArray.Copy(that))
 			{
-                Contract.Requires<ArgumentNullException> (that.IsNot (null));
+                Contract.Requires<ArgumentNullException>(that != null);
             }
 		}
 
@@ -959,7 +959,7 @@ namespace DD.Collections
 
 		[Pure] public static BitSetArray From(BitSetArray that)
 		{
-			Contract.Requires<ArgumentNullException>(that.IsNot(null));
+            Contract.Requires<ArgumentNullException>(that != null);
 
             Contract.Ensures(Contract.Result<BitSetArray>() != null);
 
@@ -968,7 +968,7 @@ namespace DD.Collections
 
 		[Pure] public static BitSetArray From(BitSetArray that, int length)
 		{
-			Contract.Requires<ArgumentNullException>(that.IsNot(null));
+            Contract.Requires<ArgumentNullException>(that != null);
 			Contract.Requires<IndexOutOfRangeException>(ValidLength(length));
 
             Contract.Ensures(Contract.Result<BitSetArray>() != null);
@@ -978,7 +978,7 @@ namespace DD.Collections
 
 		[Pure] public static BitSetArray Copy(BitSetArray that)
 		{
-			Contract.Requires<ArgumentNullException>(that.IsNot(null));
+            Contract.Requires<ArgumentNullException>(that != null);
 
             Contract.Ensures(Contract.Result<BitSetArray>() != null);
 

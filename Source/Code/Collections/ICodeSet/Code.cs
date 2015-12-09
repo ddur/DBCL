@@ -164,9 +164,11 @@ namespace DD.Collections.ICodeSet
 		/// </summary>
 		/// <param name="array"></param>
 		/// <param name="arrayIndex"></param>
-		[SuppressMessage("Microsoft.Contracts", "CC1033", Justification = "Not same exceptions")]
-		[Pure] void ICollection<Code>.CopyTo(Code[] array, int arrayIndex) {
-			Contract.Requires<ArgumentNullException>(!array.Is(null));
+        [Pure]
+        [SuppressMessage("Microsoft.Contracts", "CC1033", Justification = "Debug/Release exceptions not same")]
+        void ICollection<Code>.CopyTo(Code[] array, int arrayIndex)
+        {
+            Contract.Requires<ArgumentNullException>(array != null);
 			Contract.Requires<IndexOutOfRangeException>(arrayIndex >= 0);
 			Contract.Requires<IndexOutOfRangeException>(arrayIndex <= (array.Length - 1));
 			array[arrayIndex] = this;

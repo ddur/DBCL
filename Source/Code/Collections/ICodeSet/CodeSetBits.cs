@@ -23,14 +23,14 @@ namespace DD.Collections.ICodeSet
 		/// <remarks>Only CodeSetBits/Wrap and CodeSetNull can be Empty</remarks>
 		public static CodeSetBits From()
 		{
-            Contract.Ensures(Contract.Result<DD.Collections.ICodeSet.CodeSetBits>() != null);
+            Contract.Ensures(Contract.Result<CodeSetBits>() != null);
 
             return CodeSetBits.From(BitSetArray.Empty()); 
 		}
 
 		public static CodeSetBits From(params Code[] codes)
 		{
-			Contract.Requires<ArgumentNullException>(codes.IsNot(null));
+			Contract.Requires<ArgumentNullException>(codes != null);
             Contract.Ensures(Contract.Result<CodeSetBits>() != null);
 
             return new CodeSetBits((IEnumerable<Code>)codes);
@@ -38,7 +38,7 @@ namespace DD.Collections.ICodeSet
 
 		public static CodeSetBits From(IEnumerable<Code> codes)
 		{
-			Contract.Requires<ArgumentNullException>(codes.IsNot(null));
+            Contract.Requires<ArgumentNullException>(codes != null);
             Contract.Ensures(Contract.Result<CodeSetBits>() != null);
 
             return new CodeSetBits(codes);
@@ -49,17 +49,18 @@ namespace DD.Collections.ICodeSet
 		/// <param name="offset">int</param>
 		public static CodeSetBits From(BitSetArray bits, int offset = 0)
 		{
-			Contract.Requires<ArgumentNullException>(bits.IsNot(null));
+			Contract.Requires<ArgumentNullException>(bits != null);
 			Contract.Requires<IndexOutOfRangeException>(offset >= 0);
 			Contract.Requires<IndexOutOfRangeException>(bits.Count == 0 || ((int)bits.Last + offset) <= Code.MaxValue);
-            Contract.Ensures(Contract.Result<DD.Collections.ICodeSet.CodeSetBits>() != null);
+
+            Contract.Ensures(Contract.Result<CodeSetBits>() != null);
 
 			return new CodeSetBits(bits, offset);
 		}
 
 		private CodeSetBits(IEnumerable<Code> codes)
 		{
-			Contract.Requires<ArgumentNullException>(codes.IsNot(null));
+            Contract.Requires<ArgumentNullException>(codes != null);
 
 			Contract.Ensures(Theory.Construct(codes, this));
 
@@ -97,7 +98,7 @@ namespace DD.Collections.ICodeSet
 		private CodeSetBits(BitSetArray bits, int offset = 0)
 		{
 
-			Contract.Requires<ArgumentNullException>(bits.IsNot(null));
+            Contract.Requires<ArgumentNullException>(bits != null);
 			Contract.Requires<IndexOutOfRangeException>(offset >= 0);
 			Contract.Requires<IndexOutOfRangeException>(bits.Count == 0 || ((int)bits.Last + offset) <= Code.MaxValue);
 

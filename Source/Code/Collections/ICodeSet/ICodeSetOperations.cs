@@ -37,7 +37,7 @@ namespace DD.Collections.ICodeSet
 
 		public static BitSetArray BitUnion(this IEnumerable<ICodeSet> sets)
 		{
-			Contract.Requires<ArgumentNullException>(!sets.IsNull());
+            Contract.Requires<ArgumentNullException>(sets != null);
 			Contract.Requires<ArgumentException>(sets.Count() >= 2);
 
 			Contract.Ensures(Contract.Result<BitSetArray>().IsNot(null));
@@ -71,7 +71,7 @@ namespace DD.Collections.ICodeSet
 
 		public static BitSetArray BitIntersection(this IEnumerable<ICodeSet> sets)
 		{
-			Contract.Requires<ArgumentNullException>(!sets.IsNull());
+            Contract.Requires<ArgumentNullException>(sets != null);
 			Contract.Requires<ArgumentException>(sets.Count() >= 2);
 
 			Contract.Ensures(Contract.Result<BitSetArray>().IsNot(null));
@@ -108,7 +108,7 @@ namespace DD.Collections.ICodeSet
 
 		public static BitSetArray BitDisjunction(this IEnumerable<ICodeSet> sets)
 		{
-			Contract.Requires<ArgumentNullException>(!sets.Is(null));
+            Contract.Requires<ArgumentNullException>(sets != null);
 			Contract.Requires<ArgumentException>(sets.Count() >= 2);
 
 			Contract.Ensures(Contract.Result<BitSetArray>().IsNot(null));
@@ -142,7 +142,7 @@ namespace DD.Collections.ICodeSet
 
 		public static BitSetArray BitDifference(this IEnumerable<ICodeSet> sets)
 		{
-			Contract.Requires<ArgumentNullException>(!sets.IsNull());
+            Contract.Requires<ArgumentNullException>(sets != null);
 			Contract.Requires<ArgumentException>(sets.Count() >= 2);
 
 			Contract.Ensures(Contract.Result<BitSetArray>().IsNot(null));

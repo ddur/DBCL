@@ -25,7 +25,7 @@ namespace DD.Collections.ICodeSet
 
 			internal QuickWrap(BitSetArray bits)
 			{
-				Contract.Requires<ArgumentNullException>(!bits.IsNull());
+				Contract.Requires<ArgumentNullException>(bits != null);
                 Contract.Requires<ArgumentEmptyException> (bits.Count != 0);
                 Contract.Requires<IndexOutOfRangeException> ((int)bits.Last <= Code.MaxValue);
 
@@ -303,7 +303,7 @@ namespace DD.Collections.ICodeSet
 
 		public ICodeSet Union(IEnumerable<ICodeSet> sets)
 		{
-			Contract.Requires<ArgumentNullException>(!sets.IsNull());
+            Contract.Requires<ArgumentNullException>(sets != null);
 			Contract.Requires<ArgumentException>(sets.Count() >= 2);
 
 			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
@@ -324,7 +324,7 @@ namespace DD.Collections.ICodeSet
 
 		public ICodeSet Intersection(IEnumerable<ICodeSet> sets)
 		{
-			Contract.Requires<ArgumentNullException>(!sets.IsNull());
+            Contract.Requires<ArgumentNullException>(sets != null);
 			Contract.Requires<ArgumentException>(sets.Count() >= 2);
 
 			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
@@ -345,7 +345,7 @@ namespace DD.Collections.ICodeSet
 
 		public ICodeSet Disjunction(IEnumerable<ICodeSet> sets)
 		{
-			Contract.Requires<ArgumentNullException>(!sets.IsNull());
+            Contract.Requires<ArgumentNullException>(sets != null);
 			Contract.Requires<ArgumentException>(sets.Count() >= 2);
 
 			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
@@ -366,7 +366,7 @@ namespace DD.Collections.ICodeSet
 
 		public ICodeSet Difference(IEnumerable<ICodeSet> sets)
 		{
-			Contract.Requires<ArgumentNullException>(!sets.IsNull());
+			Contract.Requires<ArgumentNullException>(sets != null);
 			Contract.Requires<ArgumentException>(sets.Count() >= 2);
 
 			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
@@ -380,7 +380,7 @@ namespace DD.Collections.ICodeSet
 
 		public ICodeSet Complement(ICodeSet that)
 		{
-            Contract.Requires<ArgumentNullException> (!that.IsNull());
+            Contract.Requires<ArgumentNullException>(that != null);
             Contract.Ensures (Theory.Result (this, Contract.Result<ICodeSet> ()));
 
 			return QuickFrom(that.BitComplement());

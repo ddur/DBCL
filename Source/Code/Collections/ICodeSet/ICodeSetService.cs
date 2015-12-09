@@ -119,11 +119,11 @@ namespace DD.Collections.ICodeSet
 		/// <returns></returns>
 		[Pure] public static BitSetArray ToBitSetArray(this ICodeSet self)
 		{
-			Contract.Ensures(Contract.Result<BitSetArray>() != null);
 			Contract.Ensures(
 				(self.IsNull() && Contract.Result<BitSetArray>().Count == 0) ||
                 (self.Count == Contract.Result<DD.Collections.BitSetArray>().Count)
 			);
+            Contract.Ensures(Contract.Result<BitSetArray>() != null);
 
 			if (self.IsNull() || self.Count == 0) {
 				return BitSetArray.Empty ();
@@ -175,13 +175,13 @@ namespace DD.Collections.ICodeSet
 
 		[Pure] public static bool IsEmpty(this ICodeSet self)
 		{
-			Contract.Requires<ArgumentNullException>(!self.IsNull());
+            Contract.Requires<ArgumentNullException>(self != null);
 			return self.Count == 0;
 		}
 
 		[Pure] public static bool IsEmpty(this BitSetArray self)
 		{
-			Contract.Requires<ArgumentNullException>(!self.IsNull());
+            Contract.Requires<ArgumentNullException>(self != null);
 			return self.Count == 0;
 		}
 		
