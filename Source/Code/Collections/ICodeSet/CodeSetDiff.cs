@@ -38,6 +38,8 @@ namespace DD.Collections.ICodeSet
 			// this.count > PairCount
 			Contract.Requires<InvalidOperationException>((a.Count - b.Count) > ICodeSetService.PairCount);
 
+            Contract.Ensures(Contract.Result<CodeSetDiff>() != null);
+
 			return new CodeSetDiff(a, b);			
 		}
 

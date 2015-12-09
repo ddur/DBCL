@@ -23,13 +23,15 @@ namespace DD.Collections.ICodeSet
 			Contract.Requires<ArgumentNullException>(!utf16.IsNull());
 			Contract.Requires<ArgumentEmptyException>(!utf16.IsEmpty());
 			Contract.Requires<ArgumentException>(utf16.CanDecode());
+            Contract.Ensures(Contract.Result<CodeSetMask>() != null);
 
-			return new CodeSetMask(utf16.Decode());
+            return new CodeSetMask(utf16.Decode());
 		}
 
 		public static CodeSetMask From(params Code[] codes) {
             Contract.Requires<ArgumentNullException> (!codes.IsNull ());
             Contract.Requires<ArgumentEmptyException> (codes.Length > 0);
+            Contract.Ensures(Contract.Result<CodeSetMask>() != null);
 
 			return new CodeSetMask(codes as IEnumerable<Code>);
 		}
@@ -37,6 +39,7 @@ namespace DD.Collections.ICodeSet
 		public static CodeSetMask From(params char[] chars) {
             Contract.Requires<ArgumentNullException> (!chars.IsNull ());
             Contract.Requires<ArgumentEmptyException> (chars.Length > 0);
+            Contract.Ensures(Contract.Result<CodeSetMask>() != null);
 
 			return new CodeSetMask(chars.Cast<Code>());
 		}
@@ -44,6 +47,7 @@ namespace DD.Collections.ICodeSet
 		public static CodeSetMask From(IEnumerable<Code> codes) {
 			Contract.Requires<ArgumentNullException>(!codes.Is(null));
 			Contract.Requires<ArgumentEmptyException>(!codes.IsEmpty());
+            Contract.Ensures(Contract.Result<CodeSetMask>() != null);
 
 			return new CodeSetMask(codes);
 		}

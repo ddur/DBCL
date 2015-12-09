@@ -30,15 +30,24 @@ namespace DD.Collections.ICodeSet
         #region ICodeSet
 
         [Pure] public override bool this [Code code] {
-            get { return false; }
+            get {
+                Contract.Ensures(Contract.Result<bool>() == false);
+                return false;
+            }
         }
 
         [Pure] public override int Count {
-	        get { return 0; }
+	        get {
+                Contract.Ensures(Contract.Result<int>() == 0);
+                return 0;
+            }
         }
 
         [Pure] public override int Length {
-	        get { return 0; }
+	        get {
+                Contract.Ensures(Contract.Result<int>() == 0);
+                return 0;
+            }
         }
 
         /// <summary>Throws InvalidOperationException

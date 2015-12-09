@@ -32,6 +32,7 @@ namespace DD.Text
 		public static List<Code> Decode (this string utf16)
 		{
 			Contract.Ensures (Theory.Decode(utf16, Contract.Result<List<Code>>()));
+            Contract.Ensures(Contract.Result<List<Code>>() != null);
 
 			if (string.IsNullOrEmpty (utf16)) { return new List<Code> (); }
 			var codes = new List<Code>(utf16.Length);
@@ -162,7 +163,10 @@ namespace DD.Text
 		[Pure]
 		public static string Encode (this Code self)
 		{
-			if (self.HasCharValue()) { 
+            Contract.Ensures(Contract.Result<string>() != null);
+
+            if (self.HasCharValue())
+            { 
 				return self.IsSurrogate()? "" + (char)0xFFFD : "" + (char)self; 
 			}
 			int value = self.Value - 0x10000;
@@ -171,7 +175,8 @@ namespace DD.Text
 
 		[Pure]
 		public static string Encode (this IEnumerable<Code> codes) {
-			Contract.Ensures(Theory.Encode(codes, Contract.Result<string>()));
+            Contract.Ensures(Contract.Result<string>() != null);
+            Contract.Ensures(Theory.Encode(codes, Contract.Result<string>()));
 	
 			if (codes == null || codes.IsEmpty()) return string.Empty;
 			var sb = new StringBuilder(codes.Count());

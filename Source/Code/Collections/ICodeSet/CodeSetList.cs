@@ -28,6 +28,7 @@ namespace DD.Collections.ICodeSet
 			Contract.Requires<InvalidOperationException>(codes.Distinct().Count() > ICodeSetService.PairCount); // at least 3 members
 			Contract.Requires<InvalidOperationException>(codes.Distinct().Count() <= ICodeSetService.ListMaxCount); // up to max members
 			Contract.Requires<InvalidOperationException>(codes.Distinct().Count() < (1 + codes.Max() - codes.Min())); // not full
+            Contract.Ensures(Contract.Result<CodeSetList>() != null);
 
 			return new CodeSetList((IEnumerable<Code>)codes);
 		}
@@ -38,6 +39,7 @@ namespace DD.Collections.ICodeSet
 			Contract.Requires<InvalidOperationException>(codes.Distinct().Count() > ICodeSetService.PairCount); // at least 3 members
 			Contract.Requires<InvalidOperationException>(codes.Distinct().Count() <= ICodeSetService.ListMaxCount); // up to max members
 			Contract.Requires<InvalidOperationException>(codes.Distinct().Count() < (1 + codes.Max() - codes.Min())); // not full
+            Contract.Ensures(Contract.Result<CodeSetList>() != null);
 
 			return new CodeSetList(codes);
 		}

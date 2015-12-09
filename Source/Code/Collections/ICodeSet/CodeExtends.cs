@@ -87,7 +87,8 @@ namespace DD.Collections.ICodeSet
 		public static string Encode(this int self)
 		{
 			Contract.Requires<ArgumentOutOfRangeException>(self.HasCodeValue());
-	
+            Contract.Ensures(Contract.Result<string>() != null);
+
 			return ((Code)self).Encode();
 		}
 	

@@ -23,19 +23,25 @@ namespace DD.Collections.ICodeSet
 		/// <remarks>Only CodeSetBits/Wrap and CodeSetNull can be Empty</remarks>
 		public static CodeSetBits From()
 		{
-			return CodeSetBits.From(BitSetArray.Empty ()); 
+            Contract.Ensures(Contract.Result<DD.Collections.ICodeSet.CodeSetBits>() != null);
+
+            return CodeSetBits.From(BitSetArray.Empty()); 
 		}
 
 		public static CodeSetBits From(params Code[] codes)
 		{
 			Contract.Requires<ArgumentNullException>(codes.IsNot(null));
-			return new CodeSetBits((IEnumerable<Code>)codes);
+            Contract.Ensures(Contract.Result<CodeSetBits>() != null);
+
+            return new CodeSetBits((IEnumerable<Code>)codes);
 		}
 
 		public static CodeSetBits From(IEnumerable<Code> codes)
 		{
 			Contract.Requires<ArgumentNullException>(codes.IsNot(null));
-			return new CodeSetBits(codes);
+            Contract.Ensures(Contract.Result<CodeSetBits>() != null);
+
+            return new CodeSetBits(codes);
 		}
 
 		/// <summary>From BitSetArray at Offset</summary>
@@ -46,6 +52,7 @@ namespace DD.Collections.ICodeSet
 			Contract.Requires<ArgumentNullException>(bits.IsNot(null));
 			Contract.Requires<ArgumentOutOfRangeException>(offset >= 0);
 			Contract.Requires<ArgumentOutOfRangeException>(bits.Count == 0 || ((int)bits.Last + offset) <= Code.MaxValue);
+            Contract.Ensures(Contract.Result<DD.Collections.ICodeSet.CodeSetBits>() != null);
 
 			return new CodeSetBits(bits, offset);
 		}
@@ -170,12 +177,15 @@ namespace DD.Collections.ICodeSet
 
 		public BitSetArray ToCompact()
 		{
-			return BitSetArray.Copy(this.sorted);
+            Contract.Ensures(Contract.Result<BitSetArray>() != null);
+            return BitSetArray.Copy(this.sorted);
 		}
 		
 		public IEnumerable<Code> Complement {
 			get {
-				foreach (var item in this.sorted.Complement()) {
+                Contract.Ensures(Contract.Result<IEnumerable<Code>>() != null);
+                foreach (var item in this.sorted.Complement())
+                {
 					yield return item + this.start;
 				}
 			}

@@ -23,7 +23,9 @@ namespace DD.Collections.ICodeSet
 
 		public static CodeSetWrap From ()
 		{
-            var bits = BitSetArray.Empty ();
+            Contract.Ensures(Contract.Result<CodeSetWrap>() != null);
+
+            var bits = BitSetArray.Empty();
             Contract.Assume (bits.Count == 0);
 			return new CodeSetWrap(bits);
 		}
@@ -32,12 +34,16 @@ namespace DD.Collections.ICodeSet
 		{
 			Contract.Requires<ArgumentNullException>(wrap.IsNot(null));
 
+            Contract.Ensures(Contract.Result<CodeSetWrap>() != null);
+
 			return new CodeSetWrap(wrap);
 		}
 
 		public static CodeSetWrap From (params Code[] codes)
 		{
 			Contract.Requires<ArgumentNullException>(codes.IsNot(null));
+
+            Contract.Ensures(Contract.Result<CodeSetWrap>() != null);
 
 			return new CodeSetWrap(codes as IEnumerable<Code>);
 		}
@@ -46,6 +52,8 @@ namespace DD.Collections.ICodeSet
 		{
 			Contract.Requires<ArgumentNullException>(codes.IsNot(null));
 
+            Contract.Ensures(Contract.Result<CodeSetWrap>() != null);
+
 			return new CodeSetWrap(codes);
 		}
 
@@ -53,8 +61,9 @@ namespace DD.Collections.ICodeSet
 		{
 			Contract.Requires<ArgumentNullException>(bits.IsNot(null));
 			Contract.Requires<ArgumentOutOfRangeException>(bits.Count == 0 || bits.Length.IsCodesCount() || bits.Last.HasCodeValue());
+            Contract.Ensures(Contract.Result<DD.Collections.ICodeSet.CodeSetWrap>() != null);
 
-			return new CodeSetWrap(bits);
+            return new CodeSetWrap(bits);
 		}
 
 		/// <summary>Quick shallow clone</summary>
@@ -62,8 +71,7 @@ namespace DD.Collections.ICodeSet
 		private CodeSetWrap(CodeSetWrap wrap)
 		{
 			Contract.Requires<ArgumentNullException>(wrap.IsNot(null));
-
-			Contract.Ensures(Theory.Construct(wrap, this));
+            Contract.Ensures(Theory.Construct(wrap, this));
 
 			sorted = wrap.sorted;
 		}
@@ -151,12 +159,16 @@ namespace DD.Collections.ICodeSet
 
 		public BitSetArray ToBitSetArray()
 		{
-			return BitSetArray.Copy(this.sorted);
+            Contract.Ensures(Contract.Result<BitSetArray>() != null);
+
+            return BitSetArray.Copy(this.sorted);
 		}
 		
 		public IEnumerable<Code> Complement {
 			get {
-				foreach (var item in this.sorted.Complement()) {
+                Contract.Ensures(Contract.Result<IEnumerable<Code>>() != null);
+                foreach (var item in this.sorted.Complement())
+                {
 					yield return item;
 				}
 			}

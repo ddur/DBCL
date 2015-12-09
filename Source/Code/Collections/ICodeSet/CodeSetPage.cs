@@ -26,6 +26,7 @@ namespace DD.Collections.ICodeSet
             Contract.Requires<ArgumentNullException> (!codes.IsNull ());
             Contract.Requires<InvalidOperationException> (codes.Distinct ().Count ().InRange (ICodeSetService.PairCount + 1, codes.Span () - 1));	// not Null/Code/Pair/Full
             Contract.Requires<InvalidOperationException> (codes.Min ().UnicodePlane () == codes.Max ().UnicodePlane ()); // one Page
+            Contract.Ensures(Contract.Result<CodeSetPage>() != null);
 
 			return new CodeSetPage((IEnumerable<Code>)codes);
 		}
@@ -34,6 +35,7 @@ namespace DD.Collections.ICodeSet
             Contract.Requires<ArgumentNullException> (!codes.IsNull ());
             Contract.Requires<InvalidOperationException> (codes.Distinct ().Count ().InRange (ICodeSetService.PairCount + 1, codes.Span () - 1));	// not Null/Code/Pair/Full
             Contract.Requires<InvalidOperationException> (codes.Min ().UnicodePlane () == codes.Max ().UnicodePlane ()); // one Page
+            Contract.Ensures(Contract.Result<CodeSetPage>() != null);
 
 			return new CodeSetPage(codes);
 		}
@@ -44,6 +46,7 @@ namespace DD.Collections.ICodeSet
             Contract.Requires<InvalidOperationException> (bits.Count.InRange(ICodeSetService.PairCount+1, bits.Span() - 1));	// not Null/Code/Pair/Full
             Contract.Requires<ArgumentOutOfRangeException> (offset.InRange (0, Code.MaxValue - (int)bits.Last));
             Contract.Requires<InvalidOperationException> ((bits.First + offset).UnicodePlane () == (bits.Last + offset).UnicodePlane ()); // one Page
+            Contract.Ensures(Contract.Result<CodeSetPage>() != null);
 
             return new CodeSetPage (bits, offset);
 		}
@@ -164,7 +167,8 @@ namespace DD.Collections.ICodeSet
 
 		public BitSetArray ToCompact()
 		{
-			return BitSetArray.Copy(this.sorted);
+            Contract.Ensures(Contract.Result<BitSetArray>() != null);
+            return BitSetArray.Copy(this.sorted);
 		}
 
 		internal static class Theory

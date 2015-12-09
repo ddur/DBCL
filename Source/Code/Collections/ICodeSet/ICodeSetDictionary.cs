@@ -190,6 +190,7 @@ namespace DD.Collections.ICodeSet
 
 		public void Add(ICodeSet iset)
 		{
+            Contract.Requires(iset != null);
 			base.Add(iset, ID);
 			++ID;
 		}

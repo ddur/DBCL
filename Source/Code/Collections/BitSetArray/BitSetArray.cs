@@ -916,7 +916,8 @@ namespace DD.Collections
 			Contract.Requires<ArgumentNullException>(items != null);
 			Contract.Requires<ArgumentOutOfRangeException>(ValidMembers(items));
 
-			Contract.Ensures(Theory.From(Contract.Result<BitSetArray>(), items));
+            Contract.Ensures(Contract.Result<BitSetArray>() != null);
+            Contract.Ensures(Theory.From(Contract.Result<BitSetArray>(), items));
 
 			BitSetArray retValue;
 			if (items.IsEmpty()) {
@@ -943,7 +944,8 @@ namespace DD.Collections
 				optional.Length == 0 ||
 				ValidMembers(optional));
 
-			Contract.Ensures(
+            Contract.Ensures(Contract.Result<BitSetArray>() != null);
+            Contract.Ensures(
 				Theory.From(Contract.Result<BitSetArray>(), required, optional));
 
 			var items = new List<int>();
@@ -959,6 +961,8 @@ namespace DD.Collections
 		{
 			Contract.Requires<ArgumentNullException>(that.IsNot(null));
 
+            Contract.Ensures(Contract.Result<BitSetArray>() != null);
+
 			return new BitSetArray(that);
 		}
 
@@ -967,6 +971,8 @@ namespace DD.Collections
 			Contract.Requires<ArgumentNullException>(that.IsNot(null));
 			Contract.Requires<ArgumentOutOfRangeException>(ValidLength(length));
 
+            Contract.Ensures(Contract.Result<BitSetArray>() != null);
+
 			return new BitSetArray(that, length);
 		}
 
@@ -974,12 +980,16 @@ namespace DD.Collections
 		{
 			Contract.Requires<ArgumentNullException>(that.IsNot(null));
 
-			return new BitSetArray(that);
+            Contract.Ensures(Contract.Result<BitSetArray>() != null);
+
+            return new BitSetArray(that);
 		}
 
 		[Pure] public static BitSetArray Empty()
 		{
-			return BitSetArray.Size (0);
+            Contract.Ensures(Contract.Result<BitSetArray>() != null);
+
+            return BitSetArray.Size(0);
 		}
 
 		[Pure] public static BitSetArray Size(int length, bool value = false)
@@ -996,6 +1006,8 @@ namespace DD.Collections
 				)
 			);
 
+            Contract.Ensures(Contract.Result<BitSetArray>() != null);
+
 			return new BitSetArray(length, value);
 		}
 
@@ -1004,7 +1016,8 @@ namespace DD.Collections
 			Contract.Requires<ArgumentNullException>(mask != null);
 			Contract.Requires<ArgumentOutOfRangeException>(ValidLength(length));
 
-			Contract.Ensures(Theory.Mask(Contract.Result<BitSetArray>(), mask, length));
+            Contract.Ensures(Contract.Result<BitSetArray>() != null);
+            Contract.Ensures(Theory.Mask(Contract.Result<BitSetArray>(), mask, length));
 
 			var retValue = new BitSetArray(length);
 
@@ -1046,7 +1059,8 @@ namespace DD.Collections
 			Contract.Requires<ArgumentNullException>(mask != null);
 			Contract.Requires<ArgumentOutOfRangeException>(ValidLength(length));
 
-			Contract.Ensures(Theory.Mask(Contract.Result<BitSetArray>(), mask, length));
+            Contract.Ensures(Contract.Result<BitSetArray>() != null);
+            Contract.Ensures(Theory.Mask(Contract.Result<BitSetArray>(), mask, length));
 
 			var retValue = new BitSetArray(length);
 
@@ -1090,7 +1104,8 @@ namespace DD.Collections
 			Contract.Requires<ArgumentNullException>(mask != null);
 			Contract.Requires<ArgumentOutOfRangeException>(ValidLength(length));
 
-			Contract.Ensures(Theory.Mask(Contract.Result<BitSetArray>(), mask, length));
+            Contract.Ensures(Contract.Result<BitSetArray>() != null);
+            Contract.Ensures(Theory.Mask(Contract.Result<BitSetArray>(), mask, length));
 
 			var retValue = new BitSetArray(length);
 
@@ -1140,7 +1155,8 @@ namespace DD.Collections
 			Contract.Requires<ArgumentNullException>(mask != null);
 			Contract.Requires<ArgumentOutOfRangeException>(ValidLength(length));
 
-			Contract.Ensures(Theory.Mask(Contract.Result<BitSetArray>(), mask, length));
+            Contract.Ensures(Contract.Result<BitSetArray>() != null);
+            Contract.Ensures(Theory.Mask(Contract.Result<BitSetArray>(), mask, length));
 
 			var retValue = new BitSetArray(length);
 
@@ -1190,7 +1206,8 @@ namespace DD.Collections
 			Contract.Requires<ArgumentNullException>(mask != null);
 			Contract.Requires<ArgumentOutOfRangeException>(ValidLength(length));
 
-			Contract.Ensures(Theory.Mask(Contract.Result<BitSetArray>(), mask, length));
+            Contract.Ensures(Contract.Result<BitSetArray>() != null);
+            Contract.Ensures(Theory.Mask(Contract.Result<BitSetArray>(), mask, length));
 
 			var retValue = new BitSetArray(length);
 
@@ -1240,7 +1257,8 @@ namespace DD.Collections
 			Contract.Requires<ArgumentNullException>(mask != null);
 			Contract.Requires<ArgumentOutOfRangeException>(ValidLength(length));
 
-			Contract.Ensures(Theory.Mask(Contract.Result<BitSetArray>(), mask, length));
+            Contract.Ensures(Contract.Result<BitSetArray>() != null);
+            Contract.Ensures(Theory.Mask(Contract.Result<BitSetArray>(), mask, length));
 
 			var retValue = new BitSetArray(length);
 
@@ -1828,8 +1846,8 @@ namespace DD.Collections
 
 		public BitSetArray And(BitSetArray that)
 		{
-
-			Contract.Ensures(
+            Contract.Ensures(Contract.Result<BitSetArray>() != null);
+            Contract.Ensures(
 				Theory.And(Contract.OldValue<BitSetArray>(BitSetArray.Copy(this)), that, this, Contract.Result<BitSetArray>())
 			);
 
@@ -1887,7 +1905,8 @@ namespace DD.Collections
 
 		public BitSetArray Or(BitSetArray that)
 		{
-			Contract.Ensures(
+            Contract.Ensures(Contract.Result<BitSetArray>() != null);
+            Contract.Ensures(
 				Theory.Or(Contract.OldValue<BitSetArray>(BitSetArray.Copy(this)), that, this, Contract.Result<BitSetArray>())
 			);
 
@@ -1947,7 +1966,8 @@ namespace DD.Collections
 
 		public BitSetArray Xor(BitSetArray that)
 		{
-			Contract.Ensures(
+            Contract.Ensures(Contract.Result<BitSetArray>() != null);
+            Contract.Ensures(
 				Theory.Xor(Contract.OldValue<BitSetArray>(BitSetArray.Copy(this)), that, this, Contract.Result<BitSetArray>())
 			);
 
@@ -2037,7 +2057,8 @@ namespace DD.Collections
 		/// <returns></returns>
 		public BitSetArray Not(BitSetArray that)
 		{
-			Contract.Ensures(
+            Contract.Ensures(Contract.Result<BitSetArray>() != null);
+            Contract.Ensures(
 				Theory.Not(Contract.OldValue<BitSetArray>(BitSetArray.Copy(this)), that, this, Contract.Result<BitSetArray>())
 			);
 
@@ -2114,7 +2135,8 @@ namespace DD.Collections
 		/// <returns></returns>
 		public BitSetArray Not()
 		{
-			Contract.Ensures(
+            Contract.Ensures(Contract.Result<BitSetArray>() != null);
+            Contract.Ensures(
 				Theory.Not(
 					Contract.OldValue<BitSetArray>(BitSetArray.Copy(this)),
 					this,
@@ -2782,6 +2804,7 @@ namespace DD.Collections
 		[Pure]
 		IEnumerator IEnumerable.GetEnumerator()
 		{
+            Contract.Ensures(Contract.Result<IEnumerator>() != null);
 			return this.GetEnumerator();
 		}
 
@@ -2791,25 +2814,29 @@ namespace DD.Collections
 		[Pure]
 		public IEnumerator<int> GetEnumerator()
 		{
-			return new BitSetArray.EnumeratorForwardSynchronized(this);
+            Contract.Ensures(Contract.Result<IEnumerator<int>>() != null);
+            return new BitSetArray.EnumeratorForwardSynchronized(this);
 		}
 
 		[Pure]
 		public IEnumerator<int> GetEnumeratorReverse()
 		{
-			return new BitSetArray.EnumeratorReverseSynchronized(this);
+            Contract.Ensures(Contract.Result<IEnumerator<int>>() != null);
+            return new BitSetArray.EnumeratorReverseSynchronized(this);
 		}
 
 		[Pure]
 		public IEnumerator<int> GetEnumeratorComplement()
 		{
-			return new BitSetArray.EnumeratorComplementSynchronized(this);
+            Contract.Ensures(Contract.Result<IEnumerator<int>>() != null);
+            return new BitSetArray.EnumeratorComplementSynchronized(this);
 		}
 
 		[Pure]
 		public IEnumerable<int> Complement()
 		{
-			IEnumerator<int> enumerator = this.GetEnumeratorComplement();
+            Contract.Ensures(Contract.Result<IEnumerable<int>>() != null);
+            IEnumerator<int> enumerator = this.GetEnumeratorComplement();
 			while (enumerator.MoveNext()) {
 				yield return enumerator.Current;
 			}
@@ -2819,7 +2846,8 @@ namespace DD.Collections
 		[Pure]
 		public IEnumerable<int> Reverse()
 		{
-			IEnumerator<int> enumerator = this.GetEnumeratorReverse();
+            Contract.Ensures(Contract.Result<IEnumerable<int>>() != null);
+            IEnumerator<int> enumerator = this.GetEnumeratorReverse();
 			while (enumerator.MoveNext()) {
 				yield return enumerator.Current;
 			}
@@ -3473,12 +3501,14 @@ namespace DD.Collections
 
 		public static explicit operator BitArray(BitSetArray a)
 		{
+            Contract.Ensures(Contract.Result<BitArray>() != null);
 			return a.IsNull() ? new BitArray(0) : a.ToBitArray();
 		}
 
 		public static explicit operator BitSetArray(BitArray a)
 		{
-			return a.IsNull() ? new BitSetArray() : BitSetArray.Mask(a, a.Count);
+            Contract.Ensures(Contract.Result<BitSetArray>() != null);
+            return a.IsNull() ? new BitSetArray() : BitSetArray.Mask(a, a.Count);
 		}
 
 		#endregion
@@ -3487,27 +3517,32 @@ namespace DD.Collections
 
 		public static BitSetArray operator |(BitSetArray a, BitSetArray b)
 		{
-			return a.IsNull() ? b : (BitSetArray.Copy(a)).Or(b);
+            Contract.Ensures(Contract.Result<BitSetArray>() != null);
+            return a.IsNull() ? b : (BitSetArray.Copy(a)).Or(b);
 		}
 
 		public static BitSetArray operator &(BitSetArray a, BitSetArray b)
 		{
-			return a.IsNull() ? new BitSetArray() : (BitSetArray.Copy(a)).And(b);
+            Contract.Ensures(Contract.Result<BitSetArray>() != null);
+            return a.IsNull() ? new BitSetArray() : (BitSetArray.Copy(a)).And(b);
 		}
 
 		public static BitSetArray operator ^(BitSetArray a, BitSetArray b)
 		{
-			return a.IsNull() ? b : (BitSetArray.Copy(a)).Xor(b);
+            Contract.Ensures(Contract.Result<BitSetArray>() != null);
+            return a.IsNull() ? b : (BitSetArray.Copy(a)).Xor(b);
 		}
 
 		public static BitSetArray operator -(BitSetArray a, BitSetArray b)
 		{
-			return a.IsNull() ? new BitSetArray() : (BitSetArray.Copy(a)).Not(b);
+            Contract.Ensures(Contract.Result<BitSetArray>() != null);
+            return a.IsNull() ? new BitSetArray() : (BitSetArray.Copy(a)).Not(b);
 		}
 
 		public static BitSetArray operator ~(BitSetArray a)
 		{
-			return a.IsNull() ? new BitSetArray() : (BitSetArray.Copy(a)).Not();
+            Contract.Ensures(Contract.Result<BitSetArray>() != null);
+            return a.IsNull() ? new BitSetArray() : (BitSetArray.Copy(a)).Not();
 		}
 
 		#endregion

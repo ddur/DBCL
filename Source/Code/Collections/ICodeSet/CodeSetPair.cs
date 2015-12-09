@@ -24,6 +24,7 @@ namespace DD.Collections.ICodeSet
 		public static CodeSetPair From(Code low, Code high)
 		{
 			Contract.Requires<ArgumentException>(low < high);
+            Contract.Ensures(Contract.Result<CodeSetPair>() != null);
 
 			return new CodeSetPair(low, high);			
 		}

@@ -276,7 +276,9 @@ namespace DD.Collections.ICodeSet
 
 		public IEnumerable<ICodeSet> Factored {
 			get {
-				foreach (var item in dictionary) {
+                Contract.Ensures(Contract.Result<IEnumerable<ICodeSet>>() != null);
+                foreach (var item in dictionary)
+                {
 					yield return item;
 				}
 			}

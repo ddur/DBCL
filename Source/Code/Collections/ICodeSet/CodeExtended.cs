@@ -58,7 +58,10 @@ namespace DD.Collections.ICodeSet
 
 		[Pure]
 		public static string ToXmlEntity (this Code self) {
-			if ((self.Value&0xFF) == self.Value) {
+            Contract.Ensures(Contract.Result<string>() != null);
+
+            if ((self.Value & 0xFF) == self.Value)
+            {
 				switch (self.Value) { // XML predefined entities
 					case ((int)'>'):
 						return "&gt;";

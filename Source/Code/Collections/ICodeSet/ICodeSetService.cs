@@ -119,10 +119,10 @@ namespace DD.Collections.ICodeSet
 		/// <returns></returns>
 		[Pure] public static BitSetArray ToBitSetArray(this ICodeSet self)
 		{
-			Contract.Ensures(Contract.Result<BitSetArray>().IsNot(null));
+			Contract.Ensures(Contract.Result<BitSetArray>() != null);
 			Contract.Ensures(
-				(self.IsNull() && Contract.Result<BitSetArray>().Count == 0) || 
-				(self.Count == Contract.Result<BitSetArray>().Count)
+				(self.IsNull() && Contract.Result<BitSetArray>().Count == 0) ||
+                (self.Count == Contract.Result<DD.Collections.BitSetArray>().Count)
 			);
 
 			if (self.IsNull() || self.Count == 0) {
