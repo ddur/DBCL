@@ -68,7 +68,7 @@ namespace DD.Collections.ICodeSet.CodeSetWideTest
 			);
 
 			// requires valid codes
-			Assert.Throws<ArgumentOutOfRangeException>(
+			Assert.Throws<IndexOutOfRangeException>(
 				delegate {
 					csw = CodeSetWide.From(BitSetArray.From(
 						0, 1, 2, 3,

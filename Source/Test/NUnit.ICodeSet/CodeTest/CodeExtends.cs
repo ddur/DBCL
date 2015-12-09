@@ -153,7 +153,7 @@ namespace DD.Collections.ICodeSet.CodeTest
 		[Test, TestCaseSource("InvalidCode")]
 		public void Encode_Int_IsInvalidCode(int i)
 		{
-			Assert.Throws<ArgumentOutOfRangeException>(delegate {
+			Assert.Throws<IndexOutOfRangeException>(delegate {
 				i.Encode();
 			});
 		}

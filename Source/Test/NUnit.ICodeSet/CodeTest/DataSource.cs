@@ -248,10 +248,10 @@ namespace DD.Collections.ICodeSet.CodeTest
 
         public static IEnumerable<TestCaseData> CodeToStringOrThrow {
             get {
-                yield return new TestCaseData (int.MinValue).Throws(typeof(ArgumentOutOfRangeException));
-                yield return new TestCaseData (int.MaxValue).Throws(typeof(ArgumentOutOfRangeException));
-                yield return new TestCaseData (Code.MinValue - 1).Throws(typeof(ArgumentOutOfRangeException));
-                yield return new TestCaseData (Code.MaxValue + 1).Throws(typeof(ArgumentOutOfRangeException));
+                yield return new TestCaseData (int.MinValue).Throws(typeof(IndexOutOfRangeException));
+                yield return new TestCaseData (int.MaxValue).Throws(typeof(IndexOutOfRangeException));
+                yield return new TestCaseData (Code.MinValue - 1).Throws(typeof(IndexOutOfRangeException));
+                yield return new TestCaseData (Code.MaxValue + 1).Throws(typeof(IndexOutOfRangeException));
 
                 yield return new TestCaseData (8).Returns("\u0008");
                 yield return new TestCaseData (9).Returns("\u0009");

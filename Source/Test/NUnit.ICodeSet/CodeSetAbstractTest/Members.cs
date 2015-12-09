@@ -80,22 +80,22 @@ namespace DD.Collections.ICodeSet.CodeSetAbstractTest
 			acset.CopyTo(array, 0);
 			Assert.True (array.SequenceEqual(acset));
 			
-			Assert.Throws<ArgumentOutOfRangeException> (
+			Assert.Throws<IndexOutOfRangeException> (
 				delegate {
 					acset.CopyTo(array,-1);
 				}
 			);
-			Assert.Throws<ArgumentOutOfRangeException> (
+			Assert.Throws<IndexOutOfRangeException> (
 				delegate {
 					acset.CopyTo(array,int.MinValue);
 				}
 			);
-			Assert.Throws<ArgumentOutOfRangeException> (
+			Assert.Throws<IndexOutOfRangeException> (
 				delegate {
 					acset.CopyTo(array,1);
 				}
 			);
-			Assert.Throws<ArgumentOutOfRangeException> (
+			Assert.Throws<IndexOutOfRangeException> (
 				delegate {
 					acset.CopyTo(array,int.MaxValue);
 				}

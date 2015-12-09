@@ -22,17 +22,17 @@ namespace DD.Collections.BitSetArrayTest {
             }, Throws.TypeOf<ArgumentNullException> ());
             Assert.That (delegate {
                 BitSetArray.From ((IEnumerable<int>)new int[] { 0, -1 });
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
 
             Assert.That (delegate {
                 BitSetArray.From (-1);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
             Assert.That (delegate {
                 BitSetArray.From (-1, 0, 1, 2);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
             Assert.That (delegate {
                 BitSetArray.From (0, -1, -2, -3);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
 
             BitSetArray test;
             List<int> list;
@@ -137,7 +137,7 @@ namespace DD.Collections.BitSetArrayTest {
             }, Throws.Nothing);
             Assert.That (delegate {
                 BitSetArray.Size (-1);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
 
             #endregion
 
@@ -158,7 +158,7 @@ namespace DD.Collections.BitSetArrayTest {
             }, Throws.Nothing);
             Assert.That (delegate {
                 BitSetArray.Size (-1, true);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
 
             #endregion
 
@@ -177,7 +177,7 @@ namespace DD.Collections.BitSetArrayTest {
             }, Throws.TypeOf<ArgumentNullException> ());
             Assert.That (delegate {
                 BitSetArray.Mask (new BitArray (bools), -1);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
 
             masked = BitSetArray.Mask (new BitArray (bools), 0);
             Assert.That (masked.Count == 0);
@@ -215,13 +215,13 @@ namespace DD.Collections.BitSetArrayTest {
 
             Assert.That (delegate {
                 BitSetArray.Mask (new Collection<bool> (), -1);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
             Assert.That (delegate {
                 BitSetArray.Mask (new TestEnumClass<bool> (new bool[0]), -1);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
             Assert.That (delegate {
                 BitSetArray.Mask (new bool[0], int.MinValue);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
 
             masked = BitSetArray.Mask (new bool[0], 8);
             Assert.That (masked.Count == 0);
@@ -280,24 +280,24 @@ namespace DD.Collections.BitSetArrayTest {
 
             Assert.That (delegate {
                 BitSetArray.Mask (new byte[0], -1);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
             Assert.That (delegate {
                 BitSetArray.Mask (new byte[0], int.MinValue);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
 
             Assert.That (delegate {
                 BitSetArray.Mask ((Collection<byte>)null, -1);
             }, Throws.TypeOf<ArgumentNullException> ());
             Assert.That (delegate {
                 BitSetArray.Mask (new Collection<byte> (), -1);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
 
             Assert.That (delegate {
                 BitSetArray.Mask ((TestEnumClass<byte>)null, -1);
             }, Throws.TypeOf<ArgumentNullException> ());
             Assert.That (delegate {
                 BitSetArray.Mask (new TestEnumClass<byte> (), -1);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
 
             masked = BitSetArray.Mask (new byte[0], 8);
             Assert.That (masked.Count == 0);
@@ -385,24 +385,24 @@ namespace DD.Collections.BitSetArrayTest {
 
             Assert.That (delegate {
                 BitSetArray.Mask (new short[0], -1);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
             Assert.That (delegate {
                 BitSetArray.Mask (new short[0], int.MinValue);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
 
             Assert.That (delegate {
                 BitSetArray.Mask ((Collection<short>)null, -1);
             }, Throws.TypeOf<ArgumentNullException> ());
             Assert.That (delegate {
                 BitSetArray.Mask (new Collection<short> (), -1);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
 
             Assert.That (delegate {
                 BitSetArray.Mask ((TestEnumClass<short>)null, -1);
             }, Throws.TypeOf<ArgumentNullException> ());
             Assert.That (delegate {
                 BitSetArray.Mask (new TestEnumClass<short> (), -1);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
 
             masked = BitSetArray.Mask (new short[0], 9);
             Assert.That (masked.Count == 0);
@@ -486,24 +486,24 @@ namespace DD.Collections.BitSetArrayTest {
 
             Assert.That (delegate {
                 BitSetArray.Mask (new int[0], -1);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
             Assert.That (delegate {
                 BitSetArray.Mask (new int[0], int.MinValue);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
 
             Assert.That (delegate {
                 BitSetArray.Mask ((Collection<int>)null, -1);
             }, Throws.TypeOf<ArgumentNullException> ());
             Assert.That (delegate {
                 BitSetArray.Mask (new Collection<int> (), -1);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
 
             Assert.That (delegate {
                 BitSetArray.Mask ((TestEnumClass<int>)null, -1);
             }, Throws.TypeOf<ArgumentNullException> ());
             Assert.That (delegate {
                 BitSetArray.Mask (new TestEnumClass<int> (), -1);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
 
             masked = BitSetArray.Mask (new int[0], 20);
             Assert.That (masked.Count == 0);
@@ -591,24 +591,24 @@ namespace DD.Collections.BitSetArrayTest {
 
             Assert.That (delegate {
                 BitSetArray.Mask (new long[0], -1);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
             Assert.That (delegate {
                 BitSetArray.Mask (new long[0], int.MinValue);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
 
             Assert.That (delegate {
                 BitSetArray.Mask ((Collection<long>)null, -1);
             }, Throws.TypeOf<ArgumentNullException> ());
             Assert.That (delegate {
                 BitSetArray.Mask (new Collection<long> (), -1);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
 
             Assert.That (delegate {
                 BitSetArray.Mask ((TestEnumClass<long>)null, -1);
             }, Throws.TypeOf<ArgumentNullException> ());
             Assert.That (delegate {
                 BitSetArray.Mask (new TestEnumClass<long> (), -1);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
 
             masked = BitSetArray.Mask (new long[0], 20);
             Assert.That (masked.Count == 0);

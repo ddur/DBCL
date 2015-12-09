@@ -25,7 +25,7 @@ namespace DD.Collections.ICodeSet
 		// NOTE: log(16) == 4 tests, TODO: check speed on 32 and 64
 		public const int ListMaxCount = 16;
 
-		public const int NoDiffLength = 256;
+		public const int MaskMaxCount = 256;
 
 		public const int NoneStart = -1;
 		public const int NoneFinal = -2;

@@ -44,7 +44,7 @@ namespace DD.Collections.ICodeSet
 		{
 			Contract.Requires<ArgumentNullException>(!bits.Is(null));
             Contract.Requires<InvalidOperationException> (bits.Count.InRange(ICodeSetService.PairCount+1, bits.Span() - 1));	// not Null/Code/Pair/Full
-            Contract.Requires<ArgumentOutOfRangeException> (offset.InRange (0, Code.MaxValue - (int)bits.Last));
+            Contract.Requires<IndexOutOfRangeException> (offset.InRange (0, Code.MaxValue - (int)bits.Last));
             Contract.Requires<InvalidOperationException> ((bits.First + offset).UnicodePlane () == (bits.Last + offset).UnicodePlane ()); // one Page
             Contract.Ensures(Contract.Result<CodeSetPage>() != null);
 
@@ -89,7 +89,7 @@ namespace DD.Collections.ICodeSet
 		{
             Contract.Requires<ArgumentNullException> (!bits.Is (null));
             Contract.Requires<InvalidOperationException> (bits.Count.InRange (ICodeSetService.PairCount + 1, bits.Span () - 1));	// not Null/Code/Pair/Full
-            Contract.Requires<ArgumentOutOfRangeException> (offset.InRange (0, Code.MaxValue - (int)bits.Last));
+            Contract.Requires<IndexOutOfRangeException> (offset.InRange (0, Code.MaxValue - (int)bits.Last));
             Contract.Requires<InvalidOperationException> ((bits.First + offset).UnicodePlane () == (bits.Last + offset).UnicodePlane ()); // one Page
 
             Contract.Ensures (Theory.Construct (bits, offset, this));

@@ -116,13 +116,16 @@ namespace DD.Collections.ICodeSet.ICodeSetReductionTest
 
 		IEnumerable<Tuple<BitSetArray,Type>> ToPage {
 			get {
-				// bits -> Page if length <= NoDiffLength
-				yield return new Tuple<BitSetArray, Type>(BitSetArray.From(0, 99, 126), typeof(CodeSetPage));
-				yield return new Tuple<BitSetArray, Type>(BitSetArray.From(66, 250, 254), typeof(CodeSetPage));
-				yield return new Tuple<BitSetArray, Type>(BitSetArray.From(0, 1, 2, 3, 4, 9, 10, 12, 13, 16, 17, 18, 19, 20, 21, 22), typeof(CodeSetPage));
+				// bits -> List if length <= ListMaxCount
+				yield return new Tuple<BitSetArray, Type>(BitSetArray.From(0, 99, 126), typeof(CodeSetList));
+				yield return new Tuple<BitSetArray, Type>(BitSetArray.From(66, 250, 254), typeof(CodeSetList));
+				yield return new Tuple<BitSetArray, Type>(BitSetArray.From(0, 1, 2, 3, 4, 9, 10, 12, 13, 16, 17, 18, 19, 20, 21, 22), typeof(CodeSetList));
+
+				// bits -> Mask if length <= MaskMaxCount
+				yield return new Tuple<BitSetArray, Type>(BitSetArray.From(0, 1, 2, 3, 4, 9, 10, 12, 13, 16, 17, 18, 19, 20, 21, 22, 200), typeof(CodeSetMask));
 
 				// bits -> Diff attempt failed -> Page 
-				yield return new Tuple<BitSetArray, Type>(BitSetArray.From(0, 1, 2, 3, 4, 9, 10, 12, 13, 16, 17, 18, 19, 20, 21, 700), typeof(CodeSetPage));
+				yield return new Tuple<BitSetArray, Type>(BitSetArray.From(0, 1, 2, 3, 4, 9, 10, 12, 13, 16, 17, 18, 19, 20, 21, 25, 700), typeof(CodeSetPage));
 			}
 		}
 
@@ -159,7 +162,8 @@ namespace DD.Collections.ICodeSet.ICodeSetReductionTest
 
 				// bits -> Diff/Wide
 				for (var i = 0; i < 50; i++) {
-					bits.Set(r.Next(65530, 65700), false);  
+					bits.Set(r.Next(65500, 65535), false);  
+					bits.Set(r.Next(65536, 65700), false);  
 				}
 				yield return new Tuple<BitSetArray, Type>(bits, typeof(CodeSetDiff));
 			}
@@ -167,17 +171,18 @@ namespace DD.Collections.ICodeSet.ICodeSetReductionTest
 
 		IEnumerable<Tuple<BitSetArray,Type>> ToWide {
 			get {
-				// bits -> Wide if length <= NoDiffLength
-				var bits = BitSetArray.Size (100000);
-				var r = new Random();
-				for (var i = 0; i < 100; i++) {
-					bits.Set(r.Next(65530, 65700));  
-				}
-				yield return new Tuple<BitSetArray, Type>(bits, typeof(CodeSetWide));
+				// bits -> List if length <= ListMaxCount
+				yield return new Tuple<BitSetArray, Type>(BitSetArray.From(65530, 65552), typeof(CodeSetPair));
+				yield return new Tuple<BitSetArray, Type>(BitSetArray.From(65530, 65531, 65552), typeof(CodeSetList));
+				yield return new Tuple<BitSetArray, Type>(BitSetArray.From(65530, 65531, 65532, 65533, 65534, 65539, 65540, 65542, 65543, 65546, 65547, 65548, 65549, 65550, 65551, 65552), typeof(CodeSetList));
+				yield return new Tuple<BitSetArray, Type>(BitSetArray.From(65530, 65531, 65532, 65533, 65534, 65539, 65540, 65542, 65543, 65546, 65547, 65548, 65549, 65550, 65551, 65552, 65553), typeof(CodeSetMask));
 
 				// bits -> Diff attempt failed -> Wide
+				var bits = BitSetArray.Size(100000);
+				var r = new Random();
 				for (var i = 0; i < 500; i++) {
-					bits.Set(r.Next(70000, 90000));  
+					bits.Set(r.Next(40000, 65535));  
+					bits.Set(r.Next(65536, 90000));  
 				}
 				yield return new Tuple<BitSetArray, Type>(bits, typeof(CodeSetWide));
 			}

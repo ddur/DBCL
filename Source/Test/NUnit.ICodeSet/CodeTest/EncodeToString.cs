@@ -44,7 +44,7 @@ namespace DD.Collections.ICodeSet.CodeTest
 	    [Test, TestCaseSource("InvalidCode")]
         public void EncodeInvalidCode(int code)
         {
-            Assert.Throws<ArgumentOutOfRangeException>(delegate {code.Encode();});
+            Assert.Throws<IndexOutOfRangeException>(delegate {code.Encode();});
         }
 
 	    [Test, TestCaseSource("ValidCode")]

@@ -65,12 +65,12 @@ namespace DD.Collections.ICodeSet.CodeSetPageTest
 			CodeSetPage csp;
 
 			// requires valid offset
-			Assert.Throws<ArgumentOutOfRangeException>(delegate {
+			Assert.Throws<IndexOutOfRangeException>(delegate {
 				csp = CodeSetPage.From(BitSetArray.From(1, 2, 3, 4, 7), -1);
 			});
 
 			// requires valid offset
-			Assert.Throws<ArgumentOutOfRangeException>(delegate {
+			Assert.Throws<IndexOutOfRangeException>(delegate {
 				csp = CodeSetPage.From(BitSetArray.From(Code.MaxValue-10, Code.MaxValue-7, Code.MaxValue-5), 10);
 			});
 

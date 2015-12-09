@@ -83,14 +83,14 @@ namespace DD.Collections.ICodeSet.CodeTest
 			iC.CopyTo(arrayC, 1);
 			Assert.True (arrayC[1] == C);
 			
-			Assert.Throws<ArgumentOutOfRangeException> (delegate {iC.CopyTo(arrayC, -1);});
-			Assert.Throws<ArgumentOutOfRangeException> (delegate {iC.CopyTo(arrayC, 2);});
+			Assert.Throws<IndexOutOfRangeException> (delegate {iC.CopyTo(arrayC, -1);});
+			Assert.Throws<IndexOutOfRangeException> (delegate {iC.CopyTo(arrayC, 2);});
 
 			arrayC = new Code[0];
-			Assert.Throws<ArgumentOutOfRangeException> (delegate {iC.CopyTo(arrayC, -1);});
-			Assert.Throws<ArgumentOutOfRangeException> (delegate {iC.CopyTo(arrayC, 0);});
-			Assert.Throws<ArgumentOutOfRangeException> (delegate {iC.CopyTo(arrayC, 1);});
-			Assert.Throws<ArgumentOutOfRangeException> (delegate {iC.CopyTo(arrayC, 2);});
+			Assert.Throws<IndexOutOfRangeException> (delegate {iC.CopyTo(arrayC, -1);});
+			Assert.Throws<IndexOutOfRangeException> (delegate {iC.CopyTo(arrayC, 0);});
+			Assert.Throws<IndexOutOfRangeException> (delegate {iC.CopyTo(arrayC, 1);});
+			Assert.Throws<IndexOutOfRangeException> (delegate {iC.CopyTo(arrayC, 2);});
 
 			arrayC = null;
 			Assert.Throws<ArgumentNullException> (delegate {iC.CopyTo(arrayC, 0);});

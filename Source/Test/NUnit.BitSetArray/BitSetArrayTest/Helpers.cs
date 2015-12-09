@@ -130,7 +130,7 @@ namespace DD.Collections.BitSetArrayTest
 			}, Throws.Nothing);
 			Assert.That(delegate {
 				BitSetArray.CountOnBits(new int[0], -100);
-			}, Throws.TypeOf<ArgumentOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException>());
 			Assert.That(delegate {
 				BitSetArray.CountOnBits((long[])null);
 			}, Throws.Nothing);
@@ -145,7 +145,7 @@ namespace DD.Collections.BitSetArrayTest
 			}, Throws.Nothing);
 			Assert.That(delegate {
 				BitSetArray.CountOnBits(new long[0], -200);
-			}, Throws.TypeOf<ArgumentOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException>());
 
 			Assert.That(BitSetArray.CountOnBits(test.To8BitMask()) == test.Count);
 			Assert.That(BitSetArray.CountOnBits(test.To16BitMask()) == test.Count);
@@ -245,10 +245,10 @@ namespace DD.Collections.BitSetArrayTest
 		{
 			Assert.That(delegate {
 				BitSetArray.GetByteArrayLength(-1);
-			}, Throws.TypeOf<ArgumentOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException>());
 			Assert.That(delegate {
 				BitSetArray.GetByteArrayLength(int.MinValue);
-			}, Throws.TypeOf<ArgumentOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException>());
 
 			Assert.That(BitSetArray.GetByteArrayLength(0) == 0);
 			Assert.That(BitSetArray.GetByteArrayLength(1) == 1);
@@ -260,10 +260,10 @@ namespace DD.Collections.BitSetArrayTest
 
 			Assert.That(delegate {
 				BitSetArray.GetShortArrayLength(-1);
-			}, Throws.TypeOf<ArgumentOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException>());
 			Assert.That(delegate {
 				BitSetArray.GetShortArrayLength(int.MinValue);
-			}, Throws.TypeOf<ArgumentOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException>());
 
 			Assert.That(BitSetArray.GetShortArrayLength(0) == 0);
 			Assert.That(BitSetArray.GetShortArrayLength(1) == 1);
@@ -275,10 +275,10 @@ namespace DD.Collections.BitSetArrayTest
 
 			Assert.That(delegate {
 				BitSetArray.GetIntArrayLength(-1);
-			}, Throws.TypeOf<ArgumentOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException>());
 			Assert.That(delegate {
 				BitSetArray.GetIntArrayLength(int.MinValue);
-			}, Throws.TypeOf<ArgumentOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException>());
 
 			Assert.That(BitSetArray.GetIntArrayLength(0) == 0);
 			Assert.That(BitSetArray.GetIntArrayLength(1) == 1);
@@ -290,10 +290,10 @@ namespace DD.Collections.BitSetArrayTest
 
 			Assert.That(delegate {
 				BitSetArray.GetLongArrayLength(-1);
-			}, Throws.TypeOf<ArgumentOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException>());
 			Assert.That(delegate {
 				BitSetArray.GetLongArrayLength(int.MinValue);
-			}, Throws.TypeOf<ArgumentOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException>());
 
 			Assert.That(BitSetArray.GetLongArrayLength(0) == 0);
 			Assert.That(BitSetArray.GetLongArrayLength(1) == 1);

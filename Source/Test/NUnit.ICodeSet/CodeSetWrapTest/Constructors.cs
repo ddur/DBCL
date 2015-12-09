@@ -63,7 +63,7 @@ namespace DD.Collections.ICodeSet.CodeSetWrapTest
 		[Test]
 		public void From_BitSetArray_ThrowsIfNotCode()
 		{
-			Assert.Throws <ArgumentOutOfRangeException> (
+			Assert.Throws <IndexOutOfRangeException> (
 				delegate {
 					var x = CodeSetWrap.From (BitSetArray.Size(Code.MaxCount+1, true));
 				}

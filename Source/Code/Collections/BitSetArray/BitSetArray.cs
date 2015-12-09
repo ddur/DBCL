@@ -46,7 +46,7 @@ namespace DD.Collections
 		/// <param name="length"></param>
 		private BitSetArray(int length)
 		{
-			Contract.Requires<ArgumentOutOfRangeException>(
+			Contract.Requires<IndexOutOfRangeException>(
 				ValidLength(length));
 
 			Contract.Ensures(Theory.Construct(this, length));
@@ -64,7 +64,7 @@ namespace DD.Collections
 		private BitSetArray(int length, bool value = false)
 			: this(length)
 		{
-			Contract.Requires<ArgumentOutOfRangeException>(ValidLength(length));
+			Contract.Requires<IndexOutOfRangeException>(ValidLength(length));
 			Contract.Requires<ArgumentException>(!value.Bool() || (length > 0));
 
 			Contract.Ensures(Theory.Construct(this, length, value));
@@ -115,7 +115,7 @@ namespace DD.Collections
 		private BitSetArray(BitSetArray that, int length)
 		{
 			Contract.Requires<ArgumentNullException>(that.IsNot(null));
-			Contract.Requires<ArgumentOutOfRangeException>(ValidLength(length));
+			Contract.Requires<IndexOutOfRangeException>(ValidLength(length));
 
 			Contract.Ensures(Theory.Construct(this, that, length));
 
@@ -914,7 +914,7 @@ namespace DD.Collections
 		[Pure] public static BitSetArray From(IEnumerable<int> items)
 		{
 			Contract.Requires<ArgumentNullException>(items != null);
-			Contract.Requires<ArgumentOutOfRangeException>(ValidMembers(items));
+			Contract.Requires<IndexOutOfRangeException>(ValidMembers(items));
 
             Contract.Ensures(Contract.Result<BitSetArray>() != null);
             Contract.Ensures(Theory.From(Contract.Result<BitSetArray>(), items));
@@ -937,10 +937,10 @@ namespace DD.Collections
 
 		[Pure] public static BitSetArray From(int required, params int[] optional)
 		{
-			Contract.Requires<ArgumentOutOfRangeException>(
+			Contract.Requires<IndexOutOfRangeException>(
 				ValidMember(required));
             Contract.Requires<ArgumentNullException> (optional != null);
-			Contract.Requires<ArgumentOutOfRangeException>(
+			Contract.Requires<IndexOutOfRangeException>(
 				optional.Length == 0 ||
 				ValidMembers(optional));
 
@@ -969,7 +969,7 @@ namespace DD.Collections
 		[Pure] public static BitSetArray From(BitSetArray that, int length)
 		{
 			Contract.Requires<ArgumentNullException>(that.IsNot(null));
-			Contract.Requires<ArgumentOutOfRangeException>(ValidLength(length));
+			Contract.Requires<IndexOutOfRangeException>(ValidLength(length));
 
             Contract.Ensures(Contract.Result<BitSetArray>() != null);
 
@@ -994,7 +994,7 @@ namespace DD.Collections
 
 		[Pure] public static BitSetArray Size(int length, bool value = false)
 		{
-			Contract.Requires<ArgumentOutOfRangeException>(ValidLength(length));
+			Contract.Requires<IndexOutOfRangeException>(ValidLength(length));
 			Contract.Requires<ArgumentException>(
 				(
 				    value.Bool() == true
@@ -1014,7 +1014,7 @@ namespace DD.Collections
 		[Pure] public static BitSetArray Mask(BitArray mask, int length)
 		{
 			Contract.Requires<ArgumentNullException>(mask != null);
-			Contract.Requires<ArgumentOutOfRangeException>(ValidLength(length));
+			Contract.Requires<IndexOutOfRangeException>(ValidLength(length));
 
             Contract.Ensures(Contract.Result<BitSetArray>() != null);
             Contract.Ensures(Theory.Mask(Contract.Result<BitSetArray>(), mask, length));
@@ -1057,7 +1057,7 @@ namespace DD.Collections
 		[Pure] public static BitSetArray Mask(IEnumerable<bool> mask, int length)
 		{
 			Contract.Requires<ArgumentNullException>(mask != null);
-			Contract.Requires<ArgumentOutOfRangeException>(ValidLength(length));
+			Contract.Requires<IndexOutOfRangeException>(ValidLength(length));
 
             Contract.Ensures(Contract.Result<BitSetArray>() != null);
             Contract.Ensures(Theory.Mask(Contract.Result<BitSetArray>(), mask, length));
@@ -1102,7 +1102,7 @@ namespace DD.Collections
 		[Pure] public static BitSetArray Mask(IEnumerable<byte> mask, int length)
 		{
 			Contract.Requires<ArgumentNullException>(mask != null);
-			Contract.Requires<ArgumentOutOfRangeException>(ValidLength(length));
+			Contract.Requires<IndexOutOfRangeException>(ValidLength(length));
 
             Contract.Ensures(Contract.Result<BitSetArray>() != null);
             Contract.Ensures(Theory.Mask(Contract.Result<BitSetArray>(), mask, length));
@@ -1153,7 +1153,7 @@ namespace DD.Collections
 		[Pure] public static BitSetArray Mask(IEnumerable<short> mask, int length)
 		{
 			Contract.Requires<ArgumentNullException>(mask != null);
-			Contract.Requires<ArgumentOutOfRangeException>(ValidLength(length));
+			Contract.Requires<IndexOutOfRangeException>(ValidLength(length));
 
             Contract.Ensures(Contract.Result<BitSetArray>() != null);
             Contract.Ensures(Theory.Mask(Contract.Result<BitSetArray>(), mask, length));
@@ -1204,7 +1204,7 @@ namespace DD.Collections
 		[Pure] public static BitSetArray Mask(IEnumerable<int> mask, int length)
 		{
 			Contract.Requires<ArgumentNullException>(mask != null);
-			Contract.Requires<ArgumentOutOfRangeException>(ValidLength(length));
+			Contract.Requires<IndexOutOfRangeException>(ValidLength(length));
 
             Contract.Ensures(Contract.Result<BitSetArray>() != null);
             Contract.Ensures(Theory.Mask(Contract.Result<BitSetArray>(), mask, length));
@@ -1255,7 +1255,7 @@ namespace DD.Collections
 		[Pure] public static BitSetArray Mask(IEnumerable<long> mask, int length)
 		{
 			Contract.Requires<ArgumentNullException>(mask != null);
-			Contract.Requires<ArgumentOutOfRangeException>(ValidLength(length));
+			Contract.Requires<IndexOutOfRangeException>(ValidLength(length));
 
             Contract.Ensures(Contract.Result<BitSetArray>() != null);
             Contract.Ensures(Theory.Mask(Contract.Result<BitSetArray>(), mask, length));
@@ -1300,7 +1300,7 @@ namespace DD.Collections
 
 		[Pure] public static int GetLongArrayLength(int length)
 		{
-            Contract.Requires<ArgumentOutOfRangeException> (length >= 0);
+            Contract.Requires<IndexOutOfRangeException> (length >= 0);
             Contract.Ensures (length == 0 || Contract.Result<int> () == (((length - 1) / longBits) + 1));
             Contract.Ensures (length == 0 || ((long)Contract.Result<int> () * longBits) >= length);
             Contract.Ensures (length == 0 || (((long)Contract.Result<int> () - 1) * longBits) < length);
@@ -1311,7 +1311,7 @@ namespace DD.Collections
 
 		[Pure] public static int GetIntArrayLength(int length)
 		{
-			Contract.Requires<ArgumentOutOfRangeException>(length >= 0);
+			Contract.Requires<IndexOutOfRangeException>(length >= 0);
             Contract.Ensures (length == 0 || Contract.Result<int> () == (((length - 1) / int32Bits) + 1));
             Contract.Ensures (length == 0 || ((long)Contract.Result<int> () * int32Bits) >= length);
             Contract.Ensures (length == 0 || (((long)Contract.Result<int>() - 1) * int32Bits) < length);
@@ -1322,7 +1322,7 @@ namespace DD.Collections
 
 		[Pure] public static int GetShortArrayLength(int length)
 		{
-            Contract.Requires<ArgumentOutOfRangeException> (length >= 0);
+            Contract.Requires<IndexOutOfRangeException> (length >= 0);
             Contract.Ensures (length == 0 || Contract.Result<int> () == (((length - 1) / shortBits) + 1));
             Contract.Ensures (length == 0 || ((long)Contract.Result<int> () * shortBits) >= length);
             Contract.Ensures (length == 0 || (((long)Contract.Result<int> () - 1) * shortBits) < length);
@@ -1333,7 +1333,7 @@ namespace DD.Collections
 
 		[Pure] public static int GetByteArrayLength(int length)
 		{
-			Contract.Requires<ArgumentOutOfRangeException>(length >= 0);
+			Contract.Requires<IndexOutOfRangeException>(length >= 0);
             Contract.Ensures (length == 0 || Contract.Result<int> () == (((length - 1) / byteBits) + 1));
             Contract.Ensures (length == 0 || ((long)Contract.Result<int> () * byteBits) >= length);
             Contract.Ensures (length == 0 || (((long)Contract.Result<int> () - 1) * byteBits) < length);
@@ -1529,7 +1529,7 @@ namespace DD.Collections
 
 		[Pure] public static int CountOnBits(int[] mask, int length)
 		{
-			Contract.Requires<ArgumentOutOfRangeException>(ValidLength(length));
+			Contract.Requires<IndexOutOfRangeException>(ValidLength(length));
 			Contract.Ensures(Theory.CountOnBits(Contract.Result<int>(), mask, length));
 
 			int retCount = 0;
@@ -1609,7 +1609,7 @@ namespace DD.Collections
 		/// <returns></returns>
 		[Pure] public static int CountOnBits(long[] mask, int length)
 		{
-			Contract.Requires<ArgumentOutOfRangeException>(ValidLength(length));
+			Contract.Requires<IndexOutOfRangeException>(ValidLength(length));
 			Contract.Ensures(Theory.CountOnBits(Contract.Result<int>(), mask, length));
 
 			int retCount = 0;
@@ -1811,7 +1811,7 @@ namespace DD.Collections
 		/// <para>Get: Return true if item is member of collection</para>
 		/// <para>Get: No exceptions thrown</para>
 		/// <para>Set: Depending on value Add(item) to or Remove(item) from collection.</para>
-		/// <para>Set: Throws ArgumentOutOfRangeException if value == true && (item &lt; 0 || item &gt;= this.Length)</para>
+		/// <para>Set: Throws IndexOutOfRangeException if value == true && (item &lt; 0 || item &gt;= this.Length)</para>
 		/// </summary>
 		/// <param name="item"></param>
 		/// <returns>Get: bool. True if this contains item.</returns>
@@ -1828,7 +1828,7 @@ namespace DD.Collections
 				}
 			}
 			set {
-				Contract.Requires<ArgumentOutOfRangeException>(
+				Contract.Requires<IndexOutOfRangeException>(
 					(value.Bool() == true && this.InRange(item)) || value.Bool() == false);
 				Contract.Ensures(Theory.IndexerSetItemValue(Contract.OldValue<BitSetArray>(BitSetArray.Copy(this)), item, value, this));
 
@@ -2557,7 +2557,7 @@ namespace DD.Collections
 		[Pure]
 		public bool Get(int item)
 		{
-			Contract.Requires<ArgumentOutOfRangeException>(ValidMember(item));
+			Contract.Requires<IndexOutOfRangeException>(ValidMember(item));
 			Contract.Requires<IndexOutOfRangeException>(this.InRange(item));
 			Contract.Ensures(Theory.Get(this, item, Contract.Result<bool>()));
 
@@ -2567,7 +2567,7 @@ namespace DD.Collections
 		[Pure]
 		internal bool _Get(int item)
 		{
-			Contract.Requires<ArgumentOutOfRangeException>(ValidMember(item));
+			Contract.Requires<IndexOutOfRangeException>(ValidMember(item));
 			Contract.Requires<IndexOutOfRangeException>(this.InRange(item));
 			Contract.Ensures(Theory.Get(this, item, Contract.Result<bool>()));
 
@@ -2581,7 +2581,7 @@ namespace DD.Collections
 
 		public bool Set(int item, bool value = true)
 		{
-			Contract.Requires<ArgumentOutOfRangeException>(ValidMember(item));
+			Contract.Requires<IndexOutOfRangeException>(ValidMember(item));
 			Contract.Requires<IndexOutOfRangeException>(this.InRange(item));
 			Contract.Ensures(Theory.Set(Contract.OldValue<BitSetArray>(BitSetArray.Copy(this)), item, value, this));
 
@@ -2590,7 +2590,7 @@ namespace DD.Collections
 
 		internal bool _Set(int item, bool value = true)
 		{
-			Contract.Requires<ArgumentOutOfRangeException>(ValidMember(item));
+			Contract.Requires<IndexOutOfRangeException>(ValidMember(item));
 			Contract.Requires<IndexOutOfRangeException>(this.InRange(item));
 			Contract.Ensures(Theory.Set(Contract.OldValue<BitSetArray>(BitSetArray.Copy(this)), item, value, this));
 
@@ -2669,7 +2669,7 @@ namespace DD.Collections
             Contract.Requires<InvalidOperationException> (this.Count == 0);
             Contract.Requires<ArgumentNullException> (items != null);
 			Contract.Requires<ArgumentEmptyException> (items.Any());
-			Contract.Requires<ArgumentOutOfRangeException> (Contract.ForAll(items, item => this.InRange(item)));
+			Contract.Requires<IndexOutOfRangeException> (Contract.ForAll(items, item => this.InRange(item)));
 
             Contract.Ensures (this.Count > 0);
             Contract.Ensures (this.First.HasValue);
@@ -2704,7 +2704,7 @@ namespace DD.Collections
 
 		public void SetAll(bool value)
 		{
-			Contract.Requires<ArgumentOutOfRangeException>(value == value.Bool());
+			Contract.Requires<IndexOutOfRangeException>(value == value.Bool());
 
 			Contract.Ensures(Theory.SetAll(Contract.OldValue<BitSetArray>(BitSetArray.Copy(this)), value, this));
 
@@ -2970,7 +2970,7 @@ namespace DD.Collections
 		#region ICollection<int>
 
 		/// <summary>Implements ICollection{int}.Add
-		/// Throws <exception cref="System.ArgumentOutOfRangeException"/> if item &lt; 0 || item == int.MaxValue
+		/// Throws <exception cref="System.IndexOutOfRangeException"/> if item &lt; 0 || item == int.MaxValue
 		/// <remarks>
 		/// <para>ICollection.Add return value is void, so only way to return error to caller is exception.</para>
 		/// </remarks>
@@ -2981,7 +2981,7 @@ namespace DD.Collections
 			Contract.Ensures(Theory.ICollectionAdd(Contract.OldValue<BitSetArray>(BitSetArray.Copy(this)), item, this));
 
 			if (!ValidMember(item)) {
-				throw new ArgumentOutOfRangeException();
+				throw new IndexOutOfRangeException();
 			}
 			if (item >= this.range) {
 				this.Length = item + 1;
@@ -3029,7 +3029,7 @@ namespace DD.Collections
 
 		/// <summary>Implements ICollection{int}.CopyTo
 		/// <para>Throws ArgumentNullException if array.Is(null)</para>
-		/// <para>Throws ArgumentOutOfRangeException if index &lt; 0 || index &gt;= (array.Length - this.Count)</para>
+		/// <para>Throws IndexOutOfRangeException if index &lt; 0 || index &gt;= (array.Length - this.Count)</para>
 		/// </summary>
 		/// <param name="array"></param>
 		/// <param name="arrayIndex"></param>
@@ -3038,8 +3038,8 @@ namespace DD.Collections
 		public void CopyTo(int[] array, int arrayIndex)
 		{
 			Contract.Requires<ArgumentNullException>(array != null);
-			Contract.Requires<ArgumentOutOfRangeException>(arrayIndex >= 0);
-			Contract.Requires<ArgumentOutOfRangeException>(arrayIndex <= (array.Length - this.Count));
+			Contract.Requires<IndexOutOfRangeException>(arrayIndex >= 0);
+			Contract.Requires<IndexOutOfRangeException>(arrayIndex <= (array.Length - this.Count));
 
 			Contract.Ensures(Theory.CopyToArrayOfInt(this, array, arrayIndex));
 			int index = arrayIndex;
@@ -3054,7 +3054,7 @@ namespace DD.Collections
 		/// <para>Throws ArgumentNullException if array.Is(null)</para>
 		/// <para>Throws ArgumentException if array.Rank != 1</para>
 		/// <para>Throws ArgumentException if !(array is int[])</para>
-		/// <para>Throws ArgumentOutOfRangeException if index &lt; 0 || index &gt;= (array.Length - this.Count)</para>
+		/// <para>Throws IndexOutOfRangeException if index &lt; 0 || index &gt;= (array.Length - this.Count)</para>
 		/// </summary>
 		/// <param name="array"></param>
 		/// <param name="arrayIndex"></param>
@@ -3065,8 +3065,8 @@ namespace DD.Collections
 			Contract.Requires<ArgumentNullException>(array != null);
 			Contract.Requires<ArgumentException>(array.Rank == 1);
 			Contract.Requires<ArgumentException>(array is int[]);
-			Contract.Requires<ArgumentOutOfRangeException>(arrayIndex >= 0);
-			Contract.Requires<ArgumentOutOfRangeException>(arrayIndex <= (array.Length - this.Count));
+			Contract.Requires<IndexOutOfRangeException>(arrayIndex >= 0);
+			Contract.Requires<IndexOutOfRangeException>(arrayIndex <= (array.Length - this.Count));
 
 			Contract.Ensures(Theory.CopyToArrayOfObj(this, array, arrayIndex));
 
@@ -3355,7 +3355,7 @@ namespace DD.Collections
 				// If "that.domain" is not subset of BitSetArray.domain, creation of BitSetArray will fail with exception
 				try {
 					return this.IsProperSupersetOf(BitSetArray.From(that));
-				} catch (ArgumentOutOfRangeException) {
+				} catch (IndexOutOfRangeException) {
 					return false;
 				}
 			}
@@ -3432,7 +3432,7 @@ namespace DD.Collections
 			} else {
 				try {
 					return (BitSetArray.From(that)).IsProperSupersetOf(this);
-				} catch (ArgumentOutOfRangeException) {
+				} catch (IndexOutOfRangeException) {
 					// "that" contains members outside BitSetArray.domain
 					// consequently, if this.IsSubsetOf(that) => that.IsProperSupersetOf(this)
 					return this.IsSubsetOf(that);
@@ -3633,7 +3633,7 @@ namespace DD.Collections
 				return this.range;
 			}
 			set {
-				Contract.Requires<ArgumentOutOfRangeException>(ValidLength(value));
+				Contract.Requires<IndexOutOfRangeException>(ValidLength(value));
 
 				Contract.Ensures(Theory.LengthSet(Contract.OldValue<BitSetArray>(BitSetArray.Copy(this)), value, this));
 

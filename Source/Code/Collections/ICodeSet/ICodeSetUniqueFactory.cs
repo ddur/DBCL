@@ -27,7 +27,7 @@ namespace DD.Collections.ICodeSet
 			{
 				Contract.Requires<ArgumentNullException>(!bits.IsNull());
                 Contract.Requires<ArgumentEmptyException> (bits.Count != 0);
-                Contract.Requires<ArgumentOutOfRangeException> ((int)bits.Last <= Code.MaxValue);
+                Contract.Requires<IndexOutOfRangeException> ((int)bits.Last <= Code.MaxValue);
 
 				Contract.Ensures(Theory.Construct(bits, this));
 

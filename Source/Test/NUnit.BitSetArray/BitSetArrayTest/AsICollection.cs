@@ -20,10 +20,10 @@ namespace DD.Collections.BitSetArrayTest.Interfaces {
             var bs = BitSetArray.Empty ();
             Assert.That (delegate {
                 ((ICollection<int>)bs).Add (int.MinValue);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
             Assert.That (delegate {
                 ((ICollection<int>)bs).Add (-1);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
 
             int item;
             for ( int i = 0; i < 100; i++ ) {
@@ -115,22 +115,22 @@ namespace DD.Collections.BitSetArrayTest.Interfaces {
             copyArray = new int[100];
             Assert.That (delegate {
                 bs.CopyTo (copyArray, -1);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
             Assert.That (delegate {
                 bs.CopyTo (copyArray, int.MinValue);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
             Assert.That (delegate {
                 bs.CopyTo (copyArray, copyArray.Length - bs.Count + 1);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
             Assert.That (delegate {
                 bs.CopyTo (copyArray, copyArray.Length);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
             Assert.That (delegate {
                 bs.CopyTo (copyArray, copyArray.Length - 1);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
             Assert.That (delegate {
                 bs.CopyTo (copyArray, copyArray.Length + 1);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
 
             Assert.That (delegate {
                 bs.CopyTo (copyArray, 0);
@@ -161,22 +161,22 @@ namespace DD.Collections.BitSetArrayTest.Interfaces {
             copyArray = new int[100];
             Assert.That (delegate {
                 bs.CopyTo (copyArray, -1);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
             Assert.That (delegate {
                 bs.CopyTo (copyArray, int.MinValue);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
             Assert.That (delegate {
                 bs.CopyTo (copyArray, copyArray.Length - bs.Count + 1);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
             Assert.That (delegate {
                 bs.CopyTo (copyArray, copyArray.Length);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
             Assert.That (delegate {
                 bs.CopyTo (copyArray, copyArray.Length - 1);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
             Assert.That (delegate {
                 bs.CopyTo (copyArray, copyArray.Length + 1);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
 
             Assert.That (delegate {
                 bs.CopyTo (copyArray, 0);

@@ -132,8 +132,8 @@ namespace DD.Collections.ICodeSet
 		[SuppressMessage("Microsoft.Contracts", "CC1033", Justification = "Not same exceptions")]
 		[Pure] public void CopyTo(Code[] array, int arrayIndex) {
 			Contract.Requires<ArgumentNullException>(!array.Is(null));
-			Contract.Requires<ArgumentOutOfRangeException>(arrayIndex >= 0);
-			Contract.Requires<ArgumentOutOfRangeException>(arrayIndex <= (array.Length - this.Count));
+			Contract.Requires<IndexOutOfRangeException>(arrayIndex >= 0);
+			Contract.Requires<IndexOutOfRangeException>(arrayIndex <= (array.Length - this.Count));
 			foreach (Code code in this) {
 				array[arrayIndex] = code;
 				++arrayIndex;

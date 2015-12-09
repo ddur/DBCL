@@ -15,11 +15,10 @@ namespace DD.Collections.ICodeSet
 	/// </summary>
 	public static class ICodeSetReduction
 	{
-		#region Reduction
 
 		[Pure] private static ICodeSet ReducePartOne(this BitSetArray self, int offset)
 		{
-			Contract.Requires<ArgumentOutOfRangeException>
+			Contract.Requires<IndexOutOfRangeException>
 			(
 				self.IsNullOrEmpty() ||
 				(
@@ -29,6 +28,8 @@ namespace DD.Collections.ICodeSet
 			);
 
 			Contract.Ensures(Contract.Result<ICodeSet>().Is(null) || !(Contract.Result<ICodeSet>() is CodeSetBits));
+
+			#region Reduction
 
 			#region Null
 			if (self.IsNullOrEmpty()) {
@@ -76,10 +77,23 @@ namespace DD.Collections.ICodeSet
                 return CodeSetList.From(self.ToCodes(offset));
             }
 
-            Contract.Assert (self.Count > ICodeSetService.ListMaxCount) ;
-            return null;
+            #endregion
+
+			#region Mask
+
+			if (self.Span() <= ICodeSetService.MaskMaxCount)
+            {
+                return CodeSetMask.From(self.ToCodes(offset));
+            }
 
             #endregion
+
+            #endregion
+
+            Contract.Assert (self.Span() > ICodeSetService.MaskMaxCount) ;
+            Contract.Assert (self.Count > ICodeSetService.ListMaxCount) ;
+
+            return null;
 
 		}
 
@@ -87,8 +101,8 @@ namespace DD.Collections.ICodeSet
 		{
 			Contract.Requires<ArgumentNullException>(!self.IsNull());
             Contract.Requires<InvalidOperationException> (self.Count.InRange (ICodeSetService.PairCount + 1, self.Span () - 1));	// not Null/Code/Pair/Full
-            Contract.Requires<ArgumentOutOfRangeException> (self.Length <= Code.MaxCount || self.Last <= Code.MaxValue);
-            Contract.Requires<ArgumentOutOfRangeException> (offset.InRange (0, Code.MaxValue - (int)self.Last));
+            Contract.Requires<IndexOutOfRangeException> (self.Length <= Code.MaxCount || self.Last <= Code.MaxValue);
+            Contract.Requires<IndexOutOfRangeException> (offset.InRange (0, Code.MaxValue - (int)self.Last));
 
 			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
 			Contract.Ensures(Contract.Result<ICodeSet>() is CodeSetPage || Contract.Result<ICodeSet>() is CodeSetWide);
@@ -123,6 +137,7 @@ namespace DD.Collections.ICodeSet
 			    self is CodeSetPair ||
 			    self is CodeSetFull ||
 			    self is CodeSetList ||
+			    self is CodeSetMask ||
 			    self is CodeSetDiff ||
 			    self is CodeSetPage ||
 			    self is CodeSetWide
@@ -131,7 +146,7 @@ namespace DD.Collections.ICodeSet
 		
 		[Pure] public static ICodeSet Reduce(this BitSetArray self, int offset = 0)
 		{
-			Contract.Requires<ArgumentOutOfRangeException>
+			Contract.Requires<IndexOutOfRangeException>
 			(
 				self.IsNullOrEmpty() ||
 				(
@@ -147,44 +162,42 @@ namespace DD.Collections.ICodeSet
 
 			if (retSet.Is(null)) {
 
-				Contract.Assert(self.IsNot(null)); // not null
-				Contract.Assume(self.Count > ICodeSetService.PairCount); // not Code, not Pair
-				Contract.Assume(self.Span() != self.Count); // not Full -> has complement items
+				Contract.Assume(self.IsNot(null)); // not null
+				Contract.Assume(self.Span() != self.Count); // not Full
+				Contract.Assume(self.Count > ICodeSetService.ListMaxCount); // not Code, not Pair, not List
+				Contract.Assume(self.Span() > ICodeSetService.MaskMaxCount); // not Mask
 				
-				if (self.Span() <= ICodeSetService.NoDiffLength) {
-					retSet = self.ReducePartTwo(offset);
-				} else {
-					// create complement
-                    Contract.Assume (self.First.HasValue);
-                    Contract.Assume (self.Last.HasValue);
-                    int start = (int)self.First;
-					int final = (int)self.Last;
-					var complement = BitSetArray.Size(self.Length);
-					foreach (var item in self.Complement()) {
-						if (item.InRange(start, final)) {
-							complement._Set(item);
-						}
+                Contract.Assume(self.First.HasValue);
+                Contract.Assume(self.Last.HasValue);
+
+				// create complement
+                int start = (int)self.First;
+				int final = (int)self.Last;
+				var complement = BitSetArray.Size(self.Length);
+				foreach (var item in self.Complement()) {
+					if (item.InRange(start, final)) {
+						complement._Set(item);
 					}
-	
-					Contract.Assert(complement.Count != 0);
-	
-					var notSet = complement.ReducePartOne(offset);
-					if (notSet.IsNot(null)) {
-						// if reduced to Code/Pair/Full/List, return DiffSet
+				}
+
+				Contract.Assume(complement.Count != 0);
+
+				var notSet = complement.ReducePartOne(offset);
+				if (notSet.IsNot(null)) {
+					// if reduced to Code/Pair/Full/List/Mask, return DiffSet
+					retSet = CodeSetDiff.From (
+						CodeSetFull.From ((int)self.First + offset, (int)self.Last + offset),
+						notSet);
+				} else {
+					// not reduced, check size
+					if (complement.Span() < (self.Span() / 4)) {
+						// can save at least 3/4 of space
 						retSet = CodeSetDiff.From (
 							CodeSetFull.From ((int)self.First + offset, (int)self.Last + offset),
-							notSet);
+							complement.ReducePartTwo(offset));
 					} else {
-						// not reduced, check size
-						if (complement.Span() < (self.Span() / 4)) {
-							// can save at least 3/4 of space
-							retSet = CodeSetDiff.From (
-								CodeSetFull.From ((int)self.First + offset, (int)self.Last + offset),
-								complement.ReducePartTwo(offset));
-						} else {
-							// final choice
-							retSet = self.ReducePartTwo(offset);
-						}
+						// final choice Page/Wide
+						retSet = self.ReducePartTwo(offset);
 					}
 				}
 			}
@@ -215,8 +228,10 @@ namespace DD.Collections.ICodeSet
 						success.Assert(self is CodeSetFull);
 					} else if (self is CodeSetList) {
 						success.Assert(self.Count <= ICodeSetService.ListMaxCount);
+					} else if (self is CodeSetMask) {
+						success.Assert(self.Span() <= ICodeSetService.MaskMaxCount);
 					} else if (self is CodeSetDiff) {
-						success.Assert(self.Length > ICodeSetService.NoDiffLength);
+						success.Assert(self.Length > ICodeSetService.MaskMaxCount);
 					} else {
 						success.Assert(self is CodeSetPage || self is CodeSetWide);
 					}
@@ -225,6 +240,5 @@ namespace DD.Collections.ICodeSet
 			return success;
 		}
 
-		#endregion
 	}
 }

@@ -29,10 +29,10 @@ namespace DD.Collections.BitSetArrayTest {
             bs = BitSetArray.Empty ();
             Assert.That (delegate {
                 bs.Length = -1;
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
             Assert.That (delegate {
                 bs.Length = int.MinValue;
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
             bs.Length = 0;
 #if MAXCOVERAGE
 			bs.Length = int.MaxValue;

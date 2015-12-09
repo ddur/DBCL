@@ -28,13 +28,13 @@ namespace DD.Collections.BitSetArrayTest {
             // Exceptions
             Assert.That (delegate {
                 BitSetArray.Size (-1);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
             Assert.That (delegate {
                 BitSetArray.Size (int.MinValue);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
             Assert.That (delegate {
-                BitSetArray.Size (new Random ().Next (-1, int.MinValue));
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+                BitSetArray.Size (new Random ().Next (int.MinValue, -1));
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
             Assert.That (delegate {
                 BitSetArray.Size (0, true);
             }, Throws.TypeOf<ArgumentException> ());
@@ -74,13 +74,13 @@ namespace DD.Collections.BitSetArrayTest {
             // Exceptions
             Assert.That (delegate {
                 BitSetArray.Size (-1, true);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
             Assert.That (delegate {
                 BitSetArray.Size (int.MinValue, true);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
             Assert.That (delegate {
-                BitSetArray.Size (new Random ().Next (-1, int.MinValue), true);
-            }, Throws.TypeOf<ArgumentOutOfRangeException> ());
+                BitSetArray.Size (new Random ().Next (int.MinValue, -1), true);
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
 
 
             BitSetArray test;
