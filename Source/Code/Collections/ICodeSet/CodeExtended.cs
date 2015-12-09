@@ -58,7 +58,7 @@ namespace DD.Collections.ICodeSet
 
 		[Pure]
 		public static string ToXmlEntity (this Code self) {
-            Contract.Ensures(Contract.Result<string>() != null);
+            Contract.Ensures(Contract.Result<string>().IsNot(null));
 
             if ((self.Value & 0xFF) == self.Value)
             {

@@ -23,34 +23,34 @@ namespace DD.Collections.ICodeSet
 		#region Ctor
 
 		public static CodeSetList From(params Code[] codes) {
-            Contract.Requires<ArgumentNullException>(codes != null);
+            Contract.Requires<ArgumentNullException> (codes.IsNot(null));
             Contract.Requires<ArgumentEmptyException> (!codes.IsEmpty ());
-			Contract.Requires<InvalidOperationException>(codes.Distinct().Count() > ICodeSetService.PairCount); // at least 3 members
-			Contract.Requires<InvalidOperationException>(codes.Distinct().Count() <= ICodeSetService.ListMaxCount); // up to max members
-			Contract.Requires<InvalidOperationException>(codes.Distinct().Count() < (1 + codes.Max() - codes.Min())); // not full
-            Contract.Ensures(Contract.Result<CodeSetList>() != null);
+			Contract.Requires<InvalidOperationException> (codes.Distinct().Count() > ICodeSetService.PairCount); // at least 3 members
+			Contract.Requires<InvalidOperationException> (codes.Distinct().Count() <= ICodeSetService.ListMaxCount); // up to max members
+			Contract.Requires<InvalidOperationException> (codes.Distinct().Count() < (1 + codes.Max() - codes.Min())); // not full
+            Contract.Ensures(Contract.Result<CodeSetList>().IsNot(null));
 
 			return new CodeSetList((IEnumerable<Code>)codes);
 		}
 
 		public static CodeSetList From(IEnumerable<Code> codes) {
-            Contract.Requires<ArgumentNullException>(codes != null);
+            Contract.Requires<ArgumentNullException> (codes.IsNot(null));
             Contract.Requires<ArgumentEmptyException> (!codes.IsEmpty ());
-			Contract.Requires<InvalidOperationException>(codes.Distinct().Count() > ICodeSetService.PairCount); // at least 3 members
-			Contract.Requires<InvalidOperationException>(codes.Distinct().Count() <= ICodeSetService.ListMaxCount); // up to max members
-			Contract.Requires<InvalidOperationException>(codes.Distinct().Count() < (1 + codes.Max() - codes.Min())); // not full
-            Contract.Ensures(Contract.Result<CodeSetList>() != null);
+			Contract.Requires<InvalidOperationException> (codes.Distinct().Count() > ICodeSetService.PairCount); // at least 3 members
+			Contract.Requires<InvalidOperationException> (codes.Distinct().Count() <= ICodeSetService.ListMaxCount); // up to max members
+			Contract.Requires<InvalidOperationException> (codes.Distinct().Count() < (1 + codes.Max() - codes.Min())); // not full
+            Contract.Ensures(Contract.Result<CodeSetList>().IsNot(null));
 
 			return new CodeSetList(codes);
 		}
 
 		internal CodeSetList(IEnumerable<Code> codes)
 		{
-            Contract.Requires<ArgumentNullException>(codes != null);
-			Contract.Requires<ArgumentEmptyException>(!codes.IsEmpty());
-			Contract.Requires<ArgumentException>(codes.Distinct().Count() > ICodeSetService.PairCount);
-			Contract.Requires<ArgumentException>(codes.Distinct().Count() <= ICodeSetService.ListMaxCount);
-			Contract.Requires<ArgumentException>(codes.Distinct().Count() < (1 + codes.Max() - codes.Min()));
+            Contract.Requires<ArgumentNullException> (codes.IsNot(null));
+			Contract.Requires<ArgumentEmptyException> (!codes.IsEmpty());
+			Contract.Requires<ArgumentException> (codes.Distinct().Count() > ICodeSetService.PairCount);
+			Contract.Requires<ArgumentException> (codes.Distinct().Count() <= ICodeSetService.ListMaxCount);
+			Contract.Requires<ArgumentException> (codes.Distinct().Count() < (1 + codes.Max() - codes.Min()));
 
 			Contract.Ensures(Theory.Construct(codes, this));
 

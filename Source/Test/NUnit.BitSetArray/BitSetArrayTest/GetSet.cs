@@ -54,14 +54,14 @@ namespace DD.Collections.BitSetArrayTest
 			}, Throws.Nothing);
 			Assert.That(delegate {
 				test[int.MinValue] = true;
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 
 			Assert.That(delegate {
 				test[-1] = false;
 			}, Throws.Nothing);
 			Assert.That(delegate {
 				test[-1] = true;
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 
 			Assert.That(delegate {
 				test[0] = false;
@@ -102,13 +102,13 @@ namespace DD.Collections.BitSetArrayTest
 			}, Throws.Nothing);
 			Assert.That(delegate {
 				test[11] = true;
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 			Assert.That(delegate {
 				test[int.MaxValue] = false;
 			}, Throws.Nothing);
 			Assert.That(delegate {
 				test[int.MaxValue] = true;
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 
 			test = BitSetArray.Empty ();
 			Assert.That(delegate {
@@ -116,35 +116,35 @@ namespace DD.Collections.BitSetArrayTest
 			}, Throws.Nothing);
 			Assert.That(delegate {
 				test[int.MinValue] = true;
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 
 			Assert.That(delegate {
 				test[-1] = false;
 			}, Throws.Nothing);
 			Assert.That(delegate {
 				test[-1] = true;
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 
 			Assert.That(delegate {
 				test[0] = false;
 			}, Throws.Nothing);
 			Assert.That(delegate {
 				test[0] = true;
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 
 			Assert.That(delegate {
 				test[1] = false;
 			}, Throws.Nothing);
 			Assert.That(delegate {
 				test[1] = true;
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 
 			Assert.That(delegate {
 				test[int.MaxValue] = false;
 			}, Throws.Nothing);
 			Assert.That(delegate {
 				test[int.MaxValue] = true;
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 		}
 
 		[Test]
@@ -154,10 +154,10 @@ namespace DD.Collections.BitSetArrayTest
 			BitSetArray test = BitSetArray.Mask(new int[] { 1057 }, 11);
 			Assert.That(delegate {
 				test.Get(int.MinValue);
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 			Assert.That(delegate {
 				test.Get(-1);
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 			Assert.That(test.Get(0) == true);
 			Assert.That(test.Get(1) == false);
 			Assert.That(test.Get(2) == false);
@@ -171,27 +171,27 @@ namespace DD.Collections.BitSetArrayTest
 			Assert.That(test.Get(10) == true);
 			Assert.That(delegate {
 				test.Get(11);
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 			Assert.That(delegate {
 				test.Get(int.MaxValue);
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 
 			test = BitSetArray.Empty ();
 			Assert.That(delegate {
 				test.Get(int.MinValue);
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 			Assert.That(delegate {
 				test.Get(-1);
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 			Assert.That(delegate {
 				test.Get(0);
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 			Assert.That(delegate {
 				test.Get(1);
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 			Assert.That(delegate {
 				test.Get(int.MaxValue);
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 		}
 
 		[Test]
@@ -350,17 +350,17 @@ namespace DD.Collections.BitSetArrayTest
 			BitSetArray test = BitSetArray.From(5, 0, 10);
 			Assert.That(delegate {
 				test.Set(int.MinValue, false);
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 			Assert.That(delegate {
 				test.Set(int.MinValue, true);
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 
 			Assert.That(delegate {
 				test.Set(-1, false);
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 			Assert.That(delegate {
 				test.Set(-1, true);
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 
 			Assert.That(delegate {
 				test.Set(0, false);
@@ -398,49 +398,49 @@ namespace DD.Collections.BitSetArrayTest
 
 			Assert.That(delegate {
 				test.Set(11, false);
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 			Assert.That(delegate {
 				test.Set(11, true);
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 			Assert.That(delegate {
 				test.Set(int.MaxValue, false);
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 			Assert.That(delegate {
 				test.Set(int.MaxValue, true);
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 
 			test = BitSetArray.Empty ();
 			Assert.That(delegate {
 				test.Set(int.MinValue, true);
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 			Assert.That(delegate {
 				test.Set(-1, true);
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 			Assert.That(delegate {
 				test.Set(0, true);
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 			Assert.That(delegate {
 				test.Set(1, true);
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 			Assert.That(delegate {
 				test.Set(int.MaxValue, true);
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 
 			Assert.That(delegate {
 				test.Set(int.MinValue, false);
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 			Assert.That(delegate {
 				test.Set(-1, false);
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 			Assert.That(delegate {
 				test.Set(0, false);
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 			Assert.That(delegate {
 				test.Set(1, false);
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 			Assert.That(delegate {
 				test.Set(int.MaxValue, false);
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 
 		}
 
@@ -457,30 +457,30 @@ namespace DD.Collections.BitSetArrayTest
 			var test = BitSetArray.Size(2);
 			Assert.That(delegate {
 				test._SetItems(null);
-			}, Throws.TypeOf<ArgumentNullException>());
+			}, Throws.TypeOf<ArgumentNullException> ());
 			Assert.That(delegate {
 				test._SetItems(new int[0]);
-			}, Throws.TypeOf<ArgumentEmptyException>());
+			}, Throws.TypeOf<ArgumentEmptyException> ());
 			Assert.That(delegate {
 				test._SetItems(new int[] { int.MinValue });
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 			Assert.That(delegate {
 				test._SetItems(new int[] { -1 });
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 			Assert.That(delegate {
 				test._SetItems(new int[] { int.MaxValue });
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 
 			Assert.GreaterOrEqual(5, test.Length);
 			Assert.That(delegate {
 				test._SetItems(new int[] { 5 });
-			}, Throws.TypeOf<IndexOutOfRangeException>());
+			}, Throws.TypeOf<IndexOutOfRangeException> ());
 
 			test._SetItems(new int[] { 0 });
 			Assert.AreNotEqual(0, test.Count);
 			Assert.That(delegate {
 				test._SetItems(new int[] { 0 });
-			}, Throws.TypeOf<InvalidOperationException>()); // Count != 0
+			}, Throws.TypeOf<InvalidOperationException> ()); // Count != 0
 
 			#endif
 		}

@@ -18,11 +18,11 @@ namespace DD.Collections.ICodeSet.CodeTest
 	    {
 	    	int testValue = UInt16.MinValue - 1;
 #if DEBUG
-	    	Assert.That ( delegate { int x = (char)testValue;}, Throws.TypeOf<OverflowException>() );
+	    	Assert.That ( delegate { int x = (char)testValue;}, Throws.TypeOf<OverflowException> () );
 #else
 	    	Assert.That ( delegate { int x = (char)testValue;}, Throws.Nothing );
 #endif
-	    	Assert.That ( delegate { int x = checked((char)testValue);}, Throws.TypeOf<OverflowException>() );
+	    	Assert.That ( delegate { int x = checked((char)testValue);}, Throws.TypeOf<OverflowException> () );
 	    	Assert.That ( delegate { int x = unchecked((char)testValue);}, Throws.Nothing );
 	    }
 	

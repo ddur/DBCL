@@ -23,15 +23,15 @@ namespace DD.Collections.ICodeSet
 
 		public static CodeSetPair From(Code low, Code high)
 		{
-			Contract.Requires<ArgumentException>(low < high);
-            Contract.Ensures(Contract.Result<CodeSetPair>() != null);
+			Contract.Requires<ArgumentException> (low < high);
+            Contract.Ensures(Contract.Result<CodeSetPair>().IsNot(null));
 
 			return new CodeSetPair(low, high);			
 		}
 
 		internal CodeSetPair(Code low, Code high)
 		{
-			Contract.Requires<ArgumentException>(low < high);
+			Contract.Requires<ArgumentException> (low < high);
 
 			Contract.Ensures(Theory.Construct(low, high, this));
 

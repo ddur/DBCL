@@ -47,10 +47,10 @@ namespace DD.Collections.ICodeSet.CodeTest
 	        Assert.True (data.CanDecode() );
 	        List<Code> decoded = null;
 	        Assert.True (data.TryDecode(out decoded));
-	        Assert.True (decoded != null);
+	        Assert.True (decoded.IsNot(null));
 	        Assert.True (decoded.SequenceEqual(code));
 	        Assert.That (delegate {decoded = data.Decode();}, Throws.Nothing);
-	        Assert.True (decoded != null);
+	        Assert.True (decoded.IsNot(null));
 	        Assert.True (decoded.SequenceEqual(code));
 	        if (data.IsNot(null)) {
     	        Assert.True (decoded.Encode().SequenceEqual(data));

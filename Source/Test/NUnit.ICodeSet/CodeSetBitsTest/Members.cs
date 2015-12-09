@@ -49,10 +49,10 @@ namespace DD.Collections.ICodeSet.CodeSetBitsTest
 			Code C;
 
 			csb = CodeSetBits.From();
-			Assert.Throws<InvalidOperationException>(delegate {
+			Assert.Throws<InvalidOperationException> (delegate {
 				C = csb.First;
 			});
-			Assert.Throws<InvalidOperationException>(delegate {
+			Assert.Throws<InvalidOperationException> (delegate {
 				C = csb.Last;
 			});
             

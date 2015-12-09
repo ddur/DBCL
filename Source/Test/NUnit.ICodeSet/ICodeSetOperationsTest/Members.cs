@@ -95,24 +95,24 @@ namespace DD.Collections.ICodeSet.ICodeSetOperationsTest
 			ICodeSet iCodeSetB = ((BitSetArray)(argument.Arguments[1])).Reduce();
 			IEnumerable<ICodeSet> throws = null;
 
-			Assert.Throws<ArgumentNullException>(
+			Assert.Throws<ArgumentNullException> (
 				delegate {
 					var x = throws.BitDifference();
 				}
 			);
-			Assert.Throws<ArgumentException>(
+			Assert.Throws<ArgumentException> (
 				delegate {
 					var x = new ICodeSet[0].BitDifference();
 				}
 			);
-			Assert.Throws<ArgumentException>(
+			Assert.Throws<ArgumentException> (
 				delegate {
 					var x = new[] {
 						iCodeSetA
 					}.BitDifference();
 				}
 			);
-			Assert.Throws<ArgumentException>(
+			Assert.Throws<ArgumentException> (
 				delegate {
 					var x = new[] {
 						iCodeSetB
@@ -170,24 +170,24 @@ namespace DD.Collections.ICodeSet.ICodeSetOperationsTest
 			ICodeSet iCodeSetA = ((BitSetArray)(argument.Arguments[0])).Reduce();
 			ICodeSet iCodeSetB = ((BitSetArray)(argument.Arguments[1])).Reduce();
 
-			Assert.Throws<ArgumentNullException>(
+			Assert.Throws<ArgumentNullException> (
 				delegate {
 					((ICodeSet[])null).BitDisjunction();
 				}
 			);
-			Assert.Throws<ArgumentException>(
+			Assert.Throws<ArgumentException> (
 				delegate {
 					new ICodeSet[0].BitDisjunction();
 				}
 			);
-			Assert.Throws<ArgumentException>(
+			Assert.Throws<ArgumentException> (
 				delegate {
 					new[] {
 						iCodeSetA
 					}.BitDisjunction();
 				}
 			);
-			Assert.Throws<ArgumentException>(
+			Assert.Throws<ArgumentException> (
 				delegate {
 					new[] {
 						iCodeSetB
@@ -244,24 +244,24 @@ namespace DD.Collections.ICodeSet.ICodeSetOperationsTest
 			ICodeSet iCodeSetA = ((BitSetArray)(argument.Arguments[0])).Reduce();
 			ICodeSet iCodeSetB = ((BitSetArray)(argument.Arguments[1])).Reduce();
 
-			Assert.Throws<ArgumentNullException>(
+			Assert.Throws<ArgumentNullException> (
 				delegate {
 					((ICodeSet[])null).BitIntersection();
 				}
 			);
-			Assert.Throws<ArgumentException>(
+			Assert.Throws<ArgumentException> (
 				delegate {
 					new ICodeSet[0].BitIntersection();
 				}
 			);
-			Assert.Throws<ArgumentException>(
+			Assert.Throws<ArgumentException> (
 				delegate {
 					new[] {
 						iCodeSetA
 					}.BitIntersection();
 				}
 			);
-			Assert.Throws<ArgumentException>(
+			Assert.Throws<ArgumentException> (
 				delegate {
 					new[] {
 						iCodeSetB
@@ -318,24 +318,24 @@ namespace DD.Collections.ICodeSet.ICodeSetOperationsTest
 			ICodeSet iCodeSetA = ((BitSetArray)(argument.Arguments[0])).Reduce();
 			ICodeSet iCodeSetB = ((BitSetArray)(argument.Arguments[1])).Reduce();
 
-			Assert.Throws<ArgumentNullException>(
+			Assert.Throws<ArgumentNullException> (
 				delegate {
 					((ICodeSet[])null).BitUnion();
 				}
 			);
-			Assert.Throws<ArgumentException>(
+			Assert.Throws<ArgumentException> (
 				delegate {
 					new ICodeSet[0].BitUnion();
 				}
 			);
-			Assert.Throws<ArgumentException>(
+			Assert.Throws<ArgumentException> (
 				delegate {
 					new[] {
 						iCodeSetA
 					}.BitUnion();
 				}
 			);
-			Assert.Throws<ArgumentException>(
+			Assert.Throws<ArgumentException> (
 				delegate {
 					new[] {
 						iCodeSetB

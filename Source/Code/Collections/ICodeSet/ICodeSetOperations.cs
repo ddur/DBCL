@@ -37,8 +37,8 @@ namespace DD.Collections.ICodeSet
 
 		public static BitSetArray BitUnion(this IEnumerable<ICodeSet> sets)
 		{
-            Contract.Requires<ArgumentNullException>(sets != null);
-			Contract.Requires<ArgumentException>(sets.Count() >= 2);
+            Contract.Requires<ArgumentNullException> (sets.IsNot(null));
+			Contract.Requires<ArgumentException> (sets.Count() >= 2);
 
 			Contract.Ensures(Contract.Result<BitSetArray>().IsNot(null));
 			Contract.Ensures(Contract.Result<BitSetArray>().Length <= Code.MaxCount);
@@ -71,8 +71,8 @@ namespace DD.Collections.ICodeSet
 
 		public static BitSetArray BitIntersection(this IEnumerable<ICodeSet> sets)
 		{
-            Contract.Requires<ArgumentNullException>(sets != null);
-			Contract.Requires<ArgumentException>(sets.Count() >= 2);
+            Contract.Requires<ArgumentNullException> (sets.IsNot(null));
+			Contract.Requires<ArgumentException> (sets.Count() >= 2);
 
 			Contract.Ensures(Contract.Result<BitSetArray>().IsNot(null));
 			Contract.Ensures(Contract.Result<BitSetArray>().Length <= Code.MaxCount);
@@ -108,8 +108,8 @@ namespace DD.Collections.ICodeSet
 
 		public static BitSetArray BitDisjunction(this IEnumerable<ICodeSet> sets)
 		{
-            Contract.Requires<ArgumentNullException>(sets != null);
-			Contract.Requires<ArgumentException>(sets.Count() >= 2);
+            Contract.Requires<ArgumentNullException> (sets.IsNot(null));
+			Contract.Requires<ArgumentException> (sets.Count() >= 2);
 
 			Contract.Ensures(Contract.Result<BitSetArray>().IsNot(null));
 			Contract.Ensures(Contract.Result<BitSetArray>().Length <= Code.MaxCount);
@@ -142,8 +142,8 @@ namespace DD.Collections.ICodeSet
 
 		public static BitSetArray BitDifference(this IEnumerable<ICodeSet> sets)
 		{
-            Contract.Requires<ArgumentNullException>(sets != null);
-			Contract.Requires<ArgumentException>(sets.Count() >= 2);
+            Contract.Requires<ArgumentNullException> (sets.IsNot(null));
+			Contract.Requires<ArgumentException> (sets.Count() >= 2);
 
 			Contract.Ensures(Contract.Result<BitSetArray>().IsNot(null));
 			Contract.Ensures(Contract.Result<BitSetArray>().Length <= Code.MaxCount);

@@ -40,7 +40,7 @@ namespace DD.Collections.ICodeSet
 		}
 
 		public Code (int value) {
-			Contract.Requires<InvalidCastException>(value.InRange(Code.MinValue, Code.MaxValue));
+			Contract.Requires<InvalidCastException> (value.InRange(Code.MinValue, Code.MaxValue));
 
 			#if COMPACT
 			this.b0 = (byte)(value&0xFF);
@@ -168,9 +168,9 @@ namespace DD.Collections.ICodeSet
         [SuppressMessage("Microsoft.Contracts", "CC1033", Justification = "Debug/Release exceptions not same")]
         void ICollection<Code>.CopyTo(Code[] array, int arrayIndex)
         {
-            Contract.Requires<ArgumentNullException>(array != null);
-			Contract.Requires<IndexOutOfRangeException>(arrayIndex >= 0);
-			Contract.Requires<IndexOutOfRangeException>(arrayIndex <= (array.Length - 1));
+            Contract.Requires<ArgumentNullException> (array.IsNot(null));
+			Contract.Requires<IndexOutOfRangeException> (arrayIndex >= 0);
+			Contract.Requires<IndexOutOfRangeException> (arrayIndex <= (array.Length - 1));
 			array[arrayIndex] = this;
 		}
 
@@ -340,7 +340,7 @@ namespace DD.Collections.ICodeSet
 			return new Code(value);
 		}
 		public static implicit operator Code (int value) {
-			Contract.Requires<InvalidCastException>(value.InRange(Code.MinValue, Code.MaxValue));
+			Contract.Requires<InvalidCastException> (value.InRange(Code.MinValue, Code.MaxValue));
 
 			return new Code(value);
 		}

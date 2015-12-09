@@ -62,8 +62,8 @@ namespace DD.Collections.ICodeSet
 		[Pure]
 		public static bool HasCodeValue(this int? self)
 		{
-			Contract.Ensures(Contract.Result<bool>() == (self != null && ((int)self).InRange(Code.MinValue, Code.MaxValue)));
-			return (self != null && ((int)self).HasCodeValue());
+			Contract.Ensures(Contract.Result<bool>() == (self.IsNot(null) && ((int)self).InRange(Code.MinValue, Code.MaxValue)));
+			return (self.IsNot(null) && ((int)self).HasCodeValue());
 		}
 	
 		[Pure]
@@ -86,8 +86,8 @@ namespace DD.Collections.ICodeSet
 		[Pure]
 		public static string Encode(this int self)
 		{
-			Contract.Requires<IndexOutOfRangeException>(self.HasCodeValue());
-            Contract.Ensures(Contract.Result<string>() != null);
+			Contract.Requires<IndexOutOfRangeException> (self.HasCodeValue());
+            Contract.Ensures(Contract.Result<string>().IsNot(null));
 
 			return ((Code)self).Encode();
 		}

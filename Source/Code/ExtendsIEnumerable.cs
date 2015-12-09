@@ -21,7 +21,7 @@ namespace DD {
         /// <returns>True if IEnumerable&lt;T&gt; is empty</returns>
         [Pure]
         public static bool IsEmpty<T> (this IEnumerable<T> self) {
-            Contract.Requires<ArgumentNullException>(self != null);
+            Contract.Requires<ArgumentNullException> (self.IsNot(null));
 
             var collection = self as ICollection<T>;
             if ( !collection.IsNull () ) {
@@ -44,7 +44,7 @@ namespace DD {
         /// <returns>True if IEnumerable&lt;T&gt; is empty</returns>
         [Pure]
         public static bool IsEmpty (this IEnumerable self) {
-            Contract.Requires<ArgumentNullException>(self != null);
+            Contract.Requires<ArgumentNullException> (self.IsNot(null));
 
             ICollection collection = self as ICollection;
             if ( !collection.IsNull () ) {

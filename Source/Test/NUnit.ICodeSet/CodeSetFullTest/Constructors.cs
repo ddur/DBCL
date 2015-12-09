@@ -24,22 +24,22 @@ namespace DD.Collections.ICodeSet.CodeSetFullTest
 		public void FromRangeThrows()
 		{
 			CodeSetFull csf;
-			Assert.Throws<InvalidOperationException>(
+			Assert.Throws<InvalidOperationException> (
 				delegate {
 					csf = CodeSetFull.From(9, 3);
 				}
 			);
-			Assert.Throws<InvalidOperationException>(
+			Assert.Throws<InvalidOperationException> (
 				delegate {
 					csf = CodeSetFull.From(1, 2);
 				}
 			);
-			Assert.Throws<InvalidCastException>(
+			Assert.Throws<InvalidCastException> (
 				delegate {
 					csf = CodeSetFull.From(-20, 3);
 				}
 			);
-			Assert.Throws<InvalidCastException>(
+			Assert.Throws<InvalidCastException> (
 				delegate {
 					csf = CodeSetFull.From(0, -32);
 				}

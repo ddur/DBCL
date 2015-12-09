@@ -70,7 +70,7 @@ namespace DD.Collections.ICodeSet
 
 		public static ICodeSet From(IEnumerable<Code> codes)
 		{
-			Contract.Ensures(Contract.Result<ICodeSet>() != null);
+			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
 			Contract.Ensures(Contract.Result<ICodeSet>().IsReduced());
 
 			return codes.IsNullOrEmpty() ? CodeSetNone.Singleton : From(BitSetArray.From(codes.ToValues()));
@@ -78,7 +78,7 @@ namespace DD.Collections.ICodeSet
 
 		public static ICodeSet From(this BitSetArray bits)
 		{
-            Contract.Requires<ArgumentException>(bits.IsNullOrEmpty() || bits.Length <= Code.MaxCount || (int)bits.Last <= Code.MaxValue);
+            Contract.Requires<ArgumentException> (bits.IsNullOrEmpty() || bits.Length <= Code.MaxCount || (int)bits.Last <= Code.MaxValue);
 			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
 			Contract.Ensures(Contract.Result<ICodeSet>().IsReduced());
 

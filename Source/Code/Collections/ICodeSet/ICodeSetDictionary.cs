@@ -134,9 +134,9 @@ namespace DD.Collections.ICodeSet
         [SuppressMessage("Microsoft.Contracts", "CC1033", Justification = "Debug/Release exceptions not same")]
         public void CopyTo(KeyValuePair<ICodeSet, T>[] array, int arrayIndex)
 		{
-			Contract.Requires<ArgumentNullException>(array != null);
-			Contract.Requires<IndexOutOfRangeException>(arrayIndex >= 0);
-			Contract.Requires<IndexOutOfRangeException>(arrayIndex <= (array.Length - this.Count));
+			Contract.Requires<ArgumentNullException> (array.IsNot(null));
+			Contract.Requires<IndexOutOfRangeException> (arrayIndex >= 0);
+			Contract.Requires<IndexOutOfRangeException> (arrayIndex <= (array.Length - this.Count));
 			int index = arrayIndex;
 			foreach (var item in unique) {
 				array[index] = new KeyValuePair<ICodeSet, T>(item.Key, item.Value);
@@ -191,7 +191,7 @@ namespace DD.Collections.ICodeSet
 
 		public void Add(ICodeSet iset)
 		{
-            Contract.Requires(iset != null);
+            Contract.Requires(iset.IsNot(null));
 			base.Add(iset, ID);
 			++ID;
 		}

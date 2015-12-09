@@ -70,8 +70,8 @@ namespace DD.Collections
 				Success success = true;
 
 				success.Assert(self.IsReadOnly == false);
-				success.Assert(self.SyncRoot != null);
-				success.Assert(self.array != null);
+				success.Assert(self.SyncRoot.IsNot(null));
+				success.Assert(self.array.IsNot(null));
 				success.Assert(self.count >= 0);
 				success.Assert(self.range >= 0);
 				success.Assert(self.count <= self.range);
@@ -1238,8 +1238,8 @@ namespace DD.Collections
 					success.Assert(newState.range == 0);
 				} else {
 					success.Assert(newState[newState.range - 1]);
-					success.Assert(newState.Last != null);
-					success.Assert(oldState.Last != null);
+					success.Assert(newState.Last.IsNot(null));
+					success.Assert(oldState.Last.IsNot(null));
 					success.Assert((int)newState.Last == newState.range - 1);
 					success.Assert((int)oldState.Last == newState.range - 1);
 				}
@@ -1663,7 +1663,7 @@ namespace DD.Collections
 				if (self.count == 0) {
 					success.Assert(getValue == null);
 				} else {
-					success.Assert(getValue != null);
+					success.Assert(getValue.IsNot(null));
 					success.Assert((int)self.startVersion == self.version);
 					success.Assert(self.startMemoize.Equals(getValue));
 //					foreach (var item in self) {
@@ -1682,7 +1682,7 @@ namespace DD.Collections
 
 				success.Assert((int)self.startVersion == self.version);
 				success.Assert(self.startMemoize.Equals(setValue));
-				success.Assert(setValue != null);
+				success.Assert(setValue.IsNot(null));
 				success.Assert(self.count != 0);
 //				foreach (var item in self) {
 //					success.Assert((int)setValue == item);
@@ -1700,7 +1700,7 @@ namespace DD.Collections
 				if (self.count == 0) {
 					success.Assert(getValue == null);
 				} else {
-					success.Assert(getValue != null);
+					success.Assert(getValue.IsNot(null));
 					success.Assert((int)self.finalVersion == self.version);
 					success.Assert(self.finalMemoize.Equals(getValue));
 					foreach (var item in self.Reverse()) {
@@ -1719,7 +1719,7 @@ namespace DD.Collections
 
 				success.Assert((int)self.finalVersion == self.version);
 				success.Assert(self.finalMemoize.Equals(setValue));
-				success.Assert(setValue != null);
+				success.Assert(setValue.IsNot(null));
 				success.Assert(self.count != 0);
 				foreach (var item in self.Reverse()) {
 					success.Assert((int)setValue == item);

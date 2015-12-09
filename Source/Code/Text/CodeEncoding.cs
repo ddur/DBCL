@@ -32,7 +32,7 @@ namespace DD.Text
 		public static List<Code> Decode (this string utf16)
 		{
 			Contract.Ensures (Theory.Decode(utf16, Contract.Result<List<Code>>()));
-            Contract.Ensures(Contract.Result<List<Code>>() != null);
+            Contract.Ensures(Contract.Result<List<Code>>().IsNot(null));
 
 			if (string.IsNullOrEmpty (utf16)) { return new List<Code> (); }
 			var codes = new List<Code>(utf16.Length);
@@ -107,7 +107,7 @@ namespace DD.Text
 		public static Code Decode (this char prev, char next) {
 	
 			Contract.Ensures (Theory.Decode(prev, next, Contract.Result<Code>()));
-			Contract.EnsuresOnThrow<ArgumentException>(Theory.CanDecode(prev, next, false) );
+			Contract.EnsuresOnThrow<ArgumentException> (Theory.CanDecode(prev, next, false) );
 	
 			/* sample values and masks
 			 * 
@@ -163,7 +163,7 @@ namespace DD.Text
 		[Pure]
 		public static string Encode (this Code self)
 		{
-            Contract.Ensures(Contract.Result<string>() != null);
+            Contract.Ensures(Contract.Result<string>().IsNot(null));
 
             if (self.HasCharValue())
             { 
@@ -175,7 +175,7 @@ namespace DD.Text
 
 		[Pure]
 		public static string Encode (this IEnumerable<Code> codes) {
-            Contract.Ensures(Contract.Result<string>() != null);
+            Contract.Ensures(Contract.Result<string>().IsNot(null));
             Contract.Ensures(Theory.Encode(codes, Contract.Result<string>()));
 	
 			if (codes == null || codes.IsEmpty()) return string.Empty;

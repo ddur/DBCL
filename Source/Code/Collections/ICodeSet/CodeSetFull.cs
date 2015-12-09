@@ -20,7 +20,7 @@ namespace DD.Collections.ICodeSet {
 
 		public static CodeSetFull From(Code first, Code last) {
 			Contract.Requires<InvalidOperationException> ((first + ICodeSetService.PairCount) <= last);
-            Contract.Ensures(Contract.Result<CodeSetFull>() != null);
+            Contract.Ensures(Contract.Result<CodeSetFull>().IsNot(null));
 
             return new CodeSetFull(first, last);
 		}

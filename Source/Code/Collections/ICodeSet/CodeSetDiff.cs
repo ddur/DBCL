@@ -21,24 +21,24 @@ namespace DD.Collections.ICodeSet
 		#region Ctor
 
 		public static CodeSetDiff From(ICodeSet a, ICodeSet b) {
-            Contract.Requires<ArgumentNullException>(a != null);
-            Contract.Requires<ArgumentNullException>(b != null);
+            Contract.Requires<ArgumentNullException> (a.IsNot(null));
+            Contract.Requires<ArgumentNullException> (b.IsNot(null));
 
-			Contract.Requires<ArgumentEmptyException>(!a.IsEmpty());
-			Contract.Requires<ArgumentEmptyException>(!b.IsEmpty());
+			Contract.Requires<ArgumentEmptyException> (!a.IsEmpty());
+			Contract.Requires<ArgumentEmptyException> (!b.IsEmpty());
 
 			// a is full range
-			Contract.Requires<InvalidOperationException>(a.Count == a.Length);
-			Contract.Requires<InvalidOperationException>(a is CodeSetFull);
+			Contract.Requires<InvalidOperationException> (a.Count == a.Length);
+			Contract.Requires<InvalidOperationException> (a is CodeSetFull);
 
 			// b is proper-inner range subset of a
-			Contract.Requires<InvalidOperationException>(a.First < b.First);
-			Contract.Requires<InvalidOperationException>(b.Last < a.Last);
+			Contract.Requires<InvalidOperationException> (a.First < b.First);
+			Contract.Requires<InvalidOperationException> (b.Last < a.Last);
 			
 			// this.count > PairCount
-			Contract.Requires<InvalidOperationException>((a.Count - b.Count) > ICodeSetService.PairCount);
+			Contract.Requires<InvalidOperationException> ((a.Count - b.Count) > ICodeSetService.PairCount);
 
-            Contract.Ensures(Contract.Result<CodeSetDiff>() != null);
+            Contract.Ensures(Contract.Result<CodeSetDiff>().IsNot(null));
 
 			return new CodeSetDiff(a, b);			
 		}
@@ -48,22 +48,22 @@ namespace DD.Collections.ICodeSet
 		/// <param name="b">CodeSet</param>
 		internal CodeSetDiff(ICodeSet a, ICodeSet b)
 		{
-            Contract.Requires<ArgumentNullException>(a != null);
-            Contract.Requires<ArgumentNullException>(b != null);
+            Contract.Requires<ArgumentNullException> (a.IsNot(null));
+            Contract.Requires<ArgumentNullException> (b.IsNot(null));
 
-			Contract.Requires<ArgumentException>(!a.IsEmpty());
-			Contract.Requires<ArgumentException>(!b.IsEmpty());
+			Contract.Requires<ArgumentException> (!a.IsEmpty());
+			Contract.Requires<ArgumentException> (!b.IsEmpty());
 
 			// a is full range
-			Contract.Requires<ArgumentException>(a.Count == a.Length);
-			Contract.Requires<ArgumentException>(a is CodeSetFull);
+			Contract.Requires<ArgumentException> (a.Count == a.Length);
+			Contract.Requires<ArgumentException> (a is CodeSetFull);
 
 			// b is proper-inner range subset of a
-			Contract.Requires<ArgumentException>(a.First < b.First);
-			Contract.Requires<ArgumentException>(b.Last < a.Last);
+			Contract.Requires<ArgumentException> (a.First < b.First);
+			Contract.Requires<ArgumentException> (b.Last < a.Last);
 			
 			// this.count > PairCount
-			Contract.Requires<ArgumentException>((a.Count - b.Count) > ICodeSetService.PairCount);
+			Contract.Requires<ArgumentException> ((a.Count - b.Count) > ICodeSetService.PairCount);
 
 			Contract.Ensures(Theory.Construct(a, b, this));
 

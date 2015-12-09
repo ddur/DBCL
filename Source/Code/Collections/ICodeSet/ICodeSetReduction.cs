@@ -99,7 +99,7 @@ namespace DD.Collections.ICodeSet
 
 		[Pure] private static ICodeSet ReducePartTwo(this BitSetArray self, int offset)
 		{
-            Contract.Requires<ArgumentNullException>(self != null);
+            Contract.Requires<ArgumentNullException> (self.IsNot(null));
             Contract.Requires<InvalidOperationException> (self.Count.InRange (ICodeSetService.PairCount + 1, self.Span () - 1));	// not Null/Code/Pair/Full
             Contract.Requires<IndexOutOfRangeException> (self.Length <= Code.MaxCount || self.Last <= Code.MaxValue);
             Contract.Requires<IndexOutOfRangeException> (offset.InRange (0, Code.MaxValue - (int)self.Last));

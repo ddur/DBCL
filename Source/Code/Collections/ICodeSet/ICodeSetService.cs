@@ -34,8 +34,8 @@ namespace DD.Collections.ICodeSet
 
 		internal static IEnumerable<Code> ToCodes(this IEnumerable<int> ints, int offset = 0)
 		{
-			Contract.Requires<ArgumentException>(ints == null || Contract.ForAll(ints, x => (x + offset).HasCodeValue()));
-			Contract.Ensures(Contract.Result<IEnumerable<Code>>() != null);
+			Contract.Requires<ArgumentException> (ints == null || Contract.ForAll(ints, x => (x + offset).HasCodeValue()));
+			Contract.Ensures(Contract.Result<IEnumerable<Code>>().IsNot(null));
 			if (ints.IsNot(null)) {
 				if (offset == 0) {
 					foreach (var code in ints) {
@@ -55,7 +55,7 @@ namespace DD.Collections.ICodeSet
 
 		public static IEnumerable<int> ToValues(this IEnumerable<Code> codes)
 		{
-			Contract.Ensures(Contract.Result<IEnumerable<int>>() != null);
+			Contract.Ensures(Contract.Result<IEnumerable<int>>().IsNot(null));
 			if (codes.IsNot(null)) {
 				foreach (Code code in codes) {
 					yield return code.Value;
@@ -67,7 +67,7 @@ namespace DD.Collections.ICodeSet
 
 		public static IEnumerable<int> ToValues(this IEnumerable<char> codes)
 		{
-			Contract.Ensures(Contract.Result<IEnumerable<int>>() != null);
+			Contract.Ensures(Contract.Result<IEnumerable<int>>().IsNot(null));
 			if (codes.IsNot(null)) {
 				foreach (Code code in codes) {
 					yield return code.Value;
@@ -123,7 +123,7 @@ namespace DD.Collections.ICodeSet
 				(self.IsNull() && Contract.Result<BitSetArray>().Count == 0) ||
                 (self.Count == Contract.Result<DD.Collections.BitSetArray>().Count)
 			);
-            Contract.Ensures(Contract.Result<BitSetArray>() != null);
+            Contract.Ensures(Contract.Result<BitSetArray>().IsNot(null));
 
 			if (self.IsNull() || self.Count == 0) {
 				return BitSetArray.Empty ();
@@ -175,13 +175,13 @@ namespace DD.Collections.ICodeSet
 
 		[Pure] public static bool IsEmpty(this ICodeSet self)
 		{
-            Contract.Requires<ArgumentNullException>(self != null);
+            Contract.Requires<ArgumentNullException> (self.IsNot(null));
 			return self.Count == 0;
 		}
 
 		[Pure] public static bool IsEmpty(this BitSetArray self)
 		{
-            Contract.Requires<ArgumentNullException>(self != null);
+            Contract.Requires<ArgumentNullException> (self.IsNot(null));
 			return self.Count == 0;
 		}
 		

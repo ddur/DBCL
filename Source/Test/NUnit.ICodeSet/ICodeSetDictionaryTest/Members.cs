@@ -46,7 +46,7 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest
 			icsDict = new ICodeSetDictionary();
 			var icsIDictAsIDictionary = icsDict as IDictionary<ICodeSet, int>;
 			Assert.NotNull(icsIDictAsIDictionary);
-			Assert.Throws<NotSupportedException>(
+			Assert.Throws<NotSupportedException> (
 				delegate {
 					icsIDictAsIDictionary.Add(CodeSetFull.From(0, 5), 8);
 				}
@@ -66,7 +66,7 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest
 				delegate {
 					icsDictLong.Add(CodeSetFull.From(0,5),8);
 				},
-				Throws.TypeOf<ArgumentException>()
+				Throws.TypeOf<ArgumentException> ()
 			);
 		}
 
@@ -93,7 +93,7 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest
 				delegate {
 					icsDictLong.Add(new KeyValuePair<ICodeSet, long>(CodeSetFull.From(0,5),8));
 				},
-				Throws.TypeOf<ArgumentException>()
+				Throws.TypeOf<ArgumentException> ()
 			);
 		}
 

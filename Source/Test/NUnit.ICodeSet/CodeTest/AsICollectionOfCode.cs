@@ -22,7 +22,7 @@ namespace DD.Collections.ICodeSet.CodeTest
 			Code D = r.Next(Code.MinValue, Code.MaxValue);
 			ICollection<Code> iC = C;
 						
-			Assert.That (delegate { iC.Add (C); }, Throws.TypeOf<NotSupportedException>());
+			Assert.That (delegate { iC.Add (C); }, Throws.TypeOf<NotSupportedException> ());
 			Assert.Throws<NotSupportedException> (delegate { ((ICodeSet)D).Add (C); });
 			Assert.Throws<NotSupportedException> (delegate { iC.Add (D); });
 			Assert.Throws<NotSupportedException> (delegate { iC.Remove (C); });

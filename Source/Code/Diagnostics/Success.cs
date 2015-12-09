@@ -96,7 +96,7 @@ namespace DD.Diagnostics {
 
         private static string GetTypeName (Type dtype)
 		{
-			if (dtype.DeclaringType != null) {
+			if (dtype.DeclaringType.IsNot(null)) {
 				return GetTypeName(dtype.DeclaringType) + "." + dtype.Name;
 			}
 			return dtype.Name;
@@ -105,7 +105,7 @@ namespace DD.Diagnostics {
         private static string GetTypeName (MethodBase method)
 		{
 			var info = method as MethodInfo;
-			if (info != null) {
+			if (info.IsNot(null)) {
 				return info.ReturnType + " " + GetTypeName(info.DeclaringType) + "." + method.Name;
 			}
 			return GetTypeName(method.DeclaringType) + "." + method.Name;

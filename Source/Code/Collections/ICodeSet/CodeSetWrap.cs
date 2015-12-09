@@ -23,7 +23,7 @@ namespace DD.Collections.ICodeSet
 
         public static CodeSetWrap From()
         {
-            Contract.Ensures(Contract.Result<CodeSetWrap>() != null);
+            Contract.Ensures(Contract.Result<CodeSetWrap>().IsNot(null));
 
             var bits = BitSetArray.Empty();
             Contract.Assume(bits.Count == 0);
@@ -32,33 +32,33 @@ namespace DD.Collections.ICodeSet
 
         public static CodeSetWrap From(CodeSetWrap wrap)
         {
-            Contract.Requires<ArgumentNullException>(wrap != null);
-            Contract.Ensures(Contract.Result<CodeSetWrap>() != null);
+            Contract.Requires<ArgumentNullException> (wrap.IsNot(null));
+            Contract.Ensures(Contract.Result<CodeSetWrap>().IsNot(null));
 
             return new CodeSetWrap(wrap);
         }
 
         public static CodeSetWrap From(params Code[] codes)
         {
-            Contract.Requires<ArgumentNullException>(codes != null);
-            Contract.Ensures(Contract.Result<CodeSetWrap>() != null);
+            Contract.Requires<ArgumentNullException> (codes.IsNot(null));
+            Contract.Ensures(Contract.Result<CodeSetWrap>().IsNot(null));
 
             return new CodeSetWrap(codes as IEnumerable<Code>);
         }
 
         public static CodeSetWrap From(IEnumerable<Code> codes)
         {
-            Contract.Requires<ArgumentNullException>(codes != null);
-            Contract.Ensures(Contract.Result<CodeSetWrap>() != null);
+            Contract.Requires<ArgumentNullException> (codes.IsNot(null));
+            Contract.Ensures(Contract.Result<CodeSetWrap>().IsNot(null));
 
             return new CodeSetWrap(codes);
         }
 
         public static CodeSetWrap From(BitSetArray bits)
         {
-            Contract.Requires<ArgumentNullException>(bits != null);
-            Contract.Requires<IndexOutOfRangeException>(bits.Count == 0 || bits.Length.IsCodesCount() || bits.Last.HasCodeValue());
-            Contract.Ensures(Contract.Result<CodeSetWrap>() != null);
+            Contract.Requires<ArgumentNullException> (bits.IsNot(null));
+            Contract.Requires<IndexOutOfRangeException> (bits.Count == 0 || bits.Length.IsCodesCount() || bits.Last.HasCodeValue());
+            Contract.Ensures(Contract.Result<CodeSetWrap>().IsNot(null));
 
             return new CodeSetWrap(bits);
         }
@@ -67,7 +67,7 @@ namespace DD.Collections.ICodeSet
         /// <param name="wrap">CodeSetWrap</param>
         private CodeSetWrap(CodeSetWrap wrap)
         {
-            Contract.Requires<ArgumentNullException>(wrap != null);
+            Contract.Requires<ArgumentNullException> (wrap.IsNot(null));
             Contract.Ensures(Theory.Construct(wrap, this));
 
             sorted = wrap.sorted;
@@ -75,7 +75,7 @@ namespace DD.Collections.ICodeSet
 
         private CodeSetWrap(IEnumerable<Code> codes)
         {
-            Contract.Requires<ArgumentNullException>(codes != null);
+            Contract.Requires<ArgumentNullException> (codes.IsNot(null));
             Contract.Ensures(Theory.Construct(codes, this));
 
             sorted = BitSetArray.From(codes.ToValues());
@@ -85,8 +85,8 @@ namespace DD.Collections.ICodeSet
         /// <param name="bits">BitSetArray</param>
         private CodeSetWrap(BitSetArray bits)
         {
-            Contract.Requires<ArgumentNullException>(bits != null);
-            Contract.Requires<IndexOutOfRangeException>(bits.Count == 0 || bits.Length.IsCodesCount() || bits.Last.HasCodeValue());
+            Contract.Requires<ArgumentNullException> (bits.IsNot(null));
+            Contract.Requires<IndexOutOfRangeException> (bits.Count == 0 || bits.Length.IsCodesCount() || bits.Last.HasCodeValue());
             Contract.Ensures(Theory.Construct(bits, this));
 
             sorted = BitSetArray.Copy(bits);
@@ -173,7 +173,7 @@ namespace DD.Collections.ICodeSet
 
         public BitSetArray ToBitSetArray()
         {
-            Contract.Ensures(Contract.Result<BitSetArray>() != null);
+            Contract.Ensures(Contract.Result<BitSetArray>().IsNot(null));
 
             return BitSetArray.Copy(this.sorted);
         }
@@ -182,7 +182,7 @@ namespace DD.Collections.ICodeSet
         {
             get
             {
-                Contract.Ensures(Contract.Result<IEnumerable<Code>>() != null);
+                Contract.Ensures(Contract.Result<IEnumerable<Code>>().IsNot(null));
                 foreach (var item in this.sorted.Complement())
                 {
                     yield return item;

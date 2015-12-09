@@ -20,42 +20,42 @@ namespace DD.Collections.ICodeSet
 		#region Ctor
 
 		public static CodeSetMask From(string utf16) {
-            Contract.Requires<ArgumentNullException>(utf16 != null);
-			Contract.Requires<ArgumentEmptyException>(!utf16.IsEmpty());
-			Contract.Requires<ArgumentException>(utf16.CanDecode());
-            Contract.Ensures(Contract.Result<CodeSetMask>() != null);
+            Contract.Requires<ArgumentNullException> (utf16.IsNot(null));
+			Contract.Requires<ArgumentEmptyException> (!utf16.IsEmpty());
+			Contract.Requires<ArgumentException> (utf16.CanDecode());
+            Contract.Ensures(Contract.Result<CodeSetMask>().IsNot(null));
 
             return new CodeSetMask(utf16.Decode());
 		}
 
 		public static CodeSetMask From(params Code[] codes) {
-            Contract.Requires<ArgumentNullException>(codes != null);
+            Contract.Requires<ArgumentNullException> (codes.IsNot(null));
             Contract.Requires<ArgumentEmptyException> (codes.Length > 0);
-            Contract.Ensures(Contract.Result<CodeSetMask>() != null);
+            Contract.Ensures(Contract.Result<CodeSetMask>().IsNot(null));
 
 			return new CodeSetMask(codes as IEnumerable<Code>);
 		}
 
 		public static CodeSetMask From(params char[] chars) {
-            Contract.Requires<ArgumentNullException>(chars != null);
+            Contract.Requires<ArgumentNullException> (chars.IsNot(null));
             Contract.Requires<ArgumentEmptyException> (chars.Length > 0);
-            Contract.Ensures(Contract.Result<CodeSetMask>() != null);
+            Contract.Ensures(Contract.Result<CodeSetMask>().IsNot(null));
 
 			return new CodeSetMask(chars.Cast<Code>());
 		}
 
 		public static CodeSetMask From(IEnumerable<Code> codes) {
-            Contract.Requires<ArgumentNullException>(codes != null);
-			Contract.Requires<ArgumentEmptyException>(!codes.IsEmpty());
-            Contract.Ensures(Contract.Result<CodeSetMask>() != null);
+            Contract.Requires<ArgumentNullException> (codes.IsNot(null));
+			Contract.Requires<ArgumentEmptyException> (!codes.IsEmpty());
+            Contract.Ensures(Contract.Result<CodeSetMask>().IsNot(null));
 
 			return new CodeSetMask(codes);
 		}
 
 		private CodeSetMask(IEnumerable<Code> codes)
 		{
-            Contract.Requires<ArgumentNullException>(codes != null);
-			Contract.Requires<ArgumentEmptyException>(!codes.IsEmpty());
+            Contract.Requires<ArgumentNullException> (codes.IsNot(null));
+			Contract.Requires<ArgumentEmptyException> (!codes.IsEmpty());
 
 			var iCodeSet = codes as ICodeSet;
 			if (!iCodeSet.Is(null)) {
@@ -89,14 +89,14 @@ namespace DD.Collections.ICodeSet
 
 		private CodeSetMask(uint[] mask, int offset = 0)
 		{
-			Contract.Requires<ArgumentNullException>(mask != null);
-			Contract.Requires<ArgumentEmptyException>(mask.Length > 0);
-			Contract.Requires<ArgumentException>(LastBitIndex(mask) != null);
-			Contract.Requires<ArgumentException>(0 != (mask[0] & 1)); // first bit set
-			Contract.Requires<ArgumentException>(0 != (mask[mask.Length - 1])); // last bits-item is not empty
-			Contract.Requires<ArgumentException>(offset.HasCodeValue());
+			Contract.Requires<ArgumentNullException> (mask.IsNot(null));
+			Contract.Requires<ArgumentEmptyException> (mask.Length > 0);
+			Contract.Requires<ArgumentException> (LastBitIndex(mask).IsNot(null));
+			Contract.Requires<ArgumentException> (0 != (mask[0] & 1)); // first bit set
+			Contract.Requires<ArgumentException> (0 != (mask[mask.Length - 1])); // last bits-item is not empty
+			Contract.Requires<ArgumentException> (offset.HasCodeValue());
 			// compute offset + last-bit-index and check if HasCodeValue
-			Contract.Requires<ArgumentException>((offset + (int)LastBitIndex(mask)).HasCodeValue());
+			Contract.Requires<ArgumentException> ((offset + (int)LastBitIndex(mask)).HasCodeValue());
 
 			start = offset;
 			final = offset + (int)LastBitIndex(mask);
