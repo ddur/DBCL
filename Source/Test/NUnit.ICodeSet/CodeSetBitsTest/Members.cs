@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 
 namespace DD.Collections.ICodeSet.CodeSetBitsTest
@@ -101,6 +102,15 @@ namespace DD.Collections.ICodeSet.CodeSetBitsTest
 			Assert.True(compact[0]);
 			Assert.True(compact[compact.Length - 1]);
             
+		}
+
+		[Test]
+		public void Complement()
+		{
+			BitSetArray bsa = BitSetArray.From(new List<int>() { 1, 2, 5, 7 });
+			CodeSetBits csb = CodeSetBits.From(bsa);
+			List<Code> complement = new List<Code>(){3,4,6};
+			Assert.True(csb.Complement.SequenceEqual(complement));
 		}
 
 	}

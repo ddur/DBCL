@@ -63,25 +63,17 @@ namespace DD.Collections.ICodeSet
             {
                 Contract.Assert(self.Count > ICodeSetService.PairCount);
 
-                // List space less than 1/4 of Bits space. (better than CodeSetPage)
-                // List space in bytes == Count * sizeof(int)
-                // Bits space in bytes == BitSetArray.GetLongArrayLength(self.Span())*sizeof(long)
-                Contract.Assert((self.Count * sizeof(int)) < (BitSetArray.GetLongArrayLength(self.Span()) * sizeof(long) / 4));
-
-                // (CodeSetList is better than CodeSetWide)
-                //// List items spread over more than one unicode plane?
-                ////if (self.First.UnicodePlane() != self.Last.UnicodePlane()) {
-                ////    return CodeSetWide.From (self.ToCodes(offset));
-                ////}
-
-                return CodeSetList.From(self.ToCodes(offset));
+                // only if spans wider than ICodeSetService.MaskMaxSpan?
+                // if (self.Span() > ICodeSetService.MaskMaxSpan) {
+	                return CodeSetList.From(self.ToCodes(offset));
+                //}
             }
 
             #endregion
 
 			#region Mask
 
-			if (self.Span() <= ICodeSetService.MaskMaxCount)
+			if (self.Span() <= ICodeSetService.MaskMaxSpan)
             {
                 return CodeSetMask.From(self.ToCodes(offset));
             }
@@ -90,7 +82,7 @@ namespace DD.Collections.ICodeSet
 
             #endregion
 
-            Contract.Assert (self.Span() > ICodeSetService.MaskMaxCount) ;
+            Contract.Assert (self.Span() > ICodeSetService.MaskMaxSpan) ;
             Contract.Assert (self.Count > ICodeSetService.ListMaxCount) ;
 
             return null;
@@ -165,7 +157,7 @@ namespace DD.Collections.ICodeSet
 				Contract.Assume(self.IsNot(null)); // not null
 				Contract.Assume(self.Span() != self.Count); // not Full
 				Contract.Assume(self.Count > ICodeSetService.ListMaxCount); // not Code, not Pair, not List
-				Contract.Assume(self.Span() > ICodeSetService.MaskMaxCount); // not Mask
+				Contract.Assume(self.Span() > ICodeSetService.MaskMaxSpan); // not Mask
 				
                 Contract.Assume(self.First.HasValue);
                 Contract.Assume(self.Last.HasValue);
@@ -229,9 +221,9 @@ namespace DD.Collections.ICodeSet
 					} else if (self is CodeSetList) {
 						success.Assert(self.Count <= ICodeSetService.ListMaxCount);
 					} else if (self is CodeSetMask) {
-						success.Assert(self.Span() <= ICodeSetService.MaskMaxCount);
+						success.Assert(self.Span() <= ICodeSetService.MaskMaxSpan);
 					} else if (self is CodeSetDiff) {
-						success.Assert(self.Length > ICodeSetService.MaskMaxCount);
+						success.Assert(self.Length > ICodeSetService.MaskMaxSpan);
 					} else {
 						success.Assert(self is CodeSetPage || self is CodeSetWide);
 					}
