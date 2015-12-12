@@ -52,7 +52,7 @@ namespace DD.Collections.ICodeSet.CodeTest
 		}
 
 		[Test, TestCaseSource("ValidCode")]
-		public void IsPremanentlyUndefined (int code) {
+		public void IsPermanentlyUndefined (int code) {
 			Code C = code;
 			if (code.InRange (0xFDD0, 0xFDDF)) {
 				Assert.True (C.IsPermanentlyUndefined());

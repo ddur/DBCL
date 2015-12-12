@@ -8,6 +8,7 @@ TestResults
 # OpenCover & coverage.xml via SharpDevelop
 [Oo]pen[Cc]over/
 coverage.xml
+coverage.*.xml
 
 # NUnit
 *.nunit
