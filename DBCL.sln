@@ -1,6 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
+# Visual Studio 2012
+# SharpDevelop 5.1
 VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBCL", "Source\Code\DBCL.csproj", "{CA42DDC3-D6A2-4A7C-9F5C-E3E8DC0DE55E}"
@@ -16,6 +17,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EB4B3B44-064C-4AE1-A05F-A50374C70D53}"
 	ProjectSection(SolutionItems) = preProject
 		appveyor.yml = appveyor.yml
+		coveragetest.bat = coveragetest.bat
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{0EAAAA13-B949-4444-98AF-EFA12D45682B}"
