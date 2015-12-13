@@ -21,8 +21,6 @@ namespace DD.Collections
 	/// <para>On-bit represents positive integer set member</para>
 	/// <remarks>Instance with maximum capacity takes 256MB</remarks>
 	/// </summary>
-	// TODO? BitShift
-	// TODO? Parallel.ForEach
 	[Serializable]
 	public sealed partial class BitSetArray :
 		ISet<int>, ICollection<int>, IEnumerable<int>,

@@ -10,6 +10,9 @@ TestResults
 coverage.xml
 coverage.*.xml
 
+# AppVeyor Artifacts
+/artifacts/
+
 # NUnit
 *.nunit
 *.VisualState.xml
