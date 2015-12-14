@@ -18,7 +18,7 @@ namespace DD.Diagnostics {
 
         #region Ctor
 
-        public Success ( bool value ) {
+        public Success (bool value) {
             this.result = value;
         }
 
@@ -44,7 +44,7 @@ namespace DD.Diagnostics {
         /// </summary>
         /// <param name="condition">bool (expression)</param>
         /// <param name="message">string</param>
-        public bool Assert ( bool condition, string message = "" ) {
+        public bool Assert (bool condition, string message = "") {
             if (!condition) {
                 if (result) {
                     result = false;
@@ -55,28 +55,28 @@ namespace DD.Diagnostics {
                     // default UI enabled listener exists?
                     if (tl is DefaultTraceListener && ((DefaultTraceListener)tl).AssertUiEnabled) {
                         // get call stack with file information.
-                        var trace = new StackTrace ( true );
+                        var trace = new StackTrace (true);
                         if (trace.FrameCount > 1) { // caller of this method exists?
                             // get caller StackFrame (first above this StackFrame)
-                            StackFrame myFrame = trace.GetFrame ( 1 );
+                            StackFrame myFrame = trace.GetFrame (1);
 
                             // create "trace" message
-                            string methodFullName = GetTypeName ( myFrame.GetMethod () );
-                            var traceMessage = new StringBuilder ( String.Empty );
-                            traceMessage.AppendLine ( "Method: " + methodFullName );
+                            string methodFullName = GetTypeName (myFrame.GetMethod ());
+                            var traceMessage = new StringBuilder (String.Empty);
+                            traceMessage.AppendLine ("Method: " + methodFullName);
                             traceMessage.AppendLine ();
-                            traceMessage.AppendLine ( "Path: " + Path.GetDirectoryName ( myFrame.GetFileName () ) );
+                            traceMessage.AppendLine ("Path: " + Path.GetDirectoryName (myFrame.GetFileName ()));
                             traceMessage.AppendLine ();
-                            traceMessage.AppendLine ( "File: " + Path.GetFileName ( myFrame.GetFileName () ) );
-                            traceMessage.AppendLine ( "Line: " + myFrame.GetFileLineNumber () );
-                            traceMessage.AppendLine ( "Col.: " + myFrame.GetFileColumnNumber () );
+                            traceMessage.AppendLine ("File: " + Path.GetFileName (myFrame.GetFileName ()));
+                            traceMessage.AppendLine ("Line: " + myFrame.GetFileLineNumber ());
+                            traceMessage.AppendLine ("Col.: " + myFrame.GetFileColumnNumber ());
 
                             // offer to abort(exit), retry(debug) or ignore(continue)
-                            switch (System.Windows.Forms.MessageBox.Show ( traceMessage.ToString (),
-                                String.IsNullOrEmpty ( message ) ? "Assertion message IsNullOrEmpty!" : message,
-                                System.Windows.Forms.MessageBoxButtons.AbortRetryIgnore )) {
+                            switch (System.Windows.Forms.MessageBox.Show (traceMessage.ToString (),
+                                String.IsNullOrEmpty (message) ? "Assertion message IsNullOrEmpty!" : message,
+                                System.Windows.Forms.MessageBoxButtons.AbortRetryIgnore)) {
                                 case System.Windows.Forms.DialogResult.Abort:
-                                    Environment.Exit ( 0 );
+                                    Environment.Exit (0);
                                     break;
 
                                 case System.Windows.Forms.DialogResult.Retry:
@@ -96,19 +96,19 @@ namespace DD.Diagnostics {
 
         #region Private
 
-        private static string GetTypeName ( Type dtype ) {
-            if (dtype.DeclaringType.IsNot ( null )) {
-                return GetTypeName ( dtype.DeclaringType ) + "." + dtype.Name;
+        private static string GetTypeName (Type dtype) {
+            if (dtype.DeclaringType.IsNot (null)) {
+                return GetTypeName (dtype.DeclaringType) + "." + dtype.Name;
             }
             return dtype.Name;
         }
 
-        private static string GetTypeName ( MethodBase method ) {
+        private static string GetTypeName (MethodBase method) {
             var info = method as MethodInfo;
-            if (info.IsNot ( null )) {
-                return info.ReturnType + " " + GetTypeName ( info.DeclaringType ) + "." + method.Name;
+            if (info.IsNot (null)) {
+                return info.ReturnType + " " + GetTypeName (info.DeclaringType) + "." + method.Name;
             }
-            return GetTypeName ( method.DeclaringType ) + "." + method.Name;
+            return GetTypeName (method.DeclaringType) + "." + method.Name;
         }
 
         #endregion
@@ -117,12 +117,12 @@ namespace DD.Diagnostics {
 
         #region Cast Operators
 
-        public static implicit operator bool ( Success s ) {
+        public static implicit operator bool (Success s) {
             return s.result;
         }
 
-        public static implicit operator Success ( bool b ) {
-            return new Success ( b );
+        public static implicit operator Success (bool b) {
+            return new Success (b);
         }
 
         #endregion

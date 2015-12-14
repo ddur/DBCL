@@ -24,14 +24,14 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
 
         [Test]
         public void BitSetArray_Empty () {
-            Assert.True ( BitSetArray.Empty ().IsEmpty () );
-            Assert.True ( BitSetArray.Size ( 10 ).IsEmpty () );
+            Assert.True (BitSetArray.Empty ().IsEmpty ());
+            Assert.True (BitSetArray.Size (10).IsEmpty ());
         }
 
         [Test]
         public void BitSetArray_NotEmpty () {
-            Assert.False ( BitSetArray.Size ( 1, true ).IsEmpty () );
-            Assert.False ( BitSetArray.From ( 10, 11, 20 ).IsEmpty () );
+            Assert.False (BitSetArray.Size (1, true).IsEmpty ());
+            Assert.False (BitSetArray.From (10, 11, 20).IsEmpty ());
         }
 
         [Test]
@@ -45,14 +45,14 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
 
         [Test]
         public void ICodeSet_Empty () {
-            Assert.True ( CodeSetNone.Singleton.IsEmpty () );
-            Assert.True ( CodeSetBits.From ().IsEmpty () );
+            Assert.True (CodeSetNone.Singleton.IsEmpty ());
+            Assert.True (CodeSetBits.From ().IsEmpty ());
         }
 
         [Test]
         public void ICodeSet_NotEmpty () {
-            Assert.False ( CodeSetBits.From ( 1 ).IsEmpty () );
-            Assert.False ( CodeSetBits.From ( 10, 11, 20 ).IsEmpty () );
+            Assert.False (CodeSetBits.From (1).IsEmpty ());
+            Assert.False (CodeSetBits.From (10, 11, 20).IsEmpty ());
         }
     }
 }

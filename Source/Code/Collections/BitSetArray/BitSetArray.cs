@@ -33,21 +33,21 @@ namespace DD.Collections {
         /// Create empty set
         /// </summary>
         private BitSetArray () {
-            Contract.Ensures ( Theory.Construct ( this ) );
+            Contract.Ensures (Theory.Construct (this));
         }
 
         /// <summary>
         /// Create empty set with size/capacity of length items
         /// </summary>
         /// <param name="length"></param>
-        private BitSetArray ( int length ) {
+        private BitSetArray (int length) {
             Contract.Requires<IndexOutOfRangeException> (
-                ValidLength ( length ) );
+                ValidLength (length));
 
-            Contract.Ensures ( Theory.Construct ( this, length ) );
+            Contract.Ensures (Theory.Construct (this, length));
 
             this.range = length;
-            this.array = new long[BitSetArray.GetLongArrayLength ( this.range )];
+            this.array = new long[BitSetArray.GetLongArrayLength (this.range)];
         }
 
         /// <summary>
@@ -55,23 +55,23 @@ namespace DD.Collections {
         /// </summary>
         /// <param name="length"></param>
         /// <param name = "value"></param>
-        private BitSetArray ( int length, bool value = false )
-            : this ( length ) {
-            Contract.Requires<IndexOutOfRangeException> ( ValidLength ( length ) );
-            Contract.Requires<ArgumentException> ( !value.Bool () || (length > 0) );
+        private BitSetArray (int length, bool value = false)
+            : this (length) {
+            Contract.Requires<IndexOutOfRangeException> (ValidLength (length));
+            Contract.Requires<ArgumentException> (!value.Bool () || (length > 0));
 
-            Contract.Ensures ( Theory.Construct ( this, length, value ) );
+            Contract.Ensures (Theory.Construct (this, length, value));
 
             if (value.Bool ()
                 && this.range > 0) {
-                Contract.Assert ( this.array.Length > 0 );
+                Contract.Assert (this.array.Length > 0);
                 for (int i = 0; i < array.Length; i++) {
                     this.array[i] = -1;
                 }
                 this.ClearTail ();
                 this.count = this.range;
-                this.FirstSet ( 0 );
-                this.LastSet ( this.range - 1 );
+                this.FirstSet (0);
+                this.LastSet (this.range - 1);
             }
         }
 
@@ -79,10 +79,10 @@ namespace DD.Collections {
         /// Create set from another set
         /// </summary>
         /// <param name="that"></param>
-        private BitSetArray ( BitSetArray that ) {
-            Contract.Requires<ArgumentNullException> ( that.IsNot ( null ) );
+        private BitSetArray (BitSetArray that) {
+            Contract.Requires<ArgumentNullException> (that.IsNot (null));
 
-            Contract.Ensures ( Theory.Construct ( this, that ) );
+            Contract.Ensures (Theory.Construct (this, that));
 
             lock (that.SyncRoot) {
                 this.array = new long[that.array.Length];
@@ -94,7 +94,7 @@ namespace DD.Collections {
                 this.finalVersion = that.finalVersion;
                 this.finalMemoize = that.finalMemoize;
                 if (this.array.Length != 0 && this.count != 0) {
-                    Array.Copy ( that.array, this.array, BitSetArray.GetLongArrayLength ( this.range ) ); // do not copy exccess bit-blocks
+                    Array.Copy (that.array, this.array, BitSetArray.GetLongArrayLength (this.range)); // do not copy exccess bit-blocks
                 }
             }
         }
@@ -104,23 +104,23 @@ namespace DD.Collections {
         /// </summary>
         /// <param name="that"></param>
         /// <param name="length"></param>
-        private BitSetArray ( BitSetArray that, int length ) {
-            Contract.Requires<ArgumentNullException> ( that.IsNot ( null ) );
-            Contract.Requires<IndexOutOfRangeException> ( ValidLength ( length ) );
+        private BitSetArray (BitSetArray that, int length) {
+            Contract.Requires<ArgumentNullException> (that.IsNot (null));
+            Contract.Requires<IndexOutOfRangeException> (ValidLength (length));
 
-            Contract.Ensures ( Theory.Construct ( this, that, length ) );
+            Contract.Ensures (Theory.Construct (this, that, length));
 
             lock (that.SyncRoot) {
                 this.range = length;
-                this.array = new long[BitSetArray.GetLongArrayLength ( this.range )];
+                this.array = new long[BitSetArray.GetLongArrayLength (this.range)];
                 if (this.array.Length != 0
                     && that.array.Length != 0
                     && that.Count != 0) {
-                    Contract.Assume ( that.First.HasValue );
-                    Contract.Assume ( that.Last.HasValue );
-                    int thatRangeArrayLength = BitSetArray.GetLongArrayLength ( that.range );
+                    Contract.Assume (that.First.HasValue);
+                    Contract.Assume (that.Last.HasValue);
+                    int thatRangeArrayLength = BitSetArray.GetLongArrayLength (that.range);
                     if (this.array.Length >= thatRangeArrayLength) {
-                        Array.Copy ( that.array, this.array, thatRangeArrayLength );
+                        Array.Copy (that.array, this.array, thatRangeArrayLength);
                         if (this.range >= that.range || (int)that.Last < this.range) {
                             this.count = that.count;
                             this.startVersion = that.startVersion;
@@ -130,13 +130,13 @@ namespace DD.Collections {
                         }
                         else {
                             this.ClearTail ();
-                            this.count = BitSetArray.CountOnBits ( this.array );
+                            this.count = BitSetArray.CountOnBits (this.array);
                         }
                     }
                     else {
-                        Array.Copy ( that.array, this.array, this.array.Length );
+                        Array.Copy (that.array, this.array, this.array.Length);
                         this.ClearTail ();
-                        this.count = BitSetArray.CountOnBits ( this.array );
+                        this.count = BitSetArray.CountOnBits (this.array);
                     }
                 }
             }
@@ -157,33 +157,33 @@ namespace DD.Collections {
             private bool doNext;
             private bool invalid = true;
 
-            public EnumeratorForwardAbstract ( BitSetArray that ) {
-                Contract.Requires<ArgumentNullException> ( that.IsNot ( null ) );
-                Contract.Ensures ( Theory.Construct ( this, that ) );
+            public EnumeratorForwardAbstract (BitSetArray that) {
+                Contract.Requires<ArgumentNullException> (that.IsNot (null));
+                Contract.Ensures (Theory.Construct (this, that));
 
-                this.init ( that, ref this.version, ref this.enumerated, ref this.arrayLen );
+                this.init (that, ref this.version, ref this.enumerated, ref this.arrayLen);
             }
 
-            protected EnumeratorForwardAbstract ( BitSetArray that, object thatSyncRoot ) {
-                Contract.Requires<ArgumentNullException> ( that.IsNot ( null ) );
-                Contract.Requires<ArgumentNullException> ( thatSyncRoot.IsNot ( null ) );
-                Contract.Ensures ( Theory.Construct ( this, that ) );
+            protected EnumeratorForwardAbstract (BitSetArray that, object thatSyncRoot) {
+                Contract.Requires<ArgumentNullException> (that.IsNot (null));
+                Contract.Requires<ArgumentNullException> (thatSyncRoot.IsNot (null));
+                Contract.Ensures (Theory.Construct (this, that));
 
                 lock (thatSyncRoot) {
-                    this.init ( that, ref this.version, ref this.enumerated, ref this.arrayLen );
+                    this.init (that, ref this.version, ref this.enumerated, ref this.arrayLen);
                 }
             }
 
-            private void init ( BitSetArray that, ref int this_version, ref BitSetArray this_enumerated, ref int this_arrayLen ) {
+            private void init (BitSetArray that, ref int this_version, ref BitSetArray this_enumerated, ref int this_arrayLen) {
                 this_version = that.version;
                 this_enumerated = that;
-                this_arrayLen = BitSetArray.GetLongArrayLength ( this.enumerated.range );
+                this_arrayLen = BitSetArray.GetLongArrayLength (this.enumerated.range);
 
                 this.arrIndex = 0;
                 this.doNext = this.enumerated.count != 0;
                 if (this.doNext) {
-                    Contract.Assert ( this.arrayLen != 0 );
-                    this.bitItems = unchecked ( (ulong)this.enumerated.array[this.arrIndex] );
+                    Contract.Assert (this.arrayLen != 0);
+                    this.bitItems = unchecked ((ulong)this.enumerated.array[this.arrIndex]);
                 }
                 this.bitStart = 0;
                 this.bitIndex = -1;
@@ -198,8 +198,8 @@ namespace DD.Collections {
             }
 
             public virtual bool MoveNext () {
-                Contract.Ensures ( Theory.MoveNext ( this, Contract.Result<bool> () ) );
-                Contract.EnsuresOnThrow<InvalidOperationException> ( Theory.MoveNextOnThrow ( this ) );
+                Contract.Ensures (Theory.MoveNext (this, Contract.Result<bool> ()));
+                Contract.EnsuresOnThrow<InvalidOperationException> (Theory.MoveNextOnThrow (this));
 
                 if (this.doNext && (this.version == this.enumerated.version)) {
                     if (this.bitItems == 0) {
@@ -214,7 +214,7 @@ namespace DD.Collections {
                         if (this.arrIndex != this.arrayLen) {
                             this.bitStart = this.arrIndex * longBits; // compute offset
                             this.bitIndex = -1; // reset bit index
-                            this.bitItems = unchecked ( (ulong)this.enumerated.array[this.arrIndex] );
+                            this.bitItems = unchecked ((ulong)this.enumerated.array[this.arrIndex]);
                         }
                     }
                     if (this.bitItems != 0) {
@@ -234,23 +234,23 @@ namespace DD.Collections {
                     }
                 }
                 else if (this.version != this.enumerated.version) {
-                    throw new InvalidOperationException ( "Collection was modified; enumeration operation may not execute." );
+                    throw new InvalidOperationException ("Collection was modified; enumeration operation may not execute.");
                 }
                 return this.doNext;
             }
 
             public int Current {
                 get {
-                    Contract.Ensures ( Theory.Current ( this, Contract.Result<int> () ) );
-                    Contract.EnsuresOnThrow<InvalidOperationException> ( Theory.CurrentOnThrow ( this ) );
+                    Contract.Ensures (Theory.Current (this, Contract.Result<int> ()));
+                    Contract.EnsuresOnThrow<InvalidOperationException> (Theory.CurrentOnThrow (this));
 
                     if (!this.invalid && this.version == this.enumerated.version) {
                         return (this.bitStart + this.bitIndex);
                     }
                     if (this.invalid) {
-                        throw new InvalidOperationException ( "The enumerator is not positioned within collection." );
+                        throw new InvalidOperationException ("The enumerator is not positioned within collection.");
                     }
-                    throw new InvalidOperationException ( "Collection was modified; enumeration operation may not execute." );
+                    throw new InvalidOperationException ("Collection was modified; enumeration operation may not execute.");
                 }
             }
 
@@ -263,57 +263,57 @@ namespace DD.Collections {
             private static class Theory {
 
                 [Pure]
-                public static bool Construct ( EnumeratorForwardAbstract me, BitSetArray that ) {
+                public static bool Construct (EnumeratorForwardAbstract me, BitSetArray that) {
                     Success success = true;
 
-                    success.Assert ( that.IsNot ( null ) );
+                    success.Assert (that.IsNot (null));
 
-                    success.Assert ( me.doNext == (that.count != 0) );
-                    success.Assert ( me.invalid == true );
+                    success.Assert (me.doNext == (that.count != 0));
+                    success.Assert (me.invalid == true);
 
                     return success;
                 }
 
                 [Pure]
-                public static bool MoveNext ( EnumeratorForwardAbstract me, bool result ) {
+                public static bool MoveNext (EnumeratorForwardAbstract me, bool result) {
                     Success success = true;
                     if (result) {
-                        success.Assert ( !me.invalid );
-                        success.Assert ( me.enumerated[me.bitStart + me.bitIndex] );
+                        success.Assert (!me.invalid);
+                        success.Assert (me.enumerated[me.bitStart + me.bitIndex]);
                     }
                     else {
-                        success.Assert ( me.invalid );
+                        success.Assert (me.invalid);
                     }
                     return success;
                 }
 
                 [Pure]
-                public static bool MoveNextOnThrow ( EnumeratorForwardAbstract me ) {
+                public static bool MoveNextOnThrow (EnumeratorForwardAbstract me) {
                     Success success = true;
 
-                    success.Assert ( me.version != me.enumerated.version );
+                    success.Assert (me.version != me.enumerated.version);
 
                     return success;
                 }
 
                 [Pure]
-                public static bool Current ( EnumeratorForwardAbstract me, int retValue ) {
+                public static bool Current (EnumeratorForwardAbstract me, int retValue) {
                     Success success = true;
 
-                    success.Assert ( !me.invalid );
-                    success.Assert ( me.version == me.enumerated.version );
-                    success.Assert ( me.enumerated[retValue] );
-                    success.Assert ( retValue.InRange ( 0, me.enumerated.range - 1 ) );
-                    success.Assert ( retValue == me.bitStart + me.bitIndex );
+                    success.Assert (!me.invalid);
+                    success.Assert (me.version == me.enumerated.version);
+                    success.Assert (me.enumerated[retValue]);
+                    success.Assert (retValue.InRange (0, me.enumerated.range - 1));
+                    success.Assert (retValue == me.bitStart + me.bitIndex);
 
                     return success;
                 }
 
                 [Pure]
-                public static bool CurrentOnThrow ( EnumeratorForwardAbstract me ) {
+                public static bool CurrentOnThrow (EnumeratorForwardAbstract me) {
                     Success success = true;
 
-                    success.Assert ( me.invalid || (me.version != me.enumerated.version) );
+                    success.Assert (me.invalid || (me.version != me.enumerated.version));
 
                     return success;
                 }
@@ -322,17 +322,17 @@ namespace DD.Collections {
 
         public sealed class EnumeratorForward : EnumeratorForwardAbstract {
 
-            public EnumeratorForward ( BitSetArray that )
-                : base ( that ) {
-                Contract.Requires<ArgumentNullException> ( that.IsNot ( null ) );
+            public EnumeratorForward (BitSetArray that)
+                : base (that) {
+                Contract.Requires<ArgumentNullException> (that.IsNot (null));
             }
         }
 
         public sealed class EnumeratorForwardSynchronized : EnumeratorForwardAbstract {
 
-            public EnumeratorForwardSynchronized ( BitSetArray that )
-                : base ( that, that.SyncRoot ) {
-                Contract.Requires<ArgumentNullException> ( that.IsNot ( null ) );
+            public EnumeratorForwardSynchronized (BitSetArray that)
+                : base (that, that.SyncRoot) {
+                Contract.Requires<ArgumentNullException> (that.IsNot (null));
             }
 
             public override bool MoveNext () {
@@ -346,9 +346,9 @@ namespace DD.Collections {
 
         public sealed class EnumeratorForwardReadOnly : EnumeratorForwardAbstract {
 
-            public EnumeratorForwardReadOnly ( BitSetArray that )
-                : base ( BitSetArray.Copy ( that ) ) {
-                Contract.Requires<ArgumentNullException> ( that.IsNot ( null ) );
+            public EnumeratorForwardReadOnly (BitSetArray that)
+                : base (BitSetArray.Copy (that)) {
+                Contract.Requires<ArgumentNullException> (that.IsNot (null));
             }
         }
 
@@ -363,33 +363,33 @@ namespace DD.Collections {
             private bool doNext;
             private bool invalid = true;
 
-            protected EnumeratorComplementAbstract ( BitSetArray that ) {
-                Contract.Requires<ArgumentNullException> ( that.IsNot ( null ) );
-                Contract.Ensures ( Theory.Construct ( this, that ) );
+            protected EnumeratorComplementAbstract (BitSetArray that) {
+                Contract.Requires<ArgumentNullException> (that.IsNot (null));
+                Contract.Ensures (Theory.Construct (this, that));
 
-                this.init ( that, ref this.version, ref this.enumerated, ref this.arrayLen );
+                this.init (that, ref this.version, ref this.enumerated, ref this.arrayLen);
             }
 
-            protected EnumeratorComplementAbstract ( BitSetArray that, object thatSyncRoot ) {
-                Contract.Requires<ArgumentNullException> ( that.IsNot ( null ) );
-                Contract.Requires<ArgumentNullException> ( thatSyncRoot.IsNot ( null ) );
-                Contract.Ensures ( Theory.Construct ( this, that ) );
+            protected EnumeratorComplementAbstract (BitSetArray that, object thatSyncRoot) {
+                Contract.Requires<ArgumentNullException> (that.IsNot (null));
+                Contract.Requires<ArgumentNullException> (thatSyncRoot.IsNot (null));
+                Contract.Ensures (Theory.Construct (this, that));
 
                 lock (thatSyncRoot) {
-                    this.init ( that, ref this.version, ref this.enumerated, ref this.arrayLen );
+                    this.init (that, ref this.version, ref this.enumerated, ref this.arrayLen);
                 }
             }
 
-            private void init ( BitSetArray that, ref int this_version, ref BitSetArray this_enumerated, ref int this_arrayLen ) {
+            private void init (BitSetArray that, ref int this_version, ref BitSetArray this_enumerated, ref int this_arrayLen) {
                 this_version = that.version;
                 this_enumerated = that;
-                this_arrayLen = BitSetArray.GetLongArrayLength ( this.enumerated.range );
+                this_arrayLen = BitSetArray.GetLongArrayLength (this.enumerated.range);
 
                 this.arrIndex = 0;
                 this.doNext = this.enumerated.count != this.enumerated.range;
                 if (this.doNext) {
-                    Contract.Assert ( this.arrayLen != 0 );
-                    this.bitItems = unchecked ( (ulong)this.enumerated.array[this.arrIndex] );
+                    Contract.Assert (this.arrayLen != 0);
+                    this.bitItems = unchecked ((ulong)this.enumerated.array[this.arrIndex]);
                     this.bitItems = ~this.bitItems;
                     if (this.arrIndex == (this.arrayLen - 1)) { // clear tail
                         this.bitItems &= ulong.MaxValue >> (longBits - (this.enumerated.range & mask0x3F));
@@ -408,8 +408,8 @@ namespace DD.Collections {
             }
 
             public virtual bool MoveNext () {
-                Contract.Ensures ( Theory.MoveNext ( this, Contract.Result<bool> () ) );
-                Contract.EnsuresOnThrow<InvalidOperationException> ( Theory.MoveNextOnThrow ( this ) );
+                Contract.Ensures (Theory.MoveNext (this, Contract.Result<bool> ()));
+                Contract.EnsuresOnThrow<InvalidOperationException> (Theory.MoveNextOnThrow (this));
 
                 if (this.doNext && (this.version == this.enumerated.version)) {
                     if (this.bitItems == 0) {
@@ -426,7 +426,7 @@ namespace DD.Collections {
                         if (this.arrIndex != this.arrayLen) {
                             this.bitStart = this.arrIndex * longBits; // compute offset
                             this.bitIndex = -1; // reset bit index
-                            this.bitItems = unchecked ( (ulong)this.enumerated.array[this.arrIndex] );
+                            this.bitItems = unchecked ((ulong)this.enumerated.array[this.arrIndex]);
                             this.bitItems = ~this.bitItems;
                             if (this.arrIndex == (this.arrayLen - 1)) { // clear tail
                                 this.bitItems &= ulong.MaxValue >> (longBits - (this.enumerated.range & mask0x3F));
@@ -450,23 +450,23 @@ namespace DD.Collections {
                     }
                 }
                 else if (this.version != this.enumerated.version) {
-                    throw new InvalidOperationException ( "Collection was modified; enumeration operation may not execute." );
+                    throw new InvalidOperationException ("Collection was modified; enumeration operation may not execute.");
                 }
                 return this.doNext;
             }
 
             public int Current {
                 get {
-                    Contract.Ensures ( Theory.Current ( this, Contract.Result<int> () ) );
-                    Contract.EnsuresOnThrow<InvalidOperationException> ( Theory.CurrentOnThrow ( this ) );
+                    Contract.Ensures (Theory.Current (this, Contract.Result<int> ()));
+                    Contract.EnsuresOnThrow<InvalidOperationException> (Theory.CurrentOnThrow (this));
 
                     if (!this.invalid && this.version == this.enumerated.version) {
                         return (this.bitStart + this.bitIndex);
                     }
                     if (this.invalid) {
-                        throw new InvalidOperationException ( "The enumerator is not positioned within collection." );
+                        throw new InvalidOperationException ("The enumerator is not positioned within collection.");
                     }
-                    throw new InvalidOperationException ( "Collection was modified; enumeration operation may not execute." );
+                    throw new InvalidOperationException ("Collection was modified; enumeration operation may not execute.");
                 }
             }
 
@@ -479,57 +479,57 @@ namespace DD.Collections {
             private static class Theory {
 
                 [Pure]
-                public static bool Construct ( EnumeratorComplementAbstract me, BitSetArray that ) {
+                public static bool Construct (EnumeratorComplementAbstract me, BitSetArray that) {
                     Success success = true;
 
-                    success.Assert ( that.IsNot ( null ) );
+                    success.Assert (that.IsNot (null));
 
-                    success.Assert ( me.doNext == (that.count != that.range) );
-                    success.Assert ( me.invalid == true );
+                    success.Assert (me.doNext == (that.count != that.range));
+                    success.Assert (me.invalid == true);
 
                     return success;
                 }
 
                 [Pure]
-                public static bool MoveNext ( EnumeratorComplementAbstract me, bool result ) {
+                public static bool MoveNext (EnumeratorComplementAbstract me, bool result) {
                     Success success = true;
                     if (result) {
-                        success.Assert ( !me.invalid );
-                        success.Assert ( !me.enumerated[me.bitStart + me.bitIndex] );
+                        success.Assert (!me.invalid);
+                        success.Assert (!me.enumerated[me.bitStart + me.bitIndex]);
                     }
                     else {
-                        success.Assert ( me.invalid );
+                        success.Assert (me.invalid);
                     }
                     return success;
                 }
 
                 [Pure]
-                public static bool MoveNextOnThrow ( EnumeratorComplementAbstract me ) {
+                public static bool MoveNextOnThrow (EnumeratorComplementAbstract me) {
                     Success success = true;
 
-                    success.Assert ( me.version != me.enumerated.version );
+                    success.Assert (me.version != me.enumerated.version);
 
                     return success;
                 }
 
                 [Pure]
-                public static bool Current ( EnumeratorComplementAbstract me, int retValue ) {
+                public static bool Current (EnumeratorComplementAbstract me, int retValue) {
                     Success success = true;
 
-                    success.Assert ( !me.invalid );
-                    success.Assert ( me.version == me.enumerated.version );
-                    success.Assert ( !me.enumerated[retValue] );
-                    success.Assert ( retValue.InRange ( 0, me.enumerated.range - 1 ) );
-                    success.Assert ( retValue == me.bitStart + me.bitIndex );
+                    success.Assert (!me.invalid);
+                    success.Assert (me.version == me.enumerated.version);
+                    success.Assert (!me.enumerated[retValue]);
+                    success.Assert (retValue.InRange (0, me.enumerated.range - 1));
+                    success.Assert (retValue == me.bitStart + me.bitIndex);
 
                     return success;
                 }
 
                 [Pure]
-                public static bool CurrentOnThrow ( EnumeratorComplementAbstract me ) {
+                public static bool CurrentOnThrow (EnumeratorComplementAbstract me) {
                     Success success = true;
 
-                    success.Assert ( me.invalid || (me.version != me.enumerated.version) );
+                    success.Assert (me.invalid || (me.version != me.enumerated.version));
 
                     return success;
                 }
@@ -538,17 +538,17 @@ namespace DD.Collections {
 
         public sealed class EnumeratorComplement : EnumeratorComplementAbstract {
 
-            public EnumeratorComplement ( BitSetArray that )
-                : base ( that ) {
-                Contract.Requires<ArgumentNullException> ( that.IsNot ( null ) );
+            public EnumeratorComplement (BitSetArray that)
+                : base (that) {
+                Contract.Requires<ArgumentNullException> (that.IsNot (null));
             }
         }
 
         public sealed class EnumeratorComplementSynchronized : EnumeratorComplementAbstract {
 
-            public EnumeratorComplementSynchronized ( BitSetArray that )
-                : base ( that, that.SyncRoot ) {
-                Contract.Requires<ArgumentNullException> ( that.IsNot ( null ) );
+            public EnumeratorComplementSynchronized (BitSetArray that)
+                : base (that, that.SyncRoot) {
+                Contract.Requires<ArgumentNullException> (that.IsNot (null));
             }
 
             public override bool MoveNext () {
@@ -562,9 +562,9 @@ namespace DD.Collections {
 
         public sealed class EnumeratorComplementReadOnly : EnumeratorComplementAbstract {
 
-            public EnumeratorComplementReadOnly ( BitSetArray that )
-                : base ( BitSetArray.Copy ( that ) ) {
-                Contract.Requires<ArgumentNullException> ( that.IsNot ( null ) );
+            public EnumeratorComplementReadOnly (BitSetArray that)
+                : base (BitSetArray.Copy (that)) {
+                Contract.Requires<ArgumentNullException> (that.IsNot (null));
             }
         }
 
@@ -579,32 +579,32 @@ namespace DD.Collections {
             private bool doNext;
             private bool invalid = true;
 
-            protected EnumeratorReverseAbstract ( BitSetArray that ) {
-                Contract.Requires<ArgumentNullException> ( that.IsNot ( null ) );
-                Contract.Ensures ( Theory.Construct ( this, that ) );
+            protected EnumeratorReverseAbstract (BitSetArray that) {
+                Contract.Requires<ArgumentNullException> (that.IsNot (null));
+                Contract.Ensures (Theory.Construct (this, that));
 
-                this.init ( that, ref this.version, ref this.enumerated, ref this.arrayLen );
+                this.init (that, ref this.version, ref this.enumerated, ref this.arrayLen);
             }
 
-            protected EnumeratorReverseAbstract ( BitSetArray that, object thatSyncRoot ) {
-                Contract.Requires<ArgumentNullException> ( that.IsNot ( null ) );
-                Contract.Requires<ArgumentNullException> ( thatSyncRoot.IsNot ( null ) );
-                Contract.Ensures ( Theory.Construct ( this, that ) );
+            protected EnumeratorReverseAbstract (BitSetArray that, object thatSyncRoot) {
+                Contract.Requires<ArgumentNullException> (that.IsNot (null));
+                Contract.Requires<ArgumentNullException> (thatSyncRoot.IsNot (null));
+                Contract.Ensures (Theory.Construct (this, that));
 
                 lock (thatSyncRoot) {
-                    this.init ( that, ref this.version, ref this.enumerated, ref this.arrayLen );
+                    this.init (that, ref this.version, ref this.enumerated, ref this.arrayLen);
                 }
             }
 
-            private void init ( BitSetArray that, ref int this_version, ref BitSetArray this_enumerated, ref int this_arrayLen ) {
+            private void init (BitSetArray that, ref int this_version, ref BitSetArray this_enumerated, ref int this_arrayLen) {
                 this_version = that.version;
                 this_enumerated = that;
-                this_arrayLen = BitSetArray.GetLongArrayLength ( this.enumerated.range );
+                this_arrayLen = BitSetArray.GetLongArrayLength (this.enumerated.range);
 
                 this.arrIndex = this.arrayLen - 1;
                 this.doNext = this.enumerated.count != 0;
                 if (this.doNext) {
-                    Contract.Assert ( this.arrayLen != 0 );
+                    Contract.Assert (this.arrayLen != 0);
                     this.bitItems = this.enumerated.array[this.arrIndex];
                 }
                 this.bitStart = this.arrIndex * longBits; // set offset
@@ -620,8 +620,8 @@ namespace DD.Collections {
             }
 
             public virtual bool MoveNext () {
-                Contract.Ensures ( Theory.MoveNext ( this, Contract.Result<bool> () ) );
-                Contract.EnsuresOnThrow<InvalidOperationException> ( Theory.MoveNextOnThrow ( this ) );
+                Contract.Ensures (Theory.MoveNext (this, Contract.Result<bool> ()));
+                Contract.EnsuresOnThrow<InvalidOperationException> (Theory.MoveNextOnThrow (this));
 
                 if (this.doNext && (this.version == this.enumerated.version)) {
                     if (this.bitItems == 0) {
@@ -655,23 +655,23 @@ namespace DD.Collections {
                     }
                 }
                 else if (this.version != this.enumerated.version) {
-                    throw new InvalidOperationException ( "Collection was modified; enumeration operation may not execute." );
+                    throw new InvalidOperationException ("Collection was modified; enumeration operation may not execute.");
                 }
                 return this.doNext;
             }
 
             public int Current {
                 get {
-                    Contract.Ensures ( Theory.Current ( this, Contract.Result<int> () ) );
-                    Contract.EnsuresOnThrow<InvalidOperationException> ( Theory.CurrentOnThrow ( this ) );
+                    Contract.Ensures (Theory.Current (this, Contract.Result<int> ()));
+                    Contract.EnsuresOnThrow<InvalidOperationException> (Theory.CurrentOnThrow (this));
 
                     if (!this.invalid && this.version == this.enumerated.version) {
                         return (this.bitStart + this.bitIndex);
                     }
                     if (this.invalid) {
-                        throw new InvalidOperationException ( "The enumerator is not positioned within collection." );
+                        throw new InvalidOperationException ("The enumerator is not positioned within collection.");
                     }
-                    throw new InvalidOperationException ( "Collection was modified; enumeration operation may not execute." );
+                    throw new InvalidOperationException ("Collection was modified; enumeration operation may not execute.");
                 }
             }
 
@@ -684,59 +684,59 @@ namespace DD.Collections {
             private static class Theory {
 
                 [Pure]
-                public static bool Construct ( EnumeratorReverseAbstract me, BitSetArray that ) {
+                public static bool Construct (EnumeratorReverseAbstract me, BitSetArray that) {
                     Success success = true;
 
-                    success.Assert ( that.IsNot ( null ) );
+                    success.Assert (that.IsNot (null));
 
-                    success.Assert ( me.doNext == (that.count != 0) );
-                    success.Assert ( me.invalid == true );
+                    success.Assert (me.doNext == (that.count != 0));
+                    success.Assert (me.invalid == true);
 
                     return success;
                 }
 
                 [Pure]
-                public static bool MoveNext ( EnumeratorReverseAbstract me, bool result ) {
+                public static bool MoveNext (EnumeratorReverseAbstract me, bool result) {
                     Success success = true;
 
                     if (result) {
-                        success.Assert ( !me.invalid );
-                        success.Assert ( me.enumerated[me.bitStart + me.bitIndex] );
+                        success.Assert (!me.invalid);
+                        success.Assert (me.enumerated[me.bitStart + me.bitIndex]);
                     }
                     else {
-                        success.Assert ( me.invalid );
+                        success.Assert (me.invalid);
                     }
 
                     return success;
                 }
 
                 [Pure]
-                public static bool MoveNextOnThrow ( EnumeratorReverseAbstract me ) {
+                public static bool MoveNextOnThrow (EnumeratorReverseAbstract me) {
                     Success success = true;
 
-                    success.Assert ( me.version != me.enumerated.version );
+                    success.Assert (me.version != me.enumerated.version);
 
                     return success;
                 }
 
                 [Pure]
-                public static bool Current ( EnumeratorReverseAbstract me, int retValue ) {
+                public static bool Current (EnumeratorReverseAbstract me, int retValue) {
                     Success success = true;
 
-                    success.Assert ( !me.invalid );
-                    success.Assert ( me.version == me.enumerated.version );
-                    success.Assert ( me.enumerated[retValue] );
-                    success.Assert ( retValue.InRange ( 0, me.enumerated.range - 1 ) );
-                    success.Assert ( retValue == me.bitStart + me.bitIndex );
+                    success.Assert (!me.invalid);
+                    success.Assert (me.version == me.enumerated.version);
+                    success.Assert (me.enumerated[retValue]);
+                    success.Assert (retValue.InRange (0, me.enumerated.range - 1));
+                    success.Assert (retValue == me.bitStart + me.bitIndex);
 
                     return success;
                 }
 
                 [Pure]
-                public static bool CurrentOnThrow ( EnumeratorReverseAbstract me ) {
+                public static bool CurrentOnThrow (EnumeratorReverseAbstract me) {
                     Success success = true;
 
-                    success.Assert ( me.invalid || (me.version != me.enumerated.version) );
+                    success.Assert (me.invalid || (me.version != me.enumerated.version));
 
                     return success;
                 }
@@ -745,17 +745,17 @@ namespace DD.Collections {
 
         public sealed class EnumeratorReverse : EnumeratorReverseAbstract {
 
-            public EnumeratorReverse ( BitSetArray that )
-                : base ( that ) {
-                Contract.Requires<ArgumentNullException> ( that.IsNot ( null ) );
+            public EnumeratorReverse (BitSetArray that)
+                : base (that) {
+                Contract.Requires<ArgumentNullException> (that.IsNot (null));
             }
         }
 
         public sealed class EnumeratorReverseSynchronized : EnumeratorReverseAbstract {
 
-            public EnumeratorReverseSynchronized ( BitSetArray that )
-                : base ( that, that.sRoot ) {
-                Contract.Requires<ArgumentNullException> ( that.IsNot ( null ) );
+            public EnumeratorReverseSynchronized (BitSetArray that)
+                : base (that, that.sRoot) {
+                Contract.Requires<ArgumentNullException> (that.IsNot (null));
             }
 
             public override bool MoveNext () {
@@ -769,9 +769,9 @@ namespace DD.Collections {
 
         public sealed class EnumeratorReverseReadOnly : EnumeratorReverseAbstract {
 
-            public EnumeratorReverseReadOnly ( BitSetArray that )
-                : base ( BitSetArray.Copy ( that ) ) {
-                Contract.Requires<ArgumentNullException> ( that.IsNot ( null ) );
+            public EnumeratorReverseReadOnly (BitSetArray that)
+                : base (BitSetArray.Copy (that)) {
+                Contract.Requires<ArgumentNullException> (that.IsNot (null));
             }
         }
 
@@ -803,13 +803,13 @@ namespace DD.Collections {
         private const int byteBits = 8;
 
         [NonSerialized]
-        private const int shortBits = sizeof ( short ) * byteBits;
+        private const int shortBits = sizeof (short) * byteBits;
 
         [NonSerialized]
-        private const int int32Bits = sizeof ( int ) * byteBits;
+        private const int int32Bits = sizeof (int) * byteBits;
 
         [NonSerialized]
-        private const int longBits = sizeof ( long ) * byteBits;
+        private const int longBits = sizeof (long) * byteBits;
 
         [NonSerialized]
         private const int log2of64 = 6;
@@ -859,7 +859,7 @@ namespace DD.Collections {
         [ContractInvariantMethod]
         [Pure]
         private void BitSetArrayInvariant () {
-            Contract.Invariant ( Theory.Invariant ( this ) );
+            Contract.Invariant (Theory.Invariant (this));
         }
 
         #endregion
@@ -869,18 +869,18 @@ namespace DD.Collections {
         #region Member&Length Validation
 
         [Pure]
-        public static bool ValidMembers ( IEnumerable<int> items ) {
-            return Theory.IsValidMembers ( items );
+        public static bool ValidMembers (IEnumerable<int> items) {
+            return Theory.IsValidMembers (items);
         }
 
         [Pure]
-        public static bool ValidMember ( int item ) {
-            return Theory.IsValidMember ( item );
+        public static bool ValidMember (int item) {
+            return Theory.IsValidMember (item);
         }
 
         [Pure]
-        public static bool ValidLength ( int item ) {
-            return Theory.IsValidLength ( item );
+        public static bool ValidLength (int item) {
+            return Theory.IsValidLength (item);
         }
 
         #endregion
@@ -888,12 +888,12 @@ namespace DD.Collections {
         #region Factory
 
         [Pure]
-        public static BitSetArray From ( IEnumerable<int> items ) {
-            Contract.Requires<ArgumentNullException> ( items.IsNot ( null ) );
-            Contract.Requires<IndexOutOfRangeException> ( ValidMembers ( items ) );
+        public static BitSetArray From (IEnumerable<int> items) {
+            Contract.Requires<ArgumentNullException> (items.IsNot (null));
+            Contract.Requires<IndexOutOfRangeException> (ValidMembers (items));
 
-            Contract.Ensures ( Contract.Result<BitSetArray> ().IsNot ( null ) );
-            Contract.Ensures ( Theory.From ( Contract.Result<BitSetArray> (), items ) );
+            Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
+            Contract.Ensures (Theory.From (Contract.Result<BitSetArray> (), items));
 
             BitSetArray retValue;
             if (items.IsEmpty ()) {
@@ -905,72 +905,72 @@ namespace DD.Collections {
                     if (item > maxValue)
                         maxValue = item;
                 }
-                Contract.Assert ( maxValue != int.MinValue );
-                retValue = new BitSetArray ( maxValue + 1 );
-                retValue._SetItems ( items );
+                Contract.Assert (maxValue != int.MinValue);
+                retValue = new BitSetArray (maxValue + 1);
+                retValue._SetItems (items);
             }
             return retValue;
         }
 
         [Pure]
-        public static BitSetArray From ( int required, params int[] optional ) {
+        public static BitSetArray From (int required, params int[] optional) {
             Contract.Requires<IndexOutOfRangeException> (
-                ValidMember ( required ) );
-            Contract.Requires<ArgumentNullException> ( optional.IsNot ( null ) );
+                ValidMember (required));
+            Contract.Requires<ArgumentNullException> (optional.IsNot (null));
             Contract.Requires<IndexOutOfRangeException> (
                 optional.Length == 0 ||
-                ValidMembers ( optional ) );
+                ValidMembers (optional));
 
-            Contract.Ensures ( Contract.Result<BitSetArray> ().IsNot ( null ) );
+            Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
             Contract.Ensures (
-                Theory.From ( Contract.Result<BitSetArray> (), required, optional ) );
+                Theory.From (Contract.Result<BitSetArray> (), required, optional));
 
             var items = new List<int> ();
-            items.Add ( required ); // value type (int) is never null
+            items.Add (required); // value type (int) is never null
             if (optional.Length != 0) { // params is never null, cannot produce null test
-                items.AddRange ( optional );
+                items.AddRange (optional);
             }
-            return BitSetArray.From ( items ); // Redirect to From(IEnumerable<int>)
+            return BitSetArray.From (items); // Redirect to From(IEnumerable<int>)
         }
 
         [Pure]
-        public static BitSetArray From ( BitSetArray that ) {
-            Contract.Requires<ArgumentNullException> ( that.IsNot ( null ) );
+        public static BitSetArray From (BitSetArray that) {
+            Contract.Requires<ArgumentNullException> (that.IsNot (null));
 
-            Contract.Ensures ( Contract.Result<BitSetArray> ().IsNot ( null ) );
+            Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
 
-            return new BitSetArray ( that );
+            return new BitSetArray (that);
         }
 
         [Pure]
-        public static BitSetArray From ( BitSetArray that, int length ) {
-            Contract.Requires<ArgumentNullException> ( that.IsNot ( null ) );
-            Contract.Requires<IndexOutOfRangeException> ( ValidLength ( length ) );
+        public static BitSetArray From (BitSetArray that, int length) {
+            Contract.Requires<ArgumentNullException> (that.IsNot (null));
+            Contract.Requires<IndexOutOfRangeException> (ValidLength (length));
 
-            Contract.Ensures ( Contract.Result<BitSetArray> ().IsNot ( null ) );
+            Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
 
-            return new BitSetArray ( that, length );
+            return new BitSetArray (that, length);
         }
 
         [Pure]
-        public static BitSetArray Copy ( BitSetArray that ) {
-            Contract.Requires<ArgumentNullException> ( that.IsNot ( null ) );
+        public static BitSetArray Copy (BitSetArray that) {
+            Contract.Requires<ArgumentNullException> (that.IsNot (null));
 
-            Contract.Ensures ( Contract.Result<BitSetArray> ().IsNot ( null ) );
+            Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
 
-            return new BitSetArray ( that );
+            return new BitSetArray (that);
         }
 
         [Pure]
         public static BitSetArray Empty () {
-            Contract.Ensures ( Contract.Result<BitSetArray> ().IsNot ( null ) );
+            Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
 
-            return BitSetArray.Size ( 0 );
+            return BitSetArray.Size (0);
         }
 
         [Pure]
-        public static BitSetArray Size ( int length, bool value = false ) {
-            Contract.Requires<IndexOutOfRangeException> ( ValidLength ( length ) );
+        public static BitSetArray Size (int length, bool value = false) {
+            Contract.Requires<IndexOutOfRangeException> (ValidLength (length));
             Contract.Requires<ArgumentException> (
                 (
                     value.Bool () == true
@@ -982,20 +982,20 @@ namespace DD.Collections {
                 )
             );
 
-            Contract.Ensures ( Contract.Result<BitSetArray> ().IsNot ( null ) );
+            Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
 
-            return new BitSetArray ( length, value );
+            return new BitSetArray (length, value);
         }
 
         [Pure]
-        public static BitSetArray Mask ( BitArray mask, int length ) {
-            Contract.Requires<ArgumentNullException> ( mask.IsNot ( null ) );
-            Contract.Requires<IndexOutOfRangeException> ( ValidLength ( length ) );
+        public static BitSetArray Mask (BitArray mask, int length) {
+            Contract.Requires<ArgumentNullException> (mask.IsNot (null));
+            Contract.Requires<IndexOutOfRangeException> (ValidLength (length));
 
-            Contract.Ensures ( Contract.Result<BitSetArray> ().IsNot ( null ) );
-            Contract.Ensures ( Theory.Mask ( Contract.Result<BitSetArray> (), mask, length ) );
+            Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
+            Contract.Ensures (Theory.Mask (Contract.Result<BitSetArray> (), mask, length));
 
-            var retValue = new BitSetArray ( length );
+            var retValue = new BitSetArray (length);
 
             if (retValue.array.Length > 0) {
                 IEnumerator maskEnumerator = mask.GetEnumerator ();
@@ -1031,17 +1031,17 @@ namespace DD.Collections {
         }
 
         [Pure]
-        public static BitSetArray Mask ( IEnumerable<bool> mask, int length ) {
-            Contract.Requires<ArgumentNullException> ( mask.IsNot ( null ) );
-            Contract.Requires<IndexOutOfRangeException> ( ValidLength ( length ) );
+        public static BitSetArray Mask (IEnumerable<bool> mask, int length) {
+            Contract.Requires<ArgumentNullException> (mask.IsNot (null));
+            Contract.Requires<IndexOutOfRangeException> (ValidLength (length));
 
-            Contract.Ensures ( Contract.Result<BitSetArray> ().IsNot ( null ) );
-            Contract.Ensures ( Theory.Mask ( Contract.Result<BitSetArray> (), mask, length ) );
+            Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
+            Contract.Ensures (Theory.Mask (Contract.Result<BitSetArray> (), mask, length));
 
-            var retValue = new BitSetArray ( length );
+            var retValue = new BitSetArray (length);
 
             if (retValue.range > 0) {
-                Contract.Assert ( retValue.array.Length > 0 );
+                Contract.Assert (retValue.array.Length > 0);
 
                 IEnumerator<bool> maskEnumerator = mask.GetEnumerator ();
                 bool cycle = maskEnumerator.MoveNext ();
@@ -1076,17 +1076,17 @@ namespace DD.Collections {
         }
 
         [Pure]
-        public static BitSetArray Mask ( IEnumerable<byte> mask, int length ) {
-            Contract.Requires<ArgumentNullException> ( mask.IsNot ( null ) );
-            Contract.Requires<IndexOutOfRangeException> ( ValidLength ( length ) );
+        public static BitSetArray Mask (IEnumerable<byte> mask, int length) {
+            Contract.Requires<ArgumentNullException> (mask.IsNot (null));
+            Contract.Requires<IndexOutOfRangeException> (ValidLength (length));
 
-            Contract.Ensures ( Contract.Result<BitSetArray> ().IsNot ( null ) );
-            Contract.Ensures ( Theory.Mask ( Contract.Result<BitSetArray> (), mask, length ) );
+            Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
+            Contract.Ensures (Theory.Mask (Contract.Result<BitSetArray> (), mask, length));
 
-            var retValue = new BitSetArray ( length );
+            var retValue = new BitSetArray (length);
 
             if (retValue.range > 0) {
-                Contract.Assert ( retValue.array.Length > 0 );
+                Contract.Assert (retValue.array.Length > 0);
 
                 IEnumerator<byte> maskEnumerator = mask.GetEnumerator ();
                 bool cycle = maskEnumerator.MoveNext ();
@@ -1096,7 +1096,7 @@ namespace DD.Collections {
                     long value = 0;
                     for (i = 0; i < retValue.array.Length; i++) {
                         value = 0;
-                        for (j = 0; j < (sizeof ( long ) / sizeof ( byte )); j++) {
+                        for (j = 0; j < (sizeof (long) / sizeof (byte)); j++) {
                             if (maskEnumerator.Current != 0) {
                                 value |= ((long)(maskEnumerator.Current)) << (j << 3);
                             }
@@ -1106,7 +1106,7 @@ namespace DD.Collections {
                             }
                             ++maskCount;
                         }
-                        retValue.count += BitSetArray.CountOnBits ( value );
+                        retValue.count += BitSetArray.CountOnBits (value);
                         retValue.array[i] = value;
                         if (!cycle) {
                             break;
@@ -1114,11 +1114,11 @@ namespace DD.Collections {
                     }
                     if ((maskCount << 3) > retValue.range) {
                         // mask is longer than range, cleanup tail
-                        int lastBitsCount = BitSetArray.CountOnBits ( retValue.array[retValue.array.Length - 1] );
+                        int lastBitsCount = BitSetArray.CountOnBits (retValue.array[retValue.array.Length - 1]);
                         if (lastBitsCount != 0) {
                             retValue.count -= lastBitsCount;
                             retValue.ClearTail ();
-                            retValue.count += BitSetArray.CountOnBits ( retValue.array[retValue.array.Length - 1] );
+                            retValue.count += BitSetArray.CountOnBits (retValue.array[retValue.array.Length - 1]);
                         }
                     }
                 }
@@ -1127,17 +1127,17 @@ namespace DD.Collections {
         }
 
         [Pure]
-        public static BitSetArray Mask ( IEnumerable<short> mask, int length ) {
-            Contract.Requires<ArgumentNullException> ( mask.IsNot ( null ) );
-            Contract.Requires<IndexOutOfRangeException> ( ValidLength ( length ) );
+        public static BitSetArray Mask (IEnumerable<short> mask, int length) {
+            Contract.Requires<ArgumentNullException> (mask.IsNot (null));
+            Contract.Requires<IndexOutOfRangeException> (ValidLength (length));
 
-            Contract.Ensures ( Contract.Result<BitSetArray> ().IsNot ( null ) );
-            Contract.Ensures ( Theory.Mask ( Contract.Result<BitSetArray> (), mask, length ) );
+            Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
+            Contract.Ensures (Theory.Mask (Contract.Result<BitSetArray> (), mask, length));
 
-            var retValue = new BitSetArray ( length );
+            var retValue = new BitSetArray (length);
 
             if (retValue.range > 0) {
-                Contract.Assert ( retValue.array.Length > 0 );
+                Contract.Assert (retValue.array.Length > 0);
 
                 IEnumerator<short> maskEnumerator = mask.GetEnumerator ();
                 bool cycle = maskEnumerator.MoveNext ();
@@ -1147,9 +1147,9 @@ namespace DD.Collections {
                     long value = 0;
                     for (i = 0; i < retValue.array.Length; i++) {
                         value = 0;
-                        for (j = 0; j < (sizeof ( long ) / sizeof ( short )); j++) {
+                        for (j = 0; j < (sizeof (long) / sizeof (short)); j++) {
                             if (maskEnumerator.Current != 0) {
-                                value |= (((long)(unchecked ( (ushort)maskEnumerator.Current ))) << (j << 4));
+                                value |= (((long)(unchecked ((ushort)maskEnumerator.Current))) << (j << 4));
                             }
                             cycle = maskEnumerator.MoveNext ();
                             if (!cycle) {
@@ -1157,7 +1157,7 @@ namespace DD.Collections {
                             }
                             ++maskCount;
                         }
-                        retValue.count += BitSetArray.CountOnBits ( value );
+                        retValue.count += BitSetArray.CountOnBits (value);
                         retValue.array[i] = value;
                         if (!cycle) {
                             break;
@@ -1165,11 +1165,11 @@ namespace DD.Collections {
                     }
                     if ((maskCount << 4) > retValue.range) {
                         // mask is longer than range, cleanup tail
-                        int lastBitsCount = BitSetArray.CountOnBits ( retValue.array[retValue.array.Length - 1] );
+                        int lastBitsCount = BitSetArray.CountOnBits (retValue.array[retValue.array.Length - 1]);
                         if (lastBitsCount != 0) {
                             retValue.count -= lastBitsCount;
                             retValue.ClearTail ();
-                            retValue.count += BitSetArray.CountOnBits ( retValue.array[retValue.array.Length - 1] );
+                            retValue.count += BitSetArray.CountOnBits (retValue.array[retValue.array.Length - 1]);
                         }
                     }
                 }
@@ -1178,17 +1178,17 @@ namespace DD.Collections {
         }
 
         [Pure]
-        public static BitSetArray Mask ( IEnumerable<int> mask, int length ) {
-            Contract.Requires<ArgumentNullException> ( mask.IsNot ( null ) );
-            Contract.Requires<IndexOutOfRangeException> ( ValidLength ( length ) );
+        public static BitSetArray Mask (IEnumerable<int> mask, int length) {
+            Contract.Requires<ArgumentNullException> (mask.IsNot (null));
+            Contract.Requires<IndexOutOfRangeException> (ValidLength (length));
 
-            Contract.Ensures ( Contract.Result<BitSetArray> ().IsNot ( null ) );
-            Contract.Ensures ( Theory.Mask ( Contract.Result<BitSetArray> (), mask, length ) );
+            Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
+            Contract.Ensures (Theory.Mask (Contract.Result<BitSetArray> (), mask, length));
 
-            var retValue = new BitSetArray ( length );
+            var retValue = new BitSetArray (length);
 
             if (retValue.range > 0) {
-                Contract.Assert ( retValue.array.Length > 0 );
+                Contract.Assert (retValue.array.Length > 0);
 
                 IEnumerator<int> maskEnumerator = mask.GetEnumerator ();
                 bool cycle = maskEnumerator.MoveNext ();
@@ -1198,9 +1198,9 @@ namespace DD.Collections {
                     long value = 0;
                     for (i = 0; i < retValue.array.Length; i++) {
                         value = 0;
-                        for (j = 0; j < (sizeof ( long ) / sizeof ( int )); j++) {
+                        for (j = 0; j < (sizeof (long) / sizeof (int)); j++) {
                             if (maskEnumerator.Current != 0) {
-                                value |= (((long)(unchecked ( (uint)maskEnumerator.Current ))) << (j << 5));
+                                value |= (((long)(unchecked ((uint)maskEnumerator.Current))) << (j << 5));
                             }
                             cycle = maskEnumerator.MoveNext ();
                             if (!cycle) {
@@ -1208,7 +1208,7 @@ namespace DD.Collections {
                             }
                             ++maskCount;
                         }
-                        retValue.count += BitSetArray.CountOnBits ( value );
+                        retValue.count += BitSetArray.CountOnBits (value);
                         retValue.array[i] = value;
                         if (!cycle) {
                             break;
@@ -1216,11 +1216,11 @@ namespace DD.Collections {
                     }
                     if ((maskCount << 5) > retValue.range) {
                         // mask is longer than range, cleanup tail
-                        int lastBitsCount = BitSetArray.CountOnBits ( retValue.array[retValue.array.Length - 1] );
+                        int lastBitsCount = BitSetArray.CountOnBits (retValue.array[retValue.array.Length - 1]);
                         if (lastBitsCount != 0) {
                             retValue.count -= lastBitsCount;
                             retValue.ClearTail ();
-                            retValue.count += BitSetArray.CountOnBits ( retValue.array[retValue.array.Length - 1] );
+                            retValue.count += BitSetArray.CountOnBits (retValue.array[retValue.array.Length - 1]);
                         }
                     }
                 }
@@ -1229,17 +1229,17 @@ namespace DD.Collections {
         }
 
         [Pure]
-        public static BitSetArray Mask ( IEnumerable<long> mask, int length ) {
-            Contract.Requires<ArgumentNullException> ( mask.IsNot ( null ) );
-            Contract.Requires<IndexOutOfRangeException> ( ValidLength ( length ) );
+        public static BitSetArray Mask (IEnumerable<long> mask, int length) {
+            Contract.Requires<ArgumentNullException> (mask.IsNot (null));
+            Contract.Requires<IndexOutOfRangeException> (ValidLength (length));
 
-            Contract.Ensures ( Contract.Result<BitSetArray> ().IsNot ( null ) );
-            Contract.Ensures ( Theory.Mask ( Contract.Result<BitSetArray> (), mask, length ) );
+            Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
+            Contract.Ensures (Theory.Mask (Contract.Result<BitSetArray> (), mask, length));
 
-            var retValue = new BitSetArray ( length );
+            var retValue = new BitSetArray (length);
 
             if (retValue.range > 0) {
-                Contract.Assert ( retValue.array.Length > 0 );
+                Contract.Assert (retValue.array.Length > 0);
 
                 IEnumerator<long> maskEnumerator = mask.GetEnumerator ();
                 bool cycle = maskEnumerator.MoveNext ();
@@ -1248,7 +1248,7 @@ namespace DD.Collections {
                     for (int i = 0; i < retValue.array.Length; i++) {
                         if (maskEnumerator.Current != 0) {
                             retValue.array[i] = maskEnumerator.Current;
-                            retValue.count += BitSetArray.CountOnBits ( maskEnumerator.Current );
+                            retValue.count += BitSetArray.CountOnBits (maskEnumerator.Current);
                         }
                         cycle = maskEnumerator.MoveNext ();
                         if (!cycle) {
@@ -1258,11 +1258,11 @@ namespace DD.Collections {
                     }
                     if ((maskCount << 6) > retValue.range) {
                         // mask is longer than range, cleanup tail
-                        int lastBitsCount = BitSetArray.CountOnBits ( retValue.array[retValue.array.Length - 1] );
+                        int lastBitsCount = BitSetArray.CountOnBits (retValue.array[retValue.array.Length - 1]);
                         if (lastBitsCount != 0) {
                             retValue.count -= lastBitsCount;
                             retValue.ClearTail ();
-                            retValue.count += BitSetArray.CountOnBits ( retValue.array[retValue.array.Length - 1] );
+                            retValue.count += BitSetArray.CountOnBits (retValue.array[retValue.array.Length - 1]);
                         }
                     }
                 }
@@ -1275,45 +1275,45 @@ namespace DD.Collections {
         #region Ctor/To... Helpers
 
         [Pure]
-        public static int GetLongArrayLength ( int length ) {
-            Contract.Requires<IndexOutOfRangeException> ( length >= 0 );
-            Contract.Ensures ( length == 0 || Contract.Result<int> () == (((length - 1) / longBits) + 1) );
-            Contract.Ensures ( length == 0 || ((long)Contract.Result<int> () * longBits) >= length );
-            Contract.Ensures ( length == 0 || (((long)Contract.Result<int> () - 1) * longBits) < length );
-            Contract.Ensures ( length != 0 || Contract.Result<int> () == 0 );
+        public static int GetLongArrayLength (int length) {
+            Contract.Requires<IndexOutOfRangeException> (length >= 0);
+            Contract.Ensures (length == 0 || Contract.Result<int> () == (((length - 1) / longBits) + 1));
+            Contract.Ensures (length == 0 || ((long)Contract.Result<int> () * longBits) >= length);
+            Contract.Ensures (length == 0 || (((long)Contract.Result<int> () - 1) * longBits) < length);
+            Contract.Ensures (length != 0 || Contract.Result<int> () == 0);
 
             return length == 0 ? 0 : ((length - 1) >> log2of64) + 1;
         }
 
         [Pure]
-        public static int GetIntArrayLength ( int length ) {
-            Contract.Requires<IndexOutOfRangeException> ( length >= 0 );
-            Contract.Ensures ( length == 0 || Contract.Result<int> () == (((length - 1) / int32Bits) + 1) );
-            Contract.Ensures ( length == 0 || ((long)Contract.Result<int> () * int32Bits) >= length );
-            Contract.Ensures ( length == 0 || (((long)Contract.Result<int> () - 1) * int32Bits) < length );
-            Contract.Ensures ( length != 0 || Contract.Result<int> () == 0 );
+        public static int GetIntArrayLength (int length) {
+            Contract.Requires<IndexOutOfRangeException> (length >= 0);
+            Contract.Ensures (length == 0 || Contract.Result<int> () == (((length - 1) / int32Bits) + 1));
+            Contract.Ensures (length == 0 || ((long)Contract.Result<int> () * int32Bits) >= length);
+            Contract.Ensures (length == 0 || (((long)Contract.Result<int> () - 1) * int32Bits) < length);
+            Contract.Ensures (length != 0 || Contract.Result<int> () == 0);
 
             return length == 0 ? 0 : ((length - 1) >> log2of32) + 1;
         }
 
         [Pure]
-        public static int GetShortArrayLength ( int length ) {
-            Contract.Requires<IndexOutOfRangeException> ( length >= 0 );
-            Contract.Ensures ( length == 0 || Contract.Result<int> () == (((length - 1) / shortBits) + 1) );
-            Contract.Ensures ( length == 0 || ((long)Contract.Result<int> () * shortBits) >= length );
-            Contract.Ensures ( length == 0 || (((long)Contract.Result<int> () - 1) * shortBits) < length );
-            Contract.Ensures ( length != 0 || Contract.Result<int> () == 0 );
+        public static int GetShortArrayLength (int length) {
+            Contract.Requires<IndexOutOfRangeException> (length >= 0);
+            Contract.Ensures (length == 0 || Contract.Result<int> () == (((length - 1) / shortBits) + 1));
+            Contract.Ensures (length == 0 || ((long)Contract.Result<int> () * shortBits) >= length);
+            Contract.Ensures (length == 0 || (((long)Contract.Result<int> () - 1) * shortBits) < length);
+            Contract.Ensures (length != 0 || Contract.Result<int> () == 0);
 
             return length == 0 ? 0 : ((length - 1) >> log2of16) + 1;
         }
 
         [Pure]
-        public static int GetByteArrayLength ( int length ) {
-            Contract.Requires<IndexOutOfRangeException> ( length >= 0 );
-            Contract.Ensures ( length == 0 || Contract.Result<int> () == (((length - 1) / byteBits) + 1) );
-            Contract.Ensures ( length == 0 || ((long)Contract.Result<int> () * byteBits) >= length );
-            Contract.Ensures ( length == 0 || (((long)Contract.Result<int> () - 1) * byteBits) < length );
-            Contract.Ensures ( length != 0 || Contract.Result<int> () == 0 );
+        public static int GetByteArrayLength (int length) {
+            Contract.Requires<IndexOutOfRangeException> (length >= 0);
+            Contract.Ensures (length == 0 || Contract.Result<int> () == (((length - 1) / byteBits) + 1));
+            Contract.Ensures (length == 0 || ((long)Contract.Result<int> () * byteBits) >= length);
+            Contract.Ensures (length == 0 || (((long)Contract.Result<int> () - 1) * byteBits) < length);
+            Contract.Ensures (length != 0 || Contract.Result<int> () == 0);
 
             return length == 0 ? 0 : ((length - 1) >> log2of8) + 1;
         }
@@ -1323,42 +1323,42 @@ namespace DD.Collections {
         #region Count "On" Bits
 
         [Pure]
-        public static int CountOnBits ( byte mask ) {
-            Contract.Ensures ( Contract.Result<int> ().InRange ( 0, byteBits ) );
-            Contract.Ensures ( Theory.CountOnBits ( Contract.Result<int> (), mask ) );
+        public static int CountOnBits (byte mask) {
+            Contract.Ensures (Contract.Result<int> ().InRange (0, byteBits));
+            Contract.Ensures (Theory.CountOnBits (Contract.Result<int> (), mask));
 
-            return BitSetArray.CountOnBits ( (ulong)mask );
+            return BitSetArray.CountOnBits ((ulong)mask);
         }
 
         [Pure]
-        public static int CountOnBits ( short mask ) {
-            Contract.Ensures ( Contract.Result<int> ().InRange ( 0, 16 ) );
-            Contract.Ensures ( Theory.CountOnBits ( Contract.Result<int> (), mask ) );
+        public static int CountOnBits (short mask) {
+            Contract.Ensures (Contract.Result<int> ().InRange (0, 16));
+            Contract.Ensures (Theory.CountOnBits (Contract.Result<int> (), mask));
 
-            return BitSetArray.CountOnBits ( unchecked ( (ulong)((ushort)mask) ) );
+            return BitSetArray.CountOnBits (unchecked ((ulong)((ushort)mask)));
         }
 
         [Pure]
-        public static int CountOnBits ( int mask ) {
-            Contract.Ensures ( Contract.Result<int> ().InRange ( 0, 32 ) );
-            Contract.Ensures ( Theory.CountOnBits ( Contract.Result<int> (), mask ) );
+        public static int CountOnBits (int mask) {
+            Contract.Ensures (Contract.Result<int> ().InRange (0, 32));
+            Contract.Ensures (Theory.CountOnBits (Contract.Result<int> (), mask));
 
-            return BitSetArray.CountOnBits ( unchecked ( (ulong)((uint)mask) ) );
+            return BitSetArray.CountOnBits (unchecked ((ulong)((uint)mask)));
         }
 
         [Pure]
-        public static int CountOnBits ( long mask ) {
-            Contract.Ensures ( Contract.Result<int> ().InRange ( 0, longBits ) );
-            Contract.Ensures ( Theory.CountOnBits ( Contract.Result<int> (), mask ) );
+        public static int CountOnBits (long mask) {
+            Contract.Ensures (Contract.Result<int> ().InRange (0, longBits));
+            Contract.Ensures (Theory.CountOnBits (Contract.Result<int> (), mask));
 
-            return BitSetArray.CountOnBits ( unchecked ( (ulong)mask ) );
+            return BitSetArray.CountOnBits (unchecked ((ulong)mask));
         }
 
-        [CLSCompliant ( false )]
+        [CLSCompliant (false)]
         [Pure]
-        public static int CountOnBits ( ulong mask ) {
-            Contract.Ensures ( Contract.Result<int> ().InRange ( 0, longBits ) );
-            Contract.Ensures ( Theory.CountOnBits ( Contract.Result<int> (), mask ) );
+        public static int CountOnBits (ulong mask) {
+            Contract.Ensures (Contract.Result<int> ().InRange (0, longBits));
+            Contract.Ensures (Theory.CountOnBits (Contract.Result<int> (), mask));
 
             int retCount = 0;
             while (mask != 0) {
@@ -1369,17 +1369,17 @@ namespace DD.Collections {
         }
 
         [Pure]
-        public static int CountOnBits ( BitArray mask ) {
-            Contract.Ensures ( Theory.CountOnBits ( Contract.Result<int> (), mask ) );
+        public static int CountOnBits (BitArray mask) {
+            Contract.Ensures (Theory.CountOnBits (Contract.Result<int> (), mask));
 
             int retCount = 0;
-            if (mask.IsNot ( null )
+            if (mask.IsNot (null)
                 && mask.Length != 0) {
                 // Counting BitArray.CopyTo(int[]) without length(range limit) does not count correctly because bits above BitArray.length are copied
                 // => bits above BitArray.Length are not cleared when BitArray.Length is reduced!
                 var array = new int[(mask.Length + 31) / 32];
-                mask.CopyTo ( array, 0 );
-                retCount = BitSetArray.CountOnBits ( array, mask.Length );
+                mask.CopyTo (array, 0);
+                retCount = BitSetArray.CountOnBits (array, mask.Length);
             }
             return retCount;
         }
@@ -1390,11 +1390,11 @@ namespace DD.Collections {
         /// <param name="mask"></param>
         /// <returns></returns>
         [Pure]
-        public static int CountOnBits ( bool[] mask ) {
-            Contract.Ensures ( Theory.CountOnBits ( Contract.Result<int> (), mask ) );
+        public static int CountOnBits (bool[] mask) {
+            Contract.Ensures (Theory.CountOnBits (Contract.Result<int> (), mask));
 
             int retCount = 0;
-            if (mask.IsNot ( null ) && mask.Length != 0) {
+            if (mask.IsNot (null) && mask.Length != 0) {
                 foreach (bool bitBlock in mask) {
                     if (bitBlock) {
                         ++retCount;
@@ -1410,11 +1410,11 @@ namespace DD.Collections {
         /// <param name="mask"></param>
         /// <returns></returns>
         [Pure]
-        public static int CountOnBits ( byte[] mask ) {
-            Contract.Ensures ( Theory.CountOnBits ( Contract.Result<int> (), mask ) );
+        public static int CountOnBits (byte[] mask) {
+            Contract.Ensures (Theory.CountOnBits (Contract.Result<int> (), mask));
 
             int retCount = 0;
-            if (mask.IsNot ( null ) && mask.Length != 0) {
+            if (mask.IsNot (null) && mask.Length != 0) {
                 byte bitBlock = 0;
                 for (int arrIndex = 0; arrIndex < mask.Length; arrIndex++) {
                     bitBlock = mask[arrIndex];
@@ -1444,14 +1444,14 @@ namespace DD.Collections {
         /// <param name="mask"></param>
         /// <returns></returns>
         [Pure]
-        public static int CountOnBits ( short[] mask ) {
-            Contract.Ensures ( Theory.CountOnBits ( Contract.Result<int> (), mask ) );
+        public static int CountOnBits (short[] mask) {
+            Contract.Ensures (Theory.CountOnBits (Contract.Result<int> (), mask));
 
             int retCount = 0;
-            if (mask.IsNot ( null ) && mask.Length != 0) {
+            if (mask.IsNot (null) && mask.Length != 0) {
                 ushort bitBlock = 0; // unsigned for logical right shift
                 for (int arrIndex = 0; arrIndex < mask.Length; arrIndex++) {
-                    bitBlock = unchecked ( (ushort)mask[arrIndex] );
+                    bitBlock = unchecked ((ushort)mask[arrIndex]);
                     switch (bitBlock) {
                         case 0:
                             break;
@@ -1478,14 +1478,14 @@ namespace DD.Collections {
         /// <param name="mask"></param>
         /// <returns></returns>
         [Pure]
-        public static int CountOnBits ( int[] mask ) {
-            Contract.Ensures ( Theory.CountOnBits ( Contract.Result<int> (), mask ) );
+        public static int CountOnBits (int[] mask) {
+            Contract.Ensures (Theory.CountOnBits (Contract.Result<int> (), mask));
 
             int retCount = 0;
-            if (mask.IsNot ( null ) && mask.Length != 0) {
+            if (mask.IsNot (null) && mask.Length != 0) {
                 uint bitBlock = 0; // unsigned for logical right shift
                 for (int arrIndex = 0; arrIndex < mask.Length; arrIndex++) {
-                    bitBlock = unchecked ( (uint)mask[arrIndex] );
+                    bitBlock = unchecked ((uint)mask[arrIndex]);
                     switch (bitBlock) {
                         case 0:
                             break;
@@ -1507,23 +1507,23 @@ namespace DD.Collections {
         }
 
         [Pure]
-        public static int CountOnBits ( int[] mask, int length ) {
-            Contract.Requires<IndexOutOfRangeException> ( ValidLength ( length ) );
-            Contract.Ensures ( Theory.CountOnBits ( Contract.Result<int> (), mask, length ) );
+        public static int CountOnBits (int[] mask, int length) {
+            Contract.Requires<IndexOutOfRangeException> (ValidLength (length));
+            Contract.Ensures (Theory.CountOnBits (Contract.Result<int> (), mask, length));
 
             int retCount = 0;
-            if (mask.IsNot ( null ) && mask.Length != 0 && length != 0) {
-                Contract.Assume ( mask.IsNot ( null ) );
-                Contract.Assume ( mask.Length > 0 );
-                Contract.Assume ( length > 0 );
+            if (mask.IsNot (null) && mask.Length != 0 && length != 0) {
+                Contract.Assume (mask.IsNot (null));
+                Contract.Assume (mask.Length > 0);
+                Contract.Assume (length > 0);
 
-                int arrLength = BitSetArray.GetIntArrayLength ( length );
+                int arrLength = BitSetArray.GetIntArrayLength (length);
                 if (arrLength > mask.Length) {
                     arrLength = mask.Length;
                 }
                 uint bitBlock = 0; // unsigned for logical right shift
                 for (int arrIndex = 0; arrIndex < arrLength - 1; arrIndex++) {
-                    bitBlock = unchecked ( (uint)mask[arrIndex] );
+                    bitBlock = unchecked ((uint)mask[arrIndex]);
                     switch (bitBlock) {
                         case 0:
                             break;
@@ -1541,7 +1541,7 @@ namespace DD.Collections {
                     }
                 }
                 // mask last bit-block up to range and count
-                bitBlock = unchecked ( (uint)mask[arrLength - 1] ) & (uint.MaxValue >> (int32Bits - (length & 0x1F)));
+                bitBlock = unchecked ((uint)mask[arrLength - 1]) & (uint.MaxValue >> (int32Bits - (length & 0x1F)));
                 while (bitBlock != 0) {
                     retCount += (int)((table >> (int)((bitBlock & 0xF) << 2)) & 0xFul);
                     bitBlock >>= 4;
@@ -1556,14 +1556,14 @@ namespace DD.Collections {
         /// <param name="mask"></param>
         /// <returns></returns>
         [Pure]
-        public static int CountOnBits ( long[] mask ) {
-            Contract.Ensures ( Theory.CountOnBits ( Contract.Result<int> (), mask ) );
+        public static int CountOnBits (long[] mask) {
+            Contract.Ensures (Theory.CountOnBits (Contract.Result<int> (), mask));
 
             int retCount = 0;
-            if (mask.IsNot ( null ) && mask.Length != 0) {
+            if (mask.IsNot (null) && mask.Length != 0) {
                 ulong bitBlock = 0; // unsigned for logical right shift
                 for (int arrIndex = 0; arrIndex < mask.Length; arrIndex++) {
-                    bitBlock = unchecked ( (ulong)mask[arrIndex] );
+                    bitBlock = unchecked ((ulong)mask[arrIndex]);
                     switch (bitBlock) {
                         case 0:
                             break;
@@ -1590,24 +1590,24 @@ namespace DD.Collections {
         /// <param name="length"></param>
         /// <returns></returns>
         [Pure]
-        public static int CountOnBits ( long[] mask, int length ) {
-            Contract.Requires<IndexOutOfRangeException> ( ValidLength ( length ) );
-            Contract.Ensures ( Theory.CountOnBits ( Contract.Result<int> (), mask, length ) );
+        public static int CountOnBits (long[] mask, int length) {
+            Contract.Requires<IndexOutOfRangeException> (ValidLength (length));
+            Contract.Ensures (Theory.CountOnBits (Contract.Result<int> (), mask, length));
 
             int retCount = 0;
-            if (mask.IsNot ( null ) && mask.Length != 0 && length != 0) {
-                Contract.Assume ( mask.IsNot ( null ) );
-                Contract.Assume ( mask.Length > 0 );
-                Contract.Assume ( length > 0 );
+            if (mask.IsNot (null) && mask.Length != 0 && length != 0) {
+                Contract.Assume (mask.IsNot (null));
+                Contract.Assume (mask.Length > 0);
+                Contract.Assume (length > 0);
 
-                int arrLength = BitSetArray.GetLongArrayLength ( length );
+                int arrLength = BitSetArray.GetLongArrayLength (length);
                 if (arrLength > mask.Length) {
                     arrLength = mask.Length;
                 }
                 ulong bitBlock = 0; // unsigned for logical right shift
                 // count all but last
                 for (int arrIndex = 0; arrIndex < (arrLength - 1); arrIndex++) {
-                    bitBlock = unchecked ( (ulong)mask[arrIndex] );
+                    bitBlock = unchecked ((ulong)mask[arrIndex]);
                     switch (bitBlock) {
                         case 0:
                             break;
@@ -1625,7 +1625,7 @@ namespace DD.Collections {
                     }
                 }
                 // mask last bit-block up to range and count
-                bitBlock = unchecked ( (ulong)mask[arrLength - 1] ) & (ulong.MaxValue >> (longBits - (length & mask0x3F)));
+                bitBlock = unchecked ((ulong)mask[arrLength - 1]) & (ulong.MaxValue >> (longBits - (length & mask0x3F)));
                 while (bitBlock != 0) {
                     retCount += (int)((table >> (int)((bitBlock & 0xFul) << 2)) & 0xFul);
                     bitBlock >>= 4;
@@ -1640,11 +1640,11 @@ namespace DD.Collections {
         /// <param name="mask"></param>
         /// <returns></returns>
         [Pure]
-        public static int CountOnBits ( IEnumerable<bool> mask ) {
-            Contract.Ensures ( ValidLength ( Contract.Result<int> () ) );
+        public static int CountOnBits (IEnumerable<bool> mask) {
+            Contract.Ensures (ValidLength (Contract.Result<int> ()));
 
             int retCount = 0;
-            if (mask.IsNot ( null )) {
+            if (mask.IsNot (null)) {
                 foreach (bool bit in mask) {
                     if (bit) {
                         ++retCount;
@@ -1660,11 +1660,11 @@ namespace DD.Collections {
         /// <param name="mask"></param>
         /// <returns></returns>
         [Pure]
-        public static int CountOnBits ( IEnumerable<byte> mask ) {
-            Contract.Ensures ( Theory.CountOnBits ( Contract.Result<int> (), mask ) );
+        public static int CountOnBits (IEnumerable<byte> mask) {
+            Contract.Ensures (Theory.CountOnBits (Contract.Result<int> (), mask));
 
             int retCount = 0;
-            if (mask.IsNot ( null )) {
+            if (mask.IsNot (null)) {
                 byte bitBlock = 0;
                 foreach (byte item in mask) {
                     bitBlock = item;
@@ -1694,14 +1694,14 @@ namespace DD.Collections {
         /// <param name="mask"></param>
         /// <returns></returns>
         [Pure]
-        public static int CountOnBits ( IEnumerable<short> mask ) {
-            Contract.Ensures ( Theory.CountOnBits ( Contract.Result<int> (), mask ) );
+        public static int CountOnBits (IEnumerable<short> mask) {
+            Contract.Ensures (Theory.CountOnBits (Contract.Result<int> (), mask));
 
             int retCount = 0;
-            if (mask.IsNot ( null )) {
+            if (mask.IsNot (null)) {
                 ushort bitBlock = 0;
                 foreach (short item in mask) {
-                    bitBlock = unchecked ( (ushort)item );
+                    bitBlock = unchecked ((ushort)item);
                     switch (bitBlock) {
                         case 0:
                             break;
@@ -1728,14 +1728,14 @@ namespace DD.Collections {
         /// <param name="mask"></param>
         /// <returns></returns>
         [Pure]
-        public static int CountOnBits ( IEnumerable<int> mask ) {
-            Contract.Ensures ( Theory.CountOnBits ( Contract.Result<int> (), mask ) );
+        public static int CountOnBits (IEnumerable<int> mask) {
+            Contract.Ensures (Theory.CountOnBits (Contract.Result<int> (), mask));
 
             int retCount = 0;
-            if (mask.IsNot ( null )) {
+            if (mask.IsNot (null)) {
                 uint bitBlock = 0; // unsigned for logical right shift
                 foreach (int item in mask) {
-                    bitBlock = unchecked ( (uint)item );
+                    bitBlock = unchecked ((uint)item);
                     switch (bitBlock) {
                         case 0:
                             break;
@@ -1762,14 +1762,14 @@ namespace DD.Collections {
         /// <param name="mask"></param>
         /// <returns></returns>
         [Pure]
-        public static int CountOnBits ( IEnumerable<long> mask ) {
-            Contract.Ensures ( Theory.CountOnBits ( Contract.Result<int> (), mask ) );
+        public static int CountOnBits (IEnumerable<long> mask) {
+            Contract.Ensures (Theory.CountOnBits (Contract.Result<int> (), mask));
 
             int retCount = 0;
-            if (mask.IsNot ( null )) {
+            if (mask.IsNot (null)) {
                 ulong bitBlock = 0; // unsigned for logical right shift
                 foreach (long item in mask) {
-                    bitBlock = unchecked ( (ulong)item );
+                    bitBlock = unchecked ((ulong)item);
                     switch (bitBlock) {
                         case 0:
                             break;
@@ -1809,11 +1809,11 @@ namespace DD.Collections {
         public bool this[int item] {
             [Pure]
             get {
-                Contract.Ensures ( Theory.IndexerGetItemValue ( this, item, Contract.Result<bool> () ) );
+                Contract.Ensures (Theory.IndexerGetItemValue (this, item, Contract.Result<bool> ()));
 
-                if (this.InRange ( item )) {
-                    Contract.Assert ( (item >> log2of64).InRange ( 0, this.array.Length - 1 ) );
-                    return this._Get ( item );
+                if (this.InRange (item)) {
+                    Contract.Assert ((item >> log2of64).InRange (0, this.array.Length - 1));
+                    return this._Get (item);
                 }
                 else {
                     return false;
@@ -1821,14 +1821,14 @@ namespace DD.Collections {
             }
             set {
                 Contract.Requires<IndexOutOfRangeException> (
-                    (value.Bool () == true && this.InRange ( item )) || value.Bool () == false );
-                Contract.Ensures ( Theory.IndexerSetItemValue ( Contract.OldValue<BitSetArray> ( BitSetArray.Copy ( this ) ), item, value, this ) );
+                    (value.Bool () == true && this.InRange (item)) || value.Bool () == false);
+                Contract.Ensures (Theory.IndexerSetItemValue (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), item, value, this));
 
-                if (!value.Bool () && (!this.InRange ( item ))) {
+                if (!value.Bool () && (!this.InRange (item))) {
                     // if index is outside of BitSetArray range accept false value
                 }
                 else {
-                    this._Set ( item, value );
+                    this._Set (item, value);
                 }
             }
         }
@@ -1837,21 +1837,21 @@ namespace DD.Collections {
 
         #region Mutable Operations
 
-        public BitSetArray And ( BitSetArray that ) {
-            Contract.Ensures ( Contract.Result<BitSetArray> ().IsNot ( null ) );
+        public BitSetArray And (BitSetArray that) {
+            Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
             Contract.Ensures (
-                Theory.And ( Contract.OldValue<BitSetArray> ( BitSetArray.Copy ( this ) ), that, this, Contract.Result<BitSetArray> () )
+                Theory.And (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), that, this, Contract.Result<BitSetArray> ())
             );
 
-            if (this.Is ( that )
+            if (this.Is (that)
                 || this.count == 0) {
                 // A ∩ A = A
                 // A == ∅ => (∅ ∩ B = ∅) == A
             }
             else if (that.IsNull () || that.Count == 0) {
                 // A ∩ ∅ = ∅
-                Contract.Assert ( this.count != 0 );
-                this.SetAll ( false ); // .SetAll(false) will change version
+                Contract.Assert (this.count != 0);
+                this.SetAll (false); // .SetAll(false) will change version
             }
             else {
                 lock (SyncRoot) {
@@ -1859,8 +1859,8 @@ namespace DD.Collections {
                     long bits_result = 0;
 
                     // And ∧ => IntersectWith ∩
-                    int thisArrLen = BitSetArray.GetLongArrayLength ( this.range );
-                    int thatArrLen = BitSetArray.GetLongArrayLength ( that.range );
+                    int thisArrLen = BitSetArray.GetLongArrayLength (this.range);
+                    int thatArrLen = BitSetArray.GetLongArrayLength (that.range);
 
                     int temp_count = 0;
                     int index = 0;
@@ -1877,7 +1877,7 @@ namespace DD.Collections {
                                 this.array[index] = bits_result;
                             }
                         }
-                        temp_count += BitSetArray.CountOnBits ( this.array[index] );
+                        temp_count += BitSetArray.CountOnBits (this.array[index]);
                     }
                     for (index = opLength; index < thisArrLen; index++) {
                         this.array[index] = 0;
@@ -1894,14 +1894,14 @@ namespace DD.Collections {
             return this;
         }
 
-        public BitSetArray Or ( BitSetArray that ) {
-            Contract.Ensures ( Contract.Result<BitSetArray> ().IsNot ( null ) );
+        public BitSetArray Or (BitSetArray that) {
+            Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
             Contract.Ensures (
-                Theory.Or ( Contract.OldValue<BitSetArray> ( BitSetArray.Copy ( this ) ), that, this, Contract.Result<BitSetArray> () )
+                Theory.Or (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), that, this, Contract.Result<BitSetArray> ())
             );
 
-            if (this.Is ( that )
-                || that.Is ( null )
+            if (this.Is (that)
+                || that.Is (null)
                 || that.count == 0) {
                 // A ∪ A = A
                 // A ∪ ∅ = A
@@ -1915,9 +1915,9 @@ namespace DD.Collections {
                         this.Length = that.Length;
                     }
 
-                    int thisArrLen = BitSetArray.GetLongArrayLength ( this.range );
-                    int thatArrLen = BitSetArray.GetLongArrayLength ( that.range );
-                    Contract.Assert ( thisArrLen >= thatArrLen );
+                    int thisArrLen = BitSetArray.GetLongArrayLength (this.range);
+                    int thatArrLen = BitSetArray.GetLongArrayLength (that.range);
+                    Contract.Assert (thisArrLen >= thatArrLen);
 
                     int index = 0;
                     int temp_count = 0;
@@ -1936,11 +1936,11 @@ namespace DD.Collections {
                                 this.array[index] = bits_result;
                             }
                         }
-                        temp_count += BitSetArray.CountOnBits ( this.array[index] );
+                        temp_count += BitSetArray.CountOnBits (this.array[index]);
                     }
                     // thisArrLen > thatArrLen
                     for (index = opLength; index < thisArrLen; index++) {
-                        temp_count += BitSetArray.CountOnBits ( this.array[index] );
+                        temp_count += BitSetArray.CountOnBits (this.array[index]);
                     }
                     // This operation can only optionally increase number of members
                     if (this.count != temp_count) {
@@ -1953,15 +1953,15 @@ namespace DD.Collections {
             return this;
         }
 
-        public BitSetArray Xor ( BitSetArray that ) {
-            Contract.Ensures ( Contract.Result<BitSetArray> ().IsNot ( null ) );
+        public BitSetArray Xor (BitSetArray that) {
+            Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
             Contract.Ensures (
-                Theory.Xor ( Contract.OldValue<BitSetArray> ( BitSetArray.Copy ( this ) ), that, this, Contract.Result<BitSetArray> () )
+                Theory.Xor (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), that, this, Contract.Result<BitSetArray> ())
             );
 
-            if (this.Is ( that )) {
+            if (this.Is (that)) {
                 // A.Xor(A)=∅
-                this.SetAll ( false ); // that will change version too
+                this.SetAll (false); // that will change version too
             }
             else if (that.IsNull () || that.Count == 0) {
                 // A.Xor(∅)=A
@@ -1970,7 +1970,7 @@ namespace DD.Collections {
             else if (this.count == 0) {
                 // ∅.Xor(B)=B
                 // copy that to this
-                Contract.Assert ( that.count != 0 );
+                Contract.Assert (that.count != 0);
 
                 lock (SyncRoot) {
                     this.AddVersion ();
@@ -1978,16 +1978,16 @@ namespace DD.Collections {
                     this.range = this.range < that.range ?
                         that.range :
                         this.range;
-                    if (this.array.Length < BitSetArray.GetLongArrayLength ( this.range )) {
-                        this.array = new long[BitSetArray.GetLongArrayLength ( this.range )];
+                    if (this.array.Length < BitSetArray.GetLongArrayLength (this.range)) {
+                        this.array = new long[BitSetArray.GetLongArrayLength (this.range)];
                     }
-                    Array.Copy ( that.array, this.array, that.array.Length );
+                    Array.Copy (that.array, this.array, that.array.Length);
                 }
             }
             // Xor ^ => SymmetricExceptWith ⊻
             else {
-                Contract.Assert ( this.count != 0 );
-                Contract.Assert ( that.count != 0 );
+                Contract.Assert (this.count != 0);
+                Contract.Assert (that.count != 0);
 
                 lock (SyncRoot) {
                     int this_version = this.version;
@@ -1998,9 +1998,9 @@ namespace DD.Collections {
                         this.Length = that.Length;
                     }
 
-                    int thisArrLen = BitSetArray.GetLongArrayLength ( this.range );
-                    int thatArrLen = BitSetArray.GetLongArrayLength ( that.range );
-                    Contract.Assert ( thisArrLen >= thatArrLen );
+                    int thisArrLen = BitSetArray.GetLongArrayLength (this.range);
+                    int thatArrLen = BitSetArray.GetLongArrayLength (that.range);
+                    Contract.Assert (thisArrLen >= thatArrLen);
 
                     int index = 0;
                     int temp_count = 0;
@@ -2019,11 +2019,11 @@ namespace DD.Collections {
                                 this.array[index] = bits_result;
                             }
                         }
-                        temp_count += BitSetArray.CountOnBits ( this.array[index] );
+                        temp_count += BitSetArray.CountOnBits (this.array[index]);
                     }
                     // for thisArrLen > thatArrLen
                     for (index = opLength; index < thisArrLen; index++) {
-                        temp_count += BitSetArray.CountOnBits ( this.array[index] );
+                        temp_count += BitSetArray.CountOnBits (this.array[index]);
                     }
                     // This operation can change bit sequence leaving same number of bits set
                     if (this.count != temp_count) {
@@ -2042,16 +2042,16 @@ namespace DD.Collections {
         /// </summary>
         /// <param name="that"></param>
         /// <returns></returns>
-        public BitSetArray Not ( BitSetArray that ) {
-            Contract.Ensures ( Contract.Result<BitSetArray> ().IsNot ( null ) );
+        public BitSetArray Not (BitSetArray that) {
+            Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
             Contract.Ensures (
-                Theory.Not ( Contract.OldValue<BitSetArray> ( BitSetArray.Copy ( this ) ), that, this, Contract.Result<BitSetArray> () )
+                Theory.Not (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), that, this, Contract.Result<BitSetArray> ())
             );
 
             // A-B ==> A.Xor(A.And(B)) ==> A.ExceptWith(B)
-            if (this.Is ( that )) {
+            if (this.Is (that)) {
                 // A - A == ∅
-                this.SetAll ( false ); // => this.AddVerson();
+                this.SetAll (false); // => this.AddVerson();
             }
             else if (this.count == 0
                      || that.IsNull ()
@@ -2066,8 +2066,8 @@ namespace DD.Collections {
                     int this_version = this.version;
                     long bits_result = 0;
 
-                    int thisArrLen = BitSetArray.GetLongArrayLength ( this.range );
-                    int thatArrLen = BitSetArray.GetLongArrayLength ( that.range );
+                    int thisArrLen = BitSetArray.GetLongArrayLength (this.range);
+                    int thatArrLen = BitSetArray.GetLongArrayLength (that.range);
 
                     int index = 0;
                     int temp_count = 0;
@@ -2098,11 +2098,11 @@ namespace DD.Collections {
                                 this.array[index] = bits_result;
                             }
                         }
-                        temp_count += BitSetArray.CountOnBits ( this.array[index] );
+                        temp_count += BitSetArray.CountOnBits (this.array[index]);
                     }
                     // thisArrLen > thatArrLen
                     for (index = opLength; index < thisArrLen; index++) {
-                        temp_count += BitSetArray.CountOnBits ( this.array[index] );
+                        temp_count += BitSetArray.CountOnBits (this.array[index]);
                     }
                     // this operation only can optionally decrease number of members
                     if (this.count != temp_count) {
@@ -2121,10 +2121,10 @@ namespace DD.Collections {
         /// </summary>
         /// <returns></returns>
         public BitSetArray Not () {
-            Contract.Ensures ( Contract.Result<BitSetArray> ().IsNot ( null ) );
+            Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
             Contract.Ensures (
                 Theory.Not (
-                    Contract.OldValue<BitSetArray> ( BitSetArray.Copy ( this ) ),
+                    Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)),
                     this,
                     Contract.Result<BitSetArray> ()
                 )
@@ -2138,7 +2138,7 @@ namespace DD.Collections {
                     // This operation will always change bit sequence
                     this.AddVersion ();
 
-                    int opLength = BitSetArray.GetLongArrayLength ( this.range );
+                    int opLength = BitSetArray.GetLongArrayLength (this.range);
 
                     this.count = this.range - this.count;
                     //				if (System.Environment.ProcessorCount > 1 && opLength > 64) {
@@ -2260,18 +2260,18 @@ namespace DD.Collections {
         #region Pure Set Relations
 
         [Pure]
-        public bool SequenceEqual ( BitSetArray that ) {
-            return SetEquals ( that );
+        public bool SequenceEqual (BitSetArray that) {
+            return SetEquals (that);
         }
 
         [Pure]
-        public bool SetEquals ( BitSetArray that ) {
+        public bool SetEquals (BitSetArray that) {
             Contract.Ensures (
-                Theory.SetEquals ( this, Contract.Result<bool> (), that ) );
+                Theory.SetEquals (this, Contract.Result<bool> (), that));
 
             bool isSetEqual;
 
-            if (that.Is ( null ) || that.Count == 0) {
+            if (that.Is (null) || that.Count == 0) {
                 if (this.count == 0)
                     isSetEqual = true; // both empty
                 else
@@ -2280,7 +2280,7 @@ namespace DD.Collections {
             else if (this.Count == 0) {
                 isSetEqual = false; // this empty
             }
-            else if (this.Is ( that )) {
+            else if (this.Is (that)) {
                 isSetEqual = true; // same instance, none null/empty
             }
             else { // none empty
@@ -2288,17 +2288,17 @@ namespace DD.Collections {
                     isSetEqual = false; // not same count
                 }
                 else {
-                    Contract.Assert ( this.count != 0 );
-                    Contract.Assert ( this.count == that.count );
-                    Contract.Assert ( this.IsNot ( that ) ); // ATTN! using "this != that" will create infinite loop
+                    Contract.Assert (this.count != 0);
+                    Contract.Assert (this.count == that.count);
+                    Contract.Assert (this.IsNot (that)); // ATTN! using "this != that" will create infinite loop
 
                     isSetEqual = true;
 
-                    int thisArrLen = BitSetArray.GetLongArrayLength ( this.range );
-                    Contract.Assume ( thisArrLen <= this.array.Length ); // for static checker
+                    int thisArrLen = BitSetArray.GetLongArrayLength (this.range);
+                    Contract.Assume (thisArrLen <= this.array.Length); // for static checker
 
-                    int thatArrLen = BitSetArray.GetLongArrayLength ( that.range );
-                    Contract.Assume ( thatArrLen <= that.array.Length ); // for static checker
+                    int thatArrLen = BitSetArray.GetLongArrayLength (that.range);
+                    Contract.Assume (thatArrLen <= that.array.Length); // for static checker
 
                     int shorterArrLen = thisArrLen <= thatArrLen ?
                         thisArrLen :
@@ -2323,8 +2323,8 @@ namespace DD.Collections {
         }
 
         [Pure]
-        public bool Overlaps ( BitSetArray that ) {
-            Contract.Ensures ( Theory.Overlaps ( this, Contract.Result<bool> (), that ) );
+        public bool Overlaps (BitSetArray that) {
+            Contract.Ensures (Theory.Overlaps (this, Contract.Result<bool> (), that));
 
             bool hasOverlap;
 
@@ -2333,14 +2333,14 @@ namespace DD.Collections {
                 || that.IsEmpty ()) {
                 hasOverlap = false; // one empty
             }
-            else if (this.Is ( that )) {
+            else if (this.Is (that)) {
                 hasOverlap = true; // same instance - not empty
             }
             else { // none empty, not same instance
                 hasOverlap = false;
                 // to have overlap, bits must overlap within shorter array
-                int thisArrayLength = BitSetArray.GetLongArrayLength ( this.range );
-                int thatArrayLength = BitSetArray.GetLongArrayLength ( that.range );
+                int thisArrayLength = BitSetArray.GetLongArrayLength (this.range);
+                int thatArrayLength = BitSetArray.GetLongArrayLength (that.range);
                 int overlapedLength = thisArrayLength <= thatArrayLength ?
                     thisArrayLength : thatArrayLength;
                 for (int i = 0; i < overlapedLength; i++) {
@@ -2354,8 +2354,8 @@ namespace DD.Collections {
         }
 
         [Pure]
-        public bool IsSupersetOf ( BitSetArray that ) {
-            Contract.Ensures ( Theory.IsSupersetOf ( this, Contract.Result<bool> (), that ) );
+        public bool IsSupersetOf (BitSetArray that) {
+            Contract.Ensures (Theory.IsSupersetOf (this, Contract.Result<bool> (), that));
 
             bool isSuperset;
 
@@ -2364,7 +2364,7 @@ namespace DD.Collections {
                 || that.count == 0) {
                 isSuperset = false; // empty is never subset nor superset
             }
-            else if (this.Is ( that )) {
+            else if (this.Is (that)) {
                 isSuperset = true; // same instance - not empty
             }
             else if (this.count < that.count) {
@@ -2373,8 +2373,8 @@ namespace DD.Collections {
             else {
                 // condition this.count >= that.count is satisfied
                 isSuperset = true; // assume true
-                int thisArrLen = BitSetArray.GetLongArrayLength ( this.range );
-                int thatArrLen = BitSetArray.GetLongArrayLength ( that.range );
+                int thisArrLen = BitSetArray.GetLongArrayLength (this.range);
+                int thatArrLen = BitSetArray.GetLongArrayLength (that.range);
                 int testLength = thisArrLen <= thatArrLen ?
                     thisArrLen :
                     thatArrLen;
@@ -2400,34 +2400,34 @@ namespace DD.Collections {
         }
 
         [Pure]
-        public bool IsProperSupersetOf ( BitSetArray that ) {
-            Contract.Ensures ( Theory.IsProperSupersetOf ( this, Contract.Result<bool> (), that ) );
+        public bool IsProperSupersetOf (BitSetArray that) {
+            Contract.Ensures (Theory.IsProperSupersetOf (this, Contract.Result<bool> (), that));
 
-            if (that.IsNot ( null )) {
+            if (that.IsNot (null)) {
                 if (this.count <= that.count) {
                     return false;
                 }
-                return this.IsSupersetOf ( that );
+                return this.IsSupersetOf (that);
             }
             return false;
         }
 
         [Pure]
-        public bool IsSubsetOf ( BitSetArray that ) {
-            Contract.Ensures ( Theory.IsSubsetOf ( this, Contract.Result<bool> (), that ) );
+        public bool IsSubsetOf (BitSetArray that) {
+            Contract.Ensures (Theory.IsSubsetOf (this, Contract.Result<bool> (), that));
 
-            if (that.IsNot ( null )) {
-                return that.IsSupersetOf ( this );
+            if (that.IsNot (null)) {
+                return that.IsSupersetOf (this);
             }
             return false;
         }
 
         [Pure]
-        public bool IsProperSubsetOf ( BitSetArray that ) {
-            Contract.Ensures ( Theory.IsProperSubsetOf ( this, Contract.Result<bool> (), that ) );
+        public bool IsProperSubsetOf (BitSetArray that) {
+            Contract.Ensures (Theory.IsProperSubsetOf (this, Contract.Result<bool> (), that));
 
-            if (that.IsNot ( null )) {
-                return that.IsProperSupersetOf ( this );
+            if (that.IsNot (null)) {
+                return that.IsProperSupersetOf (this);
             }
             return false;
         }
@@ -2438,26 +2438,26 @@ namespace DD.Collections {
 
         [Pure]
         public long[] To64BitMask () {
-            Contract.Ensures ( Contract.Result<long[]> ().IsNot ( null ) );
-            Contract.Ensures ( Contract.Result<long[]> ().Length == BitSetArray.GetLongArrayLength ( this.range ) );
-            Contract.Ensures ( BitSetArray.CountOnBits ( Contract.Result<long[]> () ) == this.count );
+            Contract.Ensures (Contract.Result<long[]> ().IsNot (null));
+            Contract.Ensures (Contract.Result<long[]> ().Length == BitSetArray.GetLongArrayLength (this.range));
+            Contract.Ensures (BitSetArray.CountOnBits (Contract.Result<long[]> ()) == this.count);
 
             return (long[])this.array.Clone ();
         }
 
         [Pure]
         public int[] To32BitMask () {
-            Contract.Ensures ( Contract.Result<int[]> ().IsNot ( null ) );
-            Contract.Ensures ( Contract.Result<int[]> ().Length == BitSetArray.GetIntArrayLength ( this.range ) );
-            Contract.Ensures ( BitSetArray.CountOnBits ( Contract.Result<int[]> () ) == this.count );
+            Contract.Ensures (Contract.Result<int[]> ().IsNot (null));
+            Contract.Ensures (Contract.Result<int[]> ().Length == BitSetArray.GetIntArrayLength (this.range));
+            Contract.Ensures (BitSetArray.CountOnBits (Contract.Result<int[]> ()) == this.count);
 
-            var intArray = new int[BitSetArray.GetIntArrayLength ( this.range )];
+            var intArray = new int[BitSetArray.GetIntArrayLength (this.range)];
             for (int i = 0; i < intArray.Length; i++) {
                 if ((i & 1) == 0) {
-                    intArray[i] = unchecked ( (int)(this.array[(i >> 1)] & 0xFFFFFFFFL) ); // even - takes low 32 bits
+                    intArray[i] = unchecked ((int)(this.array[(i >> 1)] & 0xFFFFFFFFL)); // even - takes low 32 bits
                 }
                 else {
-                    intArray[i] = unchecked ( (int)(((ulong)this.array[(i >> 1)]) >> 32) ); // odd - takes high 32 bits
+                    intArray[i] = unchecked ((int)(((ulong)this.array[(i >> 1)]) >> 32)); // odd - takes high 32 bits
                 }
             }
             return intArray;
@@ -2465,24 +2465,24 @@ namespace DD.Collections {
 
         [Pure]
         public short[] To16BitMask () {
-            Contract.Ensures ( Contract.Result<short[]> ().IsNot ( null ) );
-            Contract.Ensures ( Contract.Result<short[]> ().Length == BitSetArray.GetShortArrayLength ( this.range ) );
-            Contract.Ensures ( BitSetArray.CountOnBits ( Contract.Result<short[]> () ) == this.count );
+            Contract.Ensures (Contract.Result<short[]> ().IsNot (null));
+            Contract.Ensures (Contract.Result<short[]> ().Length == BitSetArray.GetShortArrayLength (this.range));
+            Contract.Ensures (BitSetArray.CountOnBits (Contract.Result<short[]> ()) == this.count);
 
-            var shortArray = new short[BitSetArray.GetShortArrayLength ( this.range )];
+            var shortArray = new short[BitSetArray.GetShortArrayLength (this.range)];
             for (int i = 0; i < shortArray.Length; i++) {
-                shortArray[i] = unchecked ( (short)((((ulong)this.array[(i >> 2)]) >> ((i & 3) * shortBits)) & 0xFFFFul) );
+                shortArray[i] = unchecked ((short)((((ulong)this.array[(i >> 2)]) >> ((i & 3) * shortBits)) & 0xFFFFul));
             }
             return shortArray;
         }
 
         [Pure]
         public byte[] To8BitMask () {
-            Contract.Ensures ( Contract.Result<byte[]> ().IsNot ( null ) );
-            Contract.Ensures ( Contract.Result<byte[]> ().Length == BitSetArray.GetByteArrayLength ( this.range ) );
-            Contract.Ensures ( BitSetArray.CountOnBits ( Contract.Result<byte[]> () ) == this.count );
+            Contract.Ensures (Contract.Result<byte[]> ().IsNot (null));
+            Contract.Ensures (Contract.Result<byte[]> ().Length == BitSetArray.GetByteArrayLength (this.range));
+            Contract.Ensures (BitSetArray.CountOnBits (Contract.Result<byte[]> ()) == this.count);
 
-            var byteArray = new byte[BitSetArray.GetByteArrayLength ( this.range )];
+            var byteArray = new byte[BitSetArray.GetByteArrayLength (this.range)];
             for (int i = 0; i < byteArray.Length; i++) {
                 byteArray[i] = (byte)(((this.array[(i >> 3)]) >> ((i & 7) * byteBits)) & 0xFF);
             }
@@ -2491,9 +2491,9 @@ namespace DD.Collections {
 
         [Pure]
         public bool[] ToBoolMask () {
-            Contract.Ensures ( Contract.Result<bool[]> ().IsNot ( null ) );
-            Contract.Ensures ( Contract.Result<bool[]> ().Length == this.range );
-            Contract.Ensures ( BitSetArray.CountOnBits ( Contract.Result<bool[]> () ) == this.count );
+            Contract.Ensures (Contract.Result<bool[]> ().IsNot (null));
+            Contract.Ensures (Contract.Result<bool[]> ().Length == this.range);
+            Contract.Ensures (BitSetArray.CountOnBits (Contract.Result<bool[]> ()) == this.count);
 
             var boolArray = new bool[this.range];
             for (int i = 0; i < boolArray.Length; i++) {
@@ -2506,13 +2506,13 @@ namespace DD.Collections {
 
         [Pure]
         public BitArray ToBitArray () {
-            Contract.Ensures ( Contract.Result<BitArray> ().IsNot ( null ) );
-            Contract.Ensures ( Contract.Result<BitArray> ().Length == this.range );
-            Contract.Ensures ( BitSetArray.CountOnBits ( Contract.Result<BitArray> () ) == this.count );
+            Contract.Ensures (Contract.Result<BitArray> ().IsNot (null));
+            Contract.Ensures (Contract.Result<BitArray> ().Length == this.range);
+            Contract.Ensures (BitSetArray.CountOnBits (Contract.Result<BitArray> ()) == this.count);
 
-            var bitArray = new BitArray ( this.To32BitMask () );
-            Contract.Assert ( bitArray.Length >= this.range );
-            Contract.Assert ( bitArray.Length <= this.array.Length * longBits );
+            var bitArray = new BitArray (this.To32BitMask ());
+            Contract.Assert (bitArray.Length >= this.range);
+            Contract.Assert (bitArray.Length <= this.array.Length * longBits);
             if (bitArray.Length != this.range) {
                 bitArray.Length = this.range;
             }
@@ -2521,8 +2521,8 @@ namespace DD.Collections {
 
         [Pure]
         public int[] ToItems () {
-            Contract.Ensures ( Contract.Result<int[]> ().IsNot ( null ) );
-            Contract.Ensures ( Contract.Result<int[]> ().Length == this.count );
+            Contract.Ensures (Contract.Result<int[]> ().IsNot (null));
+            Contract.Ensures (Contract.Result<int[]> ().Length == this.count);
 
             var itemsArray = new int[this.count];
             int counter = 0;
@@ -2538,46 +2538,46 @@ namespace DD.Collections {
         #region Other
 
         [Pure]
-        public bool Get ( int item ) {
-            Contract.Requires<IndexOutOfRangeException> ( ValidMember ( item ) );
-            Contract.Requires<IndexOutOfRangeException> ( this.InRange ( item ) );
-            Contract.Ensures ( Theory.Get ( this, item, Contract.Result<bool> () ) );
+        public bool Get (int item) {
+            Contract.Requires<IndexOutOfRangeException> (ValidMember (item));
+            Contract.Requires<IndexOutOfRangeException> (this.InRange (item));
+            Contract.Ensures (Theory.Get (this, item, Contract.Result<bool> ()));
 
-            return _Get ( item );
+            return _Get (item);
         }
 
         [Pure]
-        internal bool _Get ( int item ) {
-            Contract.Requires<IndexOutOfRangeException> ( ValidMember ( item ) );
-            Contract.Requires<IndexOutOfRangeException> ( this.InRange ( item ) );
-            Contract.Ensures ( Theory.Get ( this, item, Contract.Result<bool> () ) );
+        internal bool _Get (int item) {
+            Contract.Requires<IndexOutOfRangeException> (ValidMember (item));
+            Contract.Requires<IndexOutOfRangeException> (this.InRange (item));
+            Contract.Ensures (Theory.Get (this, item, Contract.Result<bool> ()));
 
             bool value;
             lock (SyncRoot) {
-                Contract.Assert ( this.InRange ( item ), "Race condition" );
+                Contract.Assert (this.InRange (item), "Race condition");
                 value = 0 != (array[item >> log2of64] & 1L << (item & mask0x3F));
             }
             return value;
         }
 
-        public bool Set ( int item, bool value = true ) {
-            Contract.Requires<IndexOutOfRangeException> ( ValidMember ( item ) );
-            Contract.Requires<IndexOutOfRangeException> ( this.InRange ( item ) );
-            Contract.Ensures ( Theory.Set ( Contract.OldValue<BitSetArray> ( BitSetArray.Copy ( this ) ), item, value, this ) );
+        public bool Set (int item, bool value = true) {
+            Contract.Requires<IndexOutOfRangeException> (ValidMember (item));
+            Contract.Requires<IndexOutOfRangeException> (this.InRange (item));
+            Contract.Ensures (Theory.Set (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), item, value, this));
 
-            return _Set ( item, value );
+            return _Set (item, value);
         }
 
-        internal bool _Set ( int item, bool value = true ) {
-            Contract.Requires<IndexOutOfRangeException> ( ValidMember ( item ) );
-            Contract.Requires<IndexOutOfRangeException> ( this.InRange ( item ) );
-            Contract.Ensures ( Theory.Set ( Contract.OldValue<BitSetArray> ( BitSetArray.Copy ( this ) ), item, value, this ) );
+        internal bool _Set (int item, bool value = true) {
+            Contract.Requires<IndexOutOfRangeException> (ValidMember (item));
+            Contract.Requires<IndexOutOfRangeException> (this.InRange (item));
+            Contract.Ensures (Theory.Set (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), item, value, this));
 
             value = value.Bool ();
             bool isChanged = false;
 
             lock (SyncRoot) {
-                Contract.Assert ( this.InRange ( item ), "Race condition" );
+                Contract.Assert (this.InRange (item), "Race condition");
                 if (((array[item >> log2of64] & 1L << (item & mask0x3F)) != 0) == value) {
                     // no change
                 }
@@ -2588,14 +2588,14 @@ namespace DD.Collections {
                     array[item >> log2of64] ^= 1L << (item & mask0x3F);
 
                     if (value) {
-                        Contract.Assert ( this.count < this.range );
+                        Contract.Assert (this.count < this.range);
                         ++this.count; // count cannot be 0 after this line
                         if (this.count == 1) {
-                            this.FirstSet ( item );
-                            this.LastSet ( item );
+                            this.FirstSet (item);
+                            this.LastSet (item);
                         }
                         else {
-                            Contract.Assert ( this.count > 1 );
+                            Contract.Assert (this.count > 1);
                             if (this.startVersion == live_version) {
                                 // cache is not expired
                                 if (item < (int)this.startMemoize) {
@@ -2613,7 +2613,7 @@ namespace DD.Collections {
                         }
                     }
                     else {
-                        Contract.Assert ( this.count > 0 );
+                        Contract.Assert (this.count > 0);
                         --this.count;
                         if (this.startVersion == live_version) {
                             // cache is not expired
@@ -2630,7 +2630,7 @@ namespace DD.Collections {
                             }
                         }
                     }
-                    Contract.Assert ( this[item] == value );
+                    Contract.Assert (this[item] == value);
                     isChanged = true;
                 }
             }
@@ -2639,22 +2639,22 @@ namespace DD.Collections {
 
 #if DEBUG
 
-        [CLSCompliant ( false )]
+        [CLSCompliant (false)]
         public
 
 #else
 		private
 #endif
- void _SetItems ( IEnumerable<int> items ) {
-            Contract.Requires<InvalidOperationException> ( this.Length != 0 );
-            Contract.Requires<InvalidOperationException> ( this.Count == 0 );
-            Contract.Requires<ArgumentNullException> ( items.IsNot ( null ) );
-            Contract.Requires<ArgumentEmptyException> ( items.Any () );
-            Contract.Requires<IndexOutOfRangeException> ( Contract.ForAll ( items, item => this.InRange ( item ) ) );
+ void _SetItems (IEnumerable<int> items) {
+            Contract.Requires<InvalidOperationException> (this.Length != 0);
+            Contract.Requires<InvalidOperationException> (this.Count == 0);
+            Contract.Requires<ArgumentNullException> (items.IsNot (null));
+            Contract.Requires<ArgumentEmptyException> (items.Any ());
+            Contract.Requires<IndexOutOfRangeException> (Contract.ForAll (items, item => this.InRange (item)));
 
-            Contract.Ensures ( this.Count > 0 );
-            Contract.Ensures ( this.First.HasValue );
-            Contract.Ensures ( this.Last.HasValue );
+            Contract.Ensures (this.Count > 0);
+            Contract.Ensures (this.First.HasValue);
+            Contract.Ensures (this.Last.HasValue);
 
             lock (SyncRoot) {
                 this.AddVersion (); // (!items.IsEmpty() && this.Count == 0)
@@ -2667,7 +2667,7 @@ namespace DD.Collections {
                     else {
                         // set bit value
                         array[item >> log2of64] ^= 1L << (item & mask0x3F);
-                        Contract.Assert ( this.count < this.range );
+                        Contract.Assert (this.count < this.range);
                         this.count += 1;
                         if (item < minValue) {
                             minValue = item;
@@ -2677,22 +2677,22 @@ namespace DD.Collections {
                         }
                     }
                 }
-                this.FirstSet ( minValue );
-                this.LastSet ( maxValue );
-                Contract.Assume ( this.Count > 0 );
+                this.FirstSet (minValue);
+                this.LastSet (maxValue);
+                Contract.Assume (this.Count > 0);
             }
         }
 
-        public void SetAll ( bool value ) {
-            Contract.Requires<IndexOutOfRangeException> ( value == value.Bool () );
+        public void SetAll (bool value) {
+            Contract.Requires<IndexOutOfRangeException> (value == value.Bool ());
 
-            Contract.Ensures ( Theory.SetAll ( Contract.OldValue<BitSetArray> ( BitSetArray.Copy ( this ) ), value, this ) );
+            Contract.Ensures (Theory.SetAll (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), value, this));
 
             if (this.array.Length != 0) {
                 value = value.Bool ();
 
                 lock (SyncRoot) {
-                    int rangeLength = BitSetArray.GetLongArrayLength ( this.range );
+                    int rangeLength = BitSetArray.GetLongArrayLength (this.range);
                     if (value) {
                         if (this.count != this.range) {
                             this.AddVersion ();
@@ -2702,8 +2702,8 @@ namespace DD.Collections {
                                     this.array[i] = -1L;
                             }
                             this.ClearTail ();
-                            this.FirstSet ( 0 );
-                            this.LastSet ( this.range - 1 );
+                            this.FirstSet (0);
+                            this.LastSet (this.range - 1);
                         }
                     }
                     else {
@@ -2721,20 +2721,20 @@ namespace DD.Collections {
         }
 
         public void TrimExcess () {
-            Contract.Ensures ( Theory.TrimExcess ( Contract.OldValue<BitSetArray> ( BitSetArray.Copy ( this ) ), this ) );
+            Contract.Ensures (Theory.TrimExcess (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), this));
 
             lock (SyncRoot) {
                 int trimmedRange = 0;
                 if (this.count != 0) {
-                    Contract.Assume ( this.Last.HasValue );
+                    Contract.Assume (this.Last.HasValue);
                     trimmedRange = (int)this.Last;
                     ++trimmedRange;
                 }
-                int newArrayLength = BitSetArray.GetLongArrayLength ( trimmedRange );
+                int newArrayLength = BitSetArray.GetLongArrayLength (trimmedRange);
                 if (this.array.Length != newArrayLength) {
-                    Contract.Assert ( this.array.Length > newArrayLength );
+                    Contract.Assert (this.array.Length > newArrayLength);
                     long[] newArray = new long[newArrayLength];
-                    Array.Copy ( this.array, newArray, newArrayLength );
+                    Array.Copy (this.array, newArray, newArrayLength);
                     this.array = newArray;
                 }
                 this.range = trimmedRange;
@@ -2746,7 +2746,7 @@ namespace DD.Collections {
         /// <param name="item">value to test</param>
         /// <returns>true if in range</returns>
         [Pure]
-        public bool InRange ( int item ) {
+        public bool InRange (int item) {
             return (item >= 0)
             && (item < this.range);
         }
@@ -2765,10 +2765,10 @@ namespace DD.Collections {
         /// <returns>Object. Deep copy of current instance</returns>
         [Pure]
         public object Clone () {
-            Contract.Ensures ( Contract.Result<object> ().IsNot ( null ) );
-            Contract.Ensures ( Theory.IsCopy ( (BitSetArray)Contract.Result<object> (), this ) );
+            Contract.Ensures (Contract.Result<object> ().IsNot (null));
+            Contract.Ensures (Theory.IsCopy ((BitSetArray)Contract.Result<object> (), this));
 
-            return new BitSetArray ( this );
+            return new BitSetArray (this);
         }
 
         #endregion
@@ -2780,7 +2780,7 @@ namespace DD.Collections {
         /// <returns>IEnumerable</returns>
         [Pure]
         IEnumerator IEnumerable.GetEnumerator () {
-            Contract.Ensures ( Contract.Result<IEnumerator> ().IsNot ( null ) );
+            Contract.Ensures (Contract.Result<IEnumerator> ().IsNot (null));
             return this.GetEnumerator ();
         }
 
@@ -2789,25 +2789,25 @@ namespace DD.Collections {
         /// <returns>IEnumerable{int}</returns>
         [Pure]
         public IEnumerator<int> GetEnumerator () {
-            Contract.Ensures ( Contract.Result<IEnumerator<int>> ().IsNot ( null ) );
-            return new BitSetArray.EnumeratorForwardSynchronized ( this );
+            Contract.Ensures (Contract.Result<IEnumerator<int>> ().IsNot (null));
+            return new BitSetArray.EnumeratorForwardSynchronized (this);
         }
 
         [Pure]
         public IEnumerator<int> GetEnumeratorReverse () {
-            Contract.Ensures ( Contract.Result<IEnumerator<int>> ().IsNot ( null ) );
-            return new BitSetArray.EnumeratorReverseSynchronized ( this );
+            Contract.Ensures (Contract.Result<IEnumerator<int>> ().IsNot (null));
+            return new BitSetArray.EnumeratorReverseSynchronized (this);
         }
 
         [Pure]
         public IEnumerator<int> GetEnumeratorComplement () {
-            Contract.Ensures ( Contract.Result<IEnumerator<int>> ().IsNot ( null ) );
-            return new BitSetArray.EnumeratorComplementSynchronized ( this );
+            Contract.Ensures (Contract.Result<IEnumerator<int>> ().IsNot (null));
+            return new BitSetArray.EnumeratorComplementSynchronized (this);
         }
 
         [Pure]
         public IEnumerable<int> Complement () {
-            Contract.Ensures ( Contract.Result<IEnumerable<int>> ().IsNot ( null ) );
+            Contract.Ensures (Contract.Result<IEnumerable<int>> ().IsNot (null));
             IEnumerator<int> enumerator = this.GetEnumeratorComplement ();
             while (enumerator.MoveNext ()) {
                 yield return enumerator.Current;
@@ -2817,7 +2817,7 @@ namespace DD.Collections {
 
         [Pure]
         public IEnumerable<int> Reverse () {
-            Contract.Ensures ( Contract.Result<IEnumerable<int>> ().IsNot ( null ) );
+            Contract.Ensures (Contract.Result<IEnumerable<int>> ().IsNot (null));
             IEnumerator<int> enumerator = this.GetEnumeratorReverse ();
             while (enumerator.MoveNext ()) {
                 yield return enumerator.Current;
@@ -2834,22 +2834,22 @@ namespace DD.Collections {
         /// <param name="that"></param>
         /// <returns></returns>
         [Pure]
-        public override bool Equals ( Object that ) {
-            if (this.Is ( that )) {
+        public override bool Equals (Object that) {
+            if (this.Is (that)) {
                 return true;
             }
             if (this.count == 0
-                && that.Is ( null )) {
+                && that.Is (null)) {
                 return true;
             }
 
             var thatSet = that as BitSetArray;
-            if (thatSet.IsNot ( null )) {
-                return this.SetEquals ( thatSet );
+            if (thatSet.IsNot (null)) {
+                return this.SetEquals (thatSet);
             }
             var thatIEnum = that as IEnumerable<int>;
-            if (thatIEnum.IsNot ( null )) {
-                return this.SetEquals ( thatIEnum );
+            if (thatIEnum.IsNot (null)) {
+                return this.SetEquals (thatIEnum);
             }
             return false;
         }
@@ -2860,8 +2860,8 @@ namespace DD.Collections {
         /// <param name="that"></param>
         /// <returns>Bool. True if SetEquals</returns>
         [Pure]
-        public bool Equals ( BitSetArray that ) {
-            return this.SetEquals ( that );
+        public bool Equals (BitSetArray that) {
+            return this.SetEquals (that);
         }
 
         /// <summary>Implements IEquatable.GetHashCode
@@ -2874,7 +2874,7 @@ namespace DD.Collections {
                 return 0;
             }
             else {
-                return unchecked ( (int)this.First << 2 ) ^ unchecked ( this.Count << 1 ) ^ ((int)this.Last);
+                return unchecked ((int)this.First << 2) ^ unchecked (this.Count << 1) ^ ((int)this.Last);
             }
         }
 
@@ -2888,7 +2888,7 @@ namespace DD.Collections {
         /// </summary>
         /// <param name="that"></param>
         /// <returns></returns>
-        public int CompareTo ( BitSetArray that ) {
+        public int CompareTo (BitSetArray that) {
             int compare = 0;
 
             if (that.IsNull () || that.IsEmpty ()) {
@@ -2900,8 +2900,8 @@ namespace DD.Collections {
                 // longer	  = <-range.Length----------->|---->|array.Length
                 // first loop:						<----|
                 // second loop:  <-------------------|
-                int thisArrLen = BitSetArray.GetLongArrayLength ( this.range );
-                int thatArrLen = BitSetArray.GetLongArrayLength ( that.range );
+                int thisArrLen = BitSetArray.GetLongArrayLength (this.range);
+                int thatArrLen = BitSetArray.GetLongArrayLength (that.range);
 
                 int longerArrLen = thisArrLen > thatArrLen ? thisArrLen : thatArrLen;
                 int shorterArrLen = thisArrLen <= thatArrLen ? thisArrLen : thatArrLen;
@@ -2909,12 +2909,12 @@ namespace DD.Collections {
                 long[] longer = thisArrLen > thatArrLen ? this.array : that.array;
 
                 // not overlaping part
-                Contract.Assume ( longer.IsNot ( null ) );
-                Contract.Assume ( longerArrLen <= longer.Length );
-                Contract.Assume ( shorterArrLen >= 0 );
+                Contract.Assume (longer.IsNot (null));
+                Contract.Assume (longerArrLen <= longer.Length);
+                Contract.Assume (shorterArrLen >= 0);
                 for (int i = longerArrLen - 1; i >= shorterArrLen; i--) {
                     if (longer[i] != 0) {
-                        compare = longer.Is ( this.array ) ? 1 : -1;
+                        compare = longer.Is (this.array) ? 1 : -1;
                         break;
                     }
                 }
@@ -2922,7 +2922,7 @@ namespace DD.Collections {
                 if (compare == 0) {
                     for (int i = shorterArrLen - 1; i >= 0; i--) {
                         if (this.array[i] != that.array[i]) {
-                            compare = unchecked ( (ulong)this.array[i] > (ulong)that.array[i] ) ? 1 : -1;
+                            compare = unchecked ((ulong)this.array[i] > (ulong)that.array[i]) ? 1 : -1;
                             break;
                         }
                     }
@@ -2943,16 +2943,16 @@ namespace DD.Collections {
         /// </remarks>
         /// </summary>
         /// <param name="item"></param>
-        public void Add ( int item ) {
-            Contract.Ensures ( Theory.ICollectionAdd ( Contract.OldValue<BitSetArray> ( BitSetArray.Copy ( this ) ), item, this ) );
+        public void Add (int item) {
+            Contract.Ensures (Theory.ICollectionAdd (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), item, this));
 
-            if (!ValidMember ( item )) {
+            if (!ValidMember (item)) {
                 throw new IndexOutOfRangeException ();
             }
             if (item >= this.range) {
                 this.Length = item + 1;
             }
-            this._Set ( item, true );
+            this._Set (item, true);
         }
 
         /// <summary>Implements ICollection{int}.Remove
@@ -2960,11 +2960,11 @@ namespace DD.Collections {
         /// </summary>
         /// <param name="item">int</param>
         /// <returns>bool. True if item is found and removed.</returns>
-        public bool Remove ( int item ) {
-            Contract.Ensures ( Theory.Remove ( Contract.OldValue<BitSetArray> ( BitSetArray.Copy ( this ) ), item, this, Contract.Result<bool> () ) );
+        public bool Remove (int item) {
+            Contract.Ensures (Theory.Remove (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), item, this, Contract.Result<bool> ()));
 
             if (this[item]) {
-                return this._Set ( item, false );
+                return this._Set (item, false);
             }
             return false; // not found
         }
@@ -2972,9 +2972,9 @@ namespace DD.Collections {
         /// <summary>Implements ICollection{int}.Clear
         /// </summary>
         public void Clear () {
-            Contract.Ensures ( Theory.Clear ( Contract.OldValue<BitSetArray> ( BitSetArray.Copy ( this ) ), this ) );
+            Contract.Ensures (Theory.Clear (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), this));
 
-            this.SetAll ( false );
+            this.SetAll (false);
         }
 
         /// <summary>Implements ICollection{int}.Contains
@@ -2983,10 +2983,10 @@ namespace DD.Collections {
         /// <param name="item">int</param>
         /// <returns>bool. True if item is found.</returns>
         [Pure]
-        public bool Contains ( int item ) {
-            Contract.Ensures ( Theory.Contains ( this, Contract.Result<bool> (), item ) );
+        public bool Contains (int item) {
+            Contract.Ensures (Theory.Contains (this, Contract.Result<bool> (), item));
 
-            Contract.Assume ( this[item] == false || this.Count > 0 ); // assume inherited Contract.Ensures
+            Contract.Assume (this[item] == false || this.Count > 0); // assume inherited Contract.Ensures
             return this[item];
         }
 
@@ -2997,16 +2997,16 @@ namespace DD.Collections {
         /// <param name="array"></param>
         /// <param name="arrayIndex"></param>
         [Pure]
-        [SuppressMessage ( "Microsoft.Contracts", "CC1033", Justification = "Debug/Release exceptions not same" )]
-        public void CopyTo ( int[] array, int arrayIndex ) {
-            Contract.Requires<ArgumentNullException> ( array.IsNot ( null ) );
-            Contract.Requires<IndexOutOfRangeException> ( arrayIndex >= 0 );
-            Contract.Requires<IndexOutOfRangeException> ( arrayIndex <= (array.Length - this.Count) );
+        [SuppressMessage ("Microsoft.Contracts", "CC1033", Justification = "Debug/Release exceptions not same")]
+        public void CopyTo (int[] array, int arrayIndex) {
+            Contract.Requires<ArgumentNullException> (array.IsNot (null));
+            Contract.Requires<IndexOutOfRangeException> (arrayIndex >= 0);
+            Contract.Requires<IndexOutOfRangeException> (arrayIndex <= (array.Length - this.Count));
 
-            Contract.Ensures ( Theory.CopyToArrayOfInt ( this, array, arrayIndex ) );
+            Contract.Ensures (Theory.CopyToArrayOfInt (this, array, arrayIndex));
             int index = arrayIndex;
             foreach (int item in this) {
-                Contract.Assume ( index < array.Length );
+                Contract.Assume (index < array.Length);
                 array[index] = item;
                 ++index;
             }
@@ -3021,20 +3021,20 @@ namespace DD.Collections {
         /// <param name="array"></param>
         /// <param name="arrayIndex"></param>
         [Pure]
-        [SuppressMessage ( "Microsoft.Contracts", "CC1033", Justification = "Debug/Release exceptions not same" )]
-        public void CopyTo ( Array array, int arrayIndex ) {
-            Contract.Requires<ArgumentNullException> ( array.IsNot ( null ) );
-            Contract.Requires<ArgumentException> ( array.Rank == 1 );
-            Contract.Requires<ArgumentException> ( array is int[] );
-            Contract.Requires<IndexOutOfRangeException> ( arrayIndex >= 0 );
-            Contract.Requires<IndexOutOfRangeException> ( arrayIndex <= (array.Length - this.Count) );
+        [SuppressMessage ("Microsoft.Contracts", "CC1033", Justification = "Debug/Release exceptions not same")]
+        public void CopyTo (Array array, int arrayIndex) {
+            Contract.Requires<ArgumentNullException> (array.IsNot (null));
+            Contract.Requires<ArgumentException> (array.Rank == 1);
+            Contract.Requires<ArgumentException> (array is int[]);
+            Contract.Requires<IndexOutOfRangeException> (arrayIndex >= 0);
+            Contract.Requires<IndexOutOfRangeException> (arrayIndex <= (array.Length - this.Count));
 
-            Contract.Ensures ( Theory.CopyToArrayOfObj ( this, array, arrayIndex ) );
+            Contract.Ensures (Theory.CopyToArrayOfObj (this, array, arrayIndex));
 
             int index = arrayIndex;
             foreach (int item in this) {
-                Contract.Assume ( index < array.Length );
-                array.SetValue ( (object)item, index );
+                Contract.Assume (index < array.Length);
+                array.SetValue ((object)item, index);
                 ++index;
             }
         }
@@ -3049,17 +3049,17 @@ namespace DD.Collections {
         /// </summary>
         /// <param name="item"></param>
         /// <returns>bool, true if item added.</returns>
-        bool ISet<int>.Add ( int item ) {
+        bool ISet<int>.Add (int item) {
             Contract.Ensures (
-                Theory.Add ( Contract.OldValue<BitSetArray> ( BitSetArray.Copy ( this ) ), item, this, Contract.Result<bool> () ) );
+                Theory.Add (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), item, this, Contract.Result<bool> ()));
 
-            if (ValidMember ( item )) {
+            if (ValidMember (item)) {
                 if (!this[item]) {
                     if (item >= this.range) {
                         this.Length = item + 1;
                     }
-                    Contract.Assert ( this.InRange ( item ) );
-                    return this._Set ( item, true );
+                    Contract.Assert (this.InRange (item));
+                    return this._Set (item, true);
                 }
             }
             return false;
@@ -3071,14 +3071,14 @@ namespace DD.Collections {
         /// <para>For this operation argument set IEnumerableOf{int} is not required to be within BitSetArray.domain.</para></remarks>
         /// </summary>
         /// <param name="that"></param>
-        public void ExceptWith ( IEnumerable<int> that ) {
+        public void ExceptWith (IEnumerable<int> that) {
             Contract.Ensures (
-                Theory.ExceptWith ( Contract.OldValue<BitSetArray> ( BitSetArray.Copy ( this ) ), that, this )
+                Theory.ExceptWith (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), that, this)
             );
 
             var other = that as BitSetArray;
-            if (other.IsNot ( null )) {
-                this.Not ( other );
+            if (other.IsNot (null)) {
+                this.Not (other);
             }
             else if (this.count == 0
                      || that.IsNull ()
@@ -3089,8 +3089,8 @@ namespace DD.Collections {
                 // this will never ExceptWith(that) outside this.Length
                 foreach (var item in that) {
                     // ExceptWith can simply ignore any value otside this.Length
-                    if (this.InRange ( item )) {
-                        this._Set ( item, false ); // -> this.AddVersion
+                    if (this.InRange (item)) {
+                        this._Set (item, false); // -> this.AddVersion
                     }
                 }
             }
@@ -3102,28 +3102,28 @@ namespace DD.Collections {
         /// <para>For this operation argument set IEnumerableOf{int} is not required to be within BitSetArray.domain.</para></remarks>
         /// </summary>
         /// <param name="that"></param>
-        public void IntersectWith ( IEnumerable<int> that ) {
+        public void IntersectWith (IEnumerable<int> that) {
             Contract.Ensures (
-                Theory.IntersectWith ( Contract.OldValue<BitSetArray> ( BitSetArray.Copy ( this ) ), that, this )
+                Theory.IntersectWith (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), that, this)
             );
 
             var other = that as BitSetArray;
-            if (other.IsNot ( null )) {
-                this.And ( other );
+            if (other.IsNot (null)) {
+                this.And (other);
             }
             else if (this.count == 0) {
                 // nothing to IntersectWith
             }
             else if (that.IsNull () || that.IsEmpty ()) {
-                Contract.Assert ( this.count != 0 );
+                Contract.Assert (this.count != 0);
                 this.Clear (); // .Clear() will change version
             }
             else {
                 lock (SyncRoot) {
-                    other = BitSetArray.Size ( this.range );
+                    other = BitSetArray.Size (this.range);
                     foreach (var item in that) {
                         if (this[item]) {
-                            other._Set ( item, true );
+                            other._Set (item, true);
                         }
                     }
                     if (other.count != this.count) {
@@ -3143,21 +3143,21 @@ namespace DD.Collections {
         /// <para>IEnumerableOf{int} argument members outside BitSetArray.domain are ignored.</para></remarks>
         /// </summary>
         /// <param name="that"></param>
-        public void SymmetricExceptWith ( IEnumerable<int> that ) {
+        public void SymmetricExceptWith (IEnumerable<int> that) {
             Contract.Ensures (
-                Theory.SymmetricExceptWith ( Contract.OldValue<BitSetArray> ( BitSetArray.Copy ( this ) ), that, this )
+                Theory.SymmetricExceptWith (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), that, this)
             );
 
             var other = that as BitSetArray;
-            if (other.IsNot ( null )) {
-                this.Xor ( other );
+            if (other.IsNot (null)) {
+                this.Xor (other);
             }
             else if (that.IsNull () || that.IsEmpty ()) {
                 // nothing to SymmetricExceptWith
             }
             else {
-                other = BitSetArray.From ( that.Where ( ValidMember ) );
-                this.Xor ( other );
+                other = BitSetArray.From (that.Where (ValidMember));
+                this.Xor (other);
             }
         }
 
@@ -3169,21 +3169,21 @@ namespace DD.Collections {
         /// <para>IEnumerableOf{int} argument members outside BitSetArray.domain are ignored.</para></remarks>
         /// </summary>
         /// <param name="that"></param>
-        public void UnionWith ( IEnumerable<int> that ) {
+        public void UnionWith (IEnumerable<int> that) {
             Contract.Ensures (
-                Theory.UnionWith ( Contract.OldValue<BitSetArray> ( BitSetArray.Copy ( this ) ), that, this )
+                Theory.UnionWith (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), that, this)
             );
 
             var other = that as BitSetArray;
-            if (other.IsNot ( null )) {
-                this.Or ( other );
+            if (other.IsNot (null)) {
+                this.Or (other);
             }
             else if (that.IsNull () || that.IsEmpty ()) {
                 // nothing to UnionWith
             }
             else {
-                other = BitSetArray.From ( that.Where ( ValidMember ) );
-                this.Or ( other );
+                other = BitSetArray.From (that.Where (ValidMember));
+                this.Or (other);
             }
         }
 
@@ -3200,34 +3200,34 @@ namespace DD.Collections {
         /// <param name="that">IEnumerable{int}</param>
         /// <returns>bool</returns>
         [Pure]
-        public bool SetEquals ( IEnumerable<int> that ) {
-            Contract.Ensures ( Theory.SetEquals ( this, Contract.Result<bool> (), that ) );
+        public bool SetEquals (IEnumerable<int> that) {
+            Contract.Ensures (Theory.SetEquals (this, Contract.Result<bool> (), that));
 
             var other = that as BitSetArray;
-            if (other.IsNot ( null )) {
-                return this.SetEquals ( other );
+            if (other.IsNot (null)) {
+                return this.SetEquals (other);
             }
             else if (this.count == 0
                      &&
                      (
-                         that.Is ( null )
+                         that.Is (null)
                          || that.IsEmpty ()
                      )) {
                 return true; // both empty
             }
             else if (this.count == 0
-                     || (that.Is ( null )
+                     || (that.Is (null)
                      || that.IsEmpty ())) {
                 return false; // one empty
             }
             else {
                 // If any member of "that" is outside BitSetArray.domain then two sets cannot be equal.
                 foreach (var item in that) {
-                    if (!ValidMember ( item )) {
+                    if (!ValidMember (item)) {
                         return false;
                     }
                 }
-                return this.SetEquals ( BitSetArray.From ( that ) );
+                return this.SetEquals (BitSetArray.From (that));
             }
         }
 
@@ -3240,12 +3240,12 @@ namespace DD.Collections {
         /// <param name="that">IEnumerable{int}</param>
         /// <returns>bool</returns>
         [Pure]
-        public bool Overlaps ( IEnumerable<int> that ) {
-            Contract.Ensures ( Theory.Overlaps ( this, Contract.Result<bool> (), that ) );
+        public bool Overlaps (IEnumerable<int> that) {
+            Contract.Ensures (Theory.Overlaps (this, Contract.Result<bool> (), that));
 
             var other = that as BitSetArray;
-            if (other.IsNot ( null )) {
-                return this.Overlaps ( other );
+            if (other.IsNot (null)) {
+                return this.Overlaps (other);
             }
             else if (this.count == 0
                      || that.IsNull ()
@@ -3271,15 +3271,15 @@ namespace DD.Collections {
         /// <param name="that">IEnumerable{int}</param>
         /// <returns>bool</returns>
         [Pure]
-        public bool IsSupersetOf ( IEnumerable<int> that ) {
-            Contract.Ensures ( Theory.IsSupersetOf ( this, Contract.Result<bool> (), that ) );
+        public bool IsSupersetOf (IEnumerable<int> that) {
+            Contract.Ensures (Theory.IsSupersetOf (this, Contract.Result<bool> (), that));
 
             var other = that as BitSetArray;
-            if (other.IsNot ( null )) {
-                return this.IsSupersetOf ( other );
+            if (other.IsNot (null)) {
+                return this.IsSupersetOf (other);
             }
             else if (this.count == 0
-                     || that.Is ( null )
+                     || that.Is (null)
                      || that.IsEmpty ()) {
                 return false; // empty is never subset nor superset
             }
@@ -3304,12 +3304,12 @@ namespace DD.Collections {
         /// <param name="that">IEnumerable{int}</param>
         /// <returns>bool</returns>
         [Pure]
-        public bool IsProperSupersetOf ( IEnumerable<int> that ) {
-            Contract.Ensures ( Theory.IsProperSupersetOf ( this, Contract.Result<bool> (), that ) );
+        public bool IsProperSupersetOf (IEnumerable<int> that) {
+            Contract.Ensures (Theory.IsProperSupersetOf (this, Contract.Result<bool> (), that));
 
             var other = that as BitSetArray;
-            if (other.IsNot ( null )) {
-                return this.IsProperSupersetOf ( other );
+            if (other.IsNot (null)) {
+                return this.IsProperSupersetOf (other);
             }
             else if (this.count == 0
                      || that.IsNull ()
@@ -3320,7 +3320,7 @@ namespace DD.Collections {
                 // (this)BitSetArray.IsProperSupersetOf(that) only if "that.domain" is same as "BitSetArray.domain"
                 // If "that.domain" is not subset of BitSetArray.domain, creation of BitSetArray will fail with exception
                 try {
-                    return this.IsProperSupersetOf ( BitSetArray.From ( that ) );
+                    return this.IsProperSupersetOf (BitSetArray.From (that));
                 }
                 catch (IndexOutOfRangeException) {
                     return false;
@@ -3337,12 +3337,12 @@ namespace DD.Collections {
         /// <param name="that">IEnumerable{int}</param>
         /// <returns>bool</returns>
         [Pure]
-        public bool IsSubsetOf ( IEnumerable<int> that ) {
-            Contract.Ensures ( Theory.IsSubsetOf ( this, Contract.Result<bool> (), that ) );
+        public bool IsSubsetOf (IEnumerable<int> that) {
+            Contract.Ensures (Theory.IsSubsetOf (this, Contract.Result<bool> (), that));
 
             var other = that as BitSetArray;
-            if (other.IsNot ( null )) {
-                return this.IsSubsetOf ( other );
+            if (other.IsNot (null)) {
+                return this.IsSubsetOf (other);
             }
             else if (this.count == 0
                      || that.IsNull ()
@@ -3359,17 +3359,17 @@ namespace DD.Collections {
                     if (item > maxMember)
                         maxMember = item;
                 }
-                if (ValidMember ( maxMember )) {
-                    other = BitSetArray.From ( maxMember );
+                if (ValidMember (maxMember)) {
+                    other = BitSetArray.From (maxMember);
                     // add members to test set
                     foreach (var item in that) {
-                        if (ValidMember ( item )
+                        if (ValidMember (item)
                             && !other[item]) {
-                            other._Set ( item, true );
+                            other._Set (item, true);
                         }
                     }
 
-                    return this.IsSubsetOf ( other );
+                    return this.IsSubsetOf (other);
                 }
                 return false;
             }
@@ -3385,12 +3385,12 @@ namespace DD.Collections {
         /// <param name="that">IEnumerable{int}</param>
         /// <returns>bool</returns>
         [Pure]
-        public bool IsProperSubsetOf ( IEnumerable<int> that ) {
-            Contract.Ensures ( Theory.IsProperSubsetOf ( this, Contract.Result<bool> (), that ) );
+        public bool IsProperSubsetOf (IEnumerable<int> that) {
+            Contract.Ensures (Theory.IsProperSubsetOf (this, Contract.Result<bool> (), that));
 
             var other = that as BitSetArray;
-            if (other.IsNot ( null )) {
-                return this.IsProperSubsetOf ( other );
+            if (other.IsNot (null)) {
+                return this.IsProperSubsetOf (other);
             }
             else if (this.count == 0
                      || that.IsNull ()
@@ -3399,12 +3399,12 @@ namespace DD.Collections {
             }
             else {
                 try {
-                    return (BitSetArray.From ( that )).IsProperSupersetOf ( this );
+                    return (BitSetArray.From (that)).IsProperSupersetOf (this);
                 }
                 catch (IndexOutOfRangeException) {
                     // "that" contains members outside BitSetArray.domain
                     // consequently, if this.IsSubsetOf(that) => that.IsProperSupersetOf(this)
-                    return this.IsSubsetOf ( that );
+                    return this.IsSubsetOf (that);
                 }
             }
         }
@@ -3422,18 +3422,18 @@ namespace DD.Collections {
         /// </summary>
         private void ClearTail () {
             Contract.Ensures (
-                Theory.IsTailCleared ( this )
+                Theory.IsTailCleared (this)
             );
 
             lock (SyncRoot) {
-                int rangeLength = BitSetArray.GetLongArrayLength ( this.range );
+                int rangeLength = BitSetArray.GetLongArrayLength (this.range);
 
                 // clear tail bits
                 // if this.array.Length==0 => this.range==0 => !((this.range&longMask)!= 0)
                 if (((this.range & mask0x3F) != 0) && ((this.array[rangeLength - 1] & (-1L << (this.range & mask0x3F))) != 0)) {
                     // ATTN: -1L (0xFFFFFFFFFFFFFFFF) >> 63 !=  0x0000000000000001
                     // ATTN: -1L (0xFFFFFFFFFFFFFFFF) >> 63 ==  0xFFFFFFFFFFFFFFFF (-1L)
-                    this.array[rangeLength - 1] &= unchecked ( (long)(ulong.MaxValue >> (longBits - (this.range & mask0x3F))) );
+                    this.array[rangeLength - 1] &= unchecked ((long)(ulong.MaxValue >> (longBits - (this.range & mask0x3F))));
                     // checked by Ensures: Contract.Assert((this.array[rangeLength - 1] & (-1L << (this.range & longMask))) == 0);
                 }
                 // clear tail words(long)
@@ -3449,7 +3449,7 @@ namespace DD.Collections {
         }
 
         private void AddVersion () {
-            Contract.Ensures ( this.version != Contract.OldValue<int> ( this.version ) );
+            Contract.Ensures (this.version != Contract.OldValue<int> (this.version));
             lock (SyncRoot) {
                 unchecked {
                     ++this.version;
@@ -3465,50 +3465,50 @@ namespace DD.Collections {
 
         #region Cast Operators
 
-        public static explicit operator BitArray ( BitSetArray a ) {
-            Contract.Ensures ( Contract.Result<BitArray> ().IsNot ( null ) );
-            return a.IsNull () ? new BitArray ( 0 ) : a.ToBitArray ();
+        public static explicit operator BitArray (BitSetArray a) {
+            Contract.Ensures (Contract.Result<BitArray> ().IsNot (null));
+            return a.IsNull () ? new BitArray (0) : a.ToBitArray ();
         }
 
-        public static explicit operator BitSetArray ( BitArray a ) {
-            Contract.Ensures ( Contract.Result<BitSetArray> ().IsNot ( null ) );
-            return a.IsNull () ? new BitSetArray () : BitSetArray.Mask ( a, a.Count );
+        public static explicit operator BitSetArray (BitArray a) {
+            Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
+            return a.IsNull () ? new BitSetArray () : BitSetArray.Mask (a, a.Count);
         }
 
         #endregion
 
         #region Set Operators
 
-        public static BitSetArray operator | ( BitSetArray a, BitSetArray b ) {
-            Contract.Ensures ( Contract.Result<BitSetArray> ().IsNot ( null ) );
-            return a.IsNull () ? b : (BitSetArray.Copy ( a )).Or ( b );
+        public static BitSetArray operator | (BitSetArray a, BitSetArray b) {
+            Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
+            return a.IsNull () ? b : (BitSetArray.Copy (a)).Or (b);
         }
 
-        public static BitSetArray operator & ( BitSetArray a, BitSetArray b ) {
-            Contract.Ensures ( Contract.Result<BitSetArray> ().IsNot ( null ) );
-            return a.IsNull () ? new BitSetArray () : (BitSetArray.Copy ( a )).And ( b );
+        public static BitSetArray operator & (BitSetArray a, BitSetArray b) {
+            Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
+            return a.IsNull () ? new BitSetArray () : (BitSetArray.Copy (a)).And (b);
         }
 
-        public static BitSetArray operator ^ ( BitSetArray a, BitSetArray b ) {
-            Contract.Ensures ( Contract.Result<BitSetArray> ().IsNot ( null ) );
-            return a.IsNull () ? b : (BitSetArray.Copy ( a )).Xor ( b );
+        public static BitSetArray operator ^ (BitSetArray a, BitSetArray b) {
+            Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
+            return a.IsNull () ? b : (BitSetArray.Copy (a)).Xor (b);
         }
 
-        public static BitSetArray operator - ( BitSetArray a, BitSetArray b ) {
-            Contract.Ensures ( Contract.Result<BitSetArray> ().IsNot ( null ) );
-            return a.IsNull () ? new BitSetArray () : (BitSetArray.Copy ( a )).Not ( b );
+        public static BitSetArray operator - (BitSetArray a, BitSetArray b) {
+            Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
+            return a.IsNull () ? new BitSetArray () : (BitSetArray.Copy (a)).Not (b);
         }
 
-        public static BitSetArray operator ~ ( BitSetArray a ) {
-            Contract.Ensures ( Contract.Result<BitSetArray> ().IsNot ( null ) );
-            return a.IsNull () ? new BitSetArray () : (BitSetArray.Copy ( a )).Not ();
+        public static BitSetArray operator ~ (BitSetArray a) {
+            Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
+            return a.IsNull () ? new BitSetArray () : (BitSetArray.Copy (a)).Not ();
         }
 
         #endregion
 
         #region Comparators
 
-        public static bool operator == ( BitSetArray a, BitSetArray b ) {
+        public static bool operator == (BitSetArray a, BitSetArray b) {
             if (a.IsNull ()) {
                 if (b.IsNull () || b.Count == 0) {
                     return true;
@@ -3518,15 +3518,15 @@ namespace DD.Collections {
                 }
             }
             else {
-                return a.SetEquals ( b );
+                return a.SetEquals (b);
             }
         }
 
-        public static bool operator != ( BitSetArray a, BitSetArray b ) {
+        public static bool operator != (BitSetArray a, BitSetArray b) {
             return !(a == b);
         }
 
-        public static bool operator <= ( BitSetArray a, BitSetArray b ) {
+        public static bool operator <= (BitSetArray a, BitSetArray b) {
             if (a.IsNull ()) {
                 if (b.IsNull () || b.Count == 0) {
                     return true;
@@ -3536,7 +3536,7 @@ namespace DD.Collections {
                 }
             }
             else {
-                switch (a.CompareTo ( b )) {
+                switch (a.CompareTo (b)) {
                     case 0:
                         return true;
 
@@ -3549,7 +3549,7 @@ namespace DD.Collections {
             }
         }
 
-        public static bool operator >= ( BitSetArray a, BitSetArray b ) {
+        public static bool operator >= (BitSetArray a, BitSetArray b) {
             if (a.IsNull ()) {
                 if (b.IsNull () || b.Count == 0) {
                     return true;
@@ -3559,7 +3559,7 @@ namespace DD.Collections {
                 }
             }
             else {
-                switch (a.CompareTo ( b )) {
+                switch (a.CompareTo (b)) {
                     case 0:
                         return true;
 
@@ -3572,11 +3572,11 @@ namespace DD.Collections {
             }
         }
 
-        public static bool operator > ( BitSetArray a, BitSetArray b ) {
+        public static bool operator > (BitSetArray a, BitSetArray b) {
             return !(a <= b);
         }
 
-        public static bool operator < ( BitSetArray a, BitSetArray b ) {
+        public static bool operator < (BitSetArray a, BitSetArray b) {
             return !(a >= b);
         }
 
@@ -3592,19 +3592,19 @@ namespace DD.Collections {
         public int Length {
             [Pure]
             get {
-                Contract.Ensures ( Theory.LengthGet ( this, Contract.Result<int> () ) );
+                Contract.Ensures (Theory.LengthGet (this, Contract.Result<int> ()));
                 return this.range;
             }
             set {
-                Contract.Requires<IndexOutOfRangeException> ( ValidLength ( value ) );
+                Contract.Requires<IndexOutOfRangeException> (ValidLength (value));
 
-                Contract.Ensures ( Theory.LengthSet ( Contract.OldValue<BitSetArray> ( BitSetArray.Copy ( this ) ), value, this ) );
+                Contract.Ensures (Theory.LengthSet (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), value, this));
 
                 if (this.range != value) {
                     lock (SyncRoot) {
                         if (this.count != 0) {
-                            Contract.Assume ( this.First.HasValue );
-                            Contract.Assume ( this.Last.HasValue );
+                            Contract.Assume (this.First.HasValue);
+                            Contract.Assume (this.Last.HasValue);
                             if (value <= (int)this.Last) {
                                 this.AddVersion ();
                             }
@@ -3618,30 +3618,30 @@ namespace DD.Collections {
                             }
                         }
                         else {
-                            int newRangeArrayLength = BitSetArray.GetLongArrayLength ( value );
+                            int newRangeArrayLength = BitSetArray.GetLongArrayLength (value);
                             if (newRangeArrayLength > this.array.Length) {
                                 if (newRangeArrayLength < (this.array.Length * 2)) {
-                                    if (((long)(this.array.Length) * 2) <= BitSetArray.GetLongArrayLength ( int.MaxValue )) {
+                                    if (((long)(this.array.Length) * 2) <= BitSetArray.GetLongArrayLength (int.MaxValue)) {
                                         // reserve double space
                                         newRangeArrayLength = this.array.Length * 2;
                                     }
                                     else {
                                         // up to max required space
-                                        newRangeArrayLength = BitSetArray.GetLongArrayLength ( int.MaxValue );
+                                        newRangeArrayLength = BitSetArray.GetLongArrayLength (int.MaxValue);
                                     }
                                 }
                                 var newArray = new long[newRangeArrayLength];
                                 if (this.count != 0) {
-                                    Array.Copy ( this.array, newArray, BitSetArray.GetLongArrayLength ( this.range ) );
+                                    Array.Copy (this.array, newArray, BitSetArray.GetLongArrayLength (this.range));
                                 }
                                 this.array = newArray;
                                 this.range = value;
                             }
                             else {
-                                Contract.Assert ( newRangeArrayLength <= this.array.Length );
+                                Contract.Assert (newRangeArrayLength <= this.array.Length);
                                 this.range = value;
                                 this.ClearTail ();
-                                this.count = BitSetArray.CountOnBits ( this.array, this.range );
+                                this.count = BitSetArray.CountOnBits (this.array, this.range);
                             }
                         }
                     }
@@ -3652,7 +3652,7 @@ namespace DD.Collections {
         public int Capacity {
             [Pure]
             get {
-                Contract.Ensures ( Theory.CapacityGet ( this, Contract.Result<int> () ) );
+                Contract.Ensures (Theory.CapacityGet (this, Contract.Result<int> ()));
                 return
                     (this.array.LongLength * longBits) <= int.MaxValue ?
                     (int)(this.array.LongLength * longBits) :
@@ -3663,8 +3663,8 @@ namespace DD.Collections {
         public int Count {
             [Pure]
             get {
-                Contract.Ensures ( ValidLength ( Contract.Result<int> () ) );
-                Contract.Ensures ( Contract.Result<int> () == this.count );
+                Contract.Ensures (ValidLength (Contract.Result<int> ()));
+                Contract.Ensures (Contract.Result<int> () == this.count);
                 return count;
             }
         }
@@ -3672,9 +3672,9 @@ namespace DD.Collections {
         public int? First {
             [Pure]
             get {
-                Contract.Ensures ( Theory.FirstGet ( this, Contract.Result<int?> () ) );
-                Contract.Ensures ( this.Count == 0 || Contract.Result<int?> ().HasValue && Contract.Result<int?> () == this.FirstOrDefault () );
-                Contract.Ensures ( this.Count != 0 || !Contract.Result<int?> ().HasValue );
+                Contract.Ensures (Theory.FirstGet (this, Contract.Result<int?> ()));
+                Contract.Ensures (this.Count == 0 || Contract.Result<int?> ().HasValue && Contract.Result<int?> () == this.FirstOrDefault ());
+                Contract.Ensures (this.Count != 0 || !Contract.Result<int?> ().HasValue);
 
                 int? start = null;
                 if (this.count != 0) {
@@ -3695,11 +3695,11 @@ namespace DD.Collections {
             }
         }
 
-        private void FirstSet ( int value ) {
-            Contract.Requires<InvalidOperationException> ( Length != 0 );
-            Contract.Requires<ArgumentException> ( this.InRange ( value ) );
+        private void FirstSet (int value) {
+            Contract.Requires<InvalidOperationException> (Length != 0);
+            Contract.Requires<ArgumentException> (this.InRange (value));
 
-            Contract.Ensures ( Theory.FirstSet ( this, value ) );
+            Contract.Ensures (Theory.FirstSet (this, value));
 
             lock (SyncRoot) {
                 this.startMemoize = value;
@@ -3710,9 +3710,9 @@ namespace DD.Collections {
         public int? Last {
             [Pure]
             get {
-                Contract.Ensures ( Theory.LastGet ( this, Contract.Result<int?> () ) );
-                Contract.Ensures ( this.Count == 0 || Contract.Result<int?> ().HasValue && Contract.Result<int?> () < this.Length );
-                Contract.Ensures ( this.Count != 0 || !Contract.Result<int?> ().HasValue );
+                Contract.Ensures (Theory.LastGet (this, Contract.Result<int?> ()));
+                Contract.Ensures (this.Count == 0 || Contract.Result<int?> ().HasValue && Contract.Result<int?> () < this.Length);
+                Contract.Ensures (this.Count != 0 || !Contract.Result<int?> ().HasValue);
 
                 int? final = null;
                 if (this.count != 0) {
@@ -3729,17 +3729,17 @@ namespace DD.Collections {
                     }
                 }
 
-                Contract.Assume ( (this.Count == 0 && !final.HasValue) ||
-                (this.Count > 0 && final.HasValue && this[(int)final]) );
+                Contract.Assume ((this.Count == 0 && !final.HasValue) ||
+                (this.Count > 0 && final.HasValue && this[(int)final]));
                 return final;
             }
         }
 
-        private void LastSet ( int value ) {
-            Contract.Requires<InvalidOperationException> ( Length != 0 );
-            Contract.Requires<ArgumentException> ( this.InRange ( value ) );
+        private void LastSet (int value) {
+            Contract.Requires<InvalidOperationException> (Length != 0);
+            Contract.Requires<ArgumentException> (this.InRange (value));
 
-            Contract.Ensures ( Theory.LastSet ( this, value ) );
+            Contract.Ensures (Theory.LastSet (this, value));
 
             lock (SyncRoot) {
                 this.finalMemoize = value;
@@ -3750,7 +3750,7 @@ namespace DD.Collections {
         public bool IsReadOnly {
             [Pure]
             get {
-                Contract.Ensures ( Contract.Result<bool> () == false );
+                Contract.Ensures (Contract.Result<bool> () == false);
                 return false;
             }
         }
@@ -3758,7 +3758,7 @@ namespace DD.Collections {
         public bool IsSynchronized {
             [Pure]
             get {
-                Contract.Ensures ( Contract.Result<bool> () == true );
+                Contract.Ensures (Contract.Result<bool> () == true);
                 return true;
             }
         }
@@ -3766,7 +3766,7 @@ namespace DD.Collections {
         public object SyncRoot {
             [Pure]
             get {
-                Contract.Ensures ( this.sRoot.IsNot ( null ) );
+                Contract.Ensures (this.sRoot.IsNot (null));
                 return this.sRoot;
             }
         }

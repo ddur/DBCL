@@ -22,46 +22,46 @@ namespace DD.Collections.ICodeSet {
         /// <summary>Empty CodeSetBits</summary>
         /// <remarks>Only CodeSetBits/Wrap and CodeSetNull can be Empty</remarks>
         public static CodeSetBits From () {
-            Contract.Ensures ( Contract.Result<CodeSetBits> ().IsNot ( null ) );
+            Contract.Ensures (Contract.Result<CodeSetBits> ().IsNot (null));
 
-            return CodeSetBits.From ( BitSetArray.Empty () );
+            return CodeSetBits.From (BitSetArray.Empty ());
         }
 
-        public static CodeSetBits From ( params Code[] codes ) {
-            Contract.Requires<ArgumentNullException> ( codes.IsNot ( null ) );
-            Contract.Ensures ( Contract.Result<CodeSetBits> ().IsNot ( null ) );
+        public static CodeSetBits From (params Code[] codes) {
+            Contract.Requires<ArgumentNullException> (codes.IsNot (null));
+            Contract.Ensures (Contract.Result<CodeSetBits> ().IsNot (null));
 
-            return new CodeSetBits ( (IEnumerable<Code>)codes );
+            return new CodeSetBits ((IEnumerable<Code>)codes);
         }
 
-        public static CodeSetBits From ( IEnumerable<Code> codes ) {
-            Contract.Requires<ArgumentNullException> ( codes.IsNot ( null ) );
-            Contract.Ensures ( Contract.Result<CodeSetBits> ().IsNot ( null ) );
+        public static CodeSetBits From (IEnumerable<Code> codes) {
+            Contract.Requires<ArgumentNullException> (codes.IsNot (null));
+            Contract.Ensures (Contract.Result<CodeSetBits> ().IsNot (null));
 
-            return new CodeSetBits ( codes );
+            return new CodeSetBits (codes);
         }
 
         /// <summary>From BitSetArray at Offset</summary>
         /// <param name="bits">BitSetArray</param>
         /// <param name="offset">int</param>
-        public static CodeSetBits From ( BitSetArray bits, int offset = 0 ) {
-            Contract.Requires<ArgumentNullException> ( bits.IsNot ( null ) );
-            Contract.Requires<IndexOutOfRangeException> ( offset >= 0 );
-            Contract.Requires<IndexOutOfRangeException> ( bits.Count == 0 || ((int)bits.Last + offset) <= Code.MaxValue );
+        public static CodeSetBits From (BitSetArray bits, int offset = 0) {
+            Contract.Requires<ArgumentNullException> (bits.IsNot (null));
+            Contract.Requires<IndexOutOfRangeException> (offset >= 0);
+            Contract.Requires<IndexOutOfRangeException> (bits.Count == 0 || ((int)bits.Last + offset) <= Code.MaxValue);
 
-            Contract.Ensures ( Contract.Result<CodeSetBits> ().IsNot ( null ) );
+            Contract.Ensures (Contract.Result<CodeSetBits> ().IsNot (null));
 
-            return new CodeSetBits ( bits, offset );
+            return new CodeSetBits (bits, offset);
         }
 
-        private CodeSetBits ( IEnumerable<Code> codes ) {
-            Contract.Requires<ArgumentNullException> ( codes.IsNot ( null ) );
+        private CodeSetBits (IEnumerable<Code> codes) {
+            Contract.Requires<ArgumentNullException> (codes.IsNot (null));
 
-            Contract.Ensures ( Theory.Construct ( codes, this ) );
+            Contract.Ensures (Theory.Construct (codes, this));
 
             if (!codes.IsEmpty ()) {
                 var codeSet = codes as ICodeSet;
-                if (codeSet.IsNot ( null )) {
+                if (codeSet.IsNot (null)) {
                     this.start = codeSet.First;
                     this.final = codeSet.Last;
                 }
@@ -82,9 +82,9 @@ namespace DD.Collections.ICodeSet {
                     this.sorted = ((CodeSetBits)codes).sorted;
                 }
                 else {
-                    this.sorted = BitSetArray.Size ( this.final - this.start + 1 );
+                    this.sorted = BitSetArray.Size (this.final - this.start + 1);
                     foreach (Code code in codes) {
-                        this.sorted._Set ( code - this.start, true );
+                        this.sorted._Set (code - this.start, true);
                     }
                 }
             }
@@ -93,21 +93,21 @@ namespace DD.Collections.ICodeSet {
             }
         }
 
-        private CodeSetBits ( BitSetArray bits, int offset = 0 ) {
-            Contract.Requires<ArgumentNullException> ( bits.IsNot ( null ) );
-            Contract.Requires<IndexOutOfRangeException> ( offset >= 0 );
-            Contract.Requires<IndexOutOfRangeException> ( bits.Count == 0 || ((int)bits.Last + offset) <= Code.MaxValue );
+        private CodeSetBits (BitSetArray bits, int offset = 0) {
+            Contract.Requires<ArgumentNullException> (bits.IsNot (null));
+            Contract.Requires<IndexOutOfRangeException> (offset >= 0);
+            Contract.Requires<IndexOutOfRangeException> (bits.Count == 0 || ((int)bits.Last + offset) <= Code.MaxValue);
 
-            Contract.Ensures ( Theory.Construct ( bits, offset, this ) );
+            Contract.Ensures (Theory.Construct (bits, offset, this));
 
             if (bits.Count != 0) {
-                Contract.Assume ( bits.First.HasValue );
-                Contract.Assume ( bits.Last.HasValue );
+                Contract.Assume (bits.First.HasValue);
+                Contract.Assume (bits.Last.HasValue);
                 this.start = (int)bits.First + offset;
                 this.final = (int)bits.Last + offset;
-                this.sorted = BitSetArray.Size ( this.final - this.start + 1 );
+                this.sorted = BitSetArray.Size (this.final - this.start + 1);
                 foreach (Code code in bits) {
-                    this.sorted._Set ( code + offset - this.start, true );
+                    this.sorted._Set (code + offset - this.start, true);
                 }
             }
             else {
@@ -178,13 +178,13 @@ namespace DD.Collections.ICodeSet {
         #region Extended
 
         public BitSetArray ToCompact () {
-            Contract.Ensures ( Contract.Result<BitSetArray> ().IsNot ( null ) );
-            return BitSetArray.Copy ( this.sorted );
+            Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
+            return BitSetArray.Copy (this.sorted);
         }
 
         public IEnumerable<Code> Complement {
             get {
-                Contract.Ensures ( Contract.Result<IEnumerable<Code>> ().IsNot ( null ) );
+                Contract.Ensures (Contract.Result<IEnumerable<Code>> ().IsNot (null));
                 foreach (var item in this.sorted.Complement ()) {
                     yield return item + this.start;
                 }
@@ -197,7 +197,7 @@ namespace DD.Collections.ICodeSet {
 
         [ContractInvariantMethod]
         private void Invariant () {
-            Contract.Invariant ( Theory.Invariant ( this ) );
+            Contract.Invariant (Theory.Invariant (this));
         }
 
         #endregion
@@ -207,91 +207,91 @@ namespace DD.Collections.ICodeSet {
         private static class Theory {
 
             [Pure]
-            public static bool Construct ( CodeSetBits self ) {
+            public static bool Construct (CodeSetBits self) {
                 Success success = true;
 
-                success.Assert ( !self.sorted.IsNull () );
+                success.Assert (!self.sorted.IsNull ());
 
-                success.Assert ( self.sorted.Count == 0 );
-                success.Assert ( self.start == ICodeSetService.NoneStart );
-                success.Assert ( self.final == ICodeSetService.NoneFinal );
+                success.Assert (self.sorted.Count == 0);
+                success.Assert (self.start == ICodeSetService.NoneStart);
+                success.Assert (self.final == ICodeSetService.NoneFinal);
 
                 return success;
             }
 
             [Pure]
-            public static bool Construct ( IEnumerable<Code> codes, CodeSetBits self ) {
+            public static bool Construct (IEnumerable<Code> codes, CodeSetBits self) {
                 Success success = true;
 
-                success.Assert ( !codes.IsNull () );
-                success.Assert ( !self.sorted.IsNull () );
+                success.Assert (!codes.IsNull ());
+                success.Assert (!self.sorted.IsNull ());
 
                 if (!codes.IsEmpty ()) {
-                    success.Assert ( self.sorted.Count == codes.Distinct ().Count () );
-                    success.Assert ( self.start == codes.Min () );
-                    success.Assert ( self.final == codes.Max () );
+                    success.Assert (self.sorted.Count == codes.Distinct ().Count ());
+                    success.Assert (self.start == codes.Min ());
+                    success.Assert (self.final == codes.Max ());
                     foreach (var item in codes) {
-                        success.Assert ( self.sorted[item - self.start] );
+                        success.Assert (self.sorted[item - self.start]);
                     }
                 }
                 else {
-                    success.Assert ( Construct ( self ) );
+                    success.Assert (Construct (self));
                 }
 
                 return success;
             }
 
             [Pure]
-            public static bool Construct ( BitSetArray bits, int offset, CodeSetBits self ) {
+            public static bool Construct (BitSetArray bits, int offset, CodeSetBits self) {
                 Success success = true;
 
-                success.Assert ( !bits.IsNull () );
-                success.Assert ( !self.sorted.IsNull () );
+                success.Assert (!bits.IsNull ());
+                success.Assert (!self.sorted.IsNull ());
 
-                success.Assert ( self.sorted.Count == bits.Count );
+                success.Assert (self.sorted.Count == bits.Count);
 
                 if (bits.Count != 0) {
-                    Contract.Assume ( bits.First.HasValue );
-                    Contract.Assume ( bits.Last.HasValue );
-                    success.Assert ( self.start == (int)bits.First + offset );
-                    success.Assert ( self.final == (int)bits.Last + offset );
+                    Contract.Assume (bits.First.HasValue);
+                    Contract.Assume (bits.Last.HasValue);
+                    success.Assert (self.start == (int)bits.First + offset);
+                    success.Assert (self.final == (int)bits.Last + offset);
                     foreach (var item in bits) {
-                        success.Assert ( self.sorted[item + offset - self.start] );
+                        success.Assert (self.sorted[item + offset - self.start]);
                     }
                 }
                 else {
-                    success.Assert ( Construct ( self ) );
+                    success.Assert (Construct (self));
                 }
 
                 return success;
             }
 
             [Pure]
-            public static bool Invariant ( CodeSetBits self ) {
+            public static bool Invariant (CodeSetBits self) {
                 Success success = true;
 
                 // private
-                success.Assert ( !self.sorted.IsNull () );
+                success.Assert (!self.sorted.IsNull ());
 
-                success.Assert ( self.sorted.Length <= Code.MaxCount );
-                success.Assert ( self.sorted.Length == 1 + self.final - self.start );
-                success.Assert ( self.sorted.IsCompact () );
+                success.Assert (self.sorted.Length <= Code.MaxCount);
+                success.Assert (self.sorted.Length == 1 + self.final - self.start);
+                success.Assert (self.sorted.IsCompact ());
 
                 if (self.sorted.Count != 0) {
-                    success.Assert ( self.start.HasCodeValue () );
-                    success.Assert ( self.final.HasCodeValue () );
+                    success.Assert (self.start.HasCodeValue ());
+                    success.Assert (self.final.HasCodeValue ());
                 }
                 else {
-                    success.Assert ( self.start == ICodeSetService.NoneStart );
-                    success.Assert ( self.final == ICodeSetService.NoneFinal );
+                    success.Assert (self.start == ICodeSetService.NoneStart);
+                    success.Assert (self.final == ICodeSetService.NoneFinal);
                 }
 
                 // public <- private
-                success.Assert ( self.Length == self.sorted.Length );
-                success.Assert ( self.Count == self.sorted.Count );
+                success.Assert (self.Length == self.sorted.Length);
+                success.Assert (self.Count == self.sorted.Count);
                 if (self.Count != 0) {
-                    success.Assert ( self.First == self.start );
-                    success.Assert ( self.Last == self.final );
+                    success.Assert (self.First == self.start);
+                    success.Assert (self.Last == self.final);
                 }
 
                 return success;

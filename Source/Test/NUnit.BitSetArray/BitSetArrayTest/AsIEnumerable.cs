@@ -29,118 +29,118 @@ namespace DD.Collections.BitSetArrayTest.Interfaces {
         public static IEnumerable<BitSetArray> SetValueSource {
             get {
                 foreach (var input in SetInputSource) {
-                    yield return BitSetArray.From ( input );
+                    yield return BitSetArray.From (input);
                 }
             }
         }
 
         [Test]
-        public void EnumerableThrows ( [ValueSource ( "SetValueSource" )] BitSetArray me ) {
+        public void EnumerableThrows ([ValueSource ("SetValueSource")] BitSetArray me) {
             var generic_enumerator_forward = me.GetEnumerator ();
-            Assert.That ( delegate {
+            Assert.That (delegate {
                 generic_enumerator_forward.Reset ();
-            }, Throws.TypeOf<NotSupportedException> () );
-            Assert.That ( delegate {
+            }, Throws.TypeOf<NotSupportedException> ());
+            Assert.That (delegate {
                 int i = generic_enumerator_forward.Current;
-            }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ( "The enumerator is not positioned within collection." ) );
+            }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ("The enumerator is not positioned within collection."));
             if (generic_enumerator_forward.MoveNext ()) {
                 me[generic_enumerator_forward.Current] = false;
-                Assert.That ( delegate {
+                Assert.That (delegate {
                     int i = generic_enumerator_forward.Current;
-                }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ( "Collection was modified; enumeration operation may not execute." ) );
-                Assert.That ( delegate {
+                }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ("Collection was modified; enumeration operation may not execute."));
+                Assert.That (delegate {
                     generic_enumerator_forward.MoveNext ();
-                }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ( "Collection was modified; enumeration operation may not execute." ) );
+                }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ("Collection was modified; enumeration operation may not execute."));
             }
 
             var object_enumerator_forward = ((IEnumerable)me).GetEnumerator ();
-            Assert.That ( delegate {
+            Assert.That (delegate {
                 object_enumerator_forward.Reset ();
-            }, Throws.TypeOf<NotSupportedException> () );
-            Assert.That ( delegate {
+            }, Throws.TypeOf<NotSupportedException> ());
+            Assert.That (delegate {
                 int i = (int)object_enumerator_forward.Current;
-            }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ( "The enumerator is not positioned within collection." ) );
+            }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ("The enumerator is not positioned within collection."));
             if (object_enumerator_forward.MoveNext ()) {
                 me[(int)object_enumerator_forward.Current] = false;
-                Assert.That ( delegate {
+                Assert.That (delegate {
                     int i = (int)object_enumerator_forward.Current;
-                }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ( "Collection was modified; enumeration operation may not execute." ) );
-                Assert.That ( delegate {
+                }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ("Collection was modified; enumeration operation may not execute."));
+                Assert.That (delegate {
                     object_enumerator_forward.MoveNext ();
-                }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ( "Collection was modified; enumeration operation may not execute." ) );
+                }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ("Collection was modified; enumeration operation may not execute."));
             }
 
             var generic_enumerator_complement = me.GetEnumeratorComplement ();
-            Assert.That ( delegate {
+            Assert.That (delegate {
                 generic_enumerator_complement.Reset ();
-            }, Throws.TypeOf<NotSupportedException> () );
-            Assert.That ( delegate {
+            }, Throws.TypeOf<NotSupportedException> ());
+            Assert.That (delegate {
                 int i = generic_enumerator_complement.Current;
-            }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ( "The enumerator is not positioned within collection." ) );
+            }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ("The enumerator is not positioned within collection."));
             if (generic_enumerator_complement.MoveNext ()) {
                 me[generic_enumerator_complement.Current] = true;
-                Assert.That ( delegate {
+                Assert.That (delegate {
                     int i = generic_enumerator_complement.Current;
-                }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ( "Collection was modified; enumeration operation may not execute." ) );
-                Assert.That ( delegate {
+                }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ("Collection was modified; enumeration operation may not execute."));
+                Assert.That (delegate {
                     generic_enumerator_complement.MoveNext ();
-                }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ( "Collection was modified; enumeration operation may not execute." ) );
+                }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ("Collection was modified; enumeration operation may not execute."));
             }
 
             var object_enumerator_complement = (IEnumerator)(me.GetEnumeratorComplement ());
-            Assert.That ( delegate {
+            Assert.That (delegate {
                 object_enumerator_complement.Reset ();
-            }, Throws.TypeOf<NotSupportedException> () );
-            Assert.That ( delegate {
+            }, Throws.TypeOf<NotSupportedException> ());
+            Assert.That (delegate {
                 int i = (int)object_enumerator_complement.Current;
-            }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ( "The enumerator is not positioned within collection." ) );
+            }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ("The enumerator is not positioned within collection."));
             if (object_enumerator_complement.MoveNext ()) {
                 me[(int)object_enumerator_complement.Current] = true;
-                Assert.That ( delegate {
+                Assert.That (delegate {
                     int i = (int)object_enumerator_complement.Current;
-                }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ( "Collection was modified; enumeration operation may not execute." ) );
-                Assert.That ( delegate {
+                }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ("Collection was modified; enumeration operation may not execute."));
+                Assert.That (delegate {
                     object_enumerator_complement.MoveNext ();
-                }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ( "Collection was modified; enumeration operation may not execute." ) );
+                }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ("Collection was modified; enumeration operation may not execute."));
             }
 
             var generic_enumerator_reverse = me.GetEnumeratorReverse ();
-            Assert.That ( delegate {
+            Assert.That (delegate {
                 generic_enumerator_reverse.Reset ();
-            }, Throws.TypeOf<NotSupportedException> () );
-            Assert.That ( delegate {
+            }, Throws.TypeOf<NotSupportedException> ());
+            Assert.That (delegate {
                 int i = generic_enumerator_reverse.Current;
-            }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ( "The enumerator is not positioned within collection." ) );
+            }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ("The enumerator is not positioned within collection."));
             if (generic_enumerator_reverse.MoveNext ()) {
                 me[generic_enumerator_reverse.Current] = false;
-                Assert.That ( delegate {
+                Assert.That (delegate {
                     int i = generic_enumerator_reverse.Current;
-                }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ( "Collection was modified; enumeration operation may not execute." ) );
-                Assert.That ( delegate {
+                }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ("Collection was modified; enumeration operation may not execute."));
+                Assert.That (delegate {
                     generic_enumerator_reverse.MoveNext ();
-                }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ( "Collection was modified; enumeration operation may not execute." ) );
+                }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ("Collection was modified; enumeration operation may not execute."));
             }
 
             var object_enumerator_reverse = (IEnumerator)(me.GetEnumeratorReverse ());
-            Assert.That ( delegate {
+            Assert.That (delegate {
                 object_enumerator_reverse.Reset ();
-            }, Throws.TypeOf<NotSupportedException> () );
-            Assert.That ( delegate {
+            }, Throws.TypeOf<NotSupportedException> ());
+            Assert.That (delegate {
                 int i = (int)object_enumerator_reverse.Current;
-            }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ( "The enumerator is not positioned within collection." ) );
+            }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ("The enumerator is not positioned within collection."));
             if (object_enumerator_reverse.MoveNext ()) {
                 me[(int)object_enumerator_reverse.Current] = false;
-                Assert.That ( delegate {
+                Assert.That (delegate {
                     int i = (int)object_enumerator_reverse.Current;
-                }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ( "Collection was modified; enumeration operation may not execute." ) );
-                Assert.That ( delegate {
+                }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ("Collection was modified; enumeration operation may not execute."));
+                Assert.That (delegate {
                     object_enumerator_reverse.MoveNext ();
-                }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ( "Collection was modified; enumeration operation may not execute." ) );
+                }, Throws.TypeOf<InvalidOperationException> ().With.Message.EqualTo ("Collection was modified; enumeration operation may not execute."));
             }
         }
 
         [Test, Sequential]
-        public void ForEach ( [ValueSource ( "SetValueSource" )] BitSetArray me, [ValueSource ( "SetInputSource" )] int[] input ) {
+        public void ForEach ([ValueSource ("SetValueSource")] BitSetArray me, [ValueSource ("SetInputSource")] int[] input) {
             List<int> output;
 
             #region Forward enumerators
@@ -149,36 +149,36 @@ namespace DD.Collections.BitSetArrayTest.Interfaces {
             output = new List<int> ();
             foreach (var item in me) {
                 me[item] = true; // setting member allready set will not change version and/or trigger exception
-                output.Add ( item );
+                output.Add (item);
             }
-            Assert.That ( output.Count == input.Distinct ().Count () );
+            Assert.That (output.Count == input.Distinct ().Count ());
             if (output.Count > 0) {
-                Assert.That ( output.SequenceEqual ( input.Distinct ().OrderBy ( item => (item) ) ) );
+                Assert.That (output.SequenceEqual (input.Distinct ().OrderBy (item => (item))));
             }
 
             // unsynchronised enumerator
             output = new List<int> ();
-            var forwardEnumerator = new BitSetArray.EnumeratorForward ( me );
+            var forwardEnumerator = new BitSetArray.EnumeratorForward (me);
             while (forwardEnumerator.MoveNext ()) {
                 me[forwardEnumerator.Current] = true; // setting member allready set will not change version and/or trigger exception
-                output.Add ( forwardEnumerator.Current );
+                output.Add (forwardEnumerator.Current);
             }
-            Assert.That ( output.Count == input.Distinct ().Count () );
+            Assert.That (output.Count == input.Distinct ().Count ());
             if (output.Count > 0) {
-                Assert.That ( output.SequenceEqual ( input.Distinct ().OrderBy ( item => (item) ) ) );
+                Assert.That (output.SequenceEqual (input.Distinct ().OrderBy (item => (item))));
             }
 
             // readonly enumerator
             output = new List<int> ();
-            var forwardReadOnlyEnumerator = new BitSetArray.EnumeratorForwardReadOnly ( me );
+            var forwardReadOnlyEnumerator = new BitSetArray.EnumeratorForwardReadOnly (me);
             while (forwardReadOnlyEnumerator.MoveNext ()) {
                 me[forwardReadOnlyEnumerator.Current] = false; // clearing member of original will not affect copy
                 me[forwardReadOnlyEnumerator.Current] = true;  // reset value to compare result
-                output.Add ( forwardReadOnlyEnumerator.Current );
+                output.Add (forwardReadOnlyEnumerator.Current);
             }
-            Assert.That ( output.Count == input.Distinct ().Count () );
+            Assert.That (output.Count == input.Distinct ().Count ());
             if (output.Count > 0) {
-                Assert.That ( output.SequenceEqual ( input.Distinct ().OrderBy ( item => (item) ) ) );
+                Assert.That (output.SequenceEqual (input.Distinct ().OrderBy (item => (item))));
             }
 
             #endregion
@@ -189,36 +189,36 @@ namespace DD.Collections.BitSetArrayTest.Interfaces {
             output = new List<int> ();
             foreach (var item in me.Reverse ()) {
                 me[item] = true; // setting member allready set will not change version and/or trigger exception
-                output.Add ( item );
+                output.Add (item);
             }
-            Assert.That ( output.Count == input.Distinct ().Count () );
+            Assert.That (output.Count == input.Distinct ().Count ());
             if (output.Count > 0) {
-                Assert.That ( output.SequenceEqual ( input.Distinct ().OrderBy ( item => (0 - item) ) ) );
+                Assert.That (output.SequenceEqual (input.Distinct ().OrderBy (item => (0 - item))));
             }
 
             // unsynchronized reverse enumerator
             output = new List<int> ();
-            var reverseEnumerator = new BitSetArray.EnumeratorReverse ( me );
+            var reverseEnumerator = new BitSetArray.EnumeratorReverse (me);
             while (reverseEnumerator.MoveNext ()) {
                 me[reverseEnumerator.Current] = true; // setting member allready set will not change version and/or trigger exception
-                output.Add ( reverseEnumerator.Current );
+                output.Add (reverseEnumerator.Current);
             }
-            Assert.That ( output.Count == input.Distinct ().Count () );
+            Assert.That (output.Count == input.Distinct ().Count ());
             if (output.Count > 0) {
-                Assert.That ( output.SequenceEqual ( input.Distinct ().OrderBy ( item => (0 - item) ) ) );
+                Assert.That (output.SequenceEqual (input.Distinct ().OrderBy (item => (0 - item))));
             }
 
             // readonly reverse enumerator
             output = new List<int> ();
-            var reverseReadOnlyEnumerator = new BitSetArray.EnumeratorReverseReadOnly ( me );
+            var reverseReadOnlyEnumerator = new BitSetArray.EnumeratorReverseReadOnly (me);
             while (reverseReadOnlyEnumerator.MoveNext ()) {
                 me[reverseReadOnlyEnumerator.Current] = false; // clearing member of original will not affect copy
                 me[reverseReadOnlyEnumerator.Current] = true;  // reset value to compare result
-                output.Add ( reverseReadOnlyEnumerator.Current );
+                output.Add (reverseReadOnlyEnumerator.Current);
             }
-            Assert.That ( output.Count == input.Distinct ().Count () );
+            Assert.That (output.Count == input.Distinct ().Count ());
             if (output.Count > 0) {
-                Assert.That ( output.SequenceEqual ( input.Distinct ().OrderBy ( item => (0 - item) ) ) );
+                Assert.That (output.SequenceEqual (input.Distinct ().OrderBy (item => (0 - item))));
             }
 
             #endregion
@@ -229,39 +229,39 @@ namespace DD.Collections.BitSetArrayTest.Interfaces {
             output = new List<int> ();
             foreach (var item in me.Complement ()) {
                 me[item] = false; // resetting member allready un-set will not change version and/or trigger exception
-                output.Add ( item );
+                output.Add (item);
             }
             if (output.Count > 0) {
-                Assert.That ( input.Length != 0 ); // fails in Visual NUnit - old NUnit version?
-                Assert.That ( output.Count == (input.Max () + 1 - input.Distinct ().Count ()) );
-                Assert.That ( output.SequenceEqual ( (BitSetArray.Copy ( me )).Not () ) );
+                Assert.That (input.Length != 0); // fails in Visual NUnit - old NUnit version?
+                Assert.That (output.Count == (input.Max () + 1 - input.Distinct ().Count ()));
+                Assert.That (output.SequenceEqual ((BitSetArray.Copy (me)).Not ()));
             }
 
             // unsynchronized complement enumerator
             output = new List<int> ();
-            var complementEnumerator = new BitSetArray.EnumeratorComplement ( me );
+            var complementEnumerator = new BitSetArray.EnumeratorComplement (me);
             while (complementEnumerator.MoveNext ()) {
                 me[complementEnumerator.Current] = false; // resetting member allready un-set will not change version and/or trigger exception
-                output.Add ( complementEnumerator.Current );
+                output.Add (complementEnumerator.Current);
             }
             if (output.Count > 0) {
-                Assert.That ( input.Length != 0 );
-                Assert.That ( output.Count == (input.Max () + 1 - input.Distinct ().Count ()) );
-                Assert.That ( output.SequenceEqual ( (BitSetArray.Copy ( me )).Not () ) );
+                Assert.That (input.Length != 0);
+                Assert.That (output.Count == (input.Max () + 1 - input.Distinct ().Count ()));
+                Assert.That (output.SequenceEqual ((BitSetArray.Copy (me)).Not ()));
             }
 
             // readonly complement enumerator
             output = new List<int> ();
-            var complementReadOnlyEnumerator = new BitSetArray.EnumeratorComplementReadOnly ( me );
+            var complementReadOnlyEnumerator = new BitSetArray.EnumeratorComplementReadOnly (me);
             while (complementReadOnlyEnumerator.MoveNext ()) {
                 me[complementReadOnlyEnumerator.Current] = true; // setting member of original will not affect copy
                 me[complementReadOnlyEnumerator.Current] = false; // reset value to compare result
-                output.Add ( complementReadOnlyEnumerator.Current );
+                output.Add (complementReadOnlyEnumerator.Current);
             }
             if (output.Count > 0) {
-                Assert.That ( input.Length != 0 );
-                Assert.That ( output.Count == (input.Max () + 1 - input.Distinct ().Count ()) );
-                Assert.That ( output.SequenceEqual ( (BitSetArray.Copy ( me )).Not () ) );
+                Assert.That (input.Length != 0);
+                Assert.That (output.Count == (input.Max () + 1 - input.Distinct ().Count ()));
+                Assert.That (output.SequenceEqual ((BitSetArray.Copy (me)).Not ()));
             }
 
             #endregion

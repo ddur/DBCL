@@ -20,8 +20,8 @@ namespace DD {
         /// <param name="self">Extended IEnumerable&lt;T&gt;</param>
         /// <returns>True if IEnumerable&lt;T&gt; is empty</returns>
         [Pure]
-        public static bool IsEmpty<T> ( this IEnumerable<T> self ) {
-            Contract.Requires<ArgumentNullException> ( self.IsNot ( null ) );
+        public static bool IsEmpty<T> (this IEnumerable<T> self) {
+            Contract.Requires<ArgumentNullException> (self.IsNot (null));
 
             var collection = self as ICollection<T>;
             if (!collection.IsNull ()) {
@@ -43,8 +43,8 @@ namespace DD {
         /// <param name="me">Extended IEnumerable&lt;T&gt;</param>
         /// <returns>True if IEnumerable&lt;T&gt; is empty</returns>
         [Pure]
-        public static bool IsEmpty ( this IEnumerable self ) {
-            Contract.Requires<ArgumentNullException> ( self.IsNot ( null ) );
+        public static bool IsEmpty (this IEnumerable self) {
+            Contract.Requires<ArgumentNullException> (self.IsNot (null));
 
             ICollection collection = self as ICollection;
             if (!collection.IsNull ()) {
@@ -66,7 +66,7 @@ namespace DD {
         /// <param name="me"></param>
         /// <returns></returns>
         [Pure]
-        public static bool IsNullOrEmpty<T> ( this IEnumerable<T> self ) {
+        public static bool IsNullOrEmpty<T> (this IEnumerable<T> self) {
             if (!self.IsNull ()) {
                 return self.IsEmpty ();
             }
@@ -80,7 +80,7 @@ namespace DD {
         /// <param name="me"></param>
         /// <returns></returns>
         [Pure]
-        public static bool IsNullOrEmpty ( this IEnumerable self ) {
+        public static bool IsNullOrEmpty (this IEnumerable self) {
             if (!self.IsNull ()) {
                 return self.IsEmpty ();
             }

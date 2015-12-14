@@ -15,8 +15,8 @@ namespace DD.Collections.ICodeSet.CodeSetFullTest {
         [Test]
         public void FromRange () {
             CodeSetFull csf;
-            csf = CodeSetFull.From ( 1, 3 ); // at least 3 members
-            csf = CodeSetFull.From ( Code.MinValue, Code.MaxValue );
+            csf = CodeSetFull.From (1, 3); // at least 3 members
+            csf = CodeSetFull.From (Code.MinValue, Code.MaxValue);
         }
 
         [Test]
@@ -24,22 +24,22 @@ namespace DD.Collections.ICodeSet.CodeSetFullTest {
             CodeSetFull csf;
             Assert.Throws<InvalidOperationException> (
                 delegate {
-                    csf = CodeSetFull.From ( 9, 3 );
+                    csf = CodeSetFull.From (9, 3);
                 }
             );
             Assert.Throws<InvalidOperationException> (
                 delegate {
-                    csf = CodeSetFull.From ( 1, 2 );
+                    csf = CodeSetFull.From (1, 2);
                 }
             );
             Assert.Throws<InvalidCastException> (
                 delegate {
-                    csf = CodeSetFull.From ( -20, 3 );
+                    csf = CodeSetFull.From (-20, 3);
                 }
             );
             Assert.Throws<InvalidCastException> (
                 delegate {
-                    csf = CodeSetFull.From ( 0, -32 );
+                    csf = CodeSetFull.From (0, -32);
                 }
             );
         }

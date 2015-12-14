@@ -19,10 +19,10 @@ namespace DD {
         /// <param name="that"></param>
         /// <returns>bool object.ReferenceEquals(this, that)</returns>
         [Pure]
-        public static bool Is ( this object self, object that ) {
-            Contract.Ensures ( Contract.Result<System.Boolean> () == object.ReferenceEquals ( self, that ) );
+        public static bool Is (this object self, object that) {
+            Contract.Ensures (Contract.Result<System.Boolean> () == object.ReferenceEquals (self, that));
 
-            return object.ReferenceEquals ( self, that );
+            return object.ReferenceEquals (self, that);
         }
 
         /// <summary>Shortcut for "!object.ReferenceEquals(this, that)".
@@ -33,10 +33,10 @@ namespace DD {
         /// <param name="that"></param>
         /// <returns>bool !object.ReferenceEquals(this, that)</returns>
         [Pure]
-        public static bool IsNot ( this object self, object that ) {
-            Contract.Ensures ( Contract.Result<System.Boolean> () == !object.ReferenceEquals ( self, that ) );
+        public static bool IsNot (this object self, object that) {
+            Contract.Ensures (Contract.Result<System.Boolean> () == !object.ReferenceEquals (self, that));
 
-            return !self.Is ( that );
+            return !self.Is (that);
         }
 
         /// <summary>Shortcut for "object.ReferenceEquals(this, null)".
@@ -46,10 +46,10 @@ namespace DD {
         /// <param name="me"></param>
         /// <returns>bool object.ReferenceEquals(this, null)</returns>
         [Pure]
-        public static bool IsNull ( this object self ) {
-            Contract.Ensures ( Contract.Result<System.Boolean> () == object.ReferenceEquals ( self, null ) );
+        public static bool IsNull (this object self) {
+            Contract.Ensures (Contract.Result<System.Boolean> () == object.ReferenceEquals (self, null));
 
-            return self.Is ( null );
+            return self.Is (null);
         }
     }
 }

@@ -36,50 +36,50 @@ namespace DD.Collections.ICodeSet.CodeTest {
             }
         }
 
-        [Test, TestCaseSource ( "EncodeToStringOrThrow" )]
-        public string Encode ( int code ) {
+        [Test, TestCaseSource ("EncodeToStringOrThrow")]
+        public string Encode (int code) {
             return code.Encode ();
         }
 
-        [Test, TestCaseSource ( "InvalidCode" )]
-        public void EncodeInvalidCode ( int code ) {
-            Assert.Throws<IndexOutOfRangeException> ( delegate { code.Encode (); } );
+        [Test, TestCaseSource ("InvalidCode")]
+        public void EncodeInvalidCode (int code) {
+            Assert.Throws<IndexOutOfRangeException> (delegate { code.Encode (); });
         }
 
-        [Test, TestCaseSource ( "ValidCode" )]
-        public void EncodeValidCode ( int code ) {
+        [Test, TestCaseSource ("ValidCode")]
+        public void EncodeValidCode (int code) {
             Code C = code;
             if (C.HasCharValue ()) {
                 if (C.IsSurrogate ()) {
-                    Assert.That ( code.Encode () == "" + (char)0xFFFD );
+                    Assert.That (code.Encode () == "" + (char)0xFFFD);
                 }
                 else {
-                    Assert.That ( code.Encode () == "" + (char)code );
+                    Assert.That (code.Encode () == "" + (char)code);
                 }
             }
             else {
-                Assert.That ( code.Encode ().Length == 2 );
-                Assert.That ( (code.Encode ()).Decode ().First () == code );
+                Assert.That (code.Encode ().Length == 2);
+                Assert.That ((code.Encode ()).Decode ().First () == code);
             }
         }
 
         [Test]
         public void EncodeAllValidCodes () {
             List<Code> codeList = null;
-            Assert.DoesNotThrow ( delegate { codeList.Encode (); } );
+            Assert.DoesNotThrow (delegate { codeList.Encode (); });
             codeList = new List<Code> ();
-            Assert.DoesNotThrow ( delegate { codeList.Encode (); } );
-            foreach (Code code in ValidCode) { if (!code.IsSurrogate ()) codeList.Add ( code ); }
+            Assert.DoesNotThrow (delegate { codeList.Encode (); });
+            foreach (Code code in ValidCode) { if (!code.IsSurrogate ()) codeList.Add (code); }
             string result = codeList.Encode ();
-            Assert.True ( codeList.SequenceEqual ( result.Decode () ) );
+            Assert.True (codeList.SequenceEqual (result.Decode ()));
             codeList.Clear ();
-            foreach (Code code in ValidCode) { codeList.Add ( code.IsSurrogate () ? (Code)0xFFFD : code ); }
+            foreach (Code code in ValidCode) { codeList.Add (code.IsSurrogate () ? (Code)0xFFFD : code); }
             result = codeList.Encode ();
-            Assert.True ( codeList.SequenceEqual ( result.Decode () ) );
+            Assert.True (codeList.SequenceEqual (result.Decode ()));
             codeList.Clear ();
-            foreach (Code code in ValidCode) { codeList.Add ( code ); }
+            foreach (Code code in ValidCode) { codeList.Add (code); }
             result = codeList.Encode ();
-            Assert.True ( !codeList.SequenceEqual ( result.Decode () ) );
+            Assert.True (!codeList.SequenceEqual (result.Decode ()));
         }
     }
 }

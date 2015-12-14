@@ -20,17 +20,17 @@ namespace DD.Collections.ICodeSet {
 
         #region Ctor
 
-        public static CodeSetPair From ( Code low, Code high ) {
-            Contract.Requires<ArgumentException> ( low < high );
-            Contract.Ensures ( Contract.Result<CodeSetPair> ().IsNot ( null ) );
+        public static CodeSetPair From (Code low, Code high) {
+            Contract.Requires<ArgumentException> (low < high);
+            Contract.Ensures (Contract.Result<CodeSetPair> ().IsNot (null));
 
-            return new CodeSetPair ( low, high );
+            return new CodeSetPair (low, high);
         }
 
-        internal CodeSetPair ( Code low, Code high ) {
-            Contract.Requires<ArgumentException> ( low < high );
+        internal CodeSetPair (Code low, Code high) {
+            Contract.Requires<ArgumentException> (low < high);
 
-            Contract.Ensures ( Theory.Construct ( low, high, this ) );
+            Contract.Ensures (Theory.Construct (low, high, this));
 
             this.start = low;
             this.final = high;
@@ -84,7 +84,7 @@ namespace DD.Collections.ICodeSet {
 
         [ContractInvariantMethod]
         private void Invariant () {
-            Contract.Invariant ( Theory.Invariant ( this ) );
+            Contract.Invariant (Theory.Invariant (this));
         }
 
         #endregion
@@ -92,31 +92,31 @@ namespace DD.Collections.ICodeSet {
         private static class Theory {
 
             [Pure]
-            public static bool Construct ( Code low, Code high, CodeSetPair self ) {
+            public static bool Construct (Code low, Code high, CodeSetPair self) {
                 Success success = true;
 
                 // input -> private
-                success.Assert ( self.start == low );
-                success.Assert ( self.final == high );
-                success.Assert ( self[low] );
-                success.Assert ( self[high] );
+                success.Assert (self.start == low);
+                success.Assert (self.final == high);
+                success.Assert (self[low]);
+                success.Assert (self[high]);
 
                 return success;
             }
 
             [Pure]
-            public static bool Invariant ( CodeSetPair self ) {
+            public static bool Invariant (CodeSetPair self) {
                 Success success = true;
 
                 // private
-                success.Assert ( self.start < self.final );
+                success.Assert (self.start < self.final);
 
                 // public <- private
-                success.Assert ( self.First == self.start );
-                success.Assert ( self.Last == self.final );
+                success.Assert (self.First == self.start);
+                success.Assert (self.Last == self.final);
 
                 // constraints
-                success.Assert ( self.Count == ICodeSetService.PairCount );
+                success.Assert (self.Count == ICodeSetService.PairCount);
 
                 return success;
             }

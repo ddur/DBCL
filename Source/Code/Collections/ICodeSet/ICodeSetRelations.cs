@@ -18,12 +18,12 @@ namespace DD.Collections.ICodeSet {
         #region ICodeSet Set Relations
 
         [Pure]
-        public static bool Overlaps ( this ICodeSet self, ICodeSet that ) {
-            switch (self.QuickSetEquals ( that )) {
+        public static bool Overlaps (this ICodeSet self, ICodeSet that) {
+            switch (self.QuickSetEquals (that)) {
                 case true:
                     return !self.IsNullOrEmpty ();
             }
-            switch (self.QuickSetOverlaps ( that )) {
+            switch (self.QuickSetOverlaps (that)) {
                 case false:
                     return false;
 
@@ -32,10 +32,10 @@ namespace DD.Collections.ICodeSet {
             }
 
             // Get overlap range
-            Contract.Assert ( self.RangeOverlaps ( that ) ); // From QuickSetOverlaps
+            Contract.Assert (self.RangeOverlaps (that)); // From QuickSetOverlaps
             Code overlapFirst = self.First >= that.First ? self.First : that.First;
             Code overlapLast = self.Last <= that.Last ? self.Last : that.Last;
-            Contract.Assert ( overlapFirst <= overlapLast );
+            Contract.Assert (overlapFirst <= overlapLast);
 
             ICodeSet smaller = self.Count <= that.Count ? self : that;
             ICodeSet larger = self.Count > that.Count ? self : that;
@@ -52,29 +52,29 @@ namespace DD.Collections.ICodeSet {
         }
 
         [Pure]
-        public static bool IsSubsetOf ( this ICodeSet self, ICodeSet that ) {
+        public static bool IsSubsetOf (this ICodeSet self, ICodeSet that) {
             return
-                self.IsRangeSubsetOf ( that ) && // null/empty excluded
+                self.IsRangeSubsetOf (that) && // null/empty excluded
                 self.Count <= that.Count &&
-                self.All ( item => that[item] );
+                self.All (item => that[item]);
         }
 
         [Pure]
-        public static bool IsProperSubsetOf ( this ICodeSet self, ICodeSet that ) {
+        public static bool IsProperSubsetOf (this ICodeSet self, ICodeSet that) {
             return
-                self.IsRangeSubsetOf ( that ) && // null/empty excluded
+                self.IsRangeSubsetOf (that) && // null/empty excluded
                 self.Count < that.Count &&
-                self.All ( item => that[item] );
+                self.All (item => that[item]);
         }
 
         [Pure]
-        public static bool IsSupersetOf ( this ICodeSet self, ICodeSet that ) {
-            return that.IsSubsetOf ( self );
+        public static bool IsSupersetOf (this ICodeSet self, ICodeSet that) {
+            return that.IsSubsetOf (self);
         }
 
         [Pure]
-        public static bool IsProperSupersetOf ( this ICodeSet self, ICodeSet that ) {
-            return that.IsProperSubsetOf ( self );
+        public static bool IsProperSupersetOf (this ICodeSet self, ICodeSet that) {
+            return that.IsProperSubsetOf (self);
         }
 
         /// <summary>ICodeSet.CompareTo() method implementation/semantics
@@ -85,16 +85,16 @@ namespace DD.Collections.ICodeSet {
         /// <returns>Same as IComparable.CompareTo</returns>
         /// <remarks>Do not rename this extension method to "CompareTo"!</remarks>
         [Pure]
-        public static int Compare ( this ICodeSet self, ICodeSet that ) {
-            if (self.QuickSetEquals ( that ) == true) { return 0; }
-            Contract.Assert ( !(self.IsNullOrEmpty () && that.IsNullOrEmpty ()) );
+        public static int Compare (this ICodeSet self, ICodeSet that) {
+            if (self.QuickSetEquals (that) == true) { return 0; }
+            Contract.Assert (!(self.IsNullOrEmpty () && that.IsNullOrEmpty ()));
 
             if (self.IsNullOrEmpty ()) { return -1; }
             if (that.IsNullOrEmpty ()) { return 1; }
             if (self.Last < that.Last) { return -1; }
             if (self.Last > that.Last) { return 1; }
 
-            return self.ToBitSetArray ().CompareTo ( that.ToBitSetArray () );
+            return self.ToBitSetArray ().CompareTo (that.ToBitSetArray ());
         }
 
         #endregion
@@ -109,8 +109,8 @@ namespace DD.Collections.ICodeSet {
         /// <returns>True on value(set&amp;sequence) equality</returns>
         /// <remarks>Do not rename this extension method to "Equals"!</remarks>
         [Pure]
-        public static bool SetEquals ( this ICodeSet self, ICodeSet that ) {
-            bool? IsEqual = self.QuickSetEquals ( that );
+        public static bool SetEquals (this ICodeSet self, ICodeSet that) {
+            bool? IsEqual = self.QuickSetEquals (that);
             switch (IsEqual) {
                 case false:
                     return false; // one NullOrEmpty or both not QuickSetEquals
@@ -119,25 +119,25 @@ namespace DD.Collections.ICodeSet {
                     return true; // both NullOrEmpty or both QuickSetEquals
 
                 default:
-                    Contract.Assume ( IsEqual == null );
+                    Contract.Assume (IsEqual == null);
 
                     // none empty, same count, same first, same last
-                    Contract.Assume ( !self.IsNullOrEmpty () );
-                    Contract.Assume ( !that.IsNullOrEmpty () );
-                    Contract.Assume ( self.Count == that.Count );
-                    Contract.Assume ( self.First == that.First );
-                    Contract.Assume ( self.Last == that.Last );
+                    Contract.Assume (!self.IsNullOrEmpty ());
+                    Contract.Assume (!that.IsNullOrEmpty ());
+                    Contract.Assume (self.Count == that.Count);
+                    Contract.Assume (self.First == that.First);
+                    Contract.Assume (self.Last == that.Last);
 
                     bool move = true;
                     var e = that.GetEnumerator ();
                     foreach (var code in self) {
                         move = e.MoveNext ();
-                        Contract.Assume ( move );
+                        Contract.Assume (move);
                         if (code != e.Current)
                             return false;
                     }
                     move = e.MoveNext ();
-                    Contract.Assume ( !move );
+                    Contract.Assume (!move);
                     return true;
             }
         }
@@ -148,8 +148,8 @@ namespace DD.Collections.ICodeSet {
         /// <param name="that">ICodeSet</param>
         /// <returns></returns>
         [Pure]
-        public static bool SequenceEqual ( this ICodeSet self, ICodeSet that ) {
-            return self.SetEquals ( that );
+        public static bool SequenceEqual (this ICodeSet self, ICodeSet that) {
+            return self.SetEquals (that);
         }
 
         /// <summary>ICodeSet.GetHashCode method implementation/semantics
@@ -158,10 +158,10 @@ namespace DD.Collections.ICodeSet {
         /// <returns>int HashCode</returns>
         /// <remarks>Do not rename this extension method to "GetHashCode"!</remarks>
         [Pure]
-        public static int HashCode ( this ICodeSet self ) {
+        public static int HashCode (this ICodeSet self) {
             if (self.IsNull () || self.Count == 0)
                 return 0;
-            return unchecked ( self.First << 2 ) ^ unchecked ( self.Count << 1 ) ^ (self.Last);
+            return unchecked (self.First << 2) ^ unchecked (self.Count << 1) ^ (self.Last);
         }
 
         #endregion
@@ -173,7 +173,7 @@ namespace DD.Collections.ICodeSet {
         /// <param name="that"></param>
         /// <returns>true/false/maybe</returns>
         [Pure]
-        public static bool? QuickSetEquals ( this ICodeSet self, ICodeSet that ) {
+        public static bool? QuickSetEquals (this ICodeSet self, ICodeSet that) {
             // ATTN! '==' operator can be overloaded to point indirectly here
             // so using "ICodeSet == ICodeSet" here will create endless loop
 
@@ -189,7 +189,7 @@ namespace DD.Collections.ICodeSet {
             }
 
             // Reference equals? (Empty excluded by rules above)
-            if (self.Is ( that )) { return true; }
+            if (self.Is (that)) { return true; }
 
             // Maybe Equals if Range&Count equals
             if (self.First == that.First && self.Last == that.Last && self.Count == that.Count) {
@@ -201,11 +201,11 @@ namespace DD.Collections.ICodeSet {
                 return false;
             }
 
-            Contract.Assume ( !self.IsNullOrEmpty () );
-            Contract.Assume ( !that.IsNullOrEmpty () );
-            Contract.Assert ( self.Count == that.Count );
-            Contract.Assert ( self.First == that.First );
-            Contract.Assert ( self.Last == that.Last );
+            Contract.Assume (!self.IsNullOrEmpty ());
+            Contract.Assume (!that.IsNullOrEmpty ());
+            Contract.Assert (self.Count == that.Count);
+            Contract.Assert (self.First == that.First);
+            Contract.Assert (self.Last == that.Last);
 
             return null; // Maybe Equals
         }
@@ -215,15 +215,15 @@ namespace DD.Collections.ICodeSet {
         /// <param name="that"></param>
         /// <returns>true/false/maybe</returns>
         [Pure]
-        public static bool? QuickSetOverlaps ( this ICodeSet self, ICodeSet that ) {
+        public static bool? QuickSetOverlaps (this ICodeSet self, ICodeSet that) {
             // QuickEquals is allways checked before QuickOverlaps
 
             // Never overlaps if ranges do not overlap. (Checks  empty ICodeSet too)
-            if (!self.RangeOverlaps ( that )) {
+            if (!self.RangeOverlaps (that)) {
                 return false;
             }
 
-            Contract.Assert ( !self.IsNull () && self.Count != 0 && !that.IsNull () && that.Count != 0 );
+            Contract.Assert (!self.IsNull () && self.Count != 0 && !that.IsNull () && that.Count != 0);
             // From here none empty and ranges overlap, but is unknown if any member overlaps.
 
             // Quick test if known members (start/final member) overlaps
@@ -240,7 +240,7 @@ namespace DD.Collections.ICodeSet {
         #region Range Relations
 
         [Pure]
-        public static bool RangeEquals ( this ICodeSet self, ICodeSet that ) {
+        public static bool RangeEquals (this ICodeSet self, ICodeSet that) {
             if (self.IsNull () || self.Count == 0) {
                 if (that.IsNullOrEmpty ())
                     return true;
@@ -253,7 +253,7 @@ namespace DD.Collections.ICodeSet {
         }
 
         [Pure]
-        public static bool RangeOverlaps ( this ICodeSet self, ICodeSet that ) {
+        public static bool RangeOverlaps (this ICodeSet self, ICodeSet that) {
             if (self.IsNull () || self.Count == 0 || that.IsNull () || that.Count == 0) {
                 return false; // empty ranges never overlap
             }
@@ -264,7 +264,7 @@ namespace DD.Collections.ICodeSet {
         }
 
         [Pure]
-        public static bool IsRangeSubsetOf ( this ICodeSet self, ICodeSet that ) {
+        public static bool IsRangeSubsetOf (this ICodeSet self, ICodeSet that) {
             if (self.IsNull () || self.Count == 0 || that.IsNull () || that.Count == 0) {
                 return false; // empty range is never subset/superset
             }
@@ -275,18 +275,18 @@ namespace DD.Collections.ICodeSet {
         }
 
         [Pure]
-        public static bool IsProperRangeSubsetOf ( this ICodeSet self, ICodeSet that ) {
-            return self.IsRangeSubsetOf ( that ) && self.Length < that.Length;
+        public static bool IsProperRangeSubsetOf (this ICodeSet self, ICodeSet that) {
+            return self.IsRangeSubsetOf (that) && self.Length < that.Length;
         }
 
         [Pure]
-        public static bool IsRangeSupersetOf ( this ICodeSet self, ICodeSet that ) {
-            return that.IsRangeSubsetOf ( self );
+        public static bool IsRangeSupersetOf (this ICodeSet self, ICodeSet that) {
+            return that.IsRangeSubsetOf (self);
         }
 
         [Pure]
-        public static bool IsProperRangeSupersetOf ( this ICodeSet self, ICodeSet that ) {
-            return that.IsProperRangeSubsetOf ( self );
+        public static bool IsProperRangeSupersetOf (this ICodeSet self, ICodeSet that) {
+            return that.IsProperRangeSubsetOf (self);
         }
 
         #endregion

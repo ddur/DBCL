@@ -34,9 +34,9 @@ namespace DD.Collections.ICodeSet {
 
         #region C5 Find Wrapper
 
-        public bool Find ( ref ICodeSet key ) {
-            T val = default ( T );
-            return this.unique.Find ( ref key, out val );
+        public bool Find (ref ICodeSet key) {
+            T val = default (T);
+            return this.unique.Find (ref key, out val);
         }
 
         #endregion
@@ -66,25 +66,25 @@ namespace DD.Collections.ICodeSet {
             }
         }
 
-        public bool ContainsKey ( ICodeSet key ) {
-            return this.unique.Contains ( key );
+        public bool ContainsKey (ICodeSet key) {
+            return this.unique.Contains (key);
         }
 
-        public virtual void Add ( ICodeSet key, T value ) {
+        public virtual void Add (ICodeSet key, T value) {
             try {
-                this.unique.Add ( key, value );
+                this.unique.Add (key, value);
             }
             catch (C5.DuplicateNotAllowedException) {
-                throw new ArgumentException ( "Duplicate not allowed" );
+                throw new ArgumentException ("Duplicate not allowed");
             }
         }
 
-        public bool Remove ( ICodeSet key ) {
-            return this.unique.Remove ( key );
+        public bool Remove (ICodeSet key) {
+            return this.unique.Remove (key);
         }
 
-        public bool TryGetValue ( ICodeSet key, out T value ) {
-            return this.unique.Find ( ref key, out value );
+        public bool TryGetValue (ICodeSet key, out T value) {
+            return this.unique.Find (ref key, out value);
         }
 
         #endregion
@@ -105,12 +105,12 @@ namespace DD.Collections.ICodeSet {
             }
         }
 
-        public virtual void Add ( KeyValuePair<ICodeSet, T> item ) {
+        public virtual void Add (KeyValuePair<ICodeSet, T> item) {
             try {
-                this.unique.Add ( item.Key, item.Value );
+                this.unique.Add (item.Key, item.Value);
             }
             catch (C5.DuplicateNotAllowedException) {
-                throw new ArgumentException ( "Duplicate not allowed" );
+                throw new ArgumentException ("Duplicate not allowed");
             }
         }
 
@@ -118,29 +118,29 @@ namespace DD.Collections.ICodeSet {
             this.unique.Clear ();
         }
 
-        public bool Contains ( KeyValuePair<ICodeSet, T> item ) {
-            return unique.Contains ( new C5.KeyValuePair<ICodeSet, T> ( item.Key, item.Value ) );
+        public bool Contains (KeyValuePair<ICodeSet, T> item) {
+            return unique.Contains (new C5.KeyValuePair<ICodeSet, T> (item.Key, item.Value));
         }
 
         [Pure]
-        [SuppressMessage ( "Microsoft.Contracts", "CC1033", Justification = "Debug/Release exceptions not same" )]
-        public void CopyTo ( KeyValuePair<ICodeSet, T>[] array, int arrayIndex ) {
-            Contract.Requires<ArgumentNullException> ( array.IsNot ( null ) );
-            Contract.Requires<IndexOutOfRangeException> ( arrayIndex >= 0 );
-            Contract.Requires<IndexOutOfRangeException> ( arrayIndex <= (array.Length - this.Count) );
+        [SuppressMessage ("Microsoft.Contracts", "CC1033", Justification = "Debug/Release exceptions not same")]
+        public void CopyTo (KeyValuePair<ICodeSet, T>[] array, int arrayIndex) {
+            Contract.Requires<ArgumentNullException> (array.IsNot (null));
+            Contract.Requires<IndexOutOfRangeException> (arrayIndex >= 0);
+            Contract.Requires<IndexOutOfRangeException> (arrayIndex <= (array.Length - this.Count));
             int index = arrayIndex;
             foreach (var item in unique) {
-                array[index] = new KeyValuePair<ICodeSet, T> ( item.Key, item.Value );
+                array[index] = new KeyValuePair<ICodeSet, T> (item.Key, item.Value);
                 ++index;
             }
         }
 
-        public virtual bool Remove ( KeyValuePair<ICodeSet, T> item ) {
+        public virtual bool Remove (KeyValuePair<ICodeSet, T> item) {
             var key = item.Key;
             var value = item.Value;
-            if (this.unique.Find ( ref key, out value )) {
-                if (value.Equals ( item.Value )) {
-                    return this.unique.Remove ( key );
+            if (this.unique.Find (ref key, out value)) {
+                if (value.Equals (item.Value)) {
+                    return this.unique.Remove (key);
                 }
             }
             return false;
@@ -152,7 +152,7 @@ namespace DD.Collections.ICodeSet {
 
         public IEnumerator<KeyValuePair<ICodeSet, T>> GetEnumerator () {
             foreach (var item in unique) {
-                yield return new KeyValuePair<ICodeSet, T> ( item.Key, item.Value );
+                yield return new KeyValuePair<ICodeSet, T> (item.Key, item.Value);
             }
         }
 
@@ -177,9 +177,9 @@ namespace DD.Collections.ICodeSet {
 
         #region new members
 
-        public void Add ( ICodeSet iset ) {
-            Contract.Requires ( iset.IsNot ( null ) );
-            base.Add ( iset, ID );
+        public void Add (ICodeSet iset) {
+            Contract.Requires (iset.IsNot (null));
+            base.Add (iset, ID);
             ++ID;
         }
 
@@ -196,16 +196,16 @@ namespace DD.Collections.ICodeSet {
             }
         }
 
-        public override void Add ( ICodeSet key, int value ) {
+        public override void Add (ICodeSet key, int value) {
             throw new NotSupportedException ();
         }
 
-        public override void Add ( KeyValuePair<ICodeSet, int> item ) {
-            Contract.Requires ( !item.IsNull () );
+        public override void Add (KeyValuePair<ICodeSet, int> item) {
+            Contract.Requires (!item.IsNull ());
             throw new NotSupportedException ();
         }
 
-        public override bool Remove ( KeyValuePair<ICodeSet, int> item ) {
+        public override bool Remove (KeyValuePair<ICodeSet, int> item) {
             throw new NotSupportedException ();
         }
 

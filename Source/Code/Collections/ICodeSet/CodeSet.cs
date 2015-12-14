@@ -52,15 +52,15 @@ namespace DD.Collections.ICodeSet {
         public abstract IEnumerator<Code> GetEnumerator ();
 
         [Pure]
-        public virtual bool Equals ( ICodeSet that ) {
-            Contract.Ensures ( Contract.Result<bool> () == this.SetEquals ( that ) );
-            return this.SetEquals ( that );
+        public virtual bool Equals (ICodeSet that) {
+            Contract.Ensures (Contract.Result<bool> () == this.SetEquals (that));
+            return this.SetEquals (that);
         }
 
         [Pure]
-        public int CompareTo ( ICodeSet that ) {
-            Contract.Ensures ( Contract.Result<int> () == this.Compare ( that ) );
-            return this.Compare ( that );
+        public int CompareTo (ICodeSet that) {
+            Contract.Ensures (Contract.Result<int> () == this.Compare (that));
+            return this.Compare (that);
         }
 
         #endregion
@@ -68,25 +68,25 @@ namespace DD.Collections.ICodeSet {
         #region Equals<object> & GetHashCode()
 
         [Pure]
-        public override bool Equals ( object obj ) {
-            Contract.Ensures ( Contract.Result<bool> () == ((obj is ICodeSet) && this.SetEquals ( (ICodeSet)obj )) );
-            return (obj is ICodeSet) && this.SetEquals ( (ICodeSet)obj );
+        public override bool Equals (object obj) {
+            Contract.Ensures (Contract.Result<bool> () == ((obj is ICodeSet) && this.SetEquals ((ICodeSet)obj)));
+            return (obj is ICodeSet) && this.SetEquals ((ICodeSet)obj);
         }
 
         [Pure]
         public override int GetHashCode () {
-            Contract.Ensures ( Contract.Result<int> () == this.HashCode () );
+            Contract.Ensures (Contract.Result<int> () == this.HashCode ());
             return this.HashCode ();
         }
 
         [Pure]
-        public static bool operator == ( CodeSet lhs, CodeSet rhs ) {
-            return lhs.Is ( null ) ? rhs.IsNullOrEmpty () : lhs.Equals ( rhs );
+        public static bool operator == (CodeSet lhs, CodeSet rhs) {
+            return lhs.Is (null) ? rhs.IsNullOrEmpty () : lhs.Equals (rhs);
         }
 
         [Pure]
-        public static bool operator != ( CodeSet lhs, CodeSet rhs ) {
-            return lhs.Is ( null ) ? !rhs.IsNullOrEmpty () : !lhs.Equals ( rhs );
+        public static bool operator != (CodeSet lhs, CodeSet rhs) {
+            return lhs.Is (null) ? !rhs.IsNullOrEmpty () : !lhs.Equals (rhs);
         }
 
         #endregion
@@ -100,9 +100,9 @@ namespace DD.Collections.ICodeSet {
         /// <param name="b"></param>
         /// <returns></returns>
         [Pure]
-        public bool Equals ( ICodeSet a, ICodeSet b ) {
-            Contract.Ensures ( Contract.Result<bool> () == a.SetEquals ( b ) );
-            return a.SetEquals ( b );
+        public bool Equals (ICodeSet a, ICodeSet b) {
+            Contract.Ensures (Contract.Result<bool> () == a.SetEquals (b));
+            return a.SetEquals (b);
         }
 
         /// <summary>
@@ -111,8 +111,8 @@ namespace DD.Collections.ICodeSet {
         /// <param name="that"></param>
         /// <returns></returns>
         [Pure]
-        public int GetHashCode ( ICodeSet that ) {
-            Contract.Ensures ( Contract.Result<int> () == that.HashCode () );
+        public int GetHashCode (ICodeSet that) {
+            Contract.Ensures (Contract.Result<int> () == that.HashCode ());
             return that.HashCode ();
         }
 
@@ -135,8 +135,8 @@ namespace DD.Collections.ICodeSet {
         /// <param name="code"></param>
         /// <returns>bool</returns>
         [Pure]
-        public bool Contains ( Code code ) {
-            Contract.Ensures ( Contract.Result<bool> () == this[code] );
+        public bool Contains (Code code) {
+            Contract.Ensures (Contract.Result<bool> () == this[code]);
             return this[code];
         }
 
@@ -145,11 +145,11 @@ namespace DD.Collections.ICodeSet {
         /// <param name="array"></param>
         /// <param name="arrayIndex"></param>
         [Pure]
-        [SuppressMessage ( "Microsoft.Contracts", "CC1033", Justification = "Debug/Release exceptions not same" )]
-        public void CopyTo ( Code[] array, int arrayIndex ) {
-            Contract.Requires<ArgumentNullException> ( array.IsNot ( null ) );
-            Contract.Requires<IndexOutOfRangeException> ( arrayIndex >= 0 );
-            Contract.Requires<IndexOutOfRangeException> ( arrayIndex <= (array.Length - this.Count) );
+        [SuppressMessage ("Microsoft.Contracts", "CC1033", Justification = "Debug/Release exceptions not same")]
+        public void CopyTo (Code[] array, int arrayIndex) {
+            Contract.Requires<ArgumentNullException> (array.IsNot (null));
+            Contract.Requires<IndexOutOfRangeException> (arrayIndex >= 0);
+            Contract.Requires<IndexOutOfRangeException> (arrayIndex <= (array.Length - this.Count));
             foreach (Code code in this) {
                 array[arrayIndex] = code;
                 ++arrayIndex;
@@ -160,7 +160,7 @@ namespace DD.Collections.ICodeSet {
         /// </summary>
         /// <param name="code"></param>
         [Pure]
-        void ICollection<Code>.Add ( Code code ) { throw new NotSupportedException (); }
+        void ICollection<Code>.Add (Code code) { throw new NotSupportedException (); }
 
         /// <summary>Explicit interface implementation.<para>Operations not supported on Read-Only Collection</para>
         /// </summary>
@@ -170,7 +170,7 @@ namespace DD.Collections.ICodeSet {
         /// <summary>Explicit interface implementation.<para>Operations not supported on Read-Only Collection</para>
         /// </summary>
         [Pure]
-        bool ICollection<Code>.Remove ( Code code ) { throw new NotSupportedException (); }
+        bool ICollection<Code>.Remove (Code code) { throw new NotSupportedException (); }
 
         #endregion
     }

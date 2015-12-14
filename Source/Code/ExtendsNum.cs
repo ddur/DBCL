@@ -18,8 +18,8 @@ namespace DD {
         /// <param name="highValue">int</param>
         /// <returns>bool</returns>
         [Pure]
-        public static bool InRange ( this int self, int lowValue, int highValue ) {
-            Contract.Ensures ( Contract.Result<bool> () == (self >= lowValue && self <= highValue) );
+        public static bool InRange (this int self, int lowValue, int highValue) {
+            Contract.Ensures (Contract.Result<bool> () == (self >= lowValue && self <= highValue));
 
             return self >= lowValue && self <= highValue;
         }
@@ -32,8 +32,8 @@ namespace DD {
         /// <param name="highValue">int</param>
         /// <returns>bool</returns>
         [Pure]
-        public static bool InRange ( this long self, long lowValue, long highValue ) {
-            Contract.Ensures ( Contract.Result<bool> () == (self >= lowValue && self <= highValue) );
+        public static bool InRange (this long self, long lowValue, long highValue) {
+            Contract.Ensures (Contract.Result<bool> () == (self >= lowValue && self <= highValue));
 
             return self >= lowValue && self <= highValue;
         }

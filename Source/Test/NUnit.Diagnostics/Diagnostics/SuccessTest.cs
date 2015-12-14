@@ -24,44 +24,44 @@ namespace DD.Diagnostics {
             // store an remove listeners
             var tListeners = new List<TraceListener> ();
             foreach (TraceListener tl in Trace.Listeners) {
-                tListeners.Add ( tl );
+                tListeners.Add (tl);
             }
             Trace.Listeners.Clear ();
 #endif
 
-            Assert.True ( success );
-            success.Assert ( true, "Press ignore" ); // no message
-            Assert.True ( success );
-            success.Assert ( false, "Press ignore" ); // no message
-            Assert.False ( success );
-            success.Assert ( true, "Press ignore" ); // no message
-            Assert.False ( success );
-            success.Assert ( false, "Press ignore" ); // no message
-            Assert.False ( success );
+            Assert.True (success);
+            success.Assert (true, "Press ignore"); // no message
+            Assert.True (success);
+            success.Assert (false, "Press ignore"); // no message
+            Assert.False (success);
+            success.Assert (true, "Press ignore"); // no message
+            Assert.False (success);
+            success.Assert (false, "Press ignore"); // no message
+            Assert.False (success);
 
 #if DEBUG && TRACE
             // restore listeners
             foreach (TraceListener li in tListeners) {
-                Trace.Listeners.Add ( li );
+                Trace.Listeners.Add (li);
             }
             tListeners.Clear ();
 
-            Assert.False ( success );
-            success.Assert ( true, "Press ignore" ); // no message
-            Assert.False ( success );
+            Assert.False (success);
+            success.Assert (true, "Press ignore"); // no message
+            Assert.False (success);
 
             // shows message pointing at line below
-            success.Assert ( false, "line == 55?, Press ignore" ); // shows message pointing at this line
-            Assert.False ( success );
+            success.Assert (false, "line == 55?, Press ignore"); // shows message pointing at this line
+            Assert.False (success);
 
             success = true;
-            Assert.True ( success );
-            success.Assert ( true, "Press ignore" ); // no message
-            Assert.True ( success );
+            Assert.True (success);
+            success.Assert (true, "Press ignore"); // no message
+            Assert.True (success);
 
             // shows message pointing at line below
-            success.Assert ( false, "line == 64?, Press ignore" ); // shows message pointing at this line
-            Assert.False ( success );
+            success.Assert (false, "line == 64?, Press ignore"); // shows message pointing at this line
+            Assert.False (success);
 #endif
         }
     }

@@ -50,7 +50,7 @@ namespace DD.Collections.ICodeSet.CodeTest {
 
                 Random r = new Random ();
                 for (int i = 1; i <= 100; i++) {
-                    yield return r.Next ( char.MinValue, char.MaxValue );
+                    yield return r.Next (char.MinValue, char.MaxValue);
                 }
             }
         }
@@ -91,24 +91,24 @@ namespace DD.Collections.ICodeSet.CodeTest {
 
                 // 10 random high surrogates 0xD800-0xDBFF
                 for (int times = 1; times <= 10; times++) {
-                    yield return r.Next ( 0xD800, 0xDBFF );
+                    yield return r.Next (0xD800, 0xDBFF);
                 }
 
                 // 10 random low surrogates 0xDC00-0xDFFF
                 for (int times = 1; times <= 10; times++) {
-                    yield return r.Next ( 0xDC00, 0xDFFF );
+                    yield return r.Next (0xDC00, 0xDFFF);
                 }
 
                 // 10 random codes for each plane
                 for (int page = 0; page <= 16; page++) {
                     for (int times = 1; times <= 10; times++) {
-                        yield return (page << 16 | r.Next ( char.MinValue + 1, char.MaxValue - 1 ));
+                        yield return (page << 16 | r.Next (char.MinValue + 1, char.MaxValue - 1));
                     }
                 }
 
                 // 100 random Codes
                 for (int times = 1; times <= 100; times++) {
-                    yield return r.Next ( Code.MinValue, Code.MaxValue );
+                    yield return r.Next (Code.MinValue, Code.MaxValue);
                 }
             }
         }
@@ -118,10 +118,10 @@ namespace DD.Collections.ICodeSet.CodeTest {
                 Random r = new Random ();
                 yield return int.MinValue;
                 yield return int.MinValue + 1;
-                yield return r.Next ( int.MinValue + 1, Code.MinValue - 1 );
+                yield return r.Next (int.MinValue + 1, Code.MinValue - 1);
                 yield return Code.MinValue - 1;
                 yield return Code.MaxValue + 1;
-                yield return r.Next ( Code.MaxValue + 1, int.MaxValue - 1 );
+                yield return r.Next (Code.MaxValue + 1, int.MaxValue - 1);
                 yield return int.MaxValue - 1;
                 yield return int.MaxValue;
 
@@ -130,8 +130,8 @@ namespace DD.Collections.ICodeSet.CodeTest {
                 int times = 100;
                 while (times != 0) {
                     times--;
-                    yield return r.Next ( int.MinValue, Code.MinValue - 1 );
-                    yield return r.Next ( Code.MaxValue + 1, int.MaxValue );
+                    yield return r.Next (int.MinValue, Code.MinValue - 1);
+                    yield return r.Next (Code.MaxValue + 1, int.MaxValue);
                 }
             }
         }
@@ -151,130 +151,130 @@ namespace DD.Collections.ICodeSet.CodeTest {
 
         public static IEnumerable<TestCaseData> ValidEncodedString {
             get {
-                yield return new TestCaseData ( (string)null, new List<Code> () );
-                yield return new TestCaseData ( string.Empty, new List<Code> () );
-                yield return new TestCaseData ( "", new List<Code> () );
-                yield return new TestCaseData ( "a", new List<Code> () { 'a' } );
-                yield return new TestCaseData ( "a\uD800\uDC00", new List<Code> { 'a', 0x10000 } );
-                yield return new TestCaseData ( "ab\uD800\uDC01", new List<Code> { 'a', 'b', 0x10001 } );
-                yield return new TestCaseData ( "abc\uD800\uDC02", new List<Code> { 'a', 'b', 'c', 0x10002 } );
-                yield return new TestCaseData ( "abc\uF922\uD800\uDC10", new List<Code> { 'a', 'b', 'c', 0xF922, 0x10010 } );
-                yield return new TestCaseData ( "abc\uFFFF\u0000\uD801\uDC01def", new List<Code> { 'a', 'b', 'c', 0xFFFF, 0x0000, 0x10401, 'd', 'e', 'f' } );
-                yield return new TestCaseData ( "\uF922\uD802\uDC00def", new List<Code> { 0xF922, 0x10800, 'd', 'e', 'f' } );
-                yield return new TestCaseData ( "\uD802\uDC03def", new List<Code> { 0x10803, 'd', 'e', 'f' } );
-                yield return new TestCaseData ( "\uD802\uDC04de", new List<Code> { 0x10804, 'd', 'e' } );
-                yield return new TestCaseData ( "\uD800\uDC07d", new List<Code> { 0x10007, 'd' } );
-                yield return new TestCaseData ( "\uD800\uDC08", new List<Code> { 0x10008 } );
+                yield return new TestCaseData ((string)null, new List<Code> ());
+                yield return new TestCaseData (string.Empty, new List<Code> ());
+                yield return new TestCaseData ("", new List<Code> ());
+                yield return new TestCaseData ("a", new List<Code> () { 'a' });
+                yield return new TestCaseData ("a\uD800\uDC00", new List<Code> { 'a', 0x10000 });
+                yield return new TestCaseData ("ab\uD800\uDC01", new List<Code> { 'a', 'b', 0x10001 });
+                yield return new TestCaseData ("abc\uD800\uDC02", new List<Code> { 'a', 'b', 'c', 0x10002 });
+                yield return new TestCaseData ("abc\uF922\uD800\uDC10", new List<Code> { 'a', 'b', 'c', 0xF922, 0x10010 });
+                yield return new TestCaseData ("abc\uFFFF\u0000\uD801\uDC01def", new List<Code> { 'a', 'b', 'c', 0xFFFF, 0x0000, 0x10401, 'd', 'e', 'f' });
+                yield return new TestCaseData ("\uF922\uD802\uDC00def", new List<Code> { 0xF922, 0x10800, 'd', 'e', 'f' });
+                yield return new TestCaseData ("\uD802\uDC03def", new List<Code> { 0x10803, 'd', 'e', 'f' });
+                yield return new TestCaseData ("\uD802\uDC04de", new List<Code> { 0x10804, 'd', 'e' });
+                yield return new TestCaseData ("\uD800\uDC07d", new List<Code> { 0x10007, 'd' });
+                yield return new TestCaseData ("\uD800\uDC08", new List<Code> { 0x10008 });
             }
         }
 
         public static IEnumerable<TestCaseData> TwoCharsToBool {
             get {
                 // high surrogate, low surrogate
-                yield return new TestCaseData ( (char)0xD800, (char)0xDC00 ).Returns ( true );
+                yield return new TestCaseData ((char)0xD800, (char)0xDC00).Returns (true);
                 // high surrogate, no surrogate
-                yield return new TestCaseData ( (char)0xD800, (char)0x0C00 ).Returns ( false );
+                yield return new TestCaseData ((char)0xD800, (char)0x0C00).Returns (false);
                 // high surrogate, high surrogate
-                yield return new TestCaseData ( (char)0xD800, (char)0xD800 ).Returns ( false );
+                yield return new TestCaseData ((char)0xD800, (char)0xD800).Returns (false);
 
                 // low surrogate, high surrogate
-                yield return new TestCaseData ( (char)0xDC00, (char)0xD800 ).Returns ( true );
+                yield return new TestCaseData ((char)0xDC00, (char)0xD800).Returns (true);
                 // low surrogate, no surrogate
-                yield return new TestCaseData ( (char)0xDC00, (char)0x0800 ).Returns ( true );
+                yield return new TestCaseData ((char)0xDC00, (char)0x0800).Returns (true);
                 // low surrogate, low surrogate
-                yield return new TestCaseData ( (char)0xDC00, (char)0xDC00 ).Returns ( false );
+                yield return new TestCaseData ((char)0xDC00, (char)0xDC00).Returns (false);
 
                 // no surrogate, high surrogate
-                yield return new TestCaseData ( (char)0x0800, (char)0xD800 ).Returns ( true );
+                yield return new TestCaseData ((char)0x0800, (char)0xD800).Returns (true);
                 // no surrogate, low surrogate
-                yield return new TestCaseData ( (char)0x0800, (char)0xDC00 ).Returns ( false );
+                yield return new TestCaseData ((char)0x0800, (char)0xDC00).Returns (false);
                 // no surrogate, no surrogate
-                yield return new TestCaseData ( (char)0x0800, (char)0x0800 ).Returns ( true );
+                yield return new TestCaseData ((char)0x0800, (char)0x0800).Returns (true);
 
                 // no surrogate, no surrogate
-                yield return new TestCaseData ( (char)0, (char)0 ).Returns ( true );
-                yield return new TestCaseData ( char.MinValue, char.MaxValue ).Returns ( true );
-                yield return new TestCaseData ( char.MinValue, char.MinValue ).Returns ( true );
-                yield return new TestCaseData ( char.MaxValue, char.MaxValue ).Returns ( true );
-                yield return new TestCaseData ( char.MaxValue, char.MinValue ).Returns ( true );
+                yield return new TestCaseData ((char)0, (char)0).Returns (true);
+                yield return new TestCaseData (char.MinValue, char.MaxValue).Returns (true);
+                yield return new TestCaseData (char.MinValue, char.MinValue).Returns (true);
+                yield return new TestCaseData (char.MaxValue, char.MaxValue).Returns (true);
+                yield return new TestCaseData (char.MaxValue, char.MinValue).Returns (true);
             }
         }
 
         public static IEnumerable<TestCaseData> TwoCharsToCodeOrThrow {
             get {
                 // high surrogate, low surrogate
-                yield return new TestCaseData ( (char)0xD800, (char)0xDC00 ).Returns ( char.ConvertToUtf32 ( (char)0xD800, (char)0xDC00 ) );
+                yield return new TestCaseData ((char)0xD800, (char)0xDC00).Returns (char.ConvertToUtf32 ((char)0xD800, (char)0xDC00));
                 // high surrogate, no surrogate
-                yield return new TestCaseData ( (char)0xD800, (char)0x0C00 ).Throws ( typeof ( ArgumentException ) );
+                yield return new TestCaseData ((char)0xD800, (char)0x0C00).Throws (typeof (ArgumentException));
                 // high surrogate, high surrogate
-                yield return new TestCaseData ( (char)0xD800, (char)0xD800 ).Throws ( typeof ( ArgumentException ) );
+                yield return new TestCaseData ((char)0xD800, (char)0xD800).Throws (typeof (ArgumentException));
 
                 // low surrogate, high surrogate
-                yield return new TestCaseData ( (char)0xDC00, (char)0xD800 ).Returns ( 0xD800 );
+                yield return new TestCaseData ((char)0xDC00, (char)0xD800).Returns (0xD800);
                 // low surrogate, no surrogate
-                yield return new TestCaseData ( (char)0xDC00, (char)0x0800 ).Returns ( 0x0800 );
+                yield return new TestCaseData ((char)0xDC00, (char)0x0800).Returns (0x0800);
                 // low surrogate, low surrogate
-                yield return new TestCaseData ( (char)0xDC00, (char)0xDC00 ).Throws ( typeof ( ArgumentException ) );
+                yield return new TestCaseData ((char)0xDC00, (char)0xDC00).Throws (typeof (ArgumentException));
 
                 // no surrogate, high surrogate
-                yield return new TestCaseData ( (char)0x0800, (char)0xD800 ).Returns ( 0xD800 );
+                yield return new TestCaseData ((char)0x0800, (char)0xD800).Returns (0xD800);
                 // no surrogate, low surrogate
-                yield return new TestCaseData ( (char)0x0800, (char)0xDC00 ).Throws ( typeof ( ArgumentException ) );
+                yield return new TestCaseData ((char)0x0800, (char)0xDC00).Throws (typeof (ArgumentException));
                 // no surrogate, no surrogate
-                yield return new TestCaseData ( (char)0x0800, (char)0x0800 ).Returns ( 0x0800 );
+                yield return new TestCaseData ((char)0x0800, (char)0x0800).Returns (0x0800);
 
                 // no surrogate, no surrogate
-                yield return new TestCaseData ( (char)0, (char)0 ).Returns ( 0 );
-                yield return new TestCaseData ( char.MinValue, char.MaxValue ).Returns ( 0xFFFF );
-                yield return new TestCaseData ( char.MinValue, char.MinValue ).Returns ( 0x0000 );
-                yield return new TestCaseData ( char.MaxValue, char.MaxValue ).Returns ( 0xFFFF );
-                yield return new TestCaseData ( char.MaxValue, char.MinValue ).Returns ( 0x0000 );
+                yield return new TestCaseData ((char)0, (char)0).Returns (0);
+                yield return new TestCaseData (char.MinValue, char.MaxValue).Returns (0xFFFF);
+                yield return new TestCaseData (char.MinValue, char.MinValue).Returns (0x0000);
+                yield return new TestCaseData (char.MaxValue, char.MaxValue).Returns (0xFFFF);
+                yield return new TestCaseData (char.MaxValue, char.MinValue).Returns (0x0000);
             }
         }
 
         public static IEnumerable<TestCaseData> CodeToStringOrThrow {
             get {
-                yield return new TestCaseData ( int.MinValue ).Throws ( typeof ( IndexOutOfRangeException ) );
-                yield return new TestCaseData ( int.MaxValue ).Throws ( typeof ( IndexOutOfRangeException ) );
-                yield return new TestCaseData ( Code.MinValue - 1 ).Throws ( typeof ( IndexOutOfRangeException ) );
-                yield return new TestCaseData ( Code.MaxValue + 1 ).Throws ( typeof ( IndexOutOfRangeException ) );
+                yield return new TestCaseData (int.MinValue).Throws (typeof (IndexOutOfRangeException));
+                yield return new TestCaseData (int.MaxValue).Throws (typeof (IndexOutOfRangeException));
+                yield return new TestCaseData (Code.MinValue - 1).Throws (typeof (IndexOutOfRangeException));
+                yield return new TestCaseData (Code.MaxValue + 1).Throws (typeof (IndexOutOfRangeException));
 
-                yield return new TestCaseData ( 8 ).Returns ( "\u0008" );
-                yield return new TestCaseData ( 9 ).Returns ( "\u0009" );
-                yield return new TestCaseData ( 10 ).Returns ( "\u000A" );
-                yield return new TestCaseData ( 11 ).Returns ( "\u000B" );
-                yield return new TestCaseData ( 12 ).Returns ( "\u000C" );
-                yield return new TestCaseData ( 13 ).Returns ( "\u000D" );
+                yield return new TestCaseData (8).Returns ("\u0008");
+                yield return new TestCaseData (9).Returns ("\u0009");
+                yield return new TestCaseData (10).Returns ("\u000A");
+                yield return new TestCaseData (11).Returns ("\u000B");
+                yield return new TestCaseData (12).Returns ("\u000C");
+                yield return new TestCaseData (13).Returns ("\u000D");
 
-                yield return new TestCaseData ( (int)'&' ).Returns ( "&" );
-                yield return new TestCaseData ( (int)'\'' ).Returns ( "'" );
-                yield return new TestCaseData ( (int)'>' ).Returns ( ">" );
-                yield return new TestCaseData ( (int)'<' ).Returns ( "<" );
-                yield return new TestCaseData ( (int)'"' ).Returns ( "\"" );
-                yield return new TestCaseData ( (int)'~' ).Returns ( "~" );
+                yield return new TestCaseData ((int)'&').Returns ("&");
+                yield return new TestCaseData ((int)'\'').Returns ("'");
+                yield return new TestCaseData ((int)'>').Returns (">");
+                yield return new TestCaseData ((int)'<').Returns ("<");
+                yield return new TestCaseData ((int)'"').Returns ("\"");
+                yield return new TestCaseData ((int)'~').Returns ("~");
 
                 int testCode = char.MinValue;
-                yield return new TestCaseData ( testCode ).Returns ( "\u0000" );
+                yield return new TestCaseData (testCode).Returns ("\u0000");
                 Random r = new Random ();
                 for (int i = 0; i < 100; i++) {
-                    testCode = r.Next ( char.MinValue, char.MaxValue );
-                    if (char.IsSurrogate ( (char)testCode )) {
-                        yield return new TestCaseData ( testCode ).Returns ( "" + (char)0xFFFD );
+                    testCode = r.Next (char.MinValue, char.MaxValue);
+                    if (char.IsSurrogate ((char)testCode)) {
+                        yield return new TestCaseData (testCode).Returns ("" + (char)0xFFFD);
                     }
                     else {
-                        yield return new TestCaseData ( testCode ).Returns ( "" + (char)testCode );
+                        yield return new TestCaseData (testCode).Returns ("" + (char)testCode);
                     }
                 }
                 testCode = char.MaxValue;
-                yield return new TestCaseData ( testCode ).Returns ( "" + (char)testCode );
+                yield return new TestCaseData (testCode).Returns ("" + (char)testCode);
                 testCode = char.MaxValue + 1;
-                yield return new TestCaseData ( testCode ).Returns ( char.ConvertFromUtf32 ( testCode ) );
+                yield return new TestCaseData (testCode).Returns (char.ConvertFromUtf32 (testCode));
                 for (int i = 0; i < 100; i++) {
-                    testCode = r.Next ( char.MaxValue + 1, Code.MaxValue );
-                    yield return new TestCaseData ( testCode ).Returns ( char.ConvertFromUtf32 ( testCode ) );
+                    testCode = r.Next (char.MaxValue + 1, Code.MaxValue);
+                    yield return new TestCaseData (testCode).Returns (char.ConvertFromUtf32 (testCode));
                 }
                 testCode = Code.MaxValue;
-                yield return new TestCaseData ( testCode ).Returns ( char.ConvertFromUtf32 ( testCode ) );
+                yield return new TestCaseData (testCode).Returns (char.ConvertFromUtf32 (testCode));
             }
         }
     }

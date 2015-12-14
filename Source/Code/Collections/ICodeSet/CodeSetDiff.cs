@@ -18,51 +18,51 @@ namespace DD.Collections.ICodeSet {
 
         #region Ctor
 
-        public static CodeSetDiff From ( ICodeSet a, ICodeSet b ) {
-            Contract.Requires<ArgumentNullException> ( a.IsNot ( null ) );
-            Contract.Requires<ArgumentNullException> ( b.IsNot ( null ) );
+        public static CodeSetDiff From (ICodeSet a, ICodeSet b) {
+            Contract.Requires<ArgumentNullException> (a.IsNot (null));
+            Contract.Requires<ArgumentNullException> (b.IsNot (null));
 
-            Contract.Requires<ArgumentEmptyException> ( !a.IsEmpty () );
-            Contract.Requires<ArgumentEmptyException> ( !b.IsEmpty () );
+            Contract.Requires<ArgumentEmptyException> (!a.IsEmpty ());
+            Contract.Requires<ArgumentEmptyException> (!b.IsEmpty ());
 
             // a is full range
-            Contract.Requires<InvalidOperationException> ( a.Count == a.Length );
-            Contract.Requires<InvalidOperationException> ( a is CodeSetFull );
+            Contract.Requires<InvalidOperationException> (a.Count == a.Length);
+            Contract.Requires<InvalidOperationException> (a is CodeSetFull);
 
             // b is proper-inner range subset of a
-            Contract.Requires<InvalidOperationException> ( a.First < b.First );
-            Contract.Requires<InvalidOperationException> ( b.Last < a.Last );
+            Contract.Requires<InvalidOperationException> (a.First < b.First);
+            Contract.Requires<InvalidOperationException> (b.Last < a.Last);
 
             // this.count > PairCount
-            Contract.Requires<InvalidOperationException> ( (a.Count - b.Count) > ICodeSetService.PairCount );
+            Contract.Requires<InvalidOperationException> ((a.Count - b.Count) > ICodeSetService.PairCount);
 
-            Contract.Ensures ( Contract.Result<CodeSetDiff> ().IsNot ( null ) );
+            Contract.Ensures (Contract.Result<CodeSetDiff> ().IsNot (null));
 
-            return new CodeSetDiff ( a, b );
+            return new CodeSetDiff (a, b);
         }
 
         /// <summary>Internal Constructor for Reduction</summary>
         /// <param name="a">CodeRange</param>
         /// <param name="b">CodeSet</param>
-        internal CodeSetDiff ( ICodeSet a, ICodeSet b ) {
-            Contract.Requires<ArgumentNullException> ( a.IsNot ( null ) );
-            Contract.Requires<ArgumentNullException> ( b.IsNot ( null ) );
+        internal CodeSetDiff (ICodeSet a, ICodeSet b) {
+            Contract.Requires<ArgumentNullException> (a.IsNot (null));
+            Contract.Requires<ArgumentNullException> (b.IsNot (null));
 
-            Contract.Requires<ArgumentException> ( !a.IsEmpty () );
-            Contract.Requires<ArgumentException> ( !b.IsEmpty () );
+            Contract.Requires<ArgumentException> (!a.IsEmpty ());
+            Contract.Requires<ArgumentException> (!b.IsEmpty ());
 
             // a is full range
-            Contract.Requires<ArgumentException> ( a.Count == a.Length );
-            Contract.Requires<ArgumentException> ( a is CodeSetFull );
+            Contract.Requires<ArgumentException> (a.Count == a.Length);
+            Contract.Requires<ArgumentException> (a is CodeSetFull);
 
             // b is proper-inner range subset of a
-            Contract.Requires<ArgumentException> ( a.First < b.First );
-            Contract.Requires<ArgumentException> ( b.Last < a.Last );
+            Contract.Requires<ArgumentException> (a.First < b.First);
+            Contract.Requires<ArgumentException> (b.Last < a.Last);
 
             // this.count > PairCount
-            Contract.Requires<ArgumentException> ( (a.Count - b.Count) > ICodeSetService.PairCount );
+            Contract.Requires<ArgumentException> ((a.Count - b.Count) > ICodeSetService.PairCount);
 
-            Contract.Ensures ( Theory.Construct ( a, b, this ) );
+            Contract.Ensures (Theory.Construct (a, b, this));
 
             this.aSet = a;
             this.bSet = b;
@@ -129,7 +129,7 @@ namespace DD.Collections.ICodeSet {
 
         [ContractInvariantMethod]
         private void Invariant () {
-            Contract.Invariant ( Theory.Invariant ( this ) );
+            Contract.Invariant (Theory.Invariant (this));
         }
 
         #endregion
@@ -137,49 +137,49 @@ namespace DD.Collections.ICodeSet {
         private static class Theory {
 
             [Pure]
-            public static bool Construct ( ICodeSet a, ICodeSet b, CodeSetDiff self ) {
+            public static bool Construct (ICodeSet a, ICodeSet b, CodeSetDiff self) {
                 Success success = true;
 
                 // input
-                success.Assert ( !a.Is ( null ) );
-                success.Assert ( !b.Is ( null ) );
-                success.Assert ( !a.IsEmpty () );
-                success.Assert ( !b.IsEmpty () );
-                success.Assert ( a.Count == a.Length );
-                success.Assert ( a.First < b.First );
-                success.Assert ( b.Last < a.Last );
-                success.Assert ( (a.Count - b.Count) > ICodeSetService.PairCount );
+                success.Assert (!a.Is (null));
+                success.Assert (!b.Is (null));
+                success.Assert (!a.IsEmpty ());
+                success.Assert (!b.IsEmpty ());
+                success.Assert (a.Count == a.Length);
+                success.Assert (a.First < b.First);
+                success.Assert (b.Last < a.Last);
+                success.Assert ((a.Count - b.Count) > ICodeSetService.PairCount);
 
                 // input -> private
-                success.Assert ( self.aSet.Is ( a ) );
-                success.Assert ( self.bSet.Is ( b ) );
+                success.Assert (self.aSet.Is (a));
+                success.Assert (self.bSet.Is (b));
 
                 return success;
             }
 
             [Pure]
-            public static bool Invariant ( CodeSetDiff self ) {
+            public static bool Invariant (CodeSetDiff self) {
                 Success success = true;
 
                 // private
-                success.Assert ( !self.aSet.Is ( null ) );
-                success.Assert ( !self.bSet.Is ( null ) );
-                success.Assert ( !self.aSet.IsEmpty () );
-                success.Assert ( !self.bSet.IsEmpty () );
-                success.Assert ( self.aSet.Count == self.aSet.Length );
-                success.Assert ( self.aSet.First < self.bSet.First );
-                success.Assert ( self.bSet.Last < self.aSet.Last );
-                success.Assert ( (self.aSet.Count - self.bSet.Count) > ICodeSetService.PairCount );
+                success.Assert (!self.aSet.Is (null));
+                success.Assert (!self.bSet.Is (null));
+                success.Assert (!self.aSet.IsEmpty ());
+                success.Assert (!self.bSet.IsEmpty ());
+                success.Assert (self.aSet.Count == self.aSet.Length);
+                success.Assert (self.aSet.First < self.bSet.First);
+                success.Assert (self.bSet.Last < self.aSet.Last);
+                success.Assert ((self.aSet.Count - self.bSet.Count) > ICodeSetService.PairCount);
 
                 // public <- private
-                success.Assert ( self.Count == self.aSet.Count - self.bSet.Count );
-                success.Assert ( self.Length == self.aSet.Length );
-                success.Assert ( self.First == self.aSet.First );
-                success.Assert ( self.Last == self.aSet.Last );
+                success.Assert (self.Count == self.aSet.Count - self.bSet.Count);
+                success.Assert (self.Length == self.aSet.Length);
+                success.Assert (self.First == self.aSet.First);
+                success.Assert (self.Last == self.aSet.Last);
 
                 // constraints
-                success.Assert ( self.Count > ICodeSetService.PairCount );// not Pair
-                success.Assert ( self.Count < self.Length );				// not Full
+                success.Assert (self.Count > ICodeSetService.PairCount);// not Pair
+                success.Assert (self.Count < self.Length);				// not Full
 
                 return success;
             }

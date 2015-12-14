@@ -19,7 +19,7 @@ namespace DD.Collections.ICodeSet {
 
         #region Ctor
 
-        public Code ( byte value ) {
+        public Code (byte value) {
 #if COMPACT
 			this.b0 = value;
 			this.b1 = 0;
@@ -29,7 +29,7 @@ namespace DD.Collections.ICodeSet {
 #endif
         }
 
-        public Code ( char value ) {
+        public Code (char value) {
 #if COMPACT
 			this.b0 = (byte)(value&0xFF);
 			this.b1 = (byte)((value>>8)&0xFF);
@@ -39,8 +39,8 @@ namespace DD.Collections.ICodeSet {
 #endif
         }
 
-        public Code ( int value ) {
-            Contract.Requires<InvalidCastException> ( value.InRange ( Code.MinValue, Code.MaxValue ) );
+        public Code (int value) {
+            Contract.Requires<InvalidCastException> (value.InRange (Code.MinValue, Code.MaxValue));
 
 #if COMPACT
 			this.b0 = (byte)(value&0xFF);
@@ -84,7 +84,7 @@ namespace DD.Collections.ICodeSet {
         #region IEquatable<Code>
 
         [Pure]
-        public bool Equals ( Code that ) {
+        public bool Equals (Code that) {
             return this.Value == that.Value;
         }
 
@@ -93,12 +93,12 @@ namespace DD.Collections.ICodeSet {
         #region IEqualityComparer<Code>
 
         [Pure]
-        public bool Equals ( Code a, Code b ) {
+        public bool Equals (Code a, Code b) {
             return a.Value == b.Value;
         }
 
         [Pure]
-        public int GetHashCode ( Code c ) {
+        public int GetHashCode (Code c) {
             return c.GetHashCode ();
         }
 
@@ -106,8 +106,8 @@ namespace DD.Collections.ICodeSet {
 
         #region IComparable<Code>
 
-        public int CompareTo ( Code that ) {
-            return this.Value.CompareTo ( that.Value );
+        public int CompareTo (Code that) {
+            return this.Value.CompareTo (that.Value);
         }
 
         #endregion
@@ -164,7 +164,7 @@ namespace DD.Collections.ICodeSet {
         /// <param name="code"></param>
         /// <returns>bool</returns>
         [Pure]
-        bool ICollection<Code>.Contains ( Code code ) {
+        bool ICollection<Code>.Contains (Code code) {
             return this.Value == code.Value;
         }
 
@@ -173,11 +173,11 @@ namespace DD.Collections.ICodeSet {
         /// <param name="array"></param>
         /// <param name="arrayIndex"></param>
         [Pure]
-        [SuppressMessage ( "Microsoft.Contracts", "CC1033", Justification = "Debug/Release exceptions not same" )]
-        void ICollection<Code>.CopyTo ( Code[] array, int arrayIndex ) {
-            Contract.Requires<ArgumentNullException> ( array.IsNot ( null ) );
-            Contract.Requires<IndexOutOfRangeException> ( arrayIndex >= 0 );
-            Contract.Requires<IndexOutOfRangeException> ( arrayIndex <= (array.Length - 1) );
+        [SuppressMessage ("Microsoft.Contracts", "CC1033", Justification = "Debug/Release exceptions not same")]
+        void ICollection<Code>.CopyTo (Code[] array, int arrayIndex) {
+            Contract.Requires<ArgumentNullException> (array.IsNot (null));
+            Contract.Requires<IndexOutOfRangeException> (arrayIndex >= 0);
+            Contract.Requires<IndexOutOfRangeException> (arrayIndex <= (array.Length - 1));
             array[arrayIndex] = this;
         }
 
@@ -186,7 +186,7 @@ namespace DD.Collections.ICodeSet {
         /// <param name="code"></param>
         /// <exception cref="T:System.NotSupportedException"></exception>
         [Pure]
-        void ICollection<Code>.Add ( Code code ) { throw new NotSupportedException (); }
+        void ICollection<Code>.Add (Code code) { throw new NotSupportedException (); }
 
         /// <summary>Explicit interface implementation.<para>Operation not supported on Read-Only Collection</para>
         /// </summary>
@@ -199,7 +199,7 @@ namespace DD.Collections.ICodeSet {
         /// <param name="code"></param>
         /// <exception cref="T:System.NotSupportedException"></exception>
         [Pure]
-        bool ICollection<Code>.Remove ( Code code ) { throw new NotSupportedException (); }
+        bool ICollection<Code>.Remove (Code code) { throw new NotSupportedException (); }
 
         #endregion
 
@@ -220,14 +220,14 @@ namespace DD.Collections.ICodeSet {
         #region IEquatable<ICodeSet>
 
         [Pure]
-        public bool Equals ( ICodeSet that ) {
-            Contract.Ensures ( Contract.Result<bool> () == this.SetEquals ( that ) );
-            return this.SetEquals ( that );
+        public bool Equals (ICodeSet that) {
+            Contract.Ensures (Contract.Result<bool> () == this.SetEquals (that));
+            return this.SetEquals (that);
         }
 
         [Pure]
         public override int GetHashCode () {
-            Contract.Ensures ( Contract.Result<int> () == this.HashCode () );
+            Contract.Ensures (Contract.Result<int> () == this.HashCode ());
             return this.HashCode ();
         }
 
@@ -242,11 +242,11 @@ namespace DD.Collections.ICodeSet {
         /// <param name="b"></param>
         /// <returns></returns>
         [Pure]
-        public bool Equals ( ICodeSet a, ICodeSet b ) {
+        public bool Equals (ICodeSet a, ICodeSet b) {
             // disable once InvokeAsExtensionMethod
-            Contract.Ensures ( Contract.Result<bool> () == a.SetEquals ( b ) );
+            Contract.Ensures (Contract.Result<bool> () == a.SetEquals (b));
             // disable once InvokeAsExtensionMethod
-            return a.SetEquals ( b );
+            return a.SetEquals (b);
         }
 
         /// <summary>
@@ -255,9 +255,9 @@ namespace DD.Collections.ICodeSet {
         /// <param name="that"></param>
         /// <returns></returns>
         [Pure]
-        public int GetHashCode ( ICodeSet that ) {
+        public int GetHashCode (ICodeSet that) {
             // disable once InvokeAsExtensionMethod
-            Contract.Ensures ( Contract.Result<int> () == that.HashCode () );
+            Contract.Ensures (Contract.Result<int> () == that.HashCode ());
             return that.HashCode ();
         }
 
@@ -265,9 +265,9 @@ namespace DD.Collections.ICodeSet {
 
         #region IComparable<ICodeSet>
 
-        public int CompareTo ( ICodeSet that ) {
-            Contract.Ensures ( Contract.Result<int> () == this.Compare ( that ) );
-            return this.Compare ( that );
+        public int CompareTo (ICodeSet that) {
+            Contract.Ensures (Contract.Result<int> () == this.Compare (that));
+            return this.Compare (that);
         }
 
         #endregion
@@ -282,9 +282,9 @@ namespace DD.Collections.ICodeSet {
 
         [ContractInvariantMethod]
         private void Invariant () {
-            Contract.Invariant ( ((ICodeSet)this).Count == ICodeSetService.UnitCount );
-            Contract.Invariant ( ((ICodeSet)this).Count == ((ICodeSet)this).Length );
-            Contract.Invariant ( ((ICodeSet)this).First == ((ICodeSet)this).Last );
+            Contract.Invariant (((ICodeSet)this).Count == ICodeSetService.UnitCount);
+            Contract.Invariant (((ICodeSet)this).Count == ((ICodeSet)this).Length);
+            Contract.Invariant (((ICodeSet)this).First == ((ICodeSet)this).Last);
         }
 
         #endregion
@@ -292,23 +292,23 @@ namespace DD.Collections.ICodeSet {
         #region Methods
 
         [Pure]
-        public override bool Equals ( object obj ) {
+        public override bool Equals (object obj) {
             // disable once InvokeAsExtensionMethod
-            Contract.Ensures ( Contract.Result<bool> () == ((obj is ICodeSet) && this.SetEquals ( (ICodeSet)obj )) );
+            Contract.Ensures (Contract.Result<bool> () == ((obj is ICodeSet) && this.SetEquals ((ICodeSet)obj)));
             // disable once InvokeAsExtensionMethod
-            return (obj is ICodeSet) && this.SetEquals ( (ICodeSet)obj );
+            return (obj is ICodeSet) && this.SetEquals ((ICodeSet)obj);
         }
 
         [Pure]
         public override string ToString () {
             if ((Value & 0xFF) == Value) {
                 char c = (char)Value;
-                if (char.IsControl ( c )) {
-                    return "\\x" + Value.ToString ( "X" );
+                if (char.IsControl (c)) {
+                    return "\\x" + Value.ToString ("X");
                 }
                 return "" + c;
             }
-            return "\\x" + Value.ToString ( "X" );
+            return "\\x" + Value.ToString ("X");
         }
 
         #endregion
@@ -341,22 +341,22 @@ namespace DD.Collections.ICodeSet {
 
         #region Cast Operators
 
-        public static implicit operator int ( Code code ) {
+        public static implicit operator int (Code code) {
             return code.Value;
         }
 
-        public static implicit operator Code ( byte value ) {
-            return new Code ( value );
+        public static implicit operator Code (byte value) {
+            return new Code (value);
         }
 
-        public static implicit operator Code ( char value ) {
-            return new Code ( value );
+        public static implicit operator Code (char value) {
+            return new Code (value);
         }
 
-        public static implicit operator Code ( int value ) {
-            Contract.Requires<InvalidCastException> ( value.InRange ( Code.MinValue, Code.MaxValue ) );
+        public static implicit operator Code (int value) {
+            Contract.Requires<InvalidCastException> (value.InRange (Code.MinValue, Code.MaxValue));
 
-            return new Code ( value );
+            return new Code (value);
         }
 
         #endregion

@@ -24,8 +24,8 @@ namespace DD {
         /// <param name="self">this bool</param>
         /// <returns>bool</returns>
         [Pure]
-        public static bool Bool ( this bool self ) {
-            return Convert.ToInt32 ( self ) != 0;
+        public static bool Bool (this bool self) {
+            return Convert.ToInt32 (self) != 0;
         }
     }
 }

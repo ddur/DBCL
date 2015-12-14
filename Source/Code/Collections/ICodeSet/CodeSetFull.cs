@@ -18,19 +18,19 @@ namespace DD.Collections.ICodeSet {
 
         #region Ctor
 
-        public static CodeSetFull From ( Code first, Code last ) {
-            Contract.Requires<InvalidOperationException> ( (first + ICodeSetService.PairCount) <= last );
-            Contract.Ensures ( Contract.Result<CodeSetFull> ().IsNot ( null ) );
+        public static CodeSetFull From (Code first, Code last) {
+            Contract.Requires<InvalidOperationException> ((first + ICodeSetService.PairCount) <= last);
+            Contract.Ensures (Contract.Result<CodeSetFull> ().IsNot (null));
 
-            return new CodeSetFull ( first, last );
+            return new CodeSetFull (first, last);
         }
 
-        internal CodeSetFull ( Code first, Code last ) {
-            Contract.Requires<InvalidOperationException> ( (first + ICodeSetService.PairCount) <= last );
+        internal CodeSetFull (Code first, Code last) {
+            Contract.Requires<InvalidOperationException> ((first + ICodeSetService.PairCount) <= last);
 
             // Input -> private
-            Contract.Ensures ( this.start == first );
-            Contract.Ensures ( this.final == last );
+            Contract.Ensures (this.start == first);
+            Contract.Ensures (this.final == last);
 
             this.start = first;
             this.final = last;
@@ -98,20 +98,20 @@ namespace DD.Collections.ICodeSet {
         [ContractInvariantMethod]
         private void Invariant () {
             // private
-            Contract.Invariant ( this.start < this.final );
-            Contract.Invariant ( this.final - this.start >= ICodeSetService.PairCount );
-            Contract.Invariant ( this.count == 1 + this.final - this.start );
-            Contract.Invariant ( this.count.IsCodesCount () );
+            Contract.Invariant (this.start < this.final);
+            Contract.Invariant (this.final - this.start >= ICodeSetService.PairCount);
+            Contract.Invariant (this.count == 1 + this.final - this.start);
+            Contract.Invariant (this.count.IsCodesCount ());
 
             // public <- private
-            Contract.Invariant ( this.Count == this.count );
-            Contract.Invariant ( this.Length == this.count );
-            Contract.Invariant ( this.First == this.start );
-            Contract.Invariant ( this.Last == this.final );
+            Contract.Invariant (this.Count == this.count);
+            Contract.Invariant (this.Length == this.count);
+            Contract.Invariant (this.First == this.start);
+            Contract.Invariant (this.Last == this.final);
 
             // constraints
-            Contract.Invariant ( this.Count == this.Length );
-            Contract.Invariant ( this.Count > ICodeSetService.PairCount );
+            Contract.Invariant (this.Count == this.Length);
+            Contract.Invariant (this.Count > ICodeSetService.PairCount);
         }
 
         #endregion

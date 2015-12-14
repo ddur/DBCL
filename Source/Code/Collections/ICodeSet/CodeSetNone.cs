@@ -32,7 +32,7 @@ namespace DD.Collections.ICodeSet {
         [Pure]
         public override bool this[Code code] {
             get {
-                Contract.Ensures ( Contract.Result<bool> () == false );
+                Contract.Ensures (Contract.Result<bool> () == false);
                 return false;
             }
         }
@@ -40,7 +40,7 @@ namespace DD.Collections.ICodeSet {
         [Pure]
         public override int Count {
             get {
-                Contract.Ensures ( Contract.Result<int> () == 0 );
+                Contract.Ensures (Contract.Result<int> () == 0);
                 return 0;
             }
         }
@@ -48,7 +48,7 @@ namespace DD.Collections.ICodeSet {
         [Pure]
         public override int Length {
             get {
-                Contract.Ensures ( Contract.Result<int> () == 0 );
+                Contract.Ensures (Contract.Result<int> () == 0);
                 return 0;
             }
         }
@@ -79,8 +79,8 @@ namespace DD.Collections.ICodeSet {
         [ContractInvariantMethod]
         private void Invariant () {
             // constraints
-            Contract.Invariant ( this.Count == 0 );
-            Contract.Invariant ( this.Length == 0 );
+            Contract.Invariant (this.Count == 0);
+            Contract.Invariant (this.Length == 0);
         }
 
         #endregion

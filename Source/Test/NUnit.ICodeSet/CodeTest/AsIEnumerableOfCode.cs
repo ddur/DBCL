@@ -28,7 +28,7 @@ namespace DD.Collections.ICodeSet.CodeTest {
                 oa[count] = e.Current;
                 ++count;
             }
-            Assert.True ( (oa.Cast<Code> ()).SequenceEqual ( ics ) );
+            Assert.True ((oa.Cast<Code> ()).SequenceEqual (ics));
         }
 
         [Test]
@@ -42,7 +42,7 @@ namespace DD.Collections.ICodeSet.CodeTest {
                 ca[count] = e.Current;
                 ++count;
             }
-            Assert.True ( ca.SequenceEqual ( C ) );
+            Assert.True (ca.SequenceEqual (C));
 
             // from ICodeSet
             ICodeSet ics = C;
@@ -54,7 +54,7 @@ namespace DD.Collections.ICodeSet.CodeTest {
                 ca[count] = eICodSet.Current;
                 ++count;
             }
-            Assert.True ( ca.SequenceEqual ( ics ) );
+            Assert.True (ca.SequenceEqual (ics));
         }
     }
 }

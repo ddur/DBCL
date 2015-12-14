@@ -16,7 +16,7 @@ namespace DD.Collections.ICodeSet {
     public static class ICodeSetReduction {
 
         [Pure]
-        private static ICodeSet ReducePartOne ( this BitSetArray self, int offset ) {
+        private static ICodeSet ReducePartOne (this BitSetArray self, int offset) {
             Contract.Requires<IndexOutOfRangeException>
             (
                 self.IsNullOrEmpty () ||
@@ -26,7 +26,7 @@ namespace DD.Collections.ICodeSet {
                 )
             );
 
-            Contract.Ensures ( Contract.Result<ICodeSet> ().Is ( null ) || !(Contract.Result<ICodeSet> () is CodeSetBits) );
+            Contract.Ensures (Contract.Result<ICodeSet> ().Is (null) || !(Contract.Result<ICodeSet> () is CodeSetBits));
 
             #region Reduction
 
@@ -38,8 +38,8 @@ namespace DD.Collections.ICodeSet {
 
             #endregion
 
-            Contract.Assume ( self.First.HasValue );
-            Contract.Assume ( self.Last.HasValue );
+            Contract.Assume (self.First.HasValue);
+            Contract.Assume (self.Last.HasValue);
 
             #region Unit
 
@@ -52,7 +52,7 @@ namespace DD.Collections.ICodeSet {
             #region Pair
 
             if (self.Count == ICodeSetService.PairCount) {
-                return CodeSetPair.From ( (int)self.First + offset, (int)self.Last + offset );
+                return CodeSetPair.From ((int)self.First + offset, (int)self.Last + offset);
             }
 
             #endregion
@@ -60,7 +60,7 @@ namespace DD.Collections.ICodeSet {
             #region Full
 
             if (self.Count == self.Span ()) {
-                return CodeSetFull.From ( (int)self.First + offset, (int)self.Last + offset );
+                return CodeSetFull.From ((int)self.First + offset, (int)self.Last + offset);
             }
 
             #endregion
@@ -68,11 +68,11 @@ namespace DD.Collections.ICodeSet {
             #region List
 
             if (self.Count <= ICodeSetService.ListMaxCount) {
-                Contract.Assert ( self.Count > ICodeSetService.PairCount );
+                Contract.Assert (self.Count > ICodeSetService.PairCount);
 
                 // only if spans wider than ICodeSetService.MaskMaxSpan?
                 // if (self.Span() > ICodeSetService.MaskMaxSpan) {
-                return CodeSetList.From ( self.ToCodes ( offset ) );
+                return CodeSetList.From (self.ToCodes (offset));
                 //}
             }
 
@@ -81,44 +81,44 @@ namespace DD.Collections.ICodeSet {
             #region Mask
 
             if (self.Span () <= ICodeSetService.MaskMaxSpan) {
-                return CodeSetMask.From ( self.ToCodes ( offset ) );
+                return CodeSetMask.From (self.ToCodes (offset));
             }
 
             #endregion
 
             #endregion
 
-            Contract.Assert ( self.Span () > ICodeSetService.MaskMaxSpan );
-            Contract.Assert ( self.Count > ICodeSetService.ListMaxCount );
+            Contract.Assert (self.Span () > ICodeSetService.MaskMaxSpan);
+            Contract.Assert (self.Count > ICodeSetService.ListMaxCount);
 
             return null;
         }
 
         [Pure]
-        private static ICodeSet ReducePartTwo ( this BitSetArray self, int offset ) {
-            Contract.Requires<ArgumentNullException> ( self.IsNot ( null ) );
-            Contract.Requires<InvalidOperationException> ( self.Count.InRange ( ICodeSetService.PairCount + 1, self.Span () - 1 ) );	// not Null/Code/Pair/Full
-            Contract.Requires<IndexOutOfRangeException> ( self.Length <= Code.MaxCount || self.Last <= Code.MaxValue );
-            Contract.Requires<IndexOutOfRangeException> ( offset.InRange ( 0, Code.MaxValue - (int)self.Last ) );
+        private static ICodeSet ReducePartTwo (this BitSetArray self, int offset) {
+            Contract.Requires<ArgumentNullException> (self.IsNot (null));
+            Contract.Requires<InvalidOperationException> (self.Count.InRange (ICodeSetService.PairCount + 1, self.Span () - 1));	// not Null/Code/Pair/Full
+            Contract.Requires<IndexOutOfRangeException> (self.Length <= Code.MaxCount || self.Last <= Code.MaxValue);
+            Contract.Requires<IndexOutOfRangeException> (offset.InRange (0, Code.MaxValue - (int)self.Last));
 
-            Contract.Ensures ( Contract.Result<ICodeSet> ().IsNot ( null ) );
-            Contract.Ensures ( Contract.Result<ICodeSet> () is CodeSetPage || Contract.Result<ICodeSet> () is CodeSetWide );
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
+            Contract.Ensures (Contract.Result<ICodeSet> () is CodeSetPage || Contract.Result<ICodeSet> () is CodeSetWide);
 
-            Contract.Assume ( self.First.HasValue );
-            Contract.Assume ( self.Last.HasValue );
+            Contract.Assume (self.First.HasValue);
+            Contract.Assume (self.Last.HasValue);
 
             Code start = (int)self.First + offset;
             Code final = (int)self.Last + offset;
             if (start.UnicodePlane () == final.UnicodePlane ()) {
-                return CodeSetPage.From ( self, offset );
+                return CodeSetPage.From (self, offset);
             }
-            return CodeSetWide.From ( self, offset );
+            return CodeSetWide.From (self, offset);
         }
 
         [Pure]
-        public static ICodeSet Reduce ( this ICodeSet self ) {
-            Contract.Ensures ( Contract.Result<ICodeSet> ().IsNot ( null ) );
-            Contract.Ensures ( Contract.Result<ICodeSet> ().Theory () );
+        public static ICodeSet Reduce (this ICodeSet self) {
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
+            Contract.Ensures (Contract.Result<ICodeSet> ().Theory ());
 
             if (self.IsNullOrEmpty ()) {
                 return CodeSetNone.Singleton;
@@ -127,7 +127,7 @@ namespace DD.Collections.ICodeSet {
         }
 
         [Pure]
-        public static bool IsReduced ( this ICodeSet self ) {
+        public static bool IsReduced (this ICodeSet self) {
             return (
                 self is Code ||
                 self is CodeSetNone ||
@@ -142,7 +142,7 @@ namespace DD.Collections.ICodeSet {
         }
 
         [Pure]
-        public static ICodeSet Reduce ( this BitSetArray self, int offset = 0 ) {
+        public static ICodeSet Reduce (this BitSetArray self, int offset = 0) {
             Contract.Requires<IndexOutOfRangeException>
             (
                 self.IsNullOrEmpty () ||
@@ -152,50 +152,50 @@ namespace DD.Collections.ICodeSet {
                 )
             );
 
-            Contract.Ensures ( Contract.Result<ICodeSet> ().IsNot ( null ) );
-            Contract.Ensures ( Contract.Result<ICodeSet> ().Theory () );
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
+            Contract.Ensures (Contract.Result<ICodeSet> ().Theory ());
 
-            var retSet = self.ReducePartOne ( offset );
+            var retSet = self.ReducePartOne (offset);
 
-            if (retSet.Is ( null )) {
-                Contract.Assume ( self.IsNot ( null ) ); // not null
-                Contract.Assume ( self.Span () != self.Count ); // not Full
-                Contract.Assume ( self.Count > ICodeSetService.ListMaxCount ); // not Code, not Pair, not List
-                Contract.Assume ( self.Span () > ICodeSetService.MaskMaxSpan ); // not Mask
+            if (retSet.Is (null)) {
+                Contract.Assume (self.IsNot (null)); // not null
+                Contract.Assume (self.Span () != self.Count); // not Full
+                Contract.Assume (self.Count > ICodeSetService.ListMaxCount); // not Code, not Pair, not List
+                Contract.Assume (self.Span () > ICodeSetService.MaskMaxSpan); // not Mask
 
-                Contract.Assume ( self.First.HasValue );
-                Contract.Assume ( self.Last.HasValue );
+                Contract.Assume (self.First.HasValue);
+                Contract.Assume (self.Last.HasValue);
 
                 // create complement
                 int start = (int)self.First;
                 int final = (int)self.Last;
-                var complement = BitSetArray.Size ( self.Length );
+                var complement = BitSetArray.Size (self.Length);
                 foreach (var item in self.Complement ()) {
-                    if (item.InRange ( start, final )) {
-                        complement._Set ( item );
+                    if (item.InRange (start, final)) {
+                        complement._Set (item);
                     }
                 }
 
-                Contract.Assume ( complement.Count != 0 );
+                Contract.Assume (complement.Count != 0);
 
-                var notSet = complement.ReducePartOne ( offset );
-                if (notSet.IsNot ( null )) {
+                var notSet = complement.ReducePartOne (offset);
+                if (notSet.IsNot (null)) {
                     // if reduced to Code/Pair/Full/List/Mask, return DiffSet
                     retSet = CodeSetDiff.From (
-                        CodeSetFull.From ( (int)self.First + offset, (int)self.Last + offset ),
-                        notSet );
+                        CodeSetFull.From ((int)self.First + offset, (int)self.Last + offset),
+                        notSet);
                 }
                 else {
                     // not reduced, check size
                     if (complement.Span () < (self.Span () / 4)) {
                         // can save at least 3/4 of space
                         retSet = CodeSetDiff.From (
-                            CodeSetFull.From ( (int)self.First + offset, (int)self.Last + offset ),
-                            complement.ReducePartTwo ( offset ) );
+                            CodeSetFull.From ((int)self.First + offset, (int)self.Last + offset),
+                            complement.ReducePartTwo (offset));
                     }
                     else {
                         // final choice Page/Wide
-                        retSet = self.ReducePartTwo ( offset );
+                        retSet = self.ReducePartTwo (offset);
                     }
                 }
             }
@@ -204,41 +204,41 @@ namespace DD.Collections.ICodeSet {
         }
 
         [Pure]
-        private static bool Theory ( this ICodeSet self ) {
+        private static bool Theory (this ICodeSet self) {
             Success success = true;
 
-            success.Assert ( !self.IsNull () );
+            success.Assert (!self.IsNull ());
 
             switch (self.Count) {
                 case ICodeSetService.NullCount:
-                    success.Assert ( self is CodeSetNone );
+                    success.Assert (self is CodeSetNone);
                     break;
 
                 case ICodeSetService.UnitCount:
-                    success.Assert ( self is Code );
+                    success.Assert (self is Code);
                     break;
 
                 case ICodeSetService.PairCount:
-                    success.Assert ( self is CodeSetPair );
+                    success.Assert (self is CodeSetPair);
                     break;
 
                 default:
-                    success.Assert ( self.Count > ICodeSetService.PairCount );
+                    success.Assert (self.Count > ICodeSetService.PairCount);
 
                     if (self.Count == self.Length) {
-                        success.Assert ( self is CodeSetFull );
+                        success.Assert (self is CodeSetFull);
                     }
                     else if (self is CodeSetList) {
-                        success.Assert ( self.Count <= ICodeSetService.ListMaxCount );
+                        success.Assert (self.Count <= ICodeSetService.ListMaxCount);
                     }
                     else if (self is CodeSetMask) {
-                        success.Assert ( self.Span () <= ICodeSetService.MaskMaxSpan );
+                        success.Assert (self.Span () <= ICodeSetService.MaskMaxSpan);
                     }
                     else if (self is CodeSetDiff) {
-                        success.Assert ( self.Length > ICodeSetService.MaskMaxSpan );
+                        success.Assert (self.Length > ICodeSetService.MaskMaxSpan);
                     }
                     else {
-                        success.Assert ( self is CodeSetPage || self is CodeSetWide );
+                        success.Assert (self is CodeSetPage || self is CodeSetWide);
                     }
                     break;
             }

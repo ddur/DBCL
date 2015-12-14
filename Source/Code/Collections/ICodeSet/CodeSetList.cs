@@ -20,42 +20,42 @@ namespace DD.Collections.ICodeSet {
 
         #region Ctor
 
-        public static CodeSetList From ( params Code[] codes ) {
-            Contract.Requires<ArgumentNullException> ( codes.IsNot ( null ) );
-            Contract.Requires<ArgumentEmptyException> ( !codes.IsEmpty () );
-            Contract.Requires<InvalidOperationException> ( codes.Distinct ().Count () > ICodeSetService.PairCount ); // at least 3 members
-            Contract.Requires<InvalidOperationException> ( codes.Distinct ().Count () <= ICodeSetService.ListMaxCount ); // up to max members
-            Contract.Requires<InvalidOperationException> ( codes.Distinct ().Count () < (1 + codes.Max () - codes.Min ()) ); // not full
-            Contract.Ensures ( Contract.Result<CodeSetList> ().IsNot ( null ) );
+        public static CodeSetList From (params Code[] codes) {
+            Contract.Requires<ArgumentNullException> (codes.IsNot (null));
+            Contract.Requires<ArgumentEmptyException> (!codes.IsEmpty ());
+            Contract.Requires<InvalidOperationException> (codes.Distinct ().Count () > ICodeSetService.PairCount); // at least 3 members
+            Contract.Requires<InvalidOperationException> (codes.Distinct ().Count () <= ICodeSetService.ListMaxCount); // up to max members
+            Contract.Requires<InvalidOperationException> (codes.Distinct ().Count () < (1 + codes.Max () - codes.Min ())); // not full
+            Contract.Ensures (Contract.Result<CodeSetList> ().IsNot (null));
 
-            return new CodeSetList ( (IEnumerable<Code>)codes );
+            return new CodeSetList ((IEnumerable<Code>)codes);
         }
 
-        public static CodeSetList From ( IEnumerable<Code> codes ) {
-            Contract.Requires<ArgumentNullException> ( codes.IsNot ( null ) );
-            Contract.Requires<ArgumentEmptyException> ( !codes.IsEmpty () );
-            Contract.Requires<InvalidOperationException> ( codes.Distinct ().Count () > ICodeSetService.PairCount ); // at least 3 members
-            Contract.Requires<InvalidOperationException> ( codes.Distinct ().Count () <= ICodeSetService.ListMaxCount ); // up to max members
-            Contract.Requires<InvalidOperationException> ( codes.Distinct ().Count () < (1 + codes.Max () - codes.Min ()) ); // not full
-            Contract.Ensures ( Contract.Result<CodeSetList> ().IsNot ( null ) );
+        public static CodeSetList From (IEnumerable<Code> codes) {
+            Contract.Requires<ArgumentNullException> (codes.IsNot (null));
+            Contract.Requires<ArgumentEmptyException> (!codes.IsEmpty ());
+            Contract.Requires<InvalidOperationException> (codes.Distinct ().Count () > ICodeSetService.PairCount); // at least 3 members
+            Contract.Requires<InvalidOperationException> (codes.Distinct ().Count () <= ICodeSetService.ListMaxCount); // up to max members
+            Contract.Requires<InvalidOperationException> (codes.Distinct ().Count () < (1 + codes.Max () - codes.Min ())); // not full
+            Contract.Ensures (Contract.Result<CodeSetList> ().IsNot (null));
 
-            return new CodeSetList ( codes );
+            return new CodeSetList (codes);
         }
 
-        internal CodeSetList ( IEnumerable<Code> codes ) {
-            Contract.Requires<ArgumentNullException> ( codes.IsNot ( null ) );
-            Contract.Requires<ArgumentEmptyException> ( !codes.IsEmpty () );
-            Contract.Requires<ArgumentException> ( codes.Distinct ().Count () > ICodeSetService.PairCount );
-            Contract.Requires<ArgumentException> ( codes.Distinct ().Count () <= ICodeSetService.ListMaxCount );
-            Contract.Requires<ArgumentException> ( codes.Distinct ().Count () < (1 + codes.Max () - codes.Min ()) );
+        internal CodeSetList (IEnumerable<Code> codes) {
+            Contract.Requires<ArgumentNullException> (codes.IsNot (null));
+            Contract.Requires<ArgumentEmptyException> (!codes.IsEmpty ());
+            Contract.Requires<ArgumentException> (codes.Distinct ().Count () > ICodeSetService.PairCount);
+            Contract.Requires<ArgumentException> (codes.Distinct ().Count () <= ICodeSetService.ListMaxCount);
+            Contract.Requires<ArgumentException> (codes.Distinct ().Count () < (1 + codes.Max () - codes.Min ()));
 
-            Contract.Ensures ( Theory.Construct ( codes, this ) );
+            Contract.Ensures (Theory.Construct (codes, this));
 
             if (codes is ICodeSet) {
-                this.sorted = new List<Code> ( codes ); // creates sorted&distinct list from sorted set
+                this.sorted = new List<Code> (codes); // creates sorted&distinct list from sorted set
             }
             else {
-                this.sorted = new List<Code> ( codes.Distinct ().OrderBy ( item => (item) ) );
+                this.sorted = new List<Code> (codes.Distinct ().OrderBy (item => (item)));
             }
             this.sorted.TrimExcess ();
         }
@@ -73,7 +73,7 @@ namespace DD.Collections.ICodeSet {
         [Pure]
         public override bool this[Code code] {
             get {
-                return (this.sorted.BinarySearch ( code ) >= 0);
+                return (this.sorted.BinarySearch (code) >= 0);
             }
         }
 
@@ -116,7 +116,7 @@ namespace DD.Collections.ICodeSet {
 
         [ContractInvariantMethod]
         private void Invariant () {
-            Contract.Invariant ( Theory.Invariant ( this ) );
+            Contract.Invariant (Theory.Invariant (this));
         }
 
         #endregion
@@ -124,40 +124,40 @@ namespace DD.Collections.ICodeSet {
         private static class Theory {
 
             [Pure]
-            public static bool Construct ( IEnumerable<Code> codes, CodeSetList self ) {
+            public static bool Construct (IEnumerable<Code> codes, CodeSetList self) {
                 Success success = true;
 
                 // Input -> private
-                success.Assert ( self.sorted.IsNot ( null ) );
+                success.Assert (self.sorted.IsNot (null));
                 foreach (var item in codes) {
-                    success.Assert ( self.sorted.Contains ( item ) );
+                    success.Assert (self.sorted.Contains (item));
                 }
-                success.Assert ( self.sorted.Count == codes.Distinct ().Count () );
-                success.Assert ( self.sorted[0] == codes.Min () );
-                success.Assert ( self.sorted[self.sorted.Count - 1] == codes.Max () );
-                success.Assert ( self.sorted.SequenceEqual ( codes.Distinct ().OrderBy ( item => (item) ) ) );
+                success.Assert (self.sorted.Count == codes.Distinct ().Count ());
+                success.Assert (self.sorted[0] == codes.Min ());
+                success.Assert (self.sorted[self.sorted.Count - 1] == codes.Max ());
+                success.Assert (self.sorted.SequenceEqual (codes.Distinct ().OrderBy (item => (item))));
 
                 return success;
             }
 
             [Pure]
-            public static bool Invariant ( CodeSetList self ) {
+            public static bool Invariant (CodeSetList self) {
                 Success success = true;
 
                 // private
-                success.Assert ( self.sorted.IsNot ( null ) );
-                success.Assert ( self.sorted.Count > ICodeSetService.PairCount );
-                success.Assert ( self.sorted.Count <= ICodeSetService.ListMaxCount );
+                success.Assert (self.sorted.IsNot (null));
+                success.Assert (self.sorted.Count > ICodeSetService.PairCount);
+                success.Assert (self.sorted.Count <= ICodeSetService.ListMaxCount);
 
                 // public <- private
-                success.Assert ( self.First == self.sorted[0] );
-                success.Assert ( self.Last == self.sorted[self.sorted.Count - 1] );
-                success.Assert ( self.Count == self.sorted.Count );
+                success.Assert (self.First == self.sorted[0]);
+                success.Assert (self.Last == self.sorted[self.sorted.Count - 1]);
+                success.Assert (self.Count == self.sorted.Count);
 
                 // constraints
-                success.Assert ( self.Count > ICodeSetService.PairCount );
-                success.Assert ( self.Count <= ICodeSetService.ListMaxCount );
-                success.Assert ( self.Count != self.Length );
+                success.Assert (self.Count > ICodeSetService.PairCount);
+                success.Assert (self.Count <= ICodeSetService.ListMaxCount);
+                success.Assert (self.Count != self.Length);
 
                 return success;
             }

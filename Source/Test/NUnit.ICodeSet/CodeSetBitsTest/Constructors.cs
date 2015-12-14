@@ -23,8 +23,8 @@ namespace DD.Collections.ICodeSet.CodeSetBitsTest {
         public void FromParamsCodes () {
             CodeSetBits csb;
 
-            csb = CodeSetBits.From ( 1 );
-            csb = CodeSetBits.From ( 1, 12, 33, 20 );
+            csb = CodeSetBits.From (1);
+            csb = CodeSetBits.From (1, 12, 33, 20);
         }
 
         [Test]
@@ -34,13 +34,13 @@ namespace DD.Collections.ICodeSet.CodeSetBitsTest {
             // (Code)int cast fails
             Assert.Throws<InvalidCastException> (
                 delegate {
-                    csb = CodeSetBits.From ( -1 );
+                    csb = CodeSetBits.From (-1);
                 }
             );
             // (Code)int cast fails
             Assert.Throws<InvalidCastException> (
                 delegate {
-                    csb = CodeSetBits.From ( 1, 12, 33, -20 );
+                    csb = CodeSetBits.From (1, 12, 33, -20);
                 }
             );
         }
@@ -49,9 +49,9 @@ namespace DD.Collections.ICodeSet.CodeSetBitsTest {
         public void FromCodes () {
             CodeSetBits csb;
 
-            csb = CodeSetBits.From ( new List<Code> () );
-            csb = CodeSetBits.From ( new List<Code> () { 1 } );
-            csb = CodeSetBits.From ( new List<Code> () { 1, 12, 33, 20 } );
+            csb = CodeSetBits.From (new List<Code> ());
+            csb = CodeSetBits.From (new List<Code> () { 1 });
+            csb = CodeSetBits.From (new List<Code> () { 1, 12, 33, 20 });
         }
 
         [Test]
@@ -61,7 +61,7 @@ namespace DD.Collections.ICodeSet.CodeSetBitsTest {
             // Requires no null
             Assert.Throws<ArgumentNullException> (
                 delegate {
-                    csb = CodeSetBits.From ( (IEnumerable<Code>)null );
+                    csb = CodeSetBits.From ((IEnumerable<Code>)null);
                 }
             );
         }
@@ -72,11 +72,11 @@ namespace DD.Collections.ICodeSet.CodeSetBitsTest {
 
             ICodeSet input;
             input = CodeSetNone.Singleton;
-            csb = CodeSetBits.From ( input );
+            csb = CodeSetBits.From (input);
 
-            input = CodeSetList.From ( new List<Code> () { 1, 12, 33, 20 } );
-            csb = CodeSetBits.From ( input );
-            var clone = CodeSetBits.From ( csb );
+            input = CodeSetList.From (new List<Code> () { 1, 12, 33, 20 });
+            csb = CodeSetBits.From (input);
+            var clone = CodeSetBits.From (csb);
         }
 
         [Test]
@@ -84,17 +84,17 @@ namespace DD.Collections.ICodeSet.CodeSetBitsTest {
             CodeSetBits csb;
 
             // Requires no null
-            Assert.Throws<ArgumentNullException> ( delegate { csb = CodeSetBits.From ( (ICodeSet)null ); } );
+            Assert.Throws<ArgumentNullException> (delegate { csb = CodeSetBits.From ((ICodeSet)null); });
         }
 
         [Test]
         public void FromBitSetArray () {
             CodeSetBits csb;
 
-            csb = CodeSetBits.From ( BitSetArray.Empty () );
-            csb = CodeSetBits.From ( BitSetArray.From ( 33 ) );
-            csb = CodeSetBits.From ( BitSetArray.From ( 1, 12, 33 ) );
-            csb = CodeSetBits.From ( BitSetArray.From ( 1, 12, 33 ) );
+            csb = CodeSetBits.From (BitSetArray.Empty ());
+            csb = CodeSetBits.From (BitSetArray.From (33));
+            csb = CodeSetBits.From (BitSetArray.From (1, 12, 33));
+            csb = CodeSetBits.From (BitSetArray.From (1, 12, 33));
         }
 
         [Test]
@@ -104,39 +104,39 @@ namespace DD.Collections.ICodeSet.CodeSetBitsTest {
             // Requires no null
             Assert.Throws<ArgumentNullException> (
                 delegate {
-                    csb = CodeSetBits.From ( (BitSetArray)null );
-                } );
+                    csb = CodeSetBits.From ((BitSetArray)null);
+                });
 
             // Requires valid members
             Assert.Throws<IndexOutOfRangeException> (
                 delegate {
-                    csb = CodeSetBits.From ( BitSetArray.From ( 0, 1, 12, Code.MaxCount ) );
-                } );
+                    csb = CodeSetBits.From (BitSetArray.From (0, 1, 12, Code.MaxCount));
+                });
 
             Assert.Throws<IndexOutOfRangeException> (
                 delegate {
-                    csb = CodeSetBits.From ( BitSetArray.From ( 0, 1, 12, int.MaxValue - 1 ) );
-                } );
+                    csb = CodeSetBits.From (BitSetArray.From (0, 1, 12, int.MaxValue - 1));
+                });
         }
 
         [Test]
         public void FromBitSetArrayAtOffset () {
             CodeSetBits csb;
 
-            csb = CodeSetBits.From ( BitSetArray.Empty (), Code.MinValue );
-            csb = CodeSetBits.From ( BitSetArray.Empty (), Code.MaxValue );
-            csb = CodeSetBits.From ( BitSetArray.Empty (), Code.MaxCount );
+            csb = CodeSetBits.From (BitSetArray.Empty (), Code.MinValue);
+            csb = CodeSetBits.From (BitSetArray.Empty (), Code.MaxValue);
+            csb = CodeSetBits.From (BitSetArray.Empty (), Code.MaxCount);
 
-            csb = CodeSetBits.From ( BitSetArray.From ( 0 ), Code.MaxValue );
-            csb = CodeSetBits.From ( BitSetArray.From ( 0 ), Code.MaxCount - 1 );
+            csb = CodeSetBits.From (BitSetArray.From (0), Code.MaxValue);
+            csb = CodeSetBits.From (BitSetArray.From (0), Code.MaxCount - 1);
 
-            csb = CodeSetBits.From ( BitSetArray.From ( 0, 1 ), Code.MinCount );
-            csb = CodeSetBits.From ( BitSetArray.From ( 0, 1 ), Code.MaxValue - 1 );
-            csb = CodeSetBits.From ( BitSetArray.From ( 0, 1 ), Code.MaxCount - 2 );
+            csb = CodeSetBits.From (BitSetArray.From (0, 1), Code.MinCount);
+            csb = CodeSetBits.From (BitSetArray.From (0, 1), Code.MaxValue - 1);
+            csb = CodeSetBits.From (BitSetArray.From (0, 1), Code.MaxCount - 2);
 
-            csb = CodeSetBits.From ( BitSetArray.From ( 0, 1, 12, 33 ), Code.MaxCount / 2 );
+            csb = CodeSetBits.From (BitSetArray.From (0, 1, 12, 33), Code.MaxCount / 2);
 
-            csb = CodeSetBits.From ( BitSetArray.From ( 0, 1, 12, 33, Code.MaxValue ), 0 );
+            csb = CodeSetBits.From (BitSetArray.From (0, 1, 12, 33, Code.MaxValue), 0);
         }
 
         [Test]
@@ -144,13 +144,13 @@ namespace DD.Collections.ICodeSet.CodeSetBitsTest {
             CodeSetBits csb;
 
             // Requires no null
-            Assert.Throws<ArgumentNullException> ( delegate { csb = CodeSetBits.From ( (BitSetArray)null, 0 ); } );
+            Assert.Throws<ArgumentNullException> (delegate { csb = CodeSetBits.From ((BitSetArray)null, 0); });
 
             // Requires valid members&offset
-            Assert.Throws<IndexOutOfRangeException> ( delegate { csb = CodeSetBits.From ( BitSetArray.From ( 0, 1 ), -1 ); } );
-            Assert.Throws<IndexOutOfRangeException> ( delegate { csb = CodeSetBits.From ( BitSetArray.From ( 0, 1, 12, 33 ), -1 ); } );
-            Assert.Throws<IndexOutOfRangeException> ( delegate { csb = CodeSetBits.From ( BitSetArray.From ( 0, 1, 12, Code.MaxCount ), 0 ); } );
-            Assert.Throws<IndexOutOfRangeException> ( delegate { csb = CodeSetBits.From ( BitSetArray.From ( 0, 1, 12, Code.MaxValue ), 1 ); } );
+            Assert.Throws<IndexOutOfRangeException> (delegate { csb = CodeSetBits.From (BitSetArray.From (0, 1), -1); });
+            Assert.Throws<IndexOutOfRangeException> (delegate { csb = CodeSetBits.From (BitSetArray.From (0, 1, 12, 33), -1); });
+            Assert.Throws<IndexOutOfRangeException> (delegate { csb = CodeSetBits.From (BitSetArray.From (0, 1, 12, Code.MaxCount), 0); });
+            Assert.Throws<IndexOutOfRangeException> (delegate { csb = CodeSetBits.From (BitSetArray.From (0, 1, 12, Code.MaxValue), 1); });
         }
     }
 }

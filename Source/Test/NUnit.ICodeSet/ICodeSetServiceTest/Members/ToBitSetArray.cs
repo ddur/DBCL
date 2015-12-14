@@ -19,59 +19,59 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
             ICodeSet a = null;
             output = a.ToBitSetArray ();
 
-            Assert.IsTrue ( output.Count == 0 );
-            Assert.IsTrue ( output.Length == 0 );
+            Assert.IsTrue (output.Count == 0);
+            Assert.IsTrue (output.Length == 0);
 
             a = CodeSetNone.Singleton;
             output = a.ToBitSetArray ();
 
-            Assert.IsTrue ( output.Count == 0 );
-            Assert.IsTrue ( output.Length == 0 );
+            Assert.IsTrue (output.Count == 0);
+            Assert.IsTrue (output.Length == 0);
         }
 
         [Test]
         public void NotEmpty () {
             BitSetArray output;
 
-            ICodeSet a = new Code ( 11 );
+            ICodeSet a = new Code (11);
             output = a.ToBitSetArray ();
 
-            Assert.IsTrue ( output.Count == a.Count );
-            Assert.IsTrue ( output.Length == a.Last + 1 );
-            Assert.IsTrue ( output.First == a.First );
-            Assert.IsTrue ( output.Last == a.Last );
+            Assert.IsTrue (output.Count == a.Count);
+            Assert.IsTrue (output.Length == a.Last + 1);
+            Assert.IsTrue (output.First == a.First);
+            Assert.IsTrue (output.Last == a.Last);
 
-            a = CodeSetPair.From ( 25, 90 );
+            a = CodeSetPair.From (25, 90);
             output = a.ToBitSetArray ();
 
-            Assert.IsTrue ( output.Count == a.Count );
-            Assert.IsTrue ( output.Length == a.Last + 1 );
-            Assert.IsTrue ( output.First == a.First );
-            Assert.IsTrue ( output.Last == a.Last );
+            Assert.IsTrue (output.Count == a.Count);
+            Assert.IsTrue (output.Length == a.Last + 1);
+            Assert.IsTrue (output.First == a.First);
+            Assert.IsTrue (output.Last == a.Last);
 
-            a = CodeSetList.From ( 11, 25, 90, 130 );
+            a = CodeSetList.From (11, 25, 90, 130);
             output = a.ToBitSetArray ();
 
-            Assert.IsTrue ( output.Count == a.Count );
-            Assert.IsTrue ( output.Length == a.Last + 1 );
-            Assert.IsTrue ( output.First == a.First );
-            Assert.IsTrue ( output.Last == a.Last );
+            Assert.IsTrue (output.Count == a.Count);
+            Assert.IsTrue (output.Length == a.Last + 1);
+            Assert.IsTrue (output.First == a.First);
+            Assert.IsTrue (output.Last == a.Last);
 
-            a = CodeSetPage.From ( 11, 25, 90, 130, 132, 132, 133, 134, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160 );
+            a = CodeSetPage.From (11, 25, 90, 130, 132, 132, 133, 134, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160);
             output = a.ToBitSetArray ();
 
-            Assert.IsTrue ( output.Count == a.Count );
-            Assert.IsTrue ( output.Length == a.Last + 1 );
-            Assert.IsTrue ( output.First == a.First );
-            Assert.IsTrue ( output.Last == a.Last );
+            Assert.IsTrue (output.Count == a.Count);
+            Assert.IsTrue (output.Length == a.Last + 1);
+            Assert.IsTrue (output.First == a.First);
+            Assert.IsTrue (output.Last == a.Last);
 
-            a = CodeSetWrap.From ( 11, 25, 90, 130, 132, 132, 133, 134, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160 );
+            a = CodeSetWrap.From (11, 25, 90, 130, 132, 132, 133, 134, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160);
             output = a.ToBitSetArray ();
 
-            Assert.IsTrue ( output.Count == a.Count );
-            Assert.IsTrue ( output.Length == a.Last + 1 );
-            Assert.IsTrue ( output.First == a.First );
-            Assert.IsTrue ( output.Last == a.Last );
+            Assert.IsTrue (output.Count == a.Count);
+            Assert.IsTrue (output.Length == a.Last + 1);
+            Assert.IsTrue (output.First == a.First);
+            Assert.IsTrue (output.Last == a.Last);
         }
     }
 }

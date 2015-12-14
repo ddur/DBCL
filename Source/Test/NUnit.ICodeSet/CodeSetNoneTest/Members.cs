@@ -17,16 +17,16 @@ namespace DD.Collections.ICodeSet.CodeSetNullTest {
         public void AllMembers () {
             CodeSetNone csn = CodeSetNone.Singleton;
 
-            Assert.Throws<InvalidOperationException> ( delegate { Code c = csn.First; } );
-            Assert.Throws<InvalidOperationException> ( delegate { Code c = csn.Last; } );
+            Assert.Throws<InvalidOperationException> (delegate { Code c = csn.First; });
+            Assert.Throws<InvalidOperationException> (delegate { Code c = csn.Last; });
 
-            Assert.True ( csn.Count == 0 );
-            Assert.True ( csn.Length == 0 );
-            Assert.True ( csn.SequenceEqual ( new Code[0] ) );
+            Assert.True (csn.Count == 0);
+            Assert.True (csn.Length == 0);
+            Assert.True (csn.SequenceEqual (new Code[0]));
 
             Random r = new Random ();
             for (int i = 1; i <= 10; i++) {
-                Assert.False ( csn[r.Next ( Code.MinValue, Code.MaxValue )] );
+                Assert.False (csn[r.Next (Code.MinValue, Code.MaxValue)]);
             }
         }
     }

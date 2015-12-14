@@ -20,27 +20,27 @@ namespace DD.Collections.ICodeSet.CodeSetWrapTest {
 
         [Test]
         public void From_CodeSetWrap () {
-            var x = CodeSetWrap.From ( new Code[] { 1, 2, 3 } );
-            var y = CodeSetWrap.From ( x );
+            var x = CodeSetWrap.From (new Code[] { 1, 2, 3 });
+            var y = CodeSetWrap.From (x);
         }
 
         [Test]
         public void From_BitSetArray () {
-            var x = CodeSetWrap.From ( BitSetArray.Empty () );
-            var y = CodeSetWrap.From ( BitSetArray.From ( 1, 2, 3 ) );
+            var x = CodeSetWrap.From (BitSetArray.Empty ());
+            var y = CodeSetWrap.From (BitSetArray.From (1, 2, 3));
         }
 
         [Test]
         public void From_IEnumerableOfCode () {
-            var x = CodeSetWrap.From ( new Code[0] );
-            var y = CodeSetWrap.From ( new Code[] { 1, 2, 3 } );
+            var x = CodeSetWrap.From (new Code[0]);
+            var y = CodeSetWrap.From (new Code[] { 1, 2, 3 });
         }
 
         [Test]
         public void From_CodeSetWrap_ThrowsIfNull () {
             Assert.Throws<ArgumentNullException> (
                 delegate {
-                    var x = CodeSetWrap.From ( (CodeSetWrap)null );
+                    var x = CodeSetWrap.From ((CodeSetWrap)null);
                 }
             );
         }
@@ -49,7 +49,7 @@ namespace DD.Collections.ICodeSet.CodeSetWrapTest {
         public void From_BitSetArray_ThrowsIfNull () {
             Assert.Throws<ArgumentNullException> (
                 delegate {
-                    var x = CodeSetWrap.From ( (BitSetArray)null );
+                    var x = CodeSetWrap.From ((BitSetArray)null);
                 }
             );
         }
@@ -58,7 +58,7 @@ namespace DD.Collections.ICodeSet.CodeSetWrapTest {
         public void From_BitSetArray_ThrowsIfNotCode () {
             Assert.Throws<IndexOutOfRangeException> (
                 delegate {
-                    var x = CodeSetWrap.From ( BitSetArray.Size ( Code.MaxCount + 1, true ) );
+                    var x = CodeSetWrap.From (BitSetArray.Size (Code.MaxCount + 1, true));
                 }
             );
         }
@@ -67,7 +67,7 @@ namespace DD.Collections.ICodeSet.CodeSetWrapTest {
         public void From_IEnumerableOfCode_ThrowsIfNull () {
             Assert.Throws<ArgumentNullException> (
                 delegate {
-                    var x = CodeSetWrap.From ( (IEnumerable<Code>)null );
+                    var x = CodeSetWrap.From ((IEnumerable<Code>)null);
                 }
             );
         }
