@@ -7,18 +7,17 @@
 using System;
 using NUnit.Framework;
 
-namespace DD.Collections.ICodeSet.ICodeSetServiceTest
-{
-	[TestFixture]
-	public class Constants
-	{
-		[Test]
-		public void AreEqual()
-		{
-			Assert.AreEqual (ICodeSetService.UnitCount, 1);
-			Assert.AreEqual (ICodeSetService.PairCount, 2);
-			Assert.AreEqual (ICodeSetService.NoneStart,-1);
-			Assert.AreEqual (ICodeSetService.NoneFinal,-2);
-		}
-	}
+namespace DD.Collections.ICodeSet.ICodeSetServiceTest {
+
+    [TestFixture]
+    public class Constants {
+
+        [Test]
+        public void AreEqual () {
+            Assert.AreEqual ( ICodeSetService.UnitCount, 1 );
+            Assert.AreEqual ( ICodeSetService.PairCount, 2 );
+            Assert.AreEqual ( ICodeSetService.NoneStart, -1 );
+            Assert.AreEqual ( ICodeSetService.NoneFinal, -2 );
+        }
+    }
 }

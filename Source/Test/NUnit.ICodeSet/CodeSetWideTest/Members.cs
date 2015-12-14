@@ -9,78 +9,73 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 
-namespace DD.Collections.ICodeSet.CodeSetWideTest
-{
-	[TestFixture]
-	public class Members
-	{
-		static List<Code> list1 = new List<Code>() {0,65536,1114111};
-		static List<Code> list2 = new List<Code>() {32768,65536,65537};
+namespace DD.Collections.ICodeSet.CodeSetWideTest {
 
-		readonly CodeSetWide csw1 = CodeSetWide.From(list1);
-		readonly CodeSetWide csw2 = CodeSetWide.From(list2);
+    [TestFixture]
+    public class Members {
+        private static List<Code> list1 = new List<Code> () { 0, 65536, 1114111 };
+        private static List<Code> list2 = new List<Code> () { 32768, 65536, 65537 };
 
-		[Test] public void AsEnumerable() {
-			
-			Assert.True (csw1.SequenceEqual(list1));
-			Assert.True (csw2.SequenceEqual(list2));
-		}
+        private readonly CodeSetWide csw1 = CodeSetWide.From ( list1 );
+        private readonly CodeSetWide csw2 = CodeSetWide.From ( list2 );
 
-		[Test]
-		public void Indexer()
-		{
-			Assert.False (csw1[-1]);
-			Assert.False (csw1[int.MinValue]);
+        [Test]
+        public void AsEnumerable () {
+            Assert.True ( csw1.SequenceEqual ( list1 ) );
+            Assert.True ( csw2.SequenceEqual ( list2 ) );
+        }
 
-			Assert.True (csw1[0]);
-			Assert.False (csw1[1]);
+        [Test]
+        public void Indexer () {
+            Assert.False ( csw1[-1] );
+            Assert.False ( csw1[int.MinValue] );
 
-			Assert.True (csw1[(Code)0]);
-			Assert.False (csw1[(Code)1]);
+            Assert.True ( csw1[0] );
+            Assert.False ( csw1[1] );
 
-			Assert.False (csw1[65535]);
-			Assert.True (csw1[65536]);
-			Assert.False (csw1[65537]);
+            Assert.True ( csw1[(Code)0] );
+            Assert.False ( csw1[(Code)1] );
 
-			Assert.False (csw1[(Code)65535]);
-			Assert.True (csw1[(Code)65536]);
-			Assert.False (csw1[(Code)65537]);
+            Assert.False ( csw1[65535] );
+            Assert.True ( csw1[65536] );
+            Assert.False ( csw1[65537] );
 
-			Assert.False (csw1[Code.MaxValue-1]);
-			Assert.True (csw1[Code.MaxValue]);
-			
-			Assert.False (csw1[(Code)Code.MaxValue-1]);
-			Assert.True (csw1[(Code)Code.MaxValue]);
+            Assert.False ( csw1[(Code)65535] );
+            Assert.True ( csw1[(Code)65536] );
+            Assert.False ( csw1[(Code)65537] );
 
+            Assert.False ( csw1[Code.MaxValue - 1] );
+            Assert.True ( csw1[Code.MaxValue] );
 
-			Assert.False (csw2[65535]);
-			Assert.True (csw2[65536]);
-			Assert.True (csw2[65537]);
+            Assert.False ( csw1[(Code)Code.MaxValue - 1] );
+            Assert.True ( csw1[(Code)Code.MaxValue] );
 
-			Assert.False (csw2[(Code)65535]);
-			Assert.True (csw2[(Code)65536]);
-			Assert.True (csw2[(Code)65537]);
+            Assert.False ( csw2[65535] );
+            Assert.True ( csw2[65536] );
+            Assert.True ( csw2[65537] );
 
-			Assert.False (csw2[Code.MaxValue-1]);
-			Assert.False (csw2[Code.MaxValue]);
-			
-			Assert.False (csw2[(Code)Code.MaxValue-1]);
-			Assert.False (csw2[(Code)Code.MaxValue]);
+            Assert.False ( csw2[(Code)65535] );
+            Assert.True ( csw2[(Code)65536] );
+            Assert.True ( csw2[(Code)65537] );
 
-		}
-		
-		[Test] public void Properties() {
+            Assert.False ( csw2[Code.MaxValue - 1] );
+            Assert.False ( csw2[Code.MaxValue] );
 
-			Assert.True (csw1.Count == 3);
-			Assert.True (csw1.Length == Code.MaxCount);
-			Assert.True (csw1.First.Value == 0);
-			Assert.True (csw1.Last.Value == Code.MaxValue);
+            Assert.False ( csw2[(Code)Code.MaxValue - 1] );
+            Assert.False ( csw2[(Code)Code.MaxValue] );
+        }
 
-			Assert.True (csw2.Count == 3);
-			Assert.True (csw2.Length == 1 + 65537 - 32768);
-			Assert.True (csw2.First.Value == 32768);
-			Assert.True (csw2.Last.Value == 65537);
-		}
-		
-	}
+        [Test]
+        public void Properties () {
+            Assert.True ( csw1.Count == 3 );
+            Assert.True ( csw1.Length == Code.MaxCount );
+            Assert.True ( csw1.First.Value == 0 );
+            Assert.True ( csw1.Last.Value == Code.MaxValue );
+
+            Assert.True ( csw2.Count == 3 );
+            Assert.True ( csw2.Length == 1 + 65537 - 32768 );
+            Assert.True ( csw2.First.Value == 32768 );
+            Assert.True ( csw2.Last.Value == 65537 );
+        }
+    }
 }

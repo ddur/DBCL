@@ -11,115 +11,115 @@ using System.Linq;
 
 using DD.Diagnostics;
 
-namespace DD.Collections.ICodeSet
-{
-	/// <summary>Set of two codes (items), no restrictions</summary>
-	/// <remarks>Cannot be empty, allways contains two codes</remarks>
-	[Serializable]
-	public sealed class CodeSetPair : CodeSet
-	{
+namespace DD.Collections.ICodeSet {
 
-		#region Ctor
+    /// <summary>Set of two codes (items), no restrictions</summary>
+    /// <remarks>Cannot be empty, allways contains two codes</remarks>
+    [Serializable]
+    public sealed class CodeSetPair : CodeSet {
 
-		public static CodeSetPair From(Code low, Code high)
-		{
-			Contract.Requires<ArgumentException> (low < high);
-            Contract.Ensures(Contract.Result<CodeSetPair>().IsNot(null));
+        #region Ctor
 
-			return new CodeSetPair(low, high);			
-		}
+        public static CodeSetPair From ( Code low, Code high ) {
+            Contract.Requires<ArgumentException> ( low < high );
+            Contract.Ensures ( Contract.Result<CodeSetPair> ().IsNot ( null ) );
 
-		internal CodeSetPair(Code low, Code high)
-		{
-			Contract.Requires<ArgumentException> (low < high);
+            return new CodeSetPair ( low, high );
+        }
 
-			Contract.Ensures(Theory.Construct(low, high, this));
+        internal CodeSetPair ( Code low, Code high ) {
+            Contract.Requires<ArgumentException> ( low < high );
 
-			this.start = low;
-			this.final = high;
-		}
+            Contract.Ensures ( Theory.Construct ( low, high, this ) );
 
-		#endregion
+            this.start = low;
+            this.final = high;
+        }
 
-		#region Fields
+        #endregion
 
-		private readonly Code start;
-		private readonly Code final;
+        #region Fields
 
-		#endregion
+        private readonly Code start;
+        private readonly Code final;
 
-		#region ICodeSet
+        #endregion
 
-		[Pure] public override bool this[Code code] {
-			get { return code == this.start || code == this.final; }
-		}
+        #region ICodeSet
 
-		[Pure] public override int Count {
-			get { return ICodeSetService.PairCount; }
-		}
+        [Pure]
+        public override bool this[Code code] {
+            get { return code == this.start || code == this.final; }
+        }
 
-		[Pure] public override int Length {
-			get { return 1 + this.final - this.start; }
-		}
+        [Pure]
+        public override int Count {
+            get { return ICodeSetService.PairCount; }
+        }
 
-		[Pure] public override Code First {
-			get { return this.start; }
-		}
+        [Pure]
+        public override int Length {
+            get { return 1 + this.final - this.start; }
+        }
 
-		[Pure] public override Code Last {
-			get { return this.final; }
-		}
+        [Pure]
+        public override Code First {
+            get { return this.start; }
+        }
 
-		[Pure] public override IEnumerator<Code> GetEnumerator()
-		{
-			yield return this.start;
-			yield return this.final;
-		}
+        [Pure]
+        public override Code Last {
+            get { return this.final; }
+        }
 
-		#endregion
-		
-		#region Invariant
-		
-		[ContractInvariantMethod]
-		private void Invariant()
-		{
-			Contract.Invariant(Theory.Invariant(this));
-		}
+        [Pure]
+        public override IEnumerator<Code> GetEnumerator () {
+            yield return this.start;
+            yield return this.final;
+        }
 
-		#endregion
-		
-		private static class Theory
-		{
+        #endregion
 
-			[Pure] public static bool Construct(Code low, Code high, CodeSetPair self)
-			{
-				Success success = true;
-				
-				// input -> private
-				success.Assert(self.start == low);
-				success.Assert(self.final == high);
-				success.Assert(self[low]);
-				success.Assert(self[high]);
+        #region Invariant
 
-				return success;
-			}
-			
-			[Pure] public static bool Invariant(CodeSetPair self)
-			{
-				Success success = true;
-				
-				// private
-				success.Assert(self.start < self.final);
+        [ContractInvariantMethod]
+        private void Invariant () {
+            Contract.Invariant ( Theory.Invariant ( this ) );
+        }
 
-				// public <- private
-				success.Assert(self.First == self.start);
-				success.Assert(self.Last == self.final);
-				
-				// constraints
-				success.Assert(self.Count == ICodeSetService.PairCount);
+        #endregion
 
-				return success;
-			}
-		}
-	}
+        private static class Theory {
+
+            [Pure]
+            public static bool Construct ( Code low, Code high, CodeSetPair self ) {
+                Success success = true;
+
+                // input -> private
+                success.Assert ( self.start == low );
+                success.Assert ( self.final == high );
+                success.Assert ( self[low] );
+                success.Assert ( self[high] );
+
+                return success;
+            }
+
+            [Pure]
+            public static bool Invariant ( CodeSetPair self ) {
+                Success success = true;
+
+                // private
+                success.Assert ( self.start < self.final );
+
+                // public <- private
+                success.Assert ( self.First == self.start );
+                success.Assert ( self.Last == self.final );
+
+                // constraints
+                success.Assert ( self.Count == ICodeSetService.PairCount );
+
+                return success;
+            }
+        }
+    }
 }

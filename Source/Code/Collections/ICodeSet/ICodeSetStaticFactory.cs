@@ -11,198 +11,182 @@ using System.Linq;
 
 using DD.Text;
 
-namespace DD.Collections.ICodeSet
-{
-	/// <summary>Produces Reduced ICodeSet's</summary>
-	public static class ICodeSetStaticFactory
-	{
-		#region From items To ICodeSet
+namespace DD.Collections.ICodeSet {
 
-		public static ICodeSet From(this string utf16)
-		{
-			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
-			Contract.Ensures(Contract.Result<ICodeSet>().IsReduced());
+    /// <summary>Produces Reduced ICodeSet's</summary>
+    public static class ICodeSetStaticFactory {
 
-			return string.IsNullOrEmpty(utf16) ? CodeSetNone.Singleton : From(utf16.Decode());
-		}
+        #region From items To ICodeSet
 
-		public static ICodeSet From(char req, params char[] opt)
-		{
-			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
-			Contract.Ensures(Contract.Result<ICodeSet>().IsReduced());
+        public static ICodeSet From ( this string utf16 ) {
+            Contract.Ensures ( Contract.Result<ICodeSet> ().IsNot ( null ) );
+            Contract.Ensures ( Contract.Result<ICodeSet> ().IsReduced () );
 
-			List<Code> codeList;
-			if (!opt.IsNull() && opt.Length > 0) {
-				codeList = new List<Code>(1 + opt.Length);
-				codeList.Add(req);
-				foreach (Code code in opt) {
-					codeList.Add(code);
-				}
-			} else {
-				codeList = new List<Code>() {req};
-			}
-			return From(codeList);
-		}
+            return string.IsNullOrEmpty ( utf16 ) ? CodeSetNone.Singleton : From ( utf16.Decode () );
+        }
 
-		public static ICodeSet From(this IEnumerable<char> chars)
-		{
-			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
-			Contract.Ensures(Contract.Result<ICodeSet>().IsReduced());
+        public static ICodeSet From ( char req, params char[] opt ) {
+            Contract.Ensures ( Contract.Result<ICodeSet> ().IsNot ( null ) );
+            Contract.Ensures ( Contract.Result<ICodeSet> ().IsReduced () );
 
-			return chars.IsNullOrEmpty() ? CodeSetNone.Singleton : From(BitSetArray.From(chars.ToValues()));
-		}
+            List<Code> codeList;
+            if (!opt.IsNull () && opt.Length > 0) {
+                codeList = new List<Code> ( 1 + opt.Length );
+                codeList.Add ( req );
+                foreach (Code code in opt) {
+                    codeList.Add ( code );
+                }
+            }
+            else {
+                codeList = new List<Code> () { req };
+            }
+            return From ( codeList );
+        }
 
-		public static ICodeSet From(Code req, params Code[] opt)
-		{
-			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
-			Contract.Ensures(Contract.Result<ICodeSet>().IsReduced());
+        public static ICodeSet From ( this IEnumerable<char> chars ) {
+            Contract.Ensures ( Contract.Result<ICodeSet> ().IsNot ( null ) );
+            Contract.Ensures ( Contract.Result<ICodeSet> ().IsReduced () );
 
-			List<Code> codeList;
-			if (!opt.IsNull() && opt.Length > 0) {
-				codeList = new List<Code>(1 + opt.Length);
-				codeList.Add(req);
-				codeList.AddRange(opt);
-			} else { // type Code is never null
-				codeList = new List<Code>() {req};
-			}
-			return From(codeList);
-		}
+            return chars.IsNullOrEmpty () ? CodeSetNone.Singleton : From ( BitSetArray.From ( chars.ToValues () ) );
+        }
 
-		public static ICodeSet From(IEnumerable<Code> codes)
-		{
-			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
-			Contract.Ensures(Contract.Result<ICodeSet>().IsReduced());
+        public static ICodeSet From ( Code req, params Code[] opt ) {
+            Contract.Ensures ( Contract.Result<ICodeSet> ().IsNot ( null ) );
+            Contract.Ensures ( Contract.Result<ICodeSet> ().IsReduced () );
 
-			return codes.IsNullOrEmpty() ? CodeSetNone.Singleton : From(BitSetArray.From(codes.ToValues()));
-		}
+            List<Code> codeList;
+            if (!opt.IsNull () && opt.Length > 0) {
+                codeList = new List<Code> ( 1 + opt.Length );
+                codeList.Add ( req );
+                codeList.AddRange ( opt );
+            }
+            else { // type Code is never null
+                codeList = new List<Code> () { req };
+            }
+            return From ( codeList );
+        }
 
-		public static ICodeSet From(this BitSetArray bits)
-		{
-            Contract.Requires<ArgumentException> (bits.IsNullOrEmpty() || bits.Length <= Code.MaxCount || (int)bits.Last <= Code.MaxValue);
-			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
-			Contract.Ensures(Contract.Result<ICodeSet>().IsReduced());
+        public static ICodeSet From ( IEnumerable<Code> codes ) {
+            Contract.Ensures ( Contract.Result<ICodeSet> ().IsNot ( null ) );
+            Contract.Ensures ( Contract.Result<ICodeSet> ().IsReduced () );
 
-			return bits.IsNullOrEmpty() ? CodeSetNone.Singleton : bits.Reduce();
-		}
+            return codes.IsNullOrEmpty () ? CodeSetNone.Singleton : From ( BitSetArray.From ( codes.ToValues () ) );
+        }
 
-		public static ICodeSet From(this ICodeSet iset)
-		{
-			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
-			Contract.Ensures(Contract.Result<ICodeSet>().IsReduced());
+        public static ICodeSet From ( this BitSetArray bits ) {
+            Contract.Requires<ArgumentException> ( bits.IsNullOrEmpty () || bits.Length <= Code.MaxCount || (int)bits.Last <= Code.MaxValue );
+            Contract.Ensures ( Contract.Result<ICodeSet> ().IsNot ( null ) );
+            Contract.Ensures ( Contract.Result<ICodeSet> ().IsReduced () );
 
-			return iset.IsNullOrEmpty() ? CodeSetNone.Singleton : iset.Reduce();
-		}
+            return bits.IsNullOrEmpty () ? CodeSetNone.Singleton : bits.Reduce ();
+        }
 
-		#endregion
+        public static ICodeSet From ( this ICodeSet iset ) {
+            Contract.Ensures ( Contract.Result<ICodeSet> ().IsNot ( null ) );
+            Contract.Ensures ( Contract.Result<ICodeSet> ().IsReduced () );
 
-		#region Operations
+            return iset.IsNullOrEmpty () ? CodeSetNone.Singleton : iset.Reduce ();
+        }
 
-		
-		#region Union bit.Or(a,b,c...)
+        #endregion
 
-		public static ICodeSet Union(this ICodeSet self, ICodeSet that, params ICodeSet[] more)
-		{
-			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
-			Contract.Ensures(Contract.Result<ICodeSet>().IsReduced());
+        #region Operations
 
-			return From(self.BitUnion(that, more)); 
-		}
+        #region Union bit.Or(a,b,c...)
 
-		public static ICodeSet Union(this IEnumerable<ICodeSet> sets)
-		{
-			Contract.Requires(!sets.IsNull());
-			Contract.Requires(sets.Count() >= 2);
+        public static ICodeSet Union ( this ICodeSet self, ICodeSet that, params ICodeSet[] more ) {
+            Contract.Ensures ( Contract.Result<ICodeSet> ().IsNot ( null ) );
+            Contract.Ensures ( Contract.Result<ICodeSet> ().IsReduced () );
 
-			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
-			Contract.Ensures(Contract.Result<ICodeSet>().IsReduced());
+            return From ( self.BitUnion ( that, more ) );
+        }
 
-			return From(sets.BitUnion());
-		}
+        public static ICodeSet Union ( this IEnumerable<ICodeSet> sets ) {
+            Contract.Requires ( !sets.IsNull () );
+            Contract.Requires ( sets.Count () >= 2 );
 
-		#endregion
-		
-		#region Intersection bit.And(((a,b),c),d...)
-		
-		public static ICodeSet Intersection(this ICodeSet self, ICodeSet that, params ICodeSet[] more)
-		{
-			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
-			Contract.Ensures(Contract.Result<ICodeSet>().IsReduced());
+            Contract.Ensures ( Contract.Result<ICodeSet> ().IsNot ( null ) );
+            Contract.Ensures ( Contract.Result<ICodeSet> ().IsReduced () );
 
-			return From(self.BitIntersection(that, more));
-		}
+            return From ( sets.BitUnion () );
+        }
 
-		public static ICodeSet Intersection(this IEnumerable<ICodeSet> sets)
-		{
-			Contract.Requires(!sets.IsNull());
-			Contract.Requires(sets.Count() >= 2);
+        #endregion
 
-			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
-			Contract.Ensures(Contract.Result<ICodeSet>().IsReduced());
+        #region Intersection bit.And(((a,b),c),d...)
 
-			return From(sets.BitIntersection());
-		}
+        public static ICodeSet Intersection ( this ICodeSet self, ICodeSet that, params ICodeSet[] more ) {
+            Contract.Ensures ( Contract.Result<ICodeSet> ().IsNot ( null ) );
+            Contract.Ensures ( Contract.Result<ICodeSet> ().IsReduced () );
 
-		#endregion
-		
-		#region Disjunction xor(((a,b),c),d...)
+            return From ( self.BitIntersection ( that, more ) );
+        }
 
-		public static ICodeSet Disjunction(this ICodeSet self, ICodeSet that, params ICodeSet[] more)
-		{
-			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
-			Contract.Ensures(Contract.Result<ICodeSet>().IsReduced());
+        public static ICodeSet Intersection ( this IEnumerable<ICodeSet> sets ) {
+            Contract.Requires ( !sets.IsNull () );
+            Contract.Requires ( sets.Count () >= 2 );
 
-			return From(self.BitDisjunction(that, more)); 
-		}
+            Contract.Ensures ( Contract.Result<ICodeSet> ().IsNot ( null ) );
+            Contract.Ensures ( Contract.Result<ICodeSet> ().IsReduced () );
 
-		public static ICodeSet Disjunction(this IEnumerable<ICodeSet> sets)
-		{
-			Contract.Requires(!sets.IsNull());
-			Contract.Requires(sets.Count() >= 2);
+            return From ( sets.BitIntersection () );
+        }
 
-			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
-			Contract.Ensures(Contract.Result<ICodeSet>().IsReduced());
+        #endregion
 
-			return From(sets.BitDisjunction());
-		}
+        #region Disjunction xor(((a,b),c),d...)
 
-		#endregion
+        public static ICodeSet Disjunction ( this ICodeSet self, ICodeSet that, params ICodeSet[] more ) {
+            Contract.Ensures ( Contract.Result<ICodeSet> ().IsNot ( null ) );
+            Contract.Ensures ( Contract.Result<ICodeSet> ().IsReduced () );
 
-		#region Difference (((a-b)-c)-d...)
+            return From ( self.BitDisjunction ( that, more ) );
+        }
 
-		public static ICodeSet Difference(this ICodeSet self, ICodeSet that, params ICodeSet[] more)
-		{
-			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
-			Contract.Ensures(Contract.Result<ICodeSet>().IsReduced());
+        public static ICodeSet Disjunction ( this IEnumerable<ICodeSet> sets ) {
+            Contract.Requires ( !sets.IsNull () );
+            Contract.Requires ( sets.Count () >= 2 );
 
-			return From(self.BitDifference(that, more));
-		}
+            Contract.Ensures ( Contract.Result<ICodeSet> ().IsNot ( null ) );
+            Contract.Ensures ( Contract.Result<ICodeSet> ().IsReduced () );
 
-		public static ICodeSet Difference(this IEnumerable<ICodeSet> sets)
-		{
-			Contract.Requires(!sets.IsNull());
-			Contract.Requires(sets.Count() >= 2);
+            return From ( sets.BitDisjunction () );
+        }
 
-			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
-			Contract.Ensures(Contract.Result<ICodeSet>().IsReduced());
+        #endregion
 
-			return From(sets.BitDifference());
-		}
+        #region Difference (((a-b)-c)-d...)
 
-		#endregion
-		
-		#region Complement
-		
-		public static ICodeSet Complement(this ICodeSet self)
-		{
-			Contract.Ensures(Contract.Result<ICodeSet>().IsNot(null));
-			Contract.Ensures(Contract.Result<ICodeSet>().IsReduced());
+        public static ICodeSet Difference ( this ICodeSet self, ICodeSet that, params ICodeSet[] more ) {
+            Contract.Ensures ( Contract.Result<ICodeSet> ().IsNot ( null ) );
+            Contract.Ensures ( Contract.Result<ICodeSet> ().IsReduced () );
 
-			return From(self.BitComplement());
-		}
-		
-		#endregion
-		
-		#endregion
-		
-	}
+            return From ( self.BitDifference ( that, more ) );
+        }
+
+        public static ICodeSet Difference ( this IEnumerable<ICodeSet> sets ) {
+            Contract.Requires ( !sets.IsNull () );
+            Contract.Requires ( sets.Count () >= 2 );
+
+            Contract.Ensures ( Contract.Result<ICodeSet> ().IsNot ( null ) );
+            Contract.Ensures ( Contract.Result<ICodeSet> ().IsReduced () );
+
+            return From ( sets.BitDifference () );
+        }
+
+        #endregion
+
+        #region Complement
+
+        public static ICodeSet Complement ( this ICodeSet self ) {
+            Contract.Ensures ( Contract.Result<ICodeSet> ().IsNot ( null ) );
+            Contract.Ensures ( Contract.Result<ICodeSet> ().IsReduced () );
+
+            return From ( self.BitComplement () );
+        }
+
+        #endregion
+
+        #endregion
+    }
 }

@@ -1,5 +1,9 @@
 @echo off
 @if exist .\artifacts\. (del /Q .\artifacts\*) else (md .\artifacts)
+
+@rem test release build @"C:\Users\ddur\Documents\GitHub\opencover\main\bin\Release\OpenCover.Console.exe" -register:user -mergebyhash ^
+@rem test MSI installed @"C:\Program Files (x86)\OpenCover\OpenCover.Console.exe" -register:user -mergebyhash ^
+
 @".\packages\OpenCover.4.6.166\tools\OpenCover.Console.exe" -register:user -mergebyhash ^
 -output:".\artifacts\OpenCover.BitSetArray.xml" ^
 -filter:"+[DBCL]DD.Collections.BitSetArray*" ^
@@ -36,9 +40,9 @@
 @echo -------------------------------------
 @echo.
 @echo.
+
 @cd artifacts
 @"..\packages\ReportGenerator.2.3.5.0\tools\ReportGenerator" -targetdir:.\ ^
 -reports:"OpenCover.BitSetArray.xml;OpenCover.ICodeSet.xml;OpenCover.Extensions.xml;OpenCover.Diagnostics.xml"
 @"..\packages\7-Zip.CommandLine.9.20.0\tools\7za" a "CodeCoverage.7z" "*"
 @cd ..
-

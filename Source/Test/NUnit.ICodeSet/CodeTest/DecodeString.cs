@@ -13,76 +13,75 @@ using DD.Text;
 
 using NUnit.Framework;
 
-namespace DD.Collections.ICodeSet.CodeTest
-{
-	[TestFixture]
-	public class DecodeString
-	{
+namespace DD.Collections.ICodeSet.CodeTest {
 
-	    IEnumerable<TestCaseData> PrevNextToBool {
-	        get {
-	            return DataSource.TwoCharsToBool;
-	        }
-	    }
-	    IEnumerable<TestCaseData> PrevNextToCodeOrThrow {
-	        get {
-	            return DataSource.TwoCharsToCodeOrThrow;
-	        }
-	    }
+    [TestFixture]
+    public class DecodeString {
 
-	    IEnumerable<TestCaseData> ValidString {
-	        get {
-	            return DataSource.ValidEncodedString;
-	        }
-	    }
-	    
-	    IEnumerable<string> InvalidString {
-	        get {
-	            return DataSource.InvalidEncodedString;
-	        }
-	    }
+        private IEnumerable<TestCaseData> PrevNextToBool {
+            get {
+                return DataSource.TwoCharsToBool;
+            }
+        }
 
-	    [Test, TestCaseSource("ValidString")]
-	    public void DecodeValidString (string data, IEnumerable<Code> code) {
-	        Assert.True (data.CanDecode() );
-	        List<Code> decoded = null;
-	        Assert.True (data.TryDecode(out decoded));
-	        Assert.True (decoded.IsNot(null));
-	        Assert.True (decoded.SequenceEqual(code));
-	        Assert.That (delegate {decoded = data.Decode();}, Throws.Nothing);
-	        Assert.True (decoded.IsNot(null));
-	        Assert.True (decoded.SequenceEqual(code));
-	        if (data.IsNot(null)) {
-    	        Assert.True (decoded.Encode().SequenceEqual(data));
-	        }
-	        else {
-	            Assert.True (decoded.Encode().IsEmpty());
-	        }
-	    }
+        private IEnumerable<TestCaseData> PrevNextToCodeOrThrow {
+            get {
+                return DataSource.TwoCharsToCodeOrThrow;
+            }
+        }
 
-	    [Test, TestCaseSource("InvalidString")]
-	    public void DecodeInvalidString (string data) {
-	        Assert.False (data.CanDecode());
-	        List<Code> decoded = null;
-	        Assert.False (data.TryDecode(out decoded));
-	        Assert.True (decoded == null);
-	        if (data.IsNull()) {
-                Assert.Throws<ArgumentNullException> (delegate{data.Decode();});
-	        }
-	        else {
-                Assert.Throws<ArgumentException> (delegate{data.Decode();});
-	        }
-	    }
+        private IEnumerable<TestCaseData> ValidString {
+            get {
+                return DataSource.ValidEncodedString;
+            }
+        }
 
-	    [Test, TestCaseSource("PrevNextToBool")]
-	    public bool CanDecodeChar(char prev, char next) {
-	        return prev.CanDecode(next);
-	    }
+        private IEnumerable<string> InvalidString {
+            get {
+                return DataSource.InvalidEncodedString;
+            }
+        }
 
-	    [Test, TestCaseSource("PrevNextToCodeOrThrow")]
-	    public int DecodeChar(char prev, char next) {
-	        return prev.Decode(next);
-	    }
-    
-	}
+        [Test, TestCaseSource ( "ValidString" )]
+        public void DecodeValidString ( string data, IEnumerable<Code> code ) {
+            Assert.True ( data.CanDecode () );
+            List<Code> decoded = null;
+            Assert.True ( data.TryDecode ( out decoded ) );
+            Assert.True ( decoded.IsNot ( null ) );
+            Assert.True ( decoded.SequenceEqual ( code ) );
+            Assert.That ( delegate { decoded = data.Decode (); }, Throws.Nothing );
+            Assert.True ( decoded.IsNot ( null ) );
+            Assert.True ( decoded.SequenceEqual ( code ) );
+            if (data.IsNot ( null )) {
+                Assert.True ( decoded.Encode ().SequenceEqual ( data ) );
+            }
+            else {
+                Assert.True ( decoded.Encode ().IsEmpty () );
+            }
+        }
+
+        [Test, TestCaseSource ( "InvalidString" )]
+        public void DecodeInvalidString ( string data ) {
+            Assert.False ( data.CanDecode () );
+            List<Code> decoded = null;
+            Assert.False ( data.TryDecode ( out decoded ) );
+            Assert.True ( decoded == null );
+            if (data.IsNull ()) {
+                Assert.Throws<ArgumentNullException> ( delegate { data.Decode (); } );
+            }
+            else {
+                Assert.Throws<ArgumentException> ( delegate { data.Decode (); } );
+            }
+        }
+
+        [Test, TestCaseSource ( "PrevNextToBool" )]
+        public bool CanDecodeChar ( char prev, char next ) {
+            return prev.CanDecode ( next );
+        }
+
+        [Test, TestCaseSource ( "PrevNextToCodeOrThrow" )]
+        public int DecodeChar ( char prev, char next ) {
+            return prev.Decode ( next );
+        }
+    }
 }

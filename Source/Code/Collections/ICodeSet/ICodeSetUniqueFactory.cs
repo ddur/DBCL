@@ -12,32 +12,31 @@ using System.Linq;
 using DD.Diagnostics;
 using DD.Text;
 
-namespace DD.Collections.ICodeSet
-{
-	public class ICodeSetUniqueFactory
-	{
-		#region Embed
+namespace DD.Collections.ICodeSet {
+
+    public class ICodeSetUniqueFactory {
+
+        #region Embed
 
         /// <summary>QuickWrap ICodeSet over BitSetArray</summary>
-        class QuickWrap : CodeSet
-		{
-			#region Ctor
+        private class QuickWrap : CodeSet {
 
-			internal QuickWrap(BitSetArray bits)
-			{
-				Contract.Requires<ArgumentNullException> (bits.IsNot(null));
-                Contract.Requires<ArgumentEmptyException> (bits.Count != 0);
-                Contract.Requires<IndexOutOfRangeException> ((int)bits.Last <= Code.MaxValue);
+            #region Ctor
 
-				Contract.Ensures(Theory.Construct(bits, this));
+            internal QuickWrap ( BitSetArray bits ) {
+                Contract.Requires<ArgumentNullException> ( bits.IsNot ( null ) );
+                Contract.Requires<ArgumentEmptyException> ( bits.Count != 0 );
+                Contract.Requires<IndexOutOfRangeException> ( (int)bits.Last <= Code.MaxValue );
+
+                Contract.Ensures ( Theory.Construct ( bits, this ) );
 
                 this.sorted = bits;
 
-                Contract.Assume (sorted.Count > 0);
-                Contract.Assume (sorted.First.HasValue);
-                Contract.Assume (sorted.Last.HasValue);
-                Contract.Assume (sorted.First.HasCodeValue ());
-                Contract.Assume (sorted.Last.HasCodeValue ());
+                Contract.Assume ( sorted.Count > 0 );
+                Contract.Assume ( sorted.First.HasValue );
+                Contract.Assume ( sorted.Last.HasValue );
+                Contract.Assume ( sorted.First.HasCodeValue () );
+                Contract.Assume ( sorted.Last.HasCodeValue () );
 
                 this.count = sorted.Count;
                 this.length = sorted.Span ();
@@ -45,433 +44,418 @@ namespace DD.Collections.ICodeSet
                 this.final = (Code)sorted.Last;
             }
 
-			#endregion
+            #endregion
 
-			#region Fields
+            #region Fields
 
-			readonly BitSetArray sorted;
+            private readonly BitSetArray sorted;
 
             // stupid but so far this helps static checker to pass
-            readonly int count;
-            readonly int length;
-            readonly Code start;
-            readonly Code final;
+            private readonly int count;
+
+            private readonly int length;
+            private readonly Code start;
+            private readonly Code final;
 
             #endregion
 
-			#region ICodeSet
-	
-			[Pure] public override bool this[Code code] {
-				get {
-					return sorted[code.Value];
-				}
-			}
-	
-			[Pure] public override int Count {
-				get {
-					return this.count;
-				}
-			}
-	
-			[Pure] public override int Length {
-				get {
-					return this.length;
-				}
-			}
-	
-			[Pure] public override Code First {
-				get {
-					return this.start;
-				}
-			}
-	
-			[Pure] public override Code Last {
-				get {
+            #region ICodeSet
+
+            [Pure]
+            public override bool this[Code code] {
+                get {
+                    return sorted[code.Value];
+                }
+            }
+
+            [Pure]
+            public override int Count {
+                get {
+                    return this.count;
+                }
+            }
+
+            [Pure]
+            public override int Length {
+                get {
+                    return this.length;
+                }
+            }
+
+            [Pure]
+            public override Code First {
+                get {
+                    return this.start;
+                }
+            }
+
+            [Pure]
+            public override Code Last {
+                get {
                     return this.final;
-				}
-			}
-	
-			[Pure] public override IEnumerator<Code> GetEnumerator()
-			{
-				foreach (var code in sorted) {
-					yield return (Code)code;
-				}
-			}
-	
-			#endregion
+                }
+            }
 
-			#region To BitSetArray
+            [Pure]
+            public override IEnumerator<Code> GetEnumerator () {
+                foreach (var code in sorted) {
+                    yield return (Code)code;
+                }
+            }
 
-			public BitSetArray ToBitSetArray()
-			{
-				return sorted;
-			}
+            #endregion
 
-			#endregion
-	
-			#region Invariant
-	
-			[ContractInvariantMethod]
-			private void Invariant()
-			{
-				//Contract.Invariant(Theory.Invariant(this));
-			}
-	
-			#endregion
-	
-			#region Theory
-	
-			static class Theory
-			{
-	
-				[Pure] public static bool Construct(BitSetArray bits, QuickWrap self)
-				{
-					Success success = true;
+            #region To BitSetArray
 
-                    success.Assert (!bits.IsNull ());
-                    success.Assert (bits.Count > 0);
+            public BitSetArray ToBitSetArray () {
+                return sorted;
+            }
 
-                    success.Assert (bits.First.HasValue);
-                    success.Assert (bits.Last.HasValue);
+            #endregion
 
-                    success.Assert (self.sorted.First.HasCodeValue ());
-                    success.Assert (self.sorted.Last.HasCodeValue ());
+            #region Invariant
 
-                    success.Assert (self.sorted.Is (bits));
-	
-					return success;
-				}
-				
-				[Pure] public static bool Invariant(QuickWrap self)
-				{
-					Success success = true;
-					
-					// private
-					success.Assert(!self.sorted.IsNull());
-					success.Assert(self.sorted.Count > 0);
+            [ContractInvariantMethod]
+            private void Invariant () {
+                //Contract.Invariant(Theory.Invariant(this));
+            }
 
-                    success.Assert (self.sorted.First.HasValue);
-                    success.Assert (self.sorted.Last.HasValue);
-                    Contract.Assume (self.sorted.First.HasValue);
-                    Contract.Assume (self.sorted.Last.HasValue);
+            #endregion
 
-                    success.Assert (self.sorted.First.HasCodeValue ());
-                    success.Assert (self.sorted.Last.HasCodeValue ());
+            #region Theory
 
-					// public <- private
-                    success.Assert (self.Length == self.sorted.Span ());
-                    success.Assert (self.Count == self.sorted.Count);
-                    success.Assert (self.First == (Code)self.sorted.First);
-                    success.Assert (self.Last == (Code)self.sorted.Last);
-					
-					return success;
-				}
-			}
-	
-			#endregion
-		}
+            private static class Theory {
 
-		#endregion
+                [Pure]
+                public static bool Construct ( BitSetArray bits, QuickWrap self ) {
+                    Success success = true;
 
-		#region Fields
+                    success.Assert ( !bits.IsNull () );
+                    success.Assert ( bits.Count > 0 );
 
-		private readonly C5.HashSet<ICodeSet> dictionary = new C5.HashSet<ICodeSet>(); 
+                    success.Assert ( bits.First.HasValue );
+                    success.Assert ( bits.Last.HasValue );
 
-		#endregion
+                    success.Assert ( self.sorted.First.HasCodeValue () );
+                    success.Assert ( self.sorted.Last.HasCodeValue () );
 
-		#region From items
+                    success.Assert ( self.sorted.Is ( bits ) );
 
-		public ICodeSet From(string utf16)
-		{
-			Contract.Requires<ArgumentException> (utf16.CanDecode());
-			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
-			Contract.Ensures(Theory.From(utf16, this, Contract.Result<ICodeSet>()));
+                    return success;
+                }
 
-			return string.IsNullOrEmpty(utf16) ? CodeSetNone.Singleton : From(utf16.Decode());
-		}
+                [Pure]
+                public static bool Invariant ( QuickWrap self ) {
+                    Success success = true;
 
-		public ICodeSet From(params char[] chars)
-		{
-			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
-			Contract.Ensures(Theory.From(chars, this, Contract.Result<ICodeSet>()));
+                    // private
+                    success.Assert ( !self.sorted.IsNull () );
+                    success.Assert ( self.sorted.Count > 0 );
 
-			return chars.IsNullOrEmpty() ? CodeSetNone.Singleton : From(chars.ToValues());
-		}
+                    success.Assert ( self.sorted.First.HasValue );
+                    success.Assert ( self.sorted.Last.HasValue );
+                    Contract.Assume ( self.sorted.First.HasValue );
+                    Contract.Assume ( self.sorted.Last.HasValue );
 
-		public ICodeSet From(IEnumerable<char> chars)
-		{
-			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
-			Contract.Ensures(Theory.From(chars, this, Contract.Result<ICodeSet>()));
+                    success.Assert ( self.sorted.First.HasCodeValue () );
+                    success.Assert ( self.sorted.Last.HasCodeValue () );
 
-			return chars.IsNullOrEmpty() ? CodeSetNone.Singleton : From(chars.ToValues());
-		}
+                    // public <- private
+                    success.Assert ( self.Length == self.sorted.Span () );
+                    success.Assert ( self.Count == self.sorted.Count );
+                    success.Assert ( self.First == (Code)self.sorted.First );
+                    success.Assert ( self.Last == (Code)self.sorted.Last );
 
-		public ICodeSet From(IEnumerable<Code> codes)
-		{
-			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
-			Contract.Ensures(Theory.From(codes, this, Contract.Result<ICodeSet>()));
+                    return success;
+                }
+            }
 
-			return codes.IsNullOrEmpty() ? CodeSetNone.Singleton : From(codes.ToValues());
-		}
-
-		public ICodeSet From(params int[] values)
-		{
-			Contract.Requires<ArgumentException> (values.IsNullOrEmpty() || Contract.ForAll(values, value => value.HasCodeValue()));
-
-			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
-			Contract.Ensures(Theory.From(values, this, Contract.Result<ICodeSet>()));
-
-			return values.IsNullOrEmpty() ? CodeSetNone.Singleton : QuickFrom(BitSetArray.From(values));
-		}
-
-		public ICodeSet From(IEnumerable<int> values)
-		{
-			Contract.Requires<ArgumentException> (values.IsNullOrEmpty() || Contract.ForAll(values, value => value.HasCodeValue()));
-
-			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
-			Contract.Ensures(Theory.From(values, this, Contract.Result<ICodeSet>()));
-
-			return values.IsNullOrEmpty() ? CodeSetNone.Singleton : QuickFrom(BitSetArray.From(values));
-		}
-
-        public ICodeSet From (BitSetArray bits) {
-            Contract.Requires<ArgumentException> (bits.IsNullOrEmpty () || bits.Length <= Code.MaxCount || (int)bits.Last <= Code.MaxValue);
-
-            Contract.Ensures (Theory.Result (this, Contract.Result<ICodeSet> ()));
-            Contract.Ensures (Theory.From (bits, this, Contract.Result<ICodeSet> ()));
-
-            return bits.IsNullOrEmpty () ? CodeSetNone.Singleton : From ((ICodeSet)CodeSetBits.From (bits, 0));
+            #endregion
         }
 
-        ICodeSet QuickFrom (BitSetArray bits)
-		{
-            Contract.Requires<ArgumentException> (bits.IsNullOrEmpty() || bits.Length <= Code.MaxCount || (int)bits.Last <= Code.MaxValue);
+        #endregion
 
-			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
-			Contract.Ensures(Theory.From(bits, this, Contract.Result<ICodeSet>()));
+        #region Fields
 
-            return bits.IsNullOrEmpty () ? CodeSetNone.Singleton : From ((ICodeSet)new QuickWrap(bits));
+        private readonly C5.HashSet<ICodeSet> dictionary = new C5.HashSet<ICodeSet> ();
+
+        #endregion
+
+        #region From items
+
+        public ICodeSet From ( string utf16 ) {
+            Contract.Requires<ArgumentException> ( utf16.CanDecode () );
+            Contract.Ensures ( Theory.Result ( this, Contract.Result<ICodeSet> () ) );
+            Contract.Ensures ( Theory.From ( utf16, this, Contract.Result<ICodeSet> () ) );
+
+            return string.IsNullOrEmpty ( utf16 ) ? CodeSetNone.Singleton : From ( utf16.Decode () );
         }
 
-		public ICodeSet From(ICodeSet iset)
-		{
-			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
-			Contract.Ensures(Theory.From(iset, this, Contract.Result<ICodeSet>()));
+        public ICodeSet From ( params char[] chars ) {
+            Contract.Ensures ( Theory.Result ( this, Contract.Result<ICodeSet> () ) );
+            Contract.Ensures ( Theory.From ( chars, this, Contract.Result<ICodeSet> () ) );
 
-			if (iset.IsNull()) {
-				return CodeSetNone.Singleton;
-			}
-			ICodeSet key = iset;
-			if (!dictionary.Find(ref key)) {
-				var qset = iset as QuickWrap;
-				key = !qset.IsNull() ? qset.ToBitSetArray().Reduce() : iset.Reduce();
-				dictionary.Add(key);
-			}
-			return key;
-		}
+            return chars.IsNullOrEmpty () ? CodeSetNone.Singleton : From ( chars.ToValues () );
+        }
 
-		#endregion
+        public ICodeSet From ( IEnumerable<char> chars ) {
+            Contract.Ensures ( Theory.Result ( this, Contract.Result<ICodeSet> () ) );
+            Contract.Ensures ( Theory.From ( chars, this, Contract.Result<ICodeSet> () ) );
 
-		#region Sets Factored
+            return chars.IsNullOrEmpty () ? CodeSetNone.Singleton : From ( chars.ToValues () );
+        }
 
-		public IEnumerable<ICodeSet> Factored {
-			get {
-                Contract.Ensures(Contract.Result<IEnumerable<ICodeSet>>().IsNot(null));
-                foreach (var item in dictionary)
-                {
-					yield return item;
-				}
-			}
-		}
+        public ICodeSet From ( IEnumerable<Code> codes ) {
+            Contract.Ensures ( Theory.Result ( this, Contract.Result<ICodeSet> () ) );
+            Contract.Ensures ( Theory.From ( codes, this, Contract.Result<ICodeSet> () ) );
 
-		#endregion
+            return codes.IsNullOrEmpty () ? CodeSetNone.Singleton : From ( codes.ToValues () );
+        }
 
-		#region Set Operations
+        public ICodeSet From ( params int[] values ) {
+            Contract.Requires<ArgumentException> ( values.IsNullOrEmpty () || Contract.ForAll ( values, value => value.HasCodeValue () ) );
 
-		// ICodeSet operation names differ from ISet<T> names because
-		// ICodeSet operation does not mutate any operand and returns new set.
-		// (like string, unlike ISet<T> operations)
+            Contract.Ensures ( Theory.Result ( this, Contract.Result<ICodeSet> () ) );
+            Contract.Ensures ( Theory.From ( values, this, Contract.Result<ICodeSet> () ) );
 
-		#region Union bits.Or(a,b,c...)
+            return values.IsNullOrEmpty () ? CodeSetNone.Singleton : QuickFrom ( BitSetArray.From ( values ) );
+        }
 
-		public ICodeSet Union(ICodeSet lhs, ICodeSet rhs, params ICodeSet[] opt)
-		{
-			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
+        public ICodeSet From ( IEnumerable<int> values ) {
+            Contract.Requires<ArgumentException> ( values.IsNullOrEmpty () || Contract.ForAll ( values, value => value.HasCodeValue () ) );
 
-			return QuickFrom(lhs.BitUnion(rhs, opt));
-		}
+            Contract.Ensures ( Theory.Result ( this, Contract.Result<ICodeSet> () ) );
+            Contract.Ensures ( Theory.From ( values, this, Contract.Result<ICodeSet> () ) );
 
-		public ICodeSet Union(IEnumerable<ICodeSet> sets)
-		{
-            Contract.Requires<ArgumentNullException> (sets.IsNot(null));
-			Contract.Requires<ArgumentException> (sets.Count() >= 2);
+            return values.IsNullOrEmpty () ? CodeSetNone.Singleton : QuickFrom ( BitSetArray.From ( values ) );
+        }
 
-			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
+        public ICodeSet From ( BitSetArray bits ) {
+            Contract.Requires<ArgumentException> ( bits.IsNullOrEmpty () || bits.Length <= Code.MaxCount || (int)bits.Last <= Code.MaxValue );
 
-			return QuickFrom(sets.BitUnion());
-		}
+            Contract.Ensures ( Theory.Result ( this, Contract.Result<ICodeSet> () ) );
+            Contract.Ensures ( Theory.From ( bits, this, Contract.Result<ICodeSet> () ) );
 
-		#endregion
+            return bits.IsNullOrEmpty () ? CodeSetNone.Singleton : From ( (ICodeSet)CodeSetBits.From ( bits, 0 ) );
+        }
 
-		#region Intersection bits.And(((a,b),c),d...)
+        private ICodeSet QuickFrom ( BitSetArray bits ) {
+            Contract.Requires<ArgumentException> ( bits.IsNullOrEmpty () || bits.Length <= Code.MaxCount || (int)bits.Last <= Code.MaxValue );
 
-		public ICodeSet Intersection(ICodeSet lhs, ICodeSet rhs, params ICodeSet[] opt)
-		{
-			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
+            Contract.Ensures ( Theory.Result ( this, Contract.Result<ICodeSet> () ) );
+            Contract.Ensures ( Theory.From ( bits, this, Contract.Result<ICodeSet> () ) );
 
-			return QuickFrom(lhs.BitIntersection(rhs, opt));
-		}
+            return bits.IsNullOrEmpty () ? CodeSetNone.Singleton : From ( (ICodeSet)new QuickWrap ( bits ) );
+        }
 
-		public ICodeSet Intersection(IEnumerable<ICodeSet> sets)
-		{
-            Contract.Requires<ArgumentNullException> (sets.IsNot(null));
-			Contract.Requires<ArgumentException> (sets.Count() >= 2);
+        public ICodeSet From ( ICodeSet iset ) {
+            Contract.Ensures ( Theory.Result ( this, Contract.Result<ICodeSet> () ) );
+            Contract.Ensures ( Theory.From ( iset, this, Contract.Result<ICodeSet> () ) );
 
-			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
+            if (iset.IsNull ()) {
+                return CodeSetNone.Singleton;
+            }
+            ICodeSet key = iset;
+            if (!dictionary.Find ( ref key )) {
+                var qset = iset as QuickWrap;
+                key = !qset.IsNull () ? qset.ToBitSetArray ().Reduce () : iset.Reduce ();
+                dictionary.Add ( key );
+            }
+            return key;
+        }
 
-			return QuickFrom(sets.BitIntersection());
-		}
+        #endregion
 
-		#endregion
+        #region Sets Factored
 
-		#region Disjunction bits.Xor(((a,b),c),d...)
+        public IEnumerable<ICodeSet> Factored {
+            get {
+                Contract.Ensures ( Contract.Result<IEnumerable<ICodeSet>> ().IsNot ( null ) );
+                foreach (var item in dictionary) {
+                    yield return item;
+                }
+            }
+        }
 
-		public ICodeSet Disjunction(ICodeSet lhs, ICodeSet rhs, params ICodeSet[] opt)
-		{
-			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
+        #endregion
 
-			return QuickFrom(lhs.BitDisjunction(rhs, opt));
-		}
+        #region Set Operations
 
-		public ICodeSet Disjunction(IEnumerable<ICodeSet> sets)
-		{
-            Contract.Requires<ArgumentNullException> (sets.IsNot(null));
-			Contract.Requires<ArgumentException> (sets.Count() >= 2);
+        // ICodeSet operation names differ from ISet<T> names because
+        // ICodeSet operation does not mutate any operand and returns new set.
+        // (like string, unlike ISet<T> operations)
 
-			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
+        #region Union bits.Or(a,b,c...)
 
-			return QuickFrom(sets.BitDisjunction());
-		}
+        public ICodeSet Union ( ICodeSet lhs, ICodeSet rhs, params ICodeSet[] opt ) {
+            Contract.Ensures ( Theory.Result ( this, Contract.Result<ICodeSet> () ) );
 
-		#endregion
+            return QuickFrom ( lhs.BitUnion ( rhs, opt ) );
+        }
 
-		#region Difference bits.Not(((a-b)-c)-d...)
+        public ICodeSet Union ( IEnumerable<ICodeSet> sets ) {
+            Contract.Requires<ArgumentNullException> ( sets.IsNot ( null ) );
+            Contract.Requires<ArgumentException> ( sets.Count () >= 2 );
 
-		public ICodeSet Difference(ICodeSet lhs, ICodeSet rhs, params ICodeSet[] opt)
-		{
-            Contract.Ensures (Theory.Result (this, Contract.Result<ICodeSet> ()));
+            Contract.Ensures ( Theory.Result ( this, Contract.Result<ICodeSet> () ) );
 
-			return QuickFrom(lhs.BitDifference(rhs, opt));
-		}
+            return QuickFrom ( sets.BitUnion () );
+        }
 
-		public ICodeSet Difference(IEnumerable<ICodeSet> sets)
-		{
-			Contract.Requires<ArgumentNullException> (sets.IsNot(null));
-			Contract.Requires<ArgumentException> (sets.Count() >= 2);
+        #endregion
 
-			Contract.Ensures(Theory.Result(this, Contract.Result<ICodeSet>()));
+        #region Intersection bits.And(((a,b),c),d...)
 
-			return QuickFrom(sets.BitDifference());
-		}
+        public ICodeSet Intersection ( ICodeSet lhs, ICodeSet rhs, params ICodeSet[] opt ) {
+            Contract.Ensures ( Theory.Result ( this, Contract.Result<ICodeSet> () ) );
 
-		#endregion
+            return QuickFrom ( lhs.BitIntersection ( rhs, opt ) );
+        }
 
-		#region Complement bits.Not()
+        public ICodeSet Intersection ( IEnumerable<ICodeSet> sets ) {
+            Contract.Requires<ArgumentNullException> ( sets.IsNot ( null ) );
+            Contract.Requires<ArgumentException> ( sets.Count () >= 2 );
 
-		public ICodeSet Complement(ICodeSet that)
-		{
-            Contract.Requires<ArgumentNullException> (that.IsNot(null));
-            Contract.Ensures (Theory.Result (this, Contract.Result<ICodeSet> ()));
+            Contract.Ensures ( Theory.Result ( this, Contract.Result<ICodeSet> () ) );
 
-			return QuickFrom(that.BitComplement());
-		}
+            return QuickFrom ( sets.BitIntersection () );
+        }
 
-		#endregion
+        #endregion
 
-		#endregion
+        #region Disjunction bits.Xor(((a,b),c),d...)
 
-		#region Invariant
+        public ICodeSet Disjunction ( ICodeSet lhs, ICodeSet rhs, params ICodeSet[] opt ) {
+            Contract.Ensures ( Theory.Result ( this, Contract.Result<ICodeSet> () ) );
 
-		[ContractInvariantMethod]
-		private void Invariant()
-		{
-			Contract.Invariant(dictionary.IsNot(null)); 
-			Contract.Invariant(!dictionary.Contains(CodeSetNone.Singleton)); 
-		}
+            return QuickFrom ( lhs.BitDisjunction ( rhs, opt ) );
+        }
 
-		#endregion
+        public ICodeSet Disjunction ( IEnumerable<ICodeSet> sets ) {
+            Contract.Requires<ArgumentNullException> ( sets.IsNot ( null ) );
+            Contract.Requires<ArgumentException> ( sets.Count () >= 2 );
 
-		#region Theory
+            Contract.Ensures ( Theory.Result ( this, Contract.Result<ICodeSet> () ) );
 
-		private static class Theory
-		{
-			[Pure] public static bool Result(ICodeSetUniqueFactory self, ICodeSet result)
-			{
-				Success success = true;
+            return QuickFrom ( sets.BitDisjunction () );
+        }
 
-				success.Assert(result.IsNot(null));
-				success.Assert(result.IsReduced());
+        #endregion
 
-				if (result.Count != 0) {
-					var key = result;
-					success.Assert(self.dictionary.Find(ref key));
-					success.Assert(key.Is(result));
-				}
-				return success;
-			}
+        #region Difference bits.Not(((a-b)-c)-d...)
 
-			[Pure] public static bool From(string utf16, ICodeSetUniqueFactory self, ICodeSet result)
-			{
-				Success success = true;
+        public ICodeSet Difference ( ICodeSet lhs, ICodeSet rhs, params ICodeSet[] opt ) {
+            Contract.Ensures ( Theory.Result ( this, Contract.Result<ICodeSet> () ) );
 
-				if (!utf16.IsNullOrEmpty()) {
-					success.Assert(utf16.Decode().Distinct().OrderBy(item => (item)).SequenceEqual(result));
-				} else {
-					success.Assert(result.Count == 0);
-				}
-				return success;
-			}
+            return QuickFrom ( lhs.BitDifference ( rhs, opt ) );
+        }
 
-			[Pure] public static bool From(IEnumerable<char> chars, ICodeSetUniqueFactory self, ICodeSet result)
-			{
-				Success success = true;
+        public ICodeSet Difference ( IEnumerable<ICodeSet> sets ) {
+            Contract.Requires<ArgumentNullException> ( sets.IsNot ( null ) );
+            Contract.Requires<ArgumentException> ( sets.Count () >= 2 );
 
-				if (!chars.IsNullOrEmpty()) {
-					success.Assert(chars.Distinct().OrderBy(item => (item)).Cast<Code>().SequenceEqual(result));
-				} else {
-					success.Assert(result.Count == 0);
-				}
-				return success;
-			}
+            Contract.Ensures ( Theory.Result ( this, Contract.Result<ICodeSet> () ) );
 
-			[Pure] public static bool From(IEnumerable<Code> codes, ICodeSetUniqueFactory self, ICodeSet result)
-			{
-				Success success = true;
+            return QuickFrom ( sets.BitDifference () );
+        }
 
-				if (!codes.IsNullOrEmpty()) {
-					success.Assert(codes.Distinct().OrderBy(item => (item)).SequenceEqual(result));
-				} else {
-					success.Assert(result.Count == 0);
-				}
-				return success;
-			}
+        #endregion
 
-			[Pure] public static bool From(IEnumerable<int> values, ICodeSetUniqueFactory self, ICodeSet result)
-			{
-				Success success = true;
+        #region Complement bits.Not()
 
-				if (!values.IsNullOrEmpty()) {
-					success.Assert(values.ToCodes().Distinct().OrderBy(item => (item)).SequenceEqual(result));
-				} else {
-					success.Assert(result.Count == 0);
-				}
-				return success;
-			}
+        public ICodeSet Complement ( ICodeSet that ) {
+            Contract.Requires<ArgumentNullException> ( that.IsNot ( null ) );
+            Contract.Ensures ( Theory.Result ( this, Contract.Result<ICodeSet> () ) );
 
-		}
+            return QuickFrom ( that.BitComplement () );
+        }
 
-		#endregion
-	}
+        #endregion
+
+        #endregion
+
+        #region Invariant
+
+        [ContractInvariantMethod]
+        private void Invariant () {
+            Contract.Invariant ( dictionary.IsNot ( null ) );
+            Contract.Invariant ( !dictionary.Contains ( CodeSetNone.Singleton ) );
+        }
+
+        #endregion
+
+        #region Theory
+
+        private static class Theory {
+
+            [Pure]
+            public static bool Result ( ICodeSetUniqueFactory self, ICodeSet result ) {
+                Success success = true;
+
+                success.Assert ( result.IsNot ( null ) );
+                success.Assert ( result.IsReduced () );
+
+                if (result.Count != 0) {
+                    var key = result;
+                    success.Assert ( self.dictionary.Find ( ref key ) );
+                    success.Assert ( key.Is ( result ) );
+                }
+                return success;
+            }
+
+            [Pure]
+            public static bool From ( string utf16, ICodeSetUniqueFactory self, ICodeSet result ) {
+                Success success = true;
+
+                if (!utf16.IsNullOrEmpty ()) {
+                    success.Assert ( utf16.Decode ().Distinct ().OrderBy ( item => (item) ).SequenceEqual ( result ) );
+                }
+                else {
+                    success.Assert ( result.Count == 0 );
+                }
+                return success;
+            }
+
+            [Pure]
+            public static bool From ( IEnumerable<char> chars, ICodeSetUniqueFactory self, ICodeSet result ) {
+                Success success = true;
+
+                if (!chars.IsNullOrEmpty ()) {
+                    success.Assert ( chars.Distinct ().OrderBy ( item => (item) ).Cast<Code> ().SequenceEqual ( result ) );
+                }
+                else {
+                    success.Assert ( result.Count == 0 );
+                }
+                return success;
+            }
+
+            [Pure]
+            public static bool From ( IEnumerable<Code> codes, ICodeSetUniqueFactory self, ICodeSet result ) {
+                Success success = true;
+
+                if (!codes.IsNullOrEmpty ()) {
+                    success.Assert ( codes.Distinct ().OrderBy ( item => (item) ).SequenceEqual ( result ) );
+                }
+                else {
+                    success.Assert ( result.Count == 0 );
+                }
+                return success;
+            }
+
+            [Pure]
+            public static bool From ( IEnumerable<int> values, ICodeSetUniqueFactory self, ICodeSet result ) {
+                Success success = true;
+
+                if (!values.IsNullOrEmpty ()) {
+                    success.Assert ( values.ToCodes ().Distinct ().OrderBy ( item => (item) ).SequenceEqual ( result ) );
+                }
+                else {
+                    success.Assert ( result.Count == 0 );
+                }
+                return success;
+            }
+        }
+
+        #endregion
+    }
 }
-
-

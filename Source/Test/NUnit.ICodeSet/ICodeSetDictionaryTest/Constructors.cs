@@ -4,19 +4,18 @@
 // </copyright>
 // --------------------------------------------------------------------------------
 
-
 using System;
 using NUnit.Framework;
 
-namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest
-{
-	[TestFixture]
-	public class Constructors
-	{
-		[Test]
-		public void Construct() {
-			var icsDict = new ICodeSetDictionary();
-			var icsDictTyped = new ICodeSetDictionary<Code>();
-		}
-	}
+namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest {
+
+    [TestFixture]
+    public class Constructors {
+
+        [Test]
+        public void Construct () {
+            var icsDict = new ICodeSetDictionary ();
+            var icsDictTyped = new ICodeSetDictionary<Code> ();
+        }
+    }
 }

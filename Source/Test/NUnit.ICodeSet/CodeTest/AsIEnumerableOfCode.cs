@@ -11,53 +11,50 @@ using System.Linq;
 
 using NUnit.Framework;
 
-namespace DD.Collections.ICodeSet.CodeTest
-{
+namespace DD.Collections.ICodeSet.CodeTest {
+
     [TestFixture]
-    public class AsIEnumerableOfCode
-    {
+    public class AsIEnumerableOfCode {
+
         [Test]
-        public void OfObject()
-        {
+        public void OfObject () {
             Code C = 34;
             ICodeSet ics = C;
             IEnumerable ie = C;
-            var e = ie.GetEnumerator();
+            var e = ie.GetEnumerator ();
             object[] oa = new object[ics.Length];
             int count = 0;
-            while (e.MoveNext()) {
+            while (e.MoveNext ()) {
                 oa[count] = e.Current;
                 ++count;
             }
-            Assert.True ((oa.Cast<Code>()).SequenceEqual(ics));
-            
+            Assert.True ( (oa.Cast<Code> ()).SequenceEqual ( ics ) );
         }
 
         [Test]
-        public void OfCode()
-        {
+        public void OfCode () {
             Code C = 60;
 
-            var e = ((IEnumerable<Code>)C).GetEnumerator();
-            Code[] ca = new Code[((IEnumerable<Code>)C).Count()];
+            var e = ((IEnumerable<Code>)C).GetEnumerator ();
+            Code[] ca = new Code[((IEnumerable<Code>)C).Count ()];
             int count = 0;
-            while (e.MoveNext()) {
+            while (e.MoveNext ()) {
                 ca[count] = e.Current;
                 ++count;
             }
-            Assert.True (ca.SequenceEqual(C));
+            Assert.True ( ca.SequenceEqual ( C ) );
 
             // from ICodeSet
             ICodeSet ics = C;
 
-            var eICodSet = ics.GetEnumerator();
+            var eICodSet = ics.GetEnumerator ();
             ca = new Code[ics.Length];
             count = 0;
-            while (eICodSet.MoveNext()) {
+            while (eICodSet.MoveNext ()) {
                 ca[count] = eICodSet.Current;
                 ++count;
             }
-            Assert.True (ca.SequenceEqual(ics));
+            Assert.True ( ca.SequenceEqual ( ics ) );
         }
     }
 }

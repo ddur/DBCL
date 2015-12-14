@@ -8,15 +8,14 @@ using System;
 using DD.Collections;
 using NUnit.Framework;
 
-namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members
-{
-	[TestFixture]
-	public class ToCodes
-	{
-		[Test]
-		public void TestMethod()
-		{
-			// TODO: Add your test.
-		}
-	}
+namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
+
+    [TestFixture]
+    public class ToCodes {
+
+        [Test]
+        public void TestMethod () {
+            // TODO: Add your test.
+        }
+    }
 }
