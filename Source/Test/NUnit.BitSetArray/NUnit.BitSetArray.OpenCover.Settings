@@ -1,3 +1,4 @@
 ﻿<OpenCoverSettings>
-  <Rule>+[DBCL]DD.Collections.BitSetArray*</Rule>
+  <Rule>-[*]DD.Collections.BitSetArrayTest*</Rule>
+  <Rule>+[*]DD.Collections.BitSetArray*</Rule>
 </OpenCoverSettings>

@@ -19,7 +19,7 @@ using System.Diagnostics.Contracts;
 [assembly: AssemblyConfiguration ("")]
 [assembly: AssemblyCompany ("")]
 [assembly: AssemblyProduct ("DBCL")]
-[assembly: AssemblyCopyright ("ddur@GitHub Copyright 2014/2015/2016")]
+[assembly: AssemblyCopyright ("ddur@GitHub © 2014/2015/2016")]
 [assembly: AssemblyTrademark ("")]
 [assembly: AssemblyCulture ("")]
 
