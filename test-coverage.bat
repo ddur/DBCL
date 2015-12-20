@@ -29,7 +29,7 @@
 -filter:"-[*]DD.Collections.BitSetArrayTest* +[*]DD.Collections.BitSetArray*" ^
 -target:".\packages\NUnit.Runners.Net4.2.6.4\tools\nunit-console-x86.exe" ^
 -targetdir:".\Source\Test\NUnit.BitSetArray\bin\Debug" ^
--targetargs:"\"NUnit.BitSetArray.dll\" /labels /xml=\"..\..\BitSetArray.TestResult.xml\" "
+-targetargs:"\"NUnit.BitSetArray.dll\" /labels /xml=\"TestResults.xml\" "
 @echo -------------------------------------
 @echo.
 @echo.
@@ -38,7 +38,7 @@
 -filter:"-[*]DD.Collections.ICodeSet.*Test* +[*]DD.Collections.ICodeSet* +[*]DD.Text*" ^
 -target:".\packages\NUnit.Runners.Net4.2.6.4\tools\nunit-console-x86.exe" ^
 -targetdir:".\Source\Test\NUnit.ICodeSet\bin\Debug" ^
--targetargs:"\"NUnit.ICodeSet.dll\" /labels /xml=\"..\..\ICodeSet.TestResult.xml\" "
+-targetargs:"\"NUnit.ICodeSet.dll\" /labels /xml=\"TestResults.xml\" "
 @echo -------------------------------------
 @echo.
 @echo.
@@ -47,7 +47,7 @@
 -filter:"+[*]DD.Extends*" ^
 -target:".\packages\NUnit.Runners.Net4.2.6.4\tools\nunit-console-x86.exe" ^
 -targetdir:".\Source\Test\NUnit.Extensions\bin\Debug" ^
--targetargs:"\"NUnit.Extensions.dll\" /labels /xml=\"..\..\TestResult.Extensions.xml\" "
+-targetargs:"\"NUnit.Extensions.dll\" /labels /xml=\"TestResults\" "
 @echo -------------------------------------
 @echo.
 @echo.
@@ -56,7 +56,7 @@
 -filter:"-[*]DD.Diagnostics.SuccessTest* +[*]DD.Diagnostics*" ^
 -target:".\packages\NUnit.Runners.Net4.2.6.4\tools\nunit-console-x86.exe" ^
 -targetdir:".\Source\Test\NUnit.Diagnostics\bin\Debug" ^
--targetargs:"\"NUnit.Diagnostics.dll\" /labels /xml=\"..\..\TestResult.xml\" "
+-targetargs:"\"NUnit.Diagnostics.dll\" /labels /xml=\"TestResult.xml\" "
 @echo -------------------------------------
 @echo.
 @echo.
