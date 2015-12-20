@@ -1,5 +1,6 @@
 .\test-coverage.bat
 .\create-reports.bat
 .\zip-artifacts.bat
-.\upload-coverage.ps1
+.\upload-coveralls.bat
+.\upload-codecov.bat
 (Get-Date)
