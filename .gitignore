@@ -3,7 +3,7 @@
 [Oo]bj/
 
 # mstest test results
-TestResults
+*TestResult*
 
 # OpenCover & coverage.xml via SharpDevelop
 [Oo]pen[Cc]over/
