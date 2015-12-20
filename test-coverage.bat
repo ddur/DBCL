@@ -1,14 +1,16 @@
 @echo off
+@if "%appveyor%" == "true" goto test-coverage
+
+@Rem Local Build
+@if exist "C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" ("C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" DBCL.sln)
+
+@:test-coverage
 @if exist .\artifacts\. (del /Q .\artifacts\*) else (md .\artifacts)
 
-@Rem if exist "C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" ("C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" DBCL.sln)
+@Rem OpenCover release build @"E:\GitHub\opencover\main\bin\Debug\OpenCover.Console.exe" -register:user -mergebyhash ^
+@Rem OpenCover MSI installed @"C:\Program Files (x86)\OpenCover\OpenCover.Console.exe" -register:user -mergebyhash ^
+@Rem OpenCover nuget package @".\packages\OpenCover.4.6.166\tools\OpenCover.Console.exe" -register:user -mergebyhash ^
 
-@rem test release build @"E:\GitHub\opencover\main\bin\Debug\OpenCover.Console.exe" -register:user -mergebyhash ^
-@rem test MSI installed @"C:\Program Files (x86)\OpenCover\OpenCover.Console.exe" -register:user -mergebyhash ^
-@rem test Specs tested  @"E:\GitHub\opencover\main\OpenCover.Specs\bin\Release\zipFolder\OpenCover.Console.exe" -register:user -mergebyhash ^
-@rem ORIGINAL @".\packages\OpenCover.4.6.166\tools\OpenCover.Console.exe" -register:user -mergebyhash ^
-
-@Rem "E:\GitHub\opencover\main\bin\Debug\OpenCover.Console.exe" -register:user -mergebyhash ^
 @".\packages\OpenCover.4.6.166\tools\OpenCover.Console.exe" -register:user -mergebyhash ^
 -output:".\artifacts\OpenCover.BitSetArray.xml" ^
 -filter:"-[*]DD.Collections.BitSetArray.*Test* +[*]DD.Collections.BitSetArray*" ^
@@ -18,7 +20,6 @@
 @echo -------------------------------------
 @echo.
 @echo.
-@Rem "E:\GitHub\opencover\main\bin\Debug\OpenCover.Console.exe" -register:user -mergebyhash ^
 @".\packages\OpenCover.4.6.166\tools\OpenCover.Console.exe" -register:user -mergebyhash ^
 -output:".\artifacts\OpenCover.ICodeSet.xml" ^
 -filter:"-[*]DD.Collections.ICodeSet.*Test* +[*]DD.Collections.ICodeSet* +[*]DD.Text*" ^
@@ -28,7 +29,6 @@
 @echo -------------------------------------
 @echo.
 @echo.
-@Rem "E:\GitHub\opencover\main\bin\Debug\OpenCover.Console.exe" -register:user -mergebyhash ^
 @".\packages\OpenCover.4.6.166\tools\OpenCover.Console.exe" -register:user -mergebyhash ^
 -output:".\artifacts\OpenCover.Extensions.xml" ^
 -filter:"+[*]DD.Extends*" ^
@@ -38,7 +38,6 @@
 @echo -------------------------------------
 @echo.
 @echo.
-@Rem "E:\GitHub\opencover\main\bin\Debug\OpenCover.Console.exe" -register:user -mergebyhash ^
 @".\packages\OpenCover.4.6.166\tools\OpenCover.Console.exe" -register:user -mergebyhash ^
 -output:".\artifacts\OpenCover.Diagnostics.xml" ^
 -filter:"+[*]DD.Diagnostics*" ^
@@ -47,28 +46,4 @@
 -targetargs:"\"NUnit.Diagnostics.dll\" /labels /xml=\"Diagnostics.TestResult.xml\" "
 @echo -------------------------------------
 @echo.
-@echo.
-
-@Rem change directory to artifacts
-@cd artifacts
-
-@:Codecov
-@Rem Run codecov uploader
-@if not "%appveyor%"=="true" goto RunReportGenerator
-@"SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
-@pip install codecov
-@codecov -f "OpenCover.BitSetArray.xml"
-
-@:RunReportGenerator
-@Rem Run ReportGenerator and create reports
-@"..\packages\ReportGenerator.2.3.5.0\tools\ReportGenerator" -targetdir:.\ ^
--reports:"OpenCover.BitSetArray.xml;OpenCover.ICodeSet.xml;OpenCover.Extensions.xml;OpenCover.Diagnostics.xml"
-
-@:ZipReportsToArtifactFile
-@"..\packages\7-Zip.CommandLine.9.20.0\tools\7za" a "CodeCoverage.7z" "*"
-@Rem change directory o artifacts
-@cd ..
-@echo -------------------------------------
-@echo %date%
-@echo %time%
 @echo.
