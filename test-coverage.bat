@@ -4,7 +4,7 @@
 @Rem Local Build
 @if exist "C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" ("C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" DBCL.sln)
 
-@:test-coverage
+:test-coverage
 @if exist .\artifacts\. (del /Q .\artifacts\*) else (md .\artifacts)
 
 @Rem OpenCover release build @"E:\GitHub\opencover\main\bin\Debug\OpenCover.Console.exe" -register:user -mergebyhash ^
