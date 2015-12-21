@@ -1,3 +1,4 @@
 ﻿<OpenCoverSettings>
+  <Rule>-[*]DD.Diagnostics.SuccessTest*</Rule>
   <Rule>+[*]DD.Diagnostics*</Rule>
 </OpenCoverSettings>
