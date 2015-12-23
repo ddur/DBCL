@@ -70,8 +70,8 @@ namespace DD.Collections {
                 }
                 this.ClearTail ();
                 this.count = this.range;
-                this.FirstSet (0);
-                this.LastSet (this.range - 1);
+                this.SetCacheFirst (0);
+                this.SetCacheLast (this.range - 1);
             }
         }
 
@@ -2591,8 +2591,8 @@ namespace DD.Collections {
                         Contract.Assert (this.count < this.range);
                         ++this.count; // count cannot be 0 after this line
                         if (this.count == 1) {
-                            this.FirstSet (item);
-                            this.LastSet (item);
+                            this.SetCacheFirst (item);
+                            this.SetCacheLast (item);
                         }
                         else {
                             Contract.Assert (this.count > 1);
@@ -2677,8 +2677,8 @@ namespace DD.Collections {
                         }
                     }
                 }
-                this.FirstSet (minValue);
-                this.LastSet (maxValue);
+                this.SetCacheFirst (minValue);
+                this.SetCacheLast (maxValue);
                 Contract.Assume (this.Count > 0);
             }
         }
@@ -2702,8 +2702,8 @@ namespace DD.Collections {
                                     this.array[i] = -1L;
                             }
                             this.ClearTail ();
-                            this.FirstSet (0);
-                            this.LastSet (this.range - 1);
+                            this.SetCacheFirst (0);
+                            this.SetCacheLast (this.range - 1);
                         }
                     }
                     else {
@@ -3672,34 +3672,32 @@ namespace DD.Collections {
         public int? First {
             [Pure]
             get {
-                Contract.Ensures (Theory.FirstGet (this, Contract.Result<int?> ()));
+                Contract.Ensures (Theory.FirstCached (this, Contract.Result<int?> ()));
                 Contract.Ensures (this.Count == 0 || Contract.Result<int?> ().HasValue && Contract.Result<int?> () == this.FirstOrDefault ());
                 Contract.Ensures (this.Count != 0 || !Contract.Result<int?> ().HasValue);
 
                 int? start = null;
-                if (this.count != 0) {
-                    if (this.startVersion == this.version) {
-                        start = this.startMemoize;
+                if (this.startVersion == this.version) {
+                    start = this.startMemoize;
+                }
+                else {
+                    foreach (int item in this) {
+                        start = item;
+                        break;
                     }
-                    else {
-                        foreach (int item in this) {
-                            start = item;
-                            break;
-                        }
-                        this.startMemoize = start;
-                        this.startVersion = this.version;
-                    }
+                    this.startMemoize = start;
+                    this.startVersion = this.version;
                 }
 
                 return start;
             }
         }
 
-        private void FirstSet (int value) {
+        private void SetCacheFirst (int value) {
             Contract.Requires<InvalidOperationException> (Length != 0);
             Contract.Requires<ArgumentException> (this.InRange (value));
 
-            Contract.Ensures (Theory.FirstSet (this, value));
+            Contract.Ensures (Theory.FirstCashedAfterSet (this, value));
 
             lock (SyncRoot) {
                 this.startMemoize = value;
@@ -3710,23 +3708,21 @@ namespace DD.Collections {
         public int? Last {
             [Pure]
             get {
-                Contract.Ensures (Theory.LastGet (this, Contract.Result<int?> ()));
+                Contract.Ensures (Theory.LastCached (this, Contract.Result<int?> ()));
                 Contract.Ensures (this.Count == 0 || Contract.Result<int?> ().HasValue && Contract.Result<int?> () < this.Length);
                 Contract.Ensures (this.Count != 0 || !Contract.Result<int?> ().HasValue);
 
                 int? final = null;
-                if (this.count != 0) {
-                    if (this.finalVersion == this.version) {
-                        final = this.finalMemoize;
+                if (this.finalVersion == this.version) {
+                    final = this.finalMemoize;
+                }
+                else {
+                    foreach (int item in this.Reverse ()) {
+                        final = item;
+                        break;
                     }
-                    else {
-                        foreach (int item in this.Reverse ()) {
-                            final = item;
-                            break;
-                        }
-                        this.finalMemoize = final;
-                        this.finalVersion = this.version;
-                    }
+                    this.finalMemoize = final;
+                    this.finalVersion = this.version;
                 }
 
                 Contract.Assume ((this.Count == 0 && !final.HasValue) ||
@@ -3735,11 +3731,15 @@ namespace DD.Collections {
             }
         }
 
-        private void LastSet (int value) {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        private void SetCacheLast (int value) {
             Contract.Requires<InvalidOperationException> (Length != 0);
             Contract.Requires<ArgumentException> (this.InRange (value));
 
-            Contract.Ensures (Theory.LastSet (this, value));
+            Contract.Ensures (Theory.LastCachedAfterSet (this, value));
 
             lock (SyncRoot) {
                 this.finalMemoize = value;

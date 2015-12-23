@@ -185,14 +185,14 @@ namespace DD.Collections {
                 }
                 else {
                     success.Assert (created.count <= from.count);
-                    int count = 0;
-                    foreach (int item in from) {
-                        if (item >= length)
-                            break;
-                        ++count;
-                    }
-                    success.Assert (created.count == count);
                 }
+                int count = 0;
+                foreach (int item in from) {
+                    if (item >= length)
+                        break;
+                    ++count;
+                }
+                success.Assert (created.count == count);
 
                 return success;
             }
@@ -313,25 +313,23 @@ namespace DD.Collections {
 
                 success.Assert (created.range == length);
 
+                long index = 0;
+                long input = 0;
+                foreach (var item in fromMask) {
+                    if (index >= length) {
+                        break;
+                    }
+                    if (item) {
+                        ++input;
+                    }
+                    ++index;
+                }
                 if (length >= fromMask.Count ()) {
                     success.Assert (Theory.CountOnBits (created.count, fromMask));
-                }
-                else {
-                    long index = 0;
-                    long input = 0;
-                    foreach (var item in fromMask) {
-                        if (index >= length) {
-                            break;
-                        }
-                        if (item) {
-                            ++input;
-                        }
-                        ++index;
-                    }
+                } else {
                     success.Assert (created.range == index);
                     success.Assert (created.count == input);
                 }
-
                 return success;
             }
 
@@ -1655,73 +1653,57 @@ namespace DD.Collections {
             }
 
             [Pure]
-            public static bool FirstGet (BitSetArray self, int? getValue) {
+            public static bool FirstCached (BitSetArray self, int? getValue) {
                 Success success = true;
 
                 if (self.count == 0) {
-                    success.Assert (getValue == null);
+                	success.Assert (getValue.Is (null));
                 }
                 else {
                     success.Assert (getValue.IsNot (null));
-                    success.Assert ((int)self.startVersion == self.version);
-                    success.Assert (self.startMemoize.Equals (getValue));
-                    //					foreach (var item in self) {
-                    //						success.Assert((int)getValue == item);
-                    //						break;
-                    //					}
                 }
+                success.Assert ((int)self.startVersion == self.version);
+                success.Assert (self.startMemoize.Equals (getValue));
 
                 return success;
             }
 
             [Pure]
-            public static bool FirstSet (BitSetArray self, int? setValue) {
+            public static bool FirstCashedAfterSet (BitSetArray self, int? setValue) {
                 Success success = true;
 
                 success.Assert ((int)self.startVersion == self.version);
                 success.Assert (self.startMemoize.Equals (setValue));
                 success.Assert (setValue.IsNot (null));
                 success.Assert (self.count != 0);
-                //				foreach (var item in self) {
-                //					success.Assert((int)setValue == item);
-                //					break;
-                //				}
 
                 return success;
             }
 
             [Pure]
-            public static bool LastGet (BitSetArray self, int? getValue) {
+            public static bool LastCached (BitSetArray self, int? getValue) {
                 Success success = true;
 
                 if (self.count == 0) {
-                    success.Assert (getValue == null);
+                	success.Assert (getValue.Is (null));
                 }
                 else {
                     success.Assert (getValue.IsNot (null));
-                    success.Assert ((int)self.finalVersion == self.version);
-                    success.Assert (self.finalMemoize.Equals (getValue));
-                    foreach (var item in self.Reverse ()) {
-                        success.Assert ((int)getValue == item);
-                        break;
-                    }
                 }
+                success.Assert ((int)self.finalVersion == self.version);
+                success.Assert (self.finalMemoize.Equals (getValue));
 
                 return success;
             }
 
             [Pure]
-            public static bool LastSet (BitSetArray self, int? setValue) {
+            public static bool LastCachedAfterSet (BitSetArray self, int? setValue) {
                 Success success = true;
 
                 success.Assert ((int)self.finalVersion == self.version);
                 success.Assert (self.finalMemoize.Equals (setValue));
                 success.Assert (setValue.IsNot (null));
                 success.Assert (self.count != 0);
-                foreach (var item in self.Reverse ()) {
-                    success.Assert ((int)setValue == item);
-                    break;
-                }
 
                 return success;
             }

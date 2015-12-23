@@ -1,5 +1,5 @@
 ﻿<OpenCoverSettings>
-  <Rule>-[*]DD.Collections.ICodeSet.*Test*</Rule>
+  <Rule>-[*]DD.Collections.ICodeSet*Test*</Rule>
   <Rule>+[*]DD.Collections.ICodeSet*</Rule>
   <Rule>+[*]DD.Text*</Rule>
 </OpenCoverSettings>

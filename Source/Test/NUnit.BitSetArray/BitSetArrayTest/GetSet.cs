@@ -437,12 +437,23 @@ namespace DD.Collections.BitSetArrayTest {
         [Test]
         public void Bit_SetItems () {
 #if DEBUG // _SetItems private to public.
-            // Only public members contains Contract.Require<Exception>
+            // Because only public members have generated Contract.Require<Exception> tested here
+            var test = BitSetArray.Size (2);
             Assert.That (delegate {
-                BitSetArray.Size (2)._SetItems (new int[] { 0 });
+                test._SetItems (new int[] { 0 });
             }, Throws.Nothing);
 
-            var test = BitSetArray.Size (2);
+            test = BitSetArray.Size (2);
+            Assert.That (delegate {
+                test._SetItems (new int[] { 0, 1 });
+            }, Throws.Nothing);
+
+            test = BitSetArray.Size (2);
+            Assert.That (delegate {
+                test._SetItems (new int[] { 1 });
+            }, Throws.Nothing);
+
+            test = BitSetArray.Size (2);
             Assert.That (delegate {
                 test._SetItems (null);
             }, Throws.TypeOf<ArgumentNullException> ());
@@ -454,6 +465,9 @@ namespace DD.Collections.BitSetArrayTest {
             }, Throws.TypeOf<IndexOutOfRangeException> ());
             Assert.That (delegate {
                 test._SetItems (new int[] { -1 });
+            }, Throws.TypeOf<IndexOutOfRangeException> ());
+            Assert.That (delegate {
+                test._SetItems (new int[] { 2 });
             }, Throws.TypeOf<IndexOutOfRangeException> ());
             Assert.That (delegate {
                 test._SetItems (new int[] { int.MaxValue });
