@@ -29,6 +29,7 @@ namespace DD.Collections.BitSetArrayTest.Interfaces {
             for (int i = 0; i < 100; i++) {
                 item = r.Next (0, 1000);
                 ((ICollection<int>)bs).Add (item);
+                ((ICollection<int>)bs).Add (item);
                 Assert.That (bs[item]);
             }
         }
