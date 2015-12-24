@@ -27,8 +27,8 @@
 @if "%appveyor%" == "True" set OpenCoverCommand=%OpenCoverNugetPackage% %OpenCoverOptions%
 
 @Rem NUnit output folder
-@set nunit_work_option_folder="/work:\"%artifacts_dir%\""
-@if not "%appveyor_build_folder%" == "" set nunit_work_option_folder="/work:\"%appveyor_build_folder%\""
+@set nunit_work_option_folder="/work:%artifacts_dir%"
+@if not "%appveyor_build_folder%" == "" set nunit_work_option_folder="/work:%appveyor_build_folder%"
 
 @echo AppVeyor env.variable: %appveyor%
 @echo AppVeyor Build Folder: %appveyor_build_folder%
@@ -42,7 +42,7 @@
 -filter:"+[DBCL]DD.Extends*" ^
 -target:".\packages\NUnit.Runners.Net4.2.6.4\tools\nunit-console-x86.exe" ^
 -targetdir:".\Source\Test\NUnit.Extensions\bin\Debug" ^
--targetargs:"NUnit.Extensions.dll /nologo /noshadow /result=\"Extensions.TestResult.xml\" %nunit_work_option_folder%"
+-targetargs:"NUnit.Extensions.dll /nologo /noshadow /result=\"Extensions.TestResult.xml\" %nunit_work_option_folder%\Source\Test\NUnit.Extensions\"
 @echo -------------------------------------
 @echo.
 @echo.
@@ -55,7 +55,7 @@
 -filter:"+[*]DD.Extends*" ^
 -target:".\packages\NUnit.Runners.Net4.2.6.4\tools\nunit-console-x86.exe" ^
 -targetdir:".\Source\Test\NUnit.Extensions\bin\Debug" ^
--targetargs:"NUnit.Extensions.dll /nologo /noshadow /result=\"Extensions.TestResult.xml\" %nunit_work_option_folder%"
+-targetargs:"NUnit.Extensions.dll /nologo /noshadow /result=\"Extensions.TestResult.xml\" %nunit_work_option_folder%\Source\Test\NUnit.Extensions\"
 @echo -------------------------------------
 @echo.
 @echo.
@@ -66,7 +66,7 @@
 -filter:"-[*]DD.Collections.ICodeSet.*Test* +[*]DD.Collections.ICodeSet* +[*]DD.Text*" ^
 -target:".\packages\NUnit.Runners.Net4.2.6.4\tools\nunit-console-x86.exe" ^
 -targetdir:".\Source\Test\NUnit.ICodeSet\bin\Debug" ^
--targetargs:"NUnit.ICodeSet.dll /nologo /noshadow /result=\"ICodeSet.TestResult.xml\" %nunit_work_option_folder%"
+-targetargs:"NUnit.ICodeSet.dll /nologo /noshadow /result=\"ICodeSet.TestResult.xml\" %nunit_work_option_folder%\Source\Test\NUnit.ICodeSet"
 @echo -------------------------------------
 @echo.
 @echo.
@@ -77,7 +77,7 @@
 -filter:"-[*]DD.Collections.BitSetArrayTest* +[*]DD.Collections.BitSetArray*" ^
 -target:".\packages\NUnit.Runners.Net4.2.6.4\tools\nunit-console-x86.exe" ^
 -targetdir:".\Source\Test\NUnit.BitSetArray\bin\Debug" ^
--targetargs:"NUnit.BitSetArray.dll /nologo /noshadow /result=\"BitSetArray.TestResult.xml\" %nunit_work_option_folder%"
+-targetargs:"NUnit.BitSetArray.dll /nologo /noshadow /result=\"BitSetArray.TestResult.xml\" %nunit_work_option_folder%\Source\Test\NUnit.BitSetArray\bin\Debug"
 @echo -------------------------------------
 @echo.
 @echo.
