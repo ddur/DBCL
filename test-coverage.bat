@@ -8,27 +8,55 @@
 @if exist %artifacts_dir%\. (del /Q %artifacts_dir%\*) else (md %artifacts_dir%)
 
 @Rem OpenCover Debug Build
-@set OpenCoverDebugBuild=E:\GitHub\opencover\main\bin\Debug\OpenCover.Console.exe
+@set OpenCoverDebugBuild="E:\GitHub\opencover\main\bin\Debug\OpenCover.Console.exe"
 
 @Rem OpenCover Release Build
-@set OpenCoverReleaseBuild=E:\GitHub\opencover\main\bin\Release\OpenCover.Console.exe
+@set OpenCoverReleaseBuild="E:\GitHub\opencover\main\bin\Release\OpenCover.Console.exe"
 
 @Rem OpenCover MSI Installed
-@set OpenCoverMsiInstalled=C:\Program Files (x86)\OpenCover\OpenCover.Console.exe
+@set OpenCoverMsiInstalled="C:\Program Files (x86)\OpenCover\OpenCover.Console.exe"
 
 @Rem OpenCover Nuget Package
-@set OpenCoverNugetPackage=.\packages\OpenCover.4.6.166\tools\OpenCover.Console.exe
+@set OpenCoverNugetPackage=".\packages\OpenCover.4.6.166\tools\OpenCover.Console.exe"
 
 @Rem OpenCover Options
 @set OpenCoverOptions=-register:user -threshold:1 -mergebyhash -hideskipped:All
 
 @Rem OpenCover command
-@set OpenCoverCommand=%OpenCoverReleaseBuild% %OpenCoverOptions%
+@set OpenCoverCommand=%OpenCoverMsiInstalled% %OpenCoverOptions%
 @if "%appveyor%" == "true" set OpenCoverCommand=%OpenCoverNugetPackage% %OpenCoverOptions%
 
 @Rem NUnit output folder
 @set nunit_work_option_folder="/work:\"%artifacts_dir%\""
 @if not "%appveyor_build_folder%" == "" set nunit_work_option_folder="/work:\"%appveyor_build_folder%\""
+
+@echo AppVeyor Build Folder %appveyor_build_folder%
+@echo NUnit   /Work: Folder %nunit_work_option_folder%
+@echo .
+
+@echo Runining test with -filter:"+[DBCL]DD.Extends*"
+@%OpenCoverCommand% ^
+-output:".\artifacts\OpenCover.Extensions.xml" ^
+-filter:"+[DBCL]DD.Extends*" ^
+-target:".\packages\NUnit.Runners.Net4.2.6.4\tools\nunit-console-x86.exe" ^
+-targetdir:".\Source\Test\NUnit.Extensions\bin\Debug" ^
+-targetargs:"NUnit.Extensions.dll /result=\"Extensions.TestResult.xml\" %nunit_work_option_folder%"
+@echo -------------------------------------
+@echo.
+@echo.
+@rem if not "%appveyor%" == "true" pause
+
+@echo Runining again with -filter:"+[*]DD.Extends*"
+@%OpenCoverCommand% ^
+-output:".\artifacts\OpenCover.Extensions.xml" ^
+-filter:"+[*]DD.Extends*" ^
+-target:".\packages\NUnit.Runners.Net4.2.6.4\tools\nunit-console-x86.exe" ^
+-targetdir:".\Source\Test\NUnit.Extensions\bin\Debug" ^
+-targetargs:"NUnit.Extensions.dll /result=\"Extensions.TestResult.xml\" %nunit_work_option_folder%"
+@echo -------------------------------------
+@echo.
+@echo.
+@rem if not "%appveyor%" == "true" pause
 
 @%OpenCoverCommand% ^
 -output:".\artifacts\OpenCover.ICodeSet.xml" ^
@@ -58,17 +86,6 @@
 -target:".\packages\NUnit.Runners.Net4.2.6.4\tools\nunit-console-x86.exe" ^
 -targetdir:".\Source\Test\NUnit.Diagnostics\bin\Debug" ^
 -targetargs:"NUnit.Diagnostics.dll /result=\"Diagnostics.TestResult.xml\" %nunit_work_option_folder%"
-@echo -------------------------------------
-@echo.
-@echo.
-@rem if not "%appveyor%" == "true" pause
-
-@%OpenCoverCommand% ^
--output:".\artifacts\OpenCover.Extensions.xml" ^
--filter:"+[*]DD.Extends*" ^
--target:".\packages\NUnit.Runners.Net4.2.6.4\tools\nunit-console-x86.exe" ^
--targetdir:".\Source\Test\NUnit.Extensions\bin\Debug" ^
--targetargs:"NUnit.Extensions.dll /result=\"Extensions.TestResult.xml\" %nunit_work_option_folder%"
 @echo -------------------------------------
 @echo.
 @echo.
