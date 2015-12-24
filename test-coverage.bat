@@ -1,4 +1,4 @@
-@if "%appveyor%" == "true" goto test-coverage
+@if "%appveyor%" == "True" goto test-coverage
 
 @Rem Local Build
 @if exist "C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" ("C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" DBCL.sln)
@@ -33,7 +33,7 @@
 @echo AppVeyor env.variable: %appveyor%
 @echo AppVeyor Build Folder: %appveyor_build_folder%
 @echo NUnit /work:.. Option: %nunit_work_option_folder%
-@echo .
+@echo.
 
 @echo Runining test with -filter:"+[DBCL]DD.Extends*"
 @echo.
@@ -46,7 +46,7 @@
 @echo -------------------------------------
 @echo.
 @echo.
-@rem if not "%appveyor%" == "true" pause
+@rem if not "%appveyor%" == "True" pause
 
 @echo Runining again with -filter:"+[*]DD.Extends*"
 @echo.
@@ -59,7 +59,7 @@
 @echo -------------------------------------
 @echo.
 @echo.
-@rem if not "%appveyor%" == "true" pause
+@rem if not "%appveyor%" == "True" pause
 
 @%OpenCoverCommand% ^
 -output:".\artifacts\OpenCover.ICodeSet.xml" ^
@@ -70,7 +70,7 @@
 @echo -------------------------------------
 @echo.
 @echo.
-@rem if not "%appveyor%" == "true" pause
+@rem if not "%appveyor%" == "True" pause
 
 @%OpenCoverCommand% ^
 -output:".\artifacts\OpenCover.BitSetArray.xml" ^
@@ -81,7 +81,7 @@
 @echo -------------------------------------
 @echo.
 @echo.
-@rem if not "%appveyor%" == "true" pause
+@rem if not "%appveyor%" == "True" pause
 
 @%OpenCoverCommand% ^
 -output:".\artifacts\OpenCover.Diagnostics.xml" ^
@@ -92,4 +92,4 @@
 @echo -------------------------------------
 @echo.
 @echo.
-@rem if not "%appveyor%" == "true" pause
+@rem if not "%appveyor%" == "True" pause
