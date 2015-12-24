@@ -27,8 +27,7 @@
 @if "%appveyor%" == "True" set OpenCoverCommand=%OpenCoverNugetPackage% %OpenCoverOptions%
 
 @Rem NUnit output folder
-@set nunit_work_option_folder="/work:%artifacts_dir%"
-@if not "%appveyor_build_folder%" == "" set nunit_work_option_folder="/work:%appveyor_build_folder%"
+@set nunit_work_option_folder=/work:%cd%
 
 @echo AppVeyor env.variable: %appveyor%
 @echo AppVeyor Build Folder: %appveyor_build_folder%
@@ -42,7 +41,7 @@
 -filter:"+[DBCL]DD.Extends*" ^
 -target:".\packages\NUnit.Runners.Net4.2.6.4\tools\nunit-console-x86.exe" ^
 -targetdir:".\Source\Test\NUnit.Extensions\bin\Debug" ^
--targetargs:"NUnit.Extensions.dll /nologo /noshadow /result=\"Extensions.TestResult.xml\" %nunit_work_option_folder%\Source\Test\NUnit.Extensions\"
+-targetargs:"NUnit.Extensions.dll /nologo /noshadow /result=\"TestResult.xml\" %nunit_work_option_folder%\Source\Test\NUnit.Extensions\"
 @echo -------------------------------------
 @echo.
 @echo.
@@ -55,7 +54,7 @@
 -filter:"+[*]DD.Extends*" ^
 -target:".\packages\NUnit.Runners.Net4.2.6.4\tools\nunit-console-x86.exe" ^
 -targetdir:".\Source\Test\NUnit.Extensions\bin\Debug" ^
--targetargs:"NUnit.Extensions.dll /nologo /noshadow /result=\"Extensions.TestResult.xml\" %nunit_work_option_folder%\Source\Test\NUnit.Extensions\"
+-targetargs:"NUnit.Extensions.dll /nologo /noshadow /result=\"TestResult.xml\" %nunit_work_option_folder%"
 @echo -------------------------------------
 @echo.
 @echo.
