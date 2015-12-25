@@ -1,7 +1,7 @@
 @.\test-coverage.bat
 @.\create-reports.bat
-@.\zip-artifacts.bat
 @.\upload-coveralls.bat
+@.\zip-artifacts.bat
 @echo.
 @echo %date% %time%
 @echo.

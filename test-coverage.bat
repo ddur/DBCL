@@ -4,7 +4,7 @@
 @if exist "C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" ("C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" DBCL.sln)
 
 :test-coverage
-@set artifacts_dir=%cd%\artifacts
+@set artifacts_dir=%cd%\reports
 @if exist %artifacts_dir%\. (del /Q %artifacts_dir%\*) else (md %artifacts_dir%)
 
 @Rem OpenCover Debug Build
@@ -31,6 +31,7 @@
 
 @echo AppVeyor env.variable: %appveyor%
 @echo AppVeyor Build Folder: %appveyor_build_folder%
+@echo Current Directory    : %cd%
 @echo NUnit /work:.. Option: %nunit_work_option_folder%
 @echo.
 
