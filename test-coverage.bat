@@ -51,11 +51,11 @@
 @echo Runining test with -filter:"+[DBCL]DD.Extends*"
 @echo.
 @%OpenCoverCommand% ^
--output:"%dbcl_artifacts_folder%\OpenCover.Extensions.xml" ^
+-output:"%dbcl_artifacts_folder%\OpenCover.Extensions_a.xml" ^
 -filter:"+[DBCL]DD.Extends*" ^
 -target:"%dbcl_nunit_runner_console%" ^
 -targetdir:".\Source\Test\NUnit.Extensions\bin\Debug" ^
--targetargs:"NUnit.Extensions.dll /result=\"TestResult.xml\" %dbcl_nunit_runner_options%"
+-targetargs:"NUnit.Extensions.dll /result=\"NUnit.Extensions_a.xml\" %dbcl_nunit_runner_options%"
 @echo -------------------------------------
 @echo.
 @echo.
@@ -64,11 +64,11 @@
 @echo Runining again with -filter:"+[*]DD.Extends*"
 @echo.
 @%OpenCoverCommand% ^
--output:"%dbcl_artifacts_folder%\OpenCover.Extensions.xml" ^
+-output:"%dbcl_artifacts_folder%\OpenCover.Extensions_b.xml" ^
 -filter:"+[*]DD.Extends*" ^
 -target:"%dbcl_nunit_runner_console%" ^
 -targetdir:".\Source\Test\NUnit.Extensions\bin\Debug" ^
--targetargs:"NUnit.Extensions.dll /result=\"TestResult.xml\" %dbcl_nunit_runner_options%"
+-targetargs:"NUnit.Extensions.dll /result=\"NUnit.Extensions_b.xml\" %dbcl_nunit_runner_options%"
 @echo -------------------------------------
 @echo.
 @echo.
@@ -80,7 +80,7 @@
 -filter:"-[*]DD.Collections.ICodeSet.*Test* +[*]DD.Collections.ICodeSet* +[*]DD.Text*" ^
 -target:"%dbcl_nunit_runner_console%" ^
 -targetdir:".\Source\Test\NUnit.ICodeSet\bin\Debug" ^
--targetargs:"NUnit.ICodeSet.dll /result=\"ICodeSet.TestResult.xml\" %dbcl_nunit_runner_options%"
+-targetargs:"NUnit.ICodeSet.dll /result=\"NUnit.ICodeSet.xml\" %dbcl_nunit_runner_options%"
 @echo -------------------------------------
 @echo.
 @echo.
@@ -91,7 +91,7 @@
 -filter:"-[*]DD.Collections.BitSetArrayTest* +[*]DD.Collections.BitSetArray*" ^
 -target:"%dbcl_nunit_runner_console%" ^
 -targetdir:".\Source\Test\NUnit.BitSetArray\bin\Debug" ^
--targetargs:"NUnit.BitSetArray.dll /result=\"BitSetArray.TestResult.xml\" %dbcl_nunit_runner_options%"
+-targetargs:"NUnit.BitSetArray.dll /result=\"NUnit.BitSetArray.xml\" %dbcl_nunit_runner_options%"
 @echo -------------------------------------
 @echo.
 @echo.
