@@ -12,6 +12,8 @@ coverage.*.xml
 
 # Reports
 /reports/
+OpenCover*.xml
+NUnit*.xml
 
 # NUnit
 *.nunit
