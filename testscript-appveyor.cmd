@@ -3,5 +3,5 @@
 @.\upload-coveralls.bat
 @.\zip-artifacts.bat
 @echo.
-@echo %date% %time%
 @echo.
+@echo %date% %time%

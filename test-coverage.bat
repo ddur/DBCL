@@ -61,6 +61,7 @@
 @echo.
 @echo.
 @rem if not "%appveyor%" == "True" pause
+@goto end
 
 @%OpenCoverCommand% ^
 -output:"%reports_dir%\OpenCover.ICodeSet.xml" ^
@@ -94,3 +95,5 @@
 @echo.
 @echo.
 @rem if not "%appveyor%" == "True" pause
+
+:end
