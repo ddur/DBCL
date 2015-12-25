@@ -12,8 +12,7 @@ build:
 test_script:
 - cmd: c:\projects\dbcl\test-coverage.bat
 - cmd: c:\projects\dbcl\create-reports.bat
-- cmd: c:\projects\dbcl\upload-coveralls.bat
-- cmd: c:\projects\dbcl\zip-artifact.bat
+- cmd: c:\projects\dbcl\zip-artifacts.bat
 artifacts:
 - path: reports\*.7z
   name: Coverage
