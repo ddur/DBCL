@@ -1,2 +1,2 @@
-.\packages\coveralls.io.1.3.4\tools\coveralls.net.exe --opencover ".\reports\OpenCover.*.xml" --repo-token "3HvPffZf6UKHBmBX3kZG0NSV50g3yyej5"
+@echo %dbcl_coveralls_console% %dbcl_coveralls_options%
 

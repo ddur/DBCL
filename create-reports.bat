@@ -1,6 +1,4 @@
-@echo off
-@".\packages\ReportGenerator.2.3.5.0\tools\ReportGenerator" -targetdir:.\artifacts ^
--reports:".\artifacts\OpenCover.*.xml"
+@echo %dbcl_report_generator_console% %dbcl_report_generator_options%
 @echo -------------------------------------
 @echo.
 @echo.

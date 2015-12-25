@@ -1,11 +1,17 @@
-@if "%appveyor%" == "True" goto test-coverage
+@if "%appveyor%" == "True" set dbcl_build_folder=%appveyor_build_folder% else dbcl_build_folder=%cd%
 
-@Rem Local Build
-@if exist "C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" ("C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" DBCL.sln)
+@set dbcl_artifacts_folder=%dbcl_build_folder%\reports
+@if exist %dbcl_artifacts_folder%\. (del /Q %dbcl_artifacts_folder%\*) else (md %dbcl_artifacts_folder%)
+@set dbcl_packages_folder=%dbcl_build_folder%\packages
+@set dbcl_nunit_runner_console=%dbcl_packages_folder%\NUnit.Runners.Net4.2.6.4\tools\nunit-console-x86.exe
 
-:test-coverage
-@set reports_dir=%cd%\reports
-@if exist %reports_dir%\. (del /Q %reports_dir%\*) else (md %reports_dir%)
+@set dbcl_zip_console=%dbcl_packages_folder%\7-Zip.CommandLine.9.20.0\tools\7za.exe
+
+@set dbcl_coveralls_console=%dbcl_packages_folder%\coveralls.io.1.3.4\tools\coveralls.net.exe
+@set dbcl_coveralls_options=--opencover %dbcl_artifacts_folder%\OpenCover.*.xml --repo-token "3HvPffZf6UKHBmBX3kZG0NSV50g3yyej5"
+
+@set dbcl_report_generator_console=%dbcl_packages_folder%\ReportGenerator.2.3.5.0\tools\ReportGenerator.exe
+@set dbcl_report_generator_options=-targetdir:%dbcl_artifacts_folder% -reports:%dbcl_artifacts_folder%\OpenCover.*.xml
 
 @Rem OpenCover Debug Build
 @set OpenCoverDebugBuild="E:\GitHub\opencover\main\bin\Debug\OpenCover.Console.exe"
@@ -26,24 +32,30 @@
 @set OpenCoverCommand=%OpenCoverMsiInstalled% %OpenCoverOptions%
 @if "%appveyor%" == "True" set OpenCoverCommand=%OpenCoverNugetPackage% %OpenCoverOptions%
 
-@Rem NUnit output folder
-@set nunit_work_option_folder=/work:%reports_dir%
+@Rem NUnit Options
+@set nunit_options=/nologo /noshadow /work:%dbcl_artifacts_folder%
 
-@echo My Reports Directory : %reports_dir%
 @echo AppVeyor env.variable: %appveyor%
 @echo AppVeyor Build Folder: %appveyor_build_folder%
-@echo Current Directory    : %cd%
-@echo NUnit /work:.. Option: %nunit_work_option_folder%
+@echo Current        Folder: %cd%
+@echo dbcl Artifacts Folder: %dbcl_artifacts_folder%
+@echo dbcl     Build Folder: %dbcl_build_folder%
+@echo NUnit         Options: %nunit_options%
 @echo.
 
+@if "%appveyor%" == "True" goto after-build
+@Rem Local Build
+@if exist "C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" ("C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" DBCL.sln)
+
+:after-build
 @echo Runining test with -filter:"+[DBCL]DD.Extends*"
 @echo.
 @%OpenCoverCommand% ^
--output:"%reports_dir%\OpenCover.Extensions.xml" ^
+-output:"%dbcl_artifacts_folder%\OpenCover.Extensions.xml" ^
 -filter:"+[DBCL]DD.Extends*" ^
--target:".\packages\NUnit.Runners.Net4.2.6.4\tools\nunit-console-x86.exe" ^
+-target:"%dbcl_nunit_runner_console%" ^
 -targetdir:".\Source\Test\NUnit.Extensions\bin\Debug" ^
--targetargs:"NUnit.Extensions.dll /nologo /noshadow /result=\"TestResult.xml\" %nunit_work_option_folder%"
+-targetargs:"NUnit.Extensions.dll /result=\"TestResult.xml\" %nunit_options%"
 @echo -------------------------------------
 @echo.
 @echo.
@@ -52,11 +64,11 @@
 @echo Runining again with -filter:"+[*]DD.Extends*"
 @echo.
 @%OpenCoverCommand% ^
--output:"%reports_dir%\OpenCover.Extensions.xml" ^
+-output:"%dbcl_artifacts_folder%\OpenCover.Extensions.xml" ^
 -filter:"+[*]DD.Extends*" ^
--target:".\packages\NUnit.Runners.Net4.2.6.4\tools\nunit-console-x86.exe" ^
+-target:"%dbcl_nunit_runner_console%" ^
 -targetdir:".\Source\Test\NUnit.Extensions\bin\Debug" ^
--targetargs:"NUnit.Extensions.dll /nologo /noshadow /result=\"TestResult.xml\" %nunit_work_option_folder%"
+-targetargs:"NUnit.Extensions.dll /result=\"TestResult.xml\" %nunit_options%"
 @echo -------------------------------------
 @echo.
 @echo.
@@ -64,33 +76,33 @@
 @goto end
 
 @%OpenCoverCommand% ^
--output:"%reports_dir%\OpenCover.ICodeSet.xml" ^
+-output:"%dbcl_artifacts_folder%\OpenCover.ICodeSet.xml" ^
 -filter:"-[*]DD.Collections.ICodeSet.*Test* +[*]DD.Collections.ICodeSet* +[*]DD.Text*" ^
--target:".\packages\NUnit.Runners.Net4.2.6.4\tools\nunit-console-x86.exe" ^
+-target:"%dbcl_nunit_runner_console%" ^
 -targetdir:".\Source\Test\NUnit.ICodeSet\bin\Debug" ^
--targetargs:"NUnit.ICodeSet.dll /nologo /noshadow /result=\"ICodeSet.TestResult.xml\" %nunit_work_option_folder%"
+-targetargs:"NUnit.ICodeSet.dll /result=\"ICodeSet.TestResult.xml\" %nunit_options%"
 @echo -------------------------------------
 @echo.
 @echo.
 @rem if not "%appveyor%" == "True" pause
 
 @%OpenCoverCommand% ^
--output:"%reports_dir%\OpenCover.BitSetArray.xml" ^
+-output:"%dbcl_artifacts_folder%\OpenCover.BitSetArray.xml" ^
 -filter:"-[*]DD.Collections.BitSetArrayTest* +[*]DD.Collections.BitSetArray*" ^
--target:".\packages\NUnit.Runners.Net4.2.6.4\tools\nunit-console-x86.exe" ^
+-target:"%dbcl_nunit_runner_console%" ^
 -targetdir:".\Source\Test\NUnit.BitSetArray\bin\Debug" ^
--targetargs:"NUnit.BitSetArray.dll /nologo /noshadow /result=\"BitSetArray.TestResult.xml\" %nunit_work_option_folder%"
+-targetargs:"NUnit.BitSetArray.dll /result=\"BitSetArray.TestResult.xml\" %nunit_options%"
 @echo -------------------------------------
 @echo.
 @echo.
 @rem if not "%appveyor%" == "True" pause
 
 @%OpenCoverCommand% ^
--output:"%reports_dir%\OpenCover.Diagnostics.xml" ^
+-output:"%dbcl_artifacts_folder%\OpenCover.Diagnostics.xml" ^
 -filter:"-[*]DD.Diagnostics.SuccessTest* +[*]DD.Diagnostics*" ^
--target:".\packages\NUnit.Runners.Net4.2.6.4\tools\nunit-console-x86.exe" ^
+-target:"%dbcl_nunit_runner_console%" ^
 -targetdir:".\Source\Test\NUnit.Diagnostics\bin\Debug" ^
--targetargs:"NUnit.Diagnostics.dll /nologo /noshadow /result=\"Diagnostics.TestResult.xml\" %nunit_work_option_folder%"
+-targetargs:"NUnit.Diagnostics.dll /result=\"Diagnostics.TestResult.xml\" %nunit_options%"
 @echo -------------------------------------
 @echo.
 @echo.

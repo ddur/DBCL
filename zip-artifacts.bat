@@ -1,6 +1,6 @@
 @echo off
-@rem ".\packages\7-Zip.CommandLine.9.20.0\tools\7za" a ".\reports\CodeCoverage.7z" ".\reports\*"
-@rem if "%appveyor%"=="True" appveyor PushArtifact ".\reports\CodeCoverage.7z"
+@echo if "%appveyor%"=="True" appveyor PushArtifact "%dbcl_artifacts_folder%\*.xml"
+@echo %dbcl_zip_console% a "%dbcl_artifacts_folder%\CodeCoverage.7z" "%dbcl_artifacts_folder%\*"
 @echo -------------------------------------
 @echo.
 @echo.
