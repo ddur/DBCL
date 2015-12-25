@@ -10,7 +10,8 @@ build:
   project: DBCL.sln
   verbosity: quiet
 test_script:
-- cmd: c:\projects\dbcl\testscript-appveyor.cmd
+- cmd: c:\projects\dbcl\test-coverage.bat
+- cmd: c:\projects\dbcl\create-reports.bat
 artifacts:
 - path: reports\*.xml
   name: Coverage
