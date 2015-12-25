@@ -1,9 +1,11 @@
-@if "%appveyor%" == "True" set dbcl_build_folder=%appveyor_build_folder% else dbcl_build_folder=%cd%
+@if "%appveyor%" == "True" set dbcl_build_folder=%appveyor_build_folder% else set dbcl_build_folder=%cd%
 
 @set dbcl_artifacts_folder=%dbcl_build_folder%\reports
 @if exist %dbcl_artifacts_folder%\. (del /Q %dbcl_artifacts_folder%\*) else (md %dbcl_artifacts_folder%)
 @set dbcl_packages_folder=%dbcl_build_folder%\packages
+
 @set dbcl_nunit_runner_console=%dbcl_packages_folder%\NUnit.Runners.Net4.2.6.4\tools\nunit-console-x86.exe
+@set dbcl_nunit_runner_options=/nologo /noshadow /work:%dbcl_artifacts_folder%
 
 @set dbcl_zip_console=%dbcl_packages_folder%\7-Zip.CommandLine.9.20.0\tools\7za.exe
 
@@ -32,15 +34,12 @@
 @set OpenCoverCommand=%OpenCoverMsiInstalled% %OpenCoverOptions%
 @if "%appveyor%" == "True" set OpenCoverCommand=%OpenCoverNugetPackage% %OpenCoverOptions%
 
-@Rem NUnit Options
-@set nunit_options=/nologo /noshadow /work:%dbcl_artifacts_folder%
-
 @echo AppVeyor env.variable: %appveyor%
 @echo AppVeyor Build Folder: %appveyor_build_folder%
 @echo Current        Folder: %cd%
 @echo dbcl Artifacts Folder: %dbcl_artifacts_folder%
 @echo dbcl     Build Folder: %dbcl_build_folder%
-@echo NUnit         Options: %nunit_options%
+@echo NUnit         Options: %dbcl_nunit_runner_options%
 @echo.
 
 @if "%appveyor%" == "True" goto after-build
@@ -55,7 +54,7 @@
 -filter:"+[DBCL]DD.Extends*" ^
 -target:"%dbcl_nunit_runner_console%" ^
 -targetdir:".\Source\Test\NUnit.Extensions\bin\Debug" ^
--targetargs:"NUnit.Extensions.dll /result=\"TestResult.xml\" %nunit_options%"
+-targetargs:"NUnit.Extensions.dll /result=\"TestResult.xml\" %dbcl_nunit_runner_options%"
 @echo -------------------------------------
 @echo.
 @echo.
@@ -68,7 +67,7 @@
 -filter:"+[*]DD.Extends*" ^
 -target:"%dbcl_nunit_runner_console%" ^
 -targetdir:".\Source\Test\NUnit.Extensions\bin\Debug" ^
--targetargs:"NUnit.Extensions.dll /result=\"TestResult.xml\" %nunit_options%"
+-targetargs:"NUnit.Extensions.dll /result=\"TestResult.xml\" %dbcl_nunit_runner_options%"
 @echo -------------------------------------
 @echo.
 @echo.
@@ -80,7 +79,7 @@
 -filter:"-[*]DD.Collections.ICodeSet.*Test* +[*]DD.Collections.ICodeSet* +[*]DD.Text*" ^
 -target:"%dbcl_nunit_runner_console%" ^
 -targetdir:".\Source\Test\NUnit.ICodeSet\bin\Debug" ^
--targetargs:"NUnit.ICodeSet.dll /result=\"ICodeSet.TestResult.xml\" %nunit_options%"
+-targetargs:"NUnit.ICodeSet.dll /result=\"ICodeSet.TestResult.xml\" %dbcl_nunit_runner_options%"
 @echo -------------------------------------
 @echo.
 @echo.
@@ -91,7 +90,7 @@
 -filter:"-[*]DD.Collections.BitSetArrayTest* +[*]DD.Collections.BitSetArray*" ^
 -target:"%dbcl_nunit_runner_console%" ^
 -targetdir:".\Source\Test\NUnit.BitSetArray\bin\Debug" ^
--targetargs:"NUnit.BitSetArray.dll /result=\"BitSetArray.TestResult.xml\" %nunit_options%"
+-targetargs:"NUnit.BitSetArray.dll /result=\"BitSetArray.TestResult.xml\" %dbcl_nunit_runner_options%"
 @echo -------------------------------------
 @echo.
 @echo.
@@ -102,7 +101,7 @@
 -filter:"-[*]DD.Diagnostics.SuccessTest* +[*]DD.Diagnostics*" ^
 -target:"%dbcl_nunit_runner_console%" ^
 -targetdir:".\Source\Test\NUnit.Diagnostics\bin\Debug" ^
--targetargs:"NUnit.Diagnostics.dll /result=\"Diagnostics.TestResult.xml\" %nunit_options%"
+-targetargs:"NUnit.Diagnostics.dll /result=\"Diagnostics.TestResult.xml\" %dbcl_nunit_runner_options%"
 @echo -------------------------------------
 @echo.
 @echo.
