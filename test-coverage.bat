@@ -1,4 +1,5 @@
-@if "%appveyor%" == "True" set dbcl_build_folder=%appveyor_build_folder% else set dbcl_build_folder=%cd%
+@set dbcl_build_folder=%cd%
+@if "%appveyor%" == "True" set dbcl_build_folder=%appveyor_build_folder%
 
 @set dbcl_artifacts_folder=%dbcl_build_folder%\reports
 @if exist %dbcl_artifacts_folder%\. (del /Q %dbcl_artifacts_folder%\*) else (md %dbcl_artifacts_folder%)
