@@ -43,7 +43,7 @@
 -filter:"+[DBCL]DD.Extends*" ^
 -target:".\packages\NUnit.Runners.Net4.2.6.4\tools\nunit-console-x86.exe" ^
 -targetdir:".\Source\Test\NUnit.Extensions\bin\Debug" ^
--targetargs:"NUnit.Extensions.dll /nologo /noshadow /result=\"TestResult.xml\" "
+-targetargs:"NUnit.Extensions.dll"
 @echo -------------------------------------
 @echo.
 @echo.
@@ -56,7 +56,7 @@
 -filter:"+[*]DD.Extends*" ^
 -target:".\packages\NUnit.Runners.Net4.2.6.4\tools\nunit-console-x86.exe" ^
 -targetdir:".\Source\Test\NUnit.Extensions\bin\Debug" ^
--targetargs:"NUnit.Extensions.dll /nologo /noshadow /result=\"TestResult.xml\" "
+-targetargs:"NUnit.Extensions.dll"
 @echo -------------------------------------
 @echo.
 @echo.
@@ -67,7 +67,7 @@
 -filter:"-[*]DD.Collections.ICodeSet.*Test* +[*]DD.Collections.ICodeSet* +[*]DD.Text*" ^
 -target:".\packages\NUnit.Runners.Net4.2.6.4\tools\nunit-console-x86.exe" ^
 -targetdir:".\Source\Test\NUnit.ICodeSet\bin\Debug" ^
--targetargs:"NUnit.ICodeSet.dll /nologo /noshadow /result=\"ICodeSet.TestResult.xml\" "
+-targetargs:"NUnit.ICodeSet.dll"
 @echo -------------------------------------
 @echo.
 @echo.
@@ -78,7 +78,7 @@
 -filter:"-[*]DD.Collections.BitSetArrayTest* +[*]DD.Collections.BitSetArray*" ^
 -target:".\packages\NUnit.Runners.Net4.2.6.4\tools\nunit-console-x86.exe" ^
 -targetdir:".\Source\Test\NUnit.BitSetArray\bin\Debug" ^
--targetargs:"NUnit.BitSetArray.dll /nologo /noshadow /result=\"BitSetArray.TestResult.xml\" "
+-targetargs:"NUnit.BitSetArray.dll"
 @echo -------------------------------------
 @echo.
 @echo.
@@ -89,7 +89,7 @@
 -filter:"-[*]DD.Diagnostics.SuccessTest* +[*]DD.Diagnostics*" ^
 -target:".\packages\NUnit.Runners.Net4.2.6.4\tools\nunit-console-x86.exe" ^
 -targetdir:".\Source\Test\NUnit.Diagnostics\bin\Debug" ^
--targetargs:"NUnit.Diagnostics.dll /nologo /noshadow /result=\"Diagnostics.TestResult.xml\" "
+-targetargs:"NUnit.Diagnostics.dll"
 @echo -------------------------------------
 @echo.
 @echo.
