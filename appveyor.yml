@@ -11,3 +11,6 @@ build:
   verbosity: quiet
 test_script:
 - cmd: c:\projects\dbcl\testscript-appveyor.cmd
+artifacts:
+- path: reports\*.xml
+  name: Coverage
