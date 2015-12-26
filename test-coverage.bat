@@ -6,7 +6,7 @@
 @set dbcl_packages_folder=%dbcl_build_folder%\packages
 
 @set dbcl_nunit_runner_console=%dbcl_packages_folder%\NUnit.Runners.Net4.2.6.4\tools\nunit-console-x86.exe
-@set dbcl_nunit_runner_options=/nologo /noshadow /work:%dbcl_artifacts_folder%
+@set dbcl_nunit_runner_options=/nologo /noshadow /out:nul /work:%dbcl_artifacts_folder%
 
 @set dbcl_zip_console=%dbcl_packages_folder%\7-Zip.CommandLine.9.20.0\tools\7za.exe
 
