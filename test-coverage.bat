@@ -58,11 +58,11 @@
 @echo Runining test with -filter:"+[DBCL]DD.Extends*"
 @echo.
 @%OpenCoverCommandAndOptions% ^
--output:"%dbcl_artifacts_folder%\OpenCover.Extensions_a.xml" ^
+-output:"%dbcl_artifacts_folder%\OpenCover.Extensions.xml" ^
 -filter:"+[DBCL]DD.Extends*" ^
 -target:"%dbcl_nunit_runner_console%" ^
 -targetdir:".\Source\Test\NUnit.Extensions\bin\Debug" ^
--targetargs:"NUnit.Extensions.dll /result=\"NUnit.Extensions_a.xml\" %dbcl_nunit_runner_options%"
+-targetargs:"NUnit.Extensions.dll /result=\"NUnit.Extensions.xml\" %dbcl_nunit_runner_options%"
 @echo -------------------------------------
 @echo.
 @echo.
@@ -95,7 +95,7 @@
 -filter:"+[DBCL]DD.Diagnostics*" ^
 -target:"%dbcl_nunit_runner_console%" ^
 -targetdir:".\Source\Test\NUnit.Diagnostics\bin\Debug" ^
--targetargs:"NUnit.Diagnostics.dll /result=\"Diagnostics.TestResult.xml\" %dbcl_nunit_runner_options%"
+-targetargs:"NUnit.Diagnostics.dll /result=\"NUnit.Diagnostics.xml\" %dbcl_nunit_runner_options%"
 @echo -------------------------------------
 @echo.
 @echo.
