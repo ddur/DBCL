@@ -55,48 +55,22 @@
 @Rem Local Build?
 @if not "%appveyor%" == "True" if exist "C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" ("C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" DBCL.sln)
 
-@echo Runining test with -filter:"+[DBCL]DD.Extends*"
-@echo.
-@%OpenCoverCommandAndOptions% ^
--output:"%dbcl_artifacts_folder%\OpenCover.Extensions.xml" ^
--filter:"+[DBCL]DD.Extends*" ^
--target:"%dbcl_nunit_runner_console%" ^
--targetdir:".\Source\Test\NUnit.Extensions\bin\Debug" ^
--targetargs:"NUnit.Extensions.dll /result=\"NUnit.Extensions.xml\" %dbcl_nunit_runner_options%"
-@echo -------------------------------------
-@echo.
-@echo.
-@rem if not "%appveyor%" == "True" pause
+@call :run-single-test "Extensions"  "+[DBCL]DD.Extends*"
+@call :run-single-test "ICodeSet"    "+[DBCL]DD.Collections.ICodeSet* +[DBCL]DD.Text*"
+@call :run-single-test "BitSetArray" "+[DBCL]DD.Collections.BitSetArray*"
+@call :run-single-test "Diagnostics" "+[DBCL]DD.Diagnostics*"
+@exit /b
 
+:run-single-test
+@echo test name: %1
+@echo filter: %2 
 @%OpenCoverCommandAndOptions% ^
--output:"%dbcl_artifacts_folder%\OpenCover.ICodeSet.xml" ^
--filter:"+[DBCL]DD.Collections.ICodeSet* +[DBCL]DD.Text*" ^
+-output:"%dbcl_artifacts_folder%\OpenCover.%1.xml" ^
+-filter:%2 ^
 -target:"%dbcl_nunit_runner_console%" ^
--targetdir:".\Source\Test\NUnit.ICodeSet\bin\Debug" ^
--targetargs:"NUnit.ICodeSet.dll /result=\"NUnit.ICodeSet.xml\" %dbcl_nunit_runner_options%"
+-targetdir:".\Source\Test\NUnit.%1\bin\Debug" ^
+-targetargs:"NUnit.%1.dll /result=\"NUnit.%1.xml\" %dbcl_nunit_runner_options%"
 @echo -------------------------------------
 @echo.
-@echo.
 @rem if not "%appveyor%" == "True" pause
-
-@%OpenCoverCommandAndOptions% ^
--output:"%dbcl_artifacts_folder%\OpenCover.BitSetArray.xml" ^
--filter:"+[DBCL]DD.Collections.BitSetArray*" ^
--target:"%dbcl_nunit_runner_console%" ^
--targetdir:".\Source\Test\NUnit.BitSetArray\bin\Debug" ^
--targetargs:"NUnit.BitSetArray.dll /result=\"NUnit.BitSetArray.xml\" %dbcl_nunit_runner_options%"
-@echo -------------------------------------
-@echo.
-@echo.
-@rem if not "%appveyor%" == "True" pause
-
-@%OpenCoverCommandAndOptions% ^
--output:"%dbcl_artifacts_folder%\OpenCover.Diagnostics.xml" ^
--filter:"+[DBCL]DD.Diagnostics*" ^
--target:"%dbcl_nunit_runner_console%" ^
--targetdir:".\Source\Test\NUnit.Diagnostics\bin\Debug" ^
--targetargs:"NUnit.Diagnostics.dll /result=\"NUnit.Diagnostics.xml\" %dbcl_nunit_runner_options%"
-@echo -------------------------------------
-@echo.
-@echo.
-@rem if not "%appveyor%" == "True" pause
+@exit /b
