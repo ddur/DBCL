@@ -19,7 +19,7 @@ test_script:
 - cmd: c:\projects\dbcl\zip-artifacts.bat
 - cmd: c:\projects\dbcl\upload-coveralls.bat
 - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
-- pip install codecov
+- pip install codecov > nul
 - codecov -f "c:\projects\dbcl\reports\OpenCover.BitSetArray.xml"
 - codecov -f "c:\projects\dbcl\reports\OpenCover.ICodeSet.xml"
 - codecov -f "c:\projects\dbcl\reports\OpenCover.Extensions.xml"
