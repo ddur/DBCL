@@ -11,7 +11,7 @@
 @set dbcl_zip_console=%dbcl_packages_folder%\7-Zip.CommandLine.9.20.0\tools\7za.exe
 
 @set dbcl_coveralls_console=%dbcl_packages_folder%\coveralls.io.1.3.4\tools\coveralls.net.exe
-@set dbcl_coveralls_options=--opencover %dbcl_artifacts_folder%\OpenCover.*.xml --repo-token "3HvPffZf6UKHBmBX3kZG0NSV50g3yyej5"
+@set dbcl_coveralls_options=--opencover %dbcl_artifacts_folder%\OpenCover.*.xml --repo-token "%coveralls_repo_token%"
 
 @set dbcl_report_generator_console=%dbcl_packages_folder%\ReportGenerator.2.3.5.0\tools\ReportGenerator.exe
 @set dbcl_report_generator_options=-targetdir:%dbcl_artifacts_folder% -reports:%dbcl_artifacts_folder%\OpenCover.*.xml

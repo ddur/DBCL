@@ -4,6 +4,9 @@ configuration: Debug
 platform: Any CPU
 shallow_clone: true
 clone_folder: c:\projects\dbcl
+environment:
+  COVERALLS_REPO_TOKEN:
+    secure: K6NMfs30rPHzaM5D9hTfzp34I8nSFoblUrW2JPlPVkn6eySTT3pJZWvP6Zbdy6K5
 before_build:
 - ps: nuget restore
 build:
@@ -14,6 +17,7 @@ test_script:
 - cmd: c:\projects\dbcl\create-reports.bat
 - cmd: c:\projects\dbcl\zip-artifacts.bat
 - ps: c:\projects\dbcl\upload-testresults.ps1
+-
 - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
 - pip install codecov > nul
 - codecov -f "c:\projects\dbcl\reports\OpenCover.BitSetArray.xml" > nul
