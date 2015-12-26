@@ -9,6 +9,8 @@ Dragon Base Class Library
 
 [![Coverage Status](https://coveralls.io/repos/ddur/DBCL/badge.svg?branch=master&service=github)](https://coveralls.io/github/ddur/DBCL?branch=master)
 
+[![codecov.io](https://codecov.io/github/ddur/DBCL/coverage.svg?branch=master)](https://codecov.io/github/ddur/DBCL?branch=master)
+
 [![Version](https://img.shields.io/badge/version-alpha-red.svg)]()
 
 
