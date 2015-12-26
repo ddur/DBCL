@@ -46,8 +46,9 @@
 @echo dbcl Artifacts Folder: %dbcl_artifacts_folder%
 @echo dbcl     Build Folder: %dbcl_build_folder%
 @echo NUnit         Options: %dbcl_nunit_runner_options%
+@echo OpenCover     Command: %OpenCoverCommand%
+@echo OpenCover     Options: %OpenCoverOptions%
 @%OpenCoverCommand% -version 
-@echo %OpenCoverCommandAndOptions%
 @rem if not "%appveyor%" == "True" pause
 @echo.
 
