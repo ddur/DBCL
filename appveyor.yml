@@ -14,10 +14,10 @@ build:
   verbosity: quiet
 test_script:
 - cmd: c:\projects\dbcl\test-coverage.bat
+- ps: c:\projects\dbcl\upload-testresults.ps1
 - cmd: c:\projects\dbcl\create-reports.bat
 - cmd: c:\projects\dbcl\zip-artifacts.bat
 - cmd: c:\projects\dbcl\upload-coveralls.bat
-- ps: c:\projects\dbcl\upload-testresults.ps1
 - @if not "%appveyor%" == "True" goto end
 - @"SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
 - @pip install codecov
