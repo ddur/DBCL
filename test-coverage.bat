@@ -6,7 +6,7 @@
 @set dbcl_packages_folder=%dbcl_build_folder%\packages
 
 @set dbcl_nunit_runner_console=%dbcl_packages_folder%\NUnit.Runners.Net4.2.6.4\tools\nunit-console-x86.exe
-@set dbcl_nunit_runner_options=/nologo /noshadow /out:nul /work:%dbcl_artifacts_folder%
+@set dbcl_nunit_runner_options=/nologo /noshadow /work:%dbcl_artifacts_folder%
 
 @set dbcl_zip_console=%dbcl_packages_folder%\7-Zip.CommandLine.9.20.0\tools\7za.exe
 
@@ -69,7 +69,7 @@
 -filter:%2 ^
 -target:"%dbcl_nunit_runner_console%" ^
 -targetdir:".\Source\Test\NUnit.%1\bin\Debug" ^
--targetargs:"NUnit.%1.dll /result=\"NUnit.%1.xml\" %dbcl_nunit_runner_options%"
+-targetargs:"NUnit.%1.dll /result=\"NUnit.%1.xml\" %dbcl_nunit_runner_options%" >nul
 @echo -------------------------------------
 @echo.
 @rem if not "%appveyor%" == "True" pause
