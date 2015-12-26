@@ -62,14 +62,14 @@
 @exit /b
 
 :run-single-test
-@echo test name: %1
-@echo filter: %2 
+@echo assembly  name: %1
+@echo filter applied: %2 
 @%OpenCoverCommandAndOptions% ^
 -output:"%dbcl_artifacts_folder%\OpenCover.%1.xml" ^
 -filter:%2 ^
 -target:"%dbcl_nunit_runner_console%" ^
 -targetdir:".\Source\Test\NUnit.%1\bin\Debug" ^
--targetargs:"NUnit.%1.dll /result=\"NUnit.%1.xml\" %dbcl_nunit_runner_options%" >nul
+-targetargs:"NUnit.%1.dll /result:\"NUnit.%1.xml\" %dbcl_nunit_runner_options%"
 @echo -------------------------------------
 @echo.
 @rem if not "%appveyor%" == "True" pause
