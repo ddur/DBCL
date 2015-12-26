@@ -56,9 +56,9 @@
 @if not "%appveyor%" == "True" if exist "C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" ("C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" DBCL.sln)
 
 @call :run-single-test "Extensions"  "+[DBCL]DD.Extends*"
-@rem call :run-single-test "ICodeSet"    "+[DBCL]DD.Collections.ICodeSet* +[DBCL]DD.Text*"
-@rem call :run-single-test "BitSetArray" "+[DBCL]DD.Collections.BitSetArray*"
-@rem call :run-single-test "Diagnostics" "+[DBCL]DD.Diagnostics*"
+@call :run-single-test "ICodeSet"    "+[DBCL]DD.Collections.ICodeSet* +[DBCL]DD.Text*"
+@call :run-single-test "BitSetArray" "+[DBCL]DD.Collections.BitSetArray*"
+@call :run-single-test "Diagnostics" "+[DBCL]DD.Diagnostics*"
 @exit /b
 
 :run-single-test
