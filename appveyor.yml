@@ -1,5 +1,5 @@
 version: 0.90.{build}
-os: Visual Studio 2013
+os: Visual Studio 2015
 configuration: Debug
 platform: Any CPU
 shallow_clone: true
@@ -14,6 +14,9 @@ test_script:
 - ps: c:\projects\dbcl\upload-testresults.ps1
 - cmd: c:\projects\dbcl\create-reports.bat
 - cmd: c:\projects\dbcl\zip-artifacts.bat
+- "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
+- pip install codecov
+- codecov -f "c:\projects\dbcl\reports\OpenCover.BitSetArray.xml" 
 artifacts:
 - path: reports\*.7z
   name: Coverage
