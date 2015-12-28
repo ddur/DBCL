@@ -7,6 +7,8 @@ clone_folder: c:\projects\dbcl
 environment:
   COVERALLS_REPO_TOKEN:
     secure: K6NMfs30rPHzaM5D9hTfzp34I8nSFoblUrW2JPlPVkn6eySTT3pJZWvP6Zbdy6K5
+  COVERITY_REPO_TOKEN:
+    secure: lq7fFDwa8PFhi2KZuaFOxkqY+/V2aXBLlvuKdTDGgDw=
 before_build:
 - ps: nuget restore
 build:
