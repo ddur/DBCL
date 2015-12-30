@@ -26,7 +26,8 @@
 @set OpenCoverMsiInstalled="C:\Program Files (x86)\OpenCover\OpenCover.Console.exe"
 
 @Rem OpenCover Nuget Package
-@set OpenCoverNugetPackage=".\packages\OpenCover.4.6.166\tools\OpenCover.Console.exe"
+@Rem set OpenCoverNugetPackage=".\packages\OpenCover.4.6.166\tools\OpenCover.Console.exe"
+@set OpenCoverNugetPackage=".\packages\OpenCover.4.6.247-rc\tools\OpenCover.Console.exe"
 
 @Rem OpenCover Command
 @set OpenCoverCommand=%OpenCoverNugetPackage%
