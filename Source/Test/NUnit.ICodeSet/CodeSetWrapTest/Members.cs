@@ -63,6 +63,8 @@ namespace DD.Collections.ICodeSet.CodeSetWrapTest {
             Assert.True (csw.Last == 33);
         }
 
+        #region Extended
+
         [Test]
         public void ToBitSetArray () {
             CodeSetWrap csw;
@@ -90,5 +92,27 @@ namespace DD.Collections.ICodeSet.CodeSetWrapTest {
             Assert.True (bsa.Last == 33);
             Assert.True (bsa.SequenceEqual (csw.ToValues ()));
         }
+
+        [Test]
+        public void Complement_NotEmpty() {
+            CodeSetWrap csw = CodeSetWrap.From (new List<Code> () { 1, 5, 7 });
+            var complement = new List<Code>();
+            foreach (var item in csw.Complement) {
+            	complement.Add (item);
+            }
+            Assert.True (complement.SequenceEqual( new Code[] {2,3,4,6}));
+        }
+
+        [Test]
+        public void Complement_Empty() {
+            CodeSetWrap csw = CodeSetWrap.From (new List<Code> ());
+            var complement = new List<Code>();
+            foreach (var item in csw.Complement) {
+            	complement.Add (item);
+            }
+            Assert.True (complement.SequenceEqual( new Code[0]));
+        }
+
+        #endregion
     }
 }

@@ -158,9 +158,14 @@ namespace DD.Collections.ICodeSet {
         public IEnumerable<Code> Complement {
             get {
                 Contract.Ensures (Contract.Result<IEnumerable<Code>> ().IsNot (null));
-                foreach (var item in this.sorted.Complement ()) {
-                    yield return item;
+                if (this.Count != 0) {
+	                foreach (var item in this.sorted.Complement ()) {
+	                	if (item > this.First) {
+	                    	yield return item;
+	                	}
+	                }
                 }
+                yield break;
             }
         }
 
