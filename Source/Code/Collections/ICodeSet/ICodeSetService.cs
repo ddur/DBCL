@@ -30,25 +30,22 @@ namespace DD.Collections.ICodeSet {
 
         #region To Service
 
-        internal static IEnumerable<Code> ToCodes (this IEnumerable<int> ints, int offset = 0) {
-            Contract.Requires<ArgumentException> (ints == null || Contract.ForAll (ints, x => (x + offset).HasCodeValue ()));
+        public static IEnumerable<Code> ToCodes (this IEnumerable<int> ints, int offset = 0) {
+            Contract.Requires<ArgumentNullException> (ints.IsNot (null));
+            Contract.Requires<ArgumentException> (Contract.ForAll (ints, x => (x + offset).HasCodeValue ()));
             Contract.Ensures (Contract.Result<IEnumerable<Code>> ().IsNot (null));
-            if (ints.IsNot (null)) {
-                if (offset == 0) {
-                    foreach (var code in ints) {
-                        yield return (Code)code;
-                    }
-                }
-                else {
-                    int shifted;
-                    foreach (var code in ints) {
-                        shifted = code + offset;
-                        yield return (Code)shifted;
-                    }
+
+            if (offset == 0) {
+                foreach (var code in ints) {
+                    yield return (Code)code;
                 }
             }
             else {
-                yield break;
+                int shifted;
+                foreach (var code in ints) {
+                    shifted = code + offset;
+                    yield return (Code)shifted;
+                }
             }
         }
 
@@ -109,6 +106,67 @@ namespace DD.Collections.ICodeSet {
                 return self.Length == 0;
             }
             return self[0] && self[self.Length - 1] && self.Length.IsCodesCount ();
+        }
+
+        /// <summary>IsCompact if:
+        /// <para>1) is not null</para>
+        /// <para>2) is not empty</para>
+        /// <para>3) Has at least first bit set</para>
+        /// <para>4) Last self.Last() is not 0 (no empty tail)</para>
+        /// </summary>
+        /// <param name="self">int[]</param>
+        /// <returns>bool</returns>
+        [Pure]
+        internal static bool IsCodeCompact (this int[] self) {
+            if (self.IsNull ()) {
+                return false;
+            }
+            if (0 == self.Length) {
+                return false;
+            }
+            if ((Code.MaxValue >> 5) < self.Length) {
+                return false;
+            }
+            if (0 == (self[0] & 1)) { // first bit must be set
+                return false;
+            }
+            return 0 != (self[self.Length - 1]);
+        }
+
+        /// <summary>IsCompact if:
+        /// <para>1) is not null</para>
+        /// <para>2) is not empty</para>
+        /// <para>3) Has at least first bit set</para>
+        /// <para>4) Last self.Last() is not 0 (no empty tail)</para>
+        /// </summary>
+        /// <param name="self">int[]</param>
+        /// <returns>-1 if not compact else index of last bit set</returns>
+        [Pure]
+        internal static int IsCodeCompactLast (this int[] self) {
+            int lastBitIndex = -1;
+            if (self.IsNull ()) {
+                return lastBitIndex;
+            }
+            if (0 == self.Length) {
+                return lastBitIndex;
+            }
+            if (((Code.MaxValue >> 5) + 1) < self.Length) {
+                return lastBitIndex;
+            }
+            if (0 == (self[0] & 1)) { // first bit must be set
+                return lastBitIndex;
+            }
+            if (0 == (self[self.Length - 1])) { // last item = 0, does not contains bits
+                return lastBitIndex;
+            }
+            lastBitIndex = (self.Length-1) << 5;
+            uint bitMask = unchecked((uint)self[self.Length - 1]);
+            while (bitMask != 0) {
+                bitMask >>= 1;
+                ++lastBitIndex;
+            }
+            --lastBitIndex; // zero indexed bits
+            return lastBitIndex;
         }
 
         /// <summary>Returns BitSetArray(self.Last+1) where BitSetArray.Item == self.Item

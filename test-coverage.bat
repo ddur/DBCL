@@ -33,7 +33,15 @@
 @set OpenCoverCommand=%OpenCoverNugetPackage%
 
 @Rem Local OpenCover Override
-@if not "%appveyor%" == "True" set OpenCoverCommand=%OpenCoverReleaseBuild%
+@if "%appveyor%" == "True" goto nolocal
+@set OpenCoverCommand=%OpenCoverReleaseBuild%
+@del /Q /S E:\GitHub\SharpDevelop\bin\Tools\OpenCover\*
+@del /Q /S E:\GitHub\SharpDevelop\src\Tools\OpenCover\*
+@xcopy E:\GitHub\opencover\main\bin\Release\* E:\GitHub\SharpDevelop\src\Tools\OpenCover\ /S
+@xcopy E:\GitHub\opencover\main\bin\Release\* E:\GitHub\SharpDevelop\bin\Tools\OpenCover\ /S
+@pause
+
+:nolocal
 
 @Rem OpenCover Options
 @set OpenCoverOptions=-register:user -threshold:1 -mergebyhash -hideskipped:All
@@ -50,7 +58,7 @@
 @echo OpenCover     Command: %OpenCoverCommand%
 @echo OpenCover     Options: %OpenCoverOptions%
 @%OpenCoverCommand% -version 
-@rem if not "%appveyor%" == "True" pause
+@Rem if not "%appveyor%" == "True" pause
 @echo.
 
 @Rem Local Build?
@@ -73,5 +81,8 @@
 -targetargs:"NUnit.%1.dll /result:\"NUnit.%1.xml\" %dbcl_nunit_runner_options%"
 @echo -------------------------------------
 @echo.
-@rem if not "%appveyor%" == "True" pause
+@if "%appveyor%" == "True" exit /b
+@echo %date%
+@echo %time%
+@pause
 @exit /b

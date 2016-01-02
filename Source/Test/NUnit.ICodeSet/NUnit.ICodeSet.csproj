@@ -55,6 +55,7 @@
     <Compile Include="CodeSetFullTest\Members.cs" />
     <Compile Include="CodeSetListTest\Constructors.cs" />
     <Compile Include="CodeSetListTest\Members.cs" />
+    <Compile Include="CodeSetMask_Test\Constructors.cs" />
     <Compile Include="CodeSetNoneTest\Members.cs" />
     <Compile Include="CodeSetPageTest\Constructors.cs" />
     <Compile Include="CodeSetPageTest\Members.cs" />
