@@ -15,9 +15,10 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
 
         [Test]
         public void WhenArgIEnumerableIsNull () {
+            var arg = ((IEnumerable<int>)null);
             Assert.Throws<ArgumentNullException> (
                 delegate {
-                    ((IEnumerable<int>)null).ToCodes();
+                    arg.ToCodes();
                 }
             );
             
@@ -25,49 +26,38 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
 
         [Test]
         public void WhenArgIEnumerableIsValidCodes () {
-            new int[] {
-                0,
-                1,
-                2,
-                3
-            }.ToCodes();
-            new int[] {
-                0,
-                1,
-                2,
-                3
-            }.ToCodes(1000);
+            var arg = new int[] {0, 1, 2, 3};
+            Assert.That (
+                delegate {
+                    arg.ToCodes();
+                }, Throws.Nothing
+            );
+            Assert.That (
+                delegate {
+                    arg.ToCodes(1000);
+                }, Throws.Nothing
+            );
         }
 
         [Test]
         public void WhenArgIEnumerableIsInvalidCodes () {
-            Assert.That (
+            var arg = new int[] {int.MinValue, int.MaxValue, 2, 3};
+            Assert.Throws<ArgumentException> (
                 delegate {
-                    new int[] {
-                        int.MinValue,
-                        int.MaxValue
-                    }.ToCodes();
-                }, Throws.TypeOf<ArgumentException>
+                    arg.ToCodes();
+                }
             );
-            Assert.That (
+
+            arg = new int[] {0, 1, 2, 3};
+            Assert.Throws<ArgumentException> (
                 delegate {
-                    new int[] {
-                        0,
-                        1,
-                        2,
-                        3
-                    }.ToCodes(int.MinValue);
-                }, Throws.TypeOf<ArgumentException>
+                    arg.ToCodes(int.MinValue);
+                }
             );
-            Assert.That (
+            Assert.Throws<ArgumentException> (
                 delegate {
-                    new int[] {
-                        0,
-                        1,
-                        2,
-                        3
-                    }.ToCodes(int.MaxValue);
-                }, Throws.TypeOf<ArgumentException>
+                    arg.ToCodes(int.MaxValue);
+                }
             );
         }
     }

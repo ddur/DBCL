@@ -15,7 +15,7 @@ namespace DD.Collections.ICodeSet {
     /// <summary>Wraps over <see cref="ICodeSetService.IsCompact">Compact</see> BitSetArray</summary>
     /// <remarks>Can be empty, can be full, can contain up to <see cref="Code.MaxCount">Code.MaxCount</see> codes</remarks>
     [Serializable]
-    public sealed class CodeSetBits : CodeSet {
+    internal sealed class CodeSetBits : CodeSet {
 
         #region Ctor
 
