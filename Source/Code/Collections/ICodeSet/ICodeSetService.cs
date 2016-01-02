@@ -118,19 +118,10 @@ namespace DD.Collections.ICodeSet {
         /// <returns>bool</returns>
         [Pure]
         internal static bool IsCodeCompact (this int[] self) {
-            if (self.IsNull ()) {
+            if (self.IsCodeCompactLast() < 0) {
                 return false;
             }
-            if (0 == self.Length) {
-                return false;
-            }
-            if ((Code.MaxValue >> 5) < self.Length) {
-                return false;
-            }
-            if (0 == (self[0] & 1)) { // first bit must be set
-                return false;
-            }
-            return 0 != (self[self.Length - 1]);
+            return true;
         }
 
         /// <summary>IsCompact if:

@@ -41,15 +41,15 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
 
         [Test]
         public void WhenArgIEnumerableIsInvalidCodes () {
-            Assert.Throws<ArgumentException> (
+            Assert.That (
                 delegate {
                     new int[] {
                         int.MinValue,
                         int.MaxValue
                     }.ToCodes();
-                }
+                }, Throws.TypeOf<ArgumentException>
             );
-            Assert.Throws<ArgumentException> (
+            Assert.That (
                 delegate {
                     new int[] {
                         0,
@@ -57,9 +57,9 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
                         2,
                         3
                     }.ToCodes(int.MinValue);
-                }
+                }, Throws.TypeOf<ArgumentException>
             );
-            Assert.Throws<ArgumentException> (
+            Assert.That (
                 delegate {
                     new int[] {
                         0,
@@ -67,7 +67,7 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
                         2,
                         3
                     }.ToCodes(int.MaxValue);
-                }
+                }, Throws.TypeOf<ArgumentException>
             );
         }
     }

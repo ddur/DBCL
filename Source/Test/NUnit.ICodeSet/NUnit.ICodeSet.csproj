@@ -82,6 +82,7 @@
     <Compile Include="ICodeSetDictionaryTest\Members.cs" />
     <Compile Include="ICodeSetOperationsTest\Members.cs" />
     <Compile Include="ICodeSetReductionTest\Members.cs" />
+    <Compile Include="ICodeSetServiceTest\Members\IsCodeCompactLast.cs" />
     <Compile Include="ICodeSetServiceTest\Members\IsEmpty.cs" />
     <Compile Include="ICodeSetServiceTest\Members\Span.cs" />
     <Compile Include="ICodeSetServiceTest\Members\ToCodes.cs" />
