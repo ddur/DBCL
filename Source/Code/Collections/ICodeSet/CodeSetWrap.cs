@@ -159,11 +159,11 @@ namespace DD.Collections.ICodeSet {
             get {
                 Contract.Ensures (Contract.Result<IEnumerable<Code>> ().IsNot (null));
                 if (this.Count != 0) {
-	                foreach (var item in this.sorted.Complement ()) {
-	                	if (item > this.First) {
-	                    	yield return item;
-	                	}
-	                }
+                    foreach (var item in this.sorted.Complement ()) {
+                        if (item > this.First) {
+                            yield return item;
+                        }
+                    }
                 }
                 yield break;
             }

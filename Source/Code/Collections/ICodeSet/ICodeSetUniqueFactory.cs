@@ -266,9 +266,9 @@ namespace DD.Collections.ICodeSet {
 
         #endregion
 
-        #region Sets Factored
+        #region Get Factored Sets
 
-        public IEnumerable<ICodeSet> Factored {
+        public IEnumerable<ICodeSet> Collection {
             get {
                 Contract.Ensures (Contract.Result<IEnumerable<ICodeSet>> ().IsNot (null));
                 foreach (var item in dictionary) {

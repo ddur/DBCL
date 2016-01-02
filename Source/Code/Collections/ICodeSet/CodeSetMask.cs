@@ -53,7 +53,7 @@ namespace DD.Collections.ICodeSet {
         /// <returns>CodeSetMask</returns>
         public static CodeSetMask From (CodeSetMask mask, int offset = 0) {
             Contract.Requires<ArgumentNullException> (mask.IsNot (null));
-            Contract.Requires<ArgumentException> (offset.HasCodeValue());
+            Contract.Requires<ArgumentException> (offset.HasCodeValue ());
             Contract.Requires<ArgumentException> (((long)mask.Last + offset) <= Code.MaxValue);
             Contract.Ensures (Contract.Result<CodeSetMask> ().IsNot (null));
 
@@ -65,10 +65,10 @@ namespace DD.Collections.ICodeSet {
             Contract.Requires<ArgumentEmptyException> (mask.Length != 0, "Empty Mask Array");
             Contract.Requires<ArgumentException> (((Code.MaxValue >> 5) + 1) >= mask.Length, "Too large Mask Array");
             Contract.Requires<ArgumentException> ((mask[0] & 1) != 0, "First bit must be set");
-            Contract.Requires<ArgumentException> (mask[mask.Length-1] != 0, "mask.Last() must be != 0");
-            Contract.Requires<ArgumentException> (mask.IsCodeCompactLast().HasCodeValue(), "Last bit has no Code.Value");
-            Contract.Requires<ArgumentException> (offset.HasCodeValue());
-            Contract.Requires<ArgumentException> ((mask.IsCodeCompactLast() + (long)offset) <= Code.MaxValue, "Last bit + offset has no Code.Value");
+            Contract.Requires<ArgumentException> (mask[mask.Length - 1] != 0, "mask.Last() must be != 0");
+            Contract.Requires<ArgumentException> (mask.IsCodeCompactLast ().HasCodeValue (), "Last bit has no Code.Value");
+            Contract.Requires<ArgumentException> (offset.HasCodeValue ());
+            Contract.Requires<ArgumentException> ((mask.IsCodeCompactLast () + (long)offset) <= Code.MaxValue, "Last bit + offset has no Code.Value");
             Contract.Ensures (Contract.Result<CodeSetMask> ().IsNot (null));
 
             return new CodeSetMask (mask, offset);
@@ -102,7 +102,7 @@ namespace DD.Collections.ICodeSet {
                 item = code.Value - start.Value;
                 index = item >> ShiftRightBits;
                 mask = 1 << (item & ShiftLeftMask);
-                   if ((sorted[index] & mask) == 0) {
+                if ((sorted[index] & mask) == 0) {
                     sorted[index] ^= mask;
                     ++count;
                 }
@@ -111,7 +111,7 @@ namespace DD.Collections.ICodeSet {
 
         private CodeSetMask (CodeSetMask mask, int offset = 0) {
             Contract.Requires<ArgumentNullException> (mask.IsNot (null));
-            Contract.Requires<ArgumentException> (offset.HasCodeValue());
+            Contract.Requires<ArgumentException> (offset.HasCodeValue ());
             Contract.Requires<ArgumentException> (((long)mask.Last + offset) <= Code.MaxValue);
 
             start = offset;
@@ -120,19 +120,18 @@ namespace DD.Collections.ICodeSet {
             Array.Copy (mask.sorted, sorted, sorted.Length);
         }
 
-
         private CodeSetMask (int[] mask, int offset = 0) {
             Contract.Requires<ArgumentNullException> (mask.IsNot (null));
             Contract.Requires<ArgumentEmptyException> (mask.Length != 0, "Empty Mask Array");
             Contract.Requires<ArgumentException> (((Code.MaxValue >> 5) + 1) >= mask.Length, "Too large Mask Array");
             Contract.Requires<ArgumentException> ((mask[0] & 1) != 0, "First bit must be set");
-            Contract.Requires<ArgumentException> (mask[mask.Length-1] != 0, "mask.Last() must be != 0");
-            Contract.Requires<ArgumentException> (mask.IsCodeCompactLast().HasCodeValue(), "Last bit has no Code.Value");
-            Contract.Requires<ArgumentException> (offset.HasCodeValue());
-            Contract.Requires<ArgumentException> ((mask.IsCodeCompactLast() + (long)offset) <= Code.MaxValue, "Last bit + offset has no Code.Value");
+            Contract.Requires<ArgumentException> (mask[mask.Length - 1] != 0, "mask.Last() must be != 0");
+            Contract.Requires<ArgumentException> (mask.IsCodeCompactLast ().HasCodeValue (), "Last bit has no Code.Value");
+            Contract.Requires<ArgumentException> (offset.HasCodeValue ());
+            Contract.Requires<ArgumentException> ((mask.IsCodeCompactLast () + (long)offset) <= Code.MaxValue, "Last bit + offset has no Code.Value");
 
             start = offset;
-            final = offset + mask.IsCodeCompactLast();
+            final = offset + mask.IsCodeCompactLast ();
             sorted = new int[mask.Length];
             Array.Copy (mask, sorted, sorted.Length);
         }

@@ -5,56 +5,52 @@
  * Time: 15:53
  *
  */
+
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 
-namespace DD.Collections.ICodeSet.CodeSetMaskTest
-{
+namespace DD.Collections.ICodeSet.CodeSetMaskTest {
+
     [TestFixture]
-    public class Construction
-    {
+    public class Construction {
 
         #region From ParamsCode
 
         public class FromParamsCode {
+
             [Test]
-            public void NullArray()
-            {
-                
+            public void NullArray () {
                 Assert.That (
                     delegate {
                         CodeSetMask.From ((Code[])null);
-                    }, Throws.TypeOf<ArgumentNullException>()
+                    }, Throws.TypeOf<ArgumentNullException> ()
                 );
             }
-    
+
             [Test]
-            public void EmptyArray()
-            {
+            public void EmptyArray () {
                 Assert.That (
                     delegate {
                         var x = CodeSetMask.From (new Code[0]);
-                    }, Throws.TypeOf<ArgumentEmptyException>()
+                    }, Throws.TypeOf<ArgumentEmptyException> ()
                 );
             }
-    
+
             [Test]
-            public void ValidArray()
-            {
+            public void ValidArray () {
                 Assert.That (
                     delegate {
-                        CodeSetMask.From (new Code[] {0,1,2,3});
+                        CodeSetMask.From (new Code[] { 0, 1, 2, 3 });
                     }, Throws.Nothing
                 );
             }
-    
+
             [Test]
-            public void ValidParams()
-            {
+            public void ValidParams () {
                 Assert.That (
                     delegate {
-                        CodeSetMask.From ( 0, 1, 2, 3, 50);
+                        CodeSetMask.From (0, 1, 2, 3, 50);
                     }, Throws.Nothing
                 );
             }
@@ -65,44 +61,39 @@ namespace DD.Collections.ICodeSet.CodeSetMaskTest
         #region From IEumerable<Code>
 
         public class FromIEnumerableOfCode {
-        
+
             [Test]
-            public void Null()
-            {
-                
+            public void Null () {
                 Assert.That (
                     delegate {
                         CodeSetMask.From ((IEnumerable<Code>)null);
-                    }, Throws.TypeOf<ArgumentNullException>()
+                    }, Throws.TypeOf<ArgumentNullException> ()
                 );
             }
-    
+
             [Test]
-            public void Empty()
-            {
+            public void Empty () {
                 Assert.That (
                     delegate {
                         var x = CodeSetMask.From ((IEnumerable<Code>)new Code[0]);
-                    }, Throws.TypeOf<ArgumentEmptyException>()
+                    }, Throws.TypeOf<ArgumentEmptyException> ()
                 );
             }
-    
+
             [Test]
-            public void Valid()
-            {
+            public void Valid () {
                 Assert.That (
                     delegate {
-                        CodeSetMask.From ((IEnumerable<Code>)new Code[] {0,1,3,3});
+                        CodeSetMask.From ((IEnumerable<Code>)new Code[] { 0, 1, 3, 3 });
                     }, Throws.Nothing
                 );
             }
-    
+
             [Test]
-            public void CastFromICodeSet()
-            {
+            public void CastFromICodeSet () {
                 Assert.That (
                     delegate {
-                        CodeSetMask.From ((IEnumerable<Code>)CodeSetList.From(0,3,254,255,256));
+                        CodeSetMask.From ((IEnumerable<Code>)CodeSetList.From (0, 3, 254, 255, 256));
                     }, Throws.Nothing
                 );
             }
@@ -113,144 +104,132 @@ namespace DD.Collections.ICodeSet.CodeSetMaskTest
         #region From int[]
 
         public class FromArrayOfInt {
-    
+
             [Test]
-            public void Null()
-            {
+            public void Null () {
                 int[] arg = null;
                 Assert.That (
                     delegate {
                         CodeSetMask.From (arg);
-                    }, Throws.TypeOf<ArgumentNullException>()
+                    }, Throws.TypeOf<ArgumentNullException> ()
                 );
             }
-    
+
             [Test]
-            public void Empty()
-            {
+            public void Empty () {
                 var arg = new int[0];
                 Assert.That (
                     delegate {
                         var x = CodeSetMask.From (arg);
-                    }, Throws.TypeOf<ArgumentEmptyException>()
+                    }, Throws.TypeOf<ArgumentEmptyException> ()
                 );
             }
-    
+
             [Test]
-            public void InvalidNoBits()
-            {
-                var arg = new int[]{0};
+            public void InvalidNoBits () {
+                var arg = new int[] { 0 };
                 Assert.That (
                     delegate {
                         CodeSetMask.From (arg);
-                    }, Throws.TypeOf<ArgumentException>()
+                    }, Throws.TypeOf<ArgumentException> ()
                 );
             }
-    
+
             [Test]
-            public void InvalidFirstBit()
-            {
-                var arg = new int[]{2};
+            public void InvalidFirstBit () {
+                var arg = new int[] { 2 };
                 Assert.That (
                     delegate {
                         CodeSetMask.From (arg);
-                    }, Throws.TypeOf<ArgumentException>()
+                    }, Throws.TypeOf<ArgumentException> ()
                 );
             }
-    
+
             [Test]
-            public void InvalidLastInt()
-            {
-                var arg = new int[]{1,1,0};
+            public void InvalidLastInt () {
+                var arg = new int[] { 1, 1, 0 };
                 Assert.That (
                     delegate {
                         CodeSetMask.From (arg);
-                    }, Throws.TypeOf<ArgumentException>()
+                    }, Throws.TypeOf<ArgumentException> ()
                 );
             }
-    
+
             [Test]
-            public void InvalidLastBit()
-            {
-                var arg = new int[(Code.MaxValue>>5)+2];
+            public void InvalidLastBit () {
+                var arg = new int[(Code.MaxValue >> 5) + 2];
                 arg[0] = 1;
-                arg[arg.Length-1] = 1; // 1114112
+                arg[arg.Length - 1] = 1; // 1114112
                 Assert.That (
                     delegate {
                         CodeSetMask.From (arg);
-                    }, Throws.TypeOf<ArgumentException>()
+                    }, Throws.TypeOf<ArgumentException> ()
                 );
             }
-    
+
             [Test]
-            public void InvalidOffset()
-            {
-                var arg = new int[]{1};
+            public void InvalidOffset () {
+                var arg = new int[] { 1 };
                 Assert.That (
                     delegate {
-                        CodeSetMask.From (arg, Code.MinValue-1);
-                    }, Throws.TypeOf<ArgumentException>()
+                        CodeSetMask.From (arg, Code.MinValue - 1);
+                    }, Throws.TypeOf<ArgumentException> ()
                 );
                 Assert.That (
                     delegate {
-                        CodeSetMask.From (arg, Code.MaxValue+1);
-                    }, Throws.TypeOf<ArgumentException>()
+                        CodeSetMask.From (arg, Code.MaxValue + 1);
+                    }, Throws.TypeOf<ArgumentException> ()
                 );
                 Assert.That (
                     delegate {
                         CodeSetMask.From (arg, int.MinValue);
-                    }, Throws.TypeOf<ArgumentException>()
+                    }, Throws.TypeOf<ArgumentException> ()
                 );
                 Assert.That (
                     delegate {
                         CodeSetMask.From (arg, int.MaxValue);
-                    }, Throws.TypeOf<ArgumentException>()
+                    }, Throws.TypeOf<ArgumentException> ()
                 );
             }
 
             [Test]
-            public void InvalidBitsPlusOffset()
-            {
-                var arg = new int[(Code.MaxValue>>5)+1];
+            public void InvalidBitsPlusOffset () {
+                var arg = new int[(Code.MaxValue >> 5) + 1];
                 arg[0] = 1;
-                arg[arg.Length-1] = -1;
+                arg[arg.Length - 1] = -1;
                 Assert.That (
                     delegate {
                         CodeSetMask.From (arg, 1); // 1114112
-                    }, Throws.TypeOf<ArgumentException>()
+                    }, Throws.TypeOf<ArgumentException> ()
                 );
-    
-                arg = new int[]{3};
+
+                arg = new int[] { 3 };
                 Assert.That (
                     delegate {
                         CodeSetMask.From (arg, Code.MaxValue);
-                    }, Throws.TypeOf<ArgumentException>()
+                    }, Throws.TypeOf<ArgumentException> ()
                 );
-    
             }
-    
+
             [Test]
-            public void Valid()
-            {
-                var arg = new int[(Code.MaxValue>>5)+1];
+            public void Valid () {
+                var arg = new int[(Code.MaxValue >> 5) + 1];
                 arg[0] = 1;
-                arg[arg.Length-1] = -1;
+                arg[arg.Length - 1] = -1;
                 Assert.That (
                     delegate {
                         CodeSetMask.From (arg);
                     }, Throws.Nothing
                 );
-    
-                arg = new int[]{1};
+
+                arg = new int[] { 1 };
                 Assert.That (
                     delegate {
                         CodeSetMask.From (arg);
                     }, Throws.Nothing
                 );
-    
             }
         }
-
 
         #endregion
 
@@ -259,62 +238,57 @@ namespace DD.Collections.ICodeSet.CodeSetMaskTest
         public class FromCodeSetMask {
 
             [Test]
-            public void Null()
-            {
+            public void Null () {
                 CodeSetMask arg = null;
                 Assert.That (
                     delegate {
                         CodeSetMask.From (arg);
-                    }, Throws.TypeOf<ArgumentNullException>()
-                );
-            }
-    
-            [Test]
-            public void InvalidOffsetExtreme()
-            {
-                var arg = CodeSetMask.From (new int[]{1});
-                Assert.That (
-                    delegate {
-                        CodeSetMask.From (arg, int.MinValue);
-                    }, Throws.TypeOf<ArgumentException>()
-                );
-                Assert.That (
-                    delegate {
-                        CodeSetMask.From (arg, Code.MinValue - 1);
-                    }, Throws.TypeOf<ArgumentException>()
-                );
-                Assert.That (
-                    delegate {
-                        CodeSetMask.From (arg, Code.MaxValue + 1);
-                    }, Throws.TypeOf<ArgumentException>()
-                );
-                Assert.That (
-                    delegate {
-                        CodeSetMask.From (arg, int.MaxValue);
-                    }, Throws.TypeOf<ArgumentException>()
+                    }, Throws.TypeOf<ArgumentNullException> ()
                 );
             }
 
             [Test]
-            public void InvalidOffsetMinimal()
-            {
+            public void InvalidOffsetExtreme () {
+                var arg = CodeSetMask.From (new int[] { 1 });
+                Assert.That (
+                    delegate {
+                        CodeSetMask.From (arg, int.MinValue);
+                    }, Throws.TypeOf<ArgumentException> ()
+                );
+                Assert.That (
+                    delegate {
+                        CodeSetMask.From (arg, Code.MinValue - 1);
+                    }, Throws.TypeOf<ArgumentException> ()
+                );
+                Assert.That (
+                    delegate {
+                        CodeSetMask.From (arg, Code.MaxValue + 1);
+                    }, Throws.TypeOf<ArgumentException> ()
+                );
+                Assert.That (
+                    delegate {
+                        CodeSetMask.From (arg, int.MaxValue);
+                    }, Throws.TypeOf<ArgumentException> ()
+                );
+            }
+
+            [Test]
+            public void InvalidOffsetMinimal () {
                 var arg = CodeSetMask.From (CodeSetPair.From (1, 1114111));
                 Assert.That (
                     delegate {
                         CodeSetMask.From (arg, -1);
-                    }, Throws.TypeOf<ArgumentException>()
+                    }, Throws.TypeOf<ArgumentException> ()
                 );
                 Assert.That (
                     delegate {
                         CodeSetMask.From (arg, 1);
-                    }, Throws.TypeOf<ArgumentException>()
+                    }, Throws.TypeOf<ArgumentException> ()
                 );
             }
-    
-    
+
             [Test]
-            public void Valid()
-            {
+            public void Valid () {
                 var arg = CodeSetMask.From (CodeSetPair.From (1, 1114111));
                 Assert.That (
                     delegate {
@@ -325,6 +299,5 @@ namespace DD.Collections.ICodeSet.CodeSetMaskTest
         }
 
         #endregion
-
     }
 }

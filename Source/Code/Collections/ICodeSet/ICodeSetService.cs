@@ -118,7 +118,7 @@ namespace DD.Collections.ICodeSet {
         /// <returns>bool</returns>
         [Pure]
         internal static bool IsCodeCompact (this int[] self) {
-            if (self.IsCodeCompactLast() < 0) {
+            if (self.IsCodeCompactLast () < 0) {
                 return false;
             }
             return true;
@@ -150,8 +150,8 @@ namespace DD.Collections.ICodeSet {
             if (0 == (self[self.Length - 1])) { // last item = 0, does not contains bits
                 return lastBitIndex;
             }
-            lastBitIndex = (self.Length-1) << 5;
-            uint bitMask = unchecked((uint)self[self.Length - 1]);
+            lastBitIndex = (self.Length - 1) << 5;
+            uint bitMask = unchecked ((uint)self[self.Length - 1]);
             while (bitMask != 0) {
                 bitMask >>= 1;
                 ++lastBitIndex;

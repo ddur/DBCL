@@ -3732,7 +3732,7 @@ namespace DD.Collections {
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="value"></param>
         private void SetCacheLast (int value) {

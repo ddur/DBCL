@@ -326,7 +326,8 @@ namespace DD.Collections {
                 }
                 if (length >= fromMask.Count ()) {
                     success.Assert (Theory.CountOnBits (created.count, fromMask));
-                } else {
+                }
+                else {
                     success.Assert (created.range == index);
                     success.Assert (created.count == input);
                 }
@@ -1657,7 +1658,7 @@ namespace DD.Collections {
                 Success success = true;
 
                 if (self.count == 0) {
-                	success.Assert (getValue.Is (null));
+                    success.Assert (getValue.Is (null));
                 }
                 else {
                     success.Assert (getValue.IsNot (null));
@@ -1685,7 +1686,7 @@ namespace DD.Collections {
                 Success success = true;
 
                 if (self.count == 0) {
-                	success.Assert (getValue.Is (null));
+                    success.Assert (getValue.Is (null));
                 }
                 else {
                     success.Assert (getValue.IsNot (null));
