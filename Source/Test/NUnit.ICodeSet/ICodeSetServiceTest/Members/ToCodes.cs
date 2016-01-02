@@ -17,7 +17,7 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
         public void WhenArgIEnumerableIsNull () {
             Assert.Throws<ArgumentNullException> (
                 delegate {
-                    ICodeSetService.ToCodes ((IEnumerable<int>)null);
+                    ((IEnumerable<int>)null).ToCodes();
                 }
             );
             
@@ -25,31 +25,50 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
 
         [Test]
         public void WhenArgIEnumerableIsValidCodes () {
-            ICodeSetService.ToCodes (new int[]{0,1,2,3});
-            ICodeSetService.ToCodes (new int[]{0,1,2,3}, 1000);
+            new int[] {
+                0,
+                1,
+                2,
+                3
+            }.ToCodes();
+            new int[] {
+                0,
+                1,
+                2,
+                3
+            }.ToCodes(1000);
         }
 
         [Test]
         public void WhenArgIEnumerableIsInvalidCodes () {
             Assert.Throws<ArgumentException> (
                 delegate {
-                    ICodeSetService.ToCodes (new int[]{int.MinValue, int.MaxValue});
+                    new int[] {
+                        int.MinValue,
+                        int.MaxValue
+                    }.ToCodes();
                 }
             );
             Assert.Throws<ArgumentException> (
                 delegate {
-                    ICodeSetService.ToCodes (new int[]{0,1,2,3}, int.MinValue);
+                    new int[] {
+                        0,
+                        1,
+                        2,
+                        3
+                    }.ToCodes(int.MinValue);
                 }
             );
             Assert.Throws<ArgumentException> (
                 delegate {
-                    ICodeSetService.ToCodes (new int[]{0,1,2,3}, int.MaxValue);
+                    new int[] {
+                        0,
+                        1,
+                        2,
+                        3
+                    }.ToCodes(int.MaxValue);
                 }
             );
-
-            //ICodeSetService.ToCodes (new int[]{int.MinValue, int.MaxValue});
-            //ICodeSetService.ToCodes (new int[]{0,1,2,3}, int.MinValue);
-            //ICodeSetService.ToCodes (new int[]{0,1,2,3}, int.MaxValue);
         }
     }
 }

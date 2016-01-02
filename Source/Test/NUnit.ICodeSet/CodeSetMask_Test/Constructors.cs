@@ -315,7 +315,7 @@ namespace DD.Collections.ICodeSet.CodeSetMaskTest
             [Test]
             public void Valid()
             {
-                arg = CodeSetMask.From (CodeSetPair.From (1, 1114111));
+                var arg = CodeSetMask.From (CodeSetPair.From (1, 1114111));
                 Assert.That (
                     delegate {
                         CodeSetMask.From (arg);
