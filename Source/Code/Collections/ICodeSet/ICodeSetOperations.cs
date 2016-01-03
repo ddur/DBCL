@@ -14,7 +14,7 @@ namespace DD.Collections.ICodeSet {
     /// <summary>
     /// Description of ICodeSetOperations.
     /// </summary>
-    public static class ICodeSetOperations {
+    public static class Operations {
 
         private static BitSetArray NoBits {
             get { return BitSetArray.Empty (); }

@@ -15,7 +15,7 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest {
         [Test]
         public void Construct () {
             var icsDict = new ICodeSetDictionary ();
-            var icsDictTyped = new ICodeSetDictionary<Code> ();
+            var icsDictTyped = new Dictionary<Code> ();
         }
     }
 }

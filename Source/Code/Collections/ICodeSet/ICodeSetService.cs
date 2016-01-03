@@ -15,7 +15,7 @@ namespace DD.Collections.ICodeSet {
     /// <summary>Provides conversion, relation and predicate services
     /// <remarks>All public except methods returning ICodeSet</remarks>
     /// </summary>
-    public static class ICodeSetService {
+    public static class Service {
         public const int NullCount = 0;
         public const int UnitCount = 1;
         public const int PairCount = 2;

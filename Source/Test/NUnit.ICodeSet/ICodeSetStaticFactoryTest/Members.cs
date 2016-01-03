@@ -7,7 +7,7 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using Factory = DD.Collections.ICodeSet.ICodeSetStaticFactory;
+using Factory = DD.Collections.ICodeSet.Factory;
 
 namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest {
     //    [TestFixture]

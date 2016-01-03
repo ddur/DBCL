@@ -14,9 +14,9 @@ using DD.Text;
 
 namespace DD.Collections.ICodeSet {
 
-    public class ICodeSetUniqueFactory {
+    public class DistinctFactory {
 
-        #region Embed
+        #region Embeds
 
         /// <summary>QuickWrap ICodeSet over BitSetArray</summary>
         private class QuickWrap : CodeSet {
@@ -266,7 +266,7 @@ namespace DD.Collections.ICodeSet {
 
         #endregion
 
-        #region Get Factored Sets
+        #region Get Unique Sets Collection
 
         public IEnumerable<ICodeSet> Collection {
             get {
@@ -389,7 +389,7 @@ namespace DD.Collections.ICodeSet {
         private static class Theory {
 
             [Pure]
-            public static bool Result (ICodeSetUniqueFactory self, ICodeSet result) {
+            public static bool Result (DistinctFactory self, ICodeSet result) {
                 Success success = true;
 
                 success.Assert (result.IsNot (null));
@@ -404,7 +404,7 @@ namespace DD.Collections.ICodeSet {
             }
 
             [Pure]
-            public static bool From (string utf16, ICodeSetUniqueFactory self, ICodeSet result) {
+            public static bool From (string utf16, DistinctFactory self, ICodeSet result) {
                 Success success = true;
 
                 if (!utf16.IsNullOrEmpty ()) {
@@ -417,7 +417,7 @@ namespace DD.Collections.ICodeSet {
             }
 
             [Pure]
-            public static bool From (IEnumerable<char> chars, ICodeSetUniqueFactory self, ICodeSet result) {
+            public static bool From (IEnumerable<char> chars, DistinctFactory self, ICodeSet result) {
                 Success success = true;
 
                 if (!chars.IsNullOrEmpty ()) {
@@ -430,7 +430,7 @@ namespace DD.Collections.ICodeSet {
             }
 
             [Pure]
-            public static bool From (IEnumerable<Code> codes, ICodeSetUniqueFactory self, ICodeSet result) {
+            public static bool From (IEnumerable<Code> codes, DistinctFactory self, ICodeSet result) {
                 Success success = true;
 
                 if (!codes.IsNullOrEmpty ()) {
@@ -443,7 +443,7 @@ namespace DD.Collections.ICodeSet {
             }
 
             [Pure]
-            public static bool From (IEnumerable<int> values, ICodeSetUniqueFactory self, ICodeSet result) {
+            public static bool From (IEnumerable<int> values, DistinctFactory self, ICodeSet result) {
                 Success success = true;
 
                 if (!values.IsNullOrEmpty ()) {

@@ -23,8 +23,8 @@ namespace DD.Collections.ICodeSet {
         public static CodeSetList From (params Code[] codes) {
             Contract.Requires<ArgumentNullException> (codes.IsNot (null));
             Contract.Requires<ArgumentEmptyException> (!codes.IsEmpty ());
-            Contract.Requires<InvalidOperationException> (codes.Distinct ().Count () > ICodeSetService.PairCount); // at least 3 members
-            Contract.Requires<InvalidOperationException> (codes.Distinct ().Count () <= ICodeSetService.ListMaxCount); // up to max members
+            Contract.Requires<InvalidOperationException> (codes.Distinct ().Count () > Service.PairCount); // at least 3 members
+            Contract.Requires<InvalidOperationException> (codes.Distinct ().Count () <= Service.ListMaxCount); // up to max members
             Contract.Requires<InvalidOperationException> (codes.Distinct ().Count () < (1 + codes.Max () - codes.Min ())); // not full
             Contract.Ensures (Contract.Result<CodeSetList> ().IsNot (null));
 
@@ -34,8 +34,8 @@ namespace DD.Collections.ICodeSet {
         public static CodeSetList From (IEnumerable<Code> codes) {
             Contract.Requires<ArgumentNullException> (codes.IsNot (null));
             Contract.Requires<ArgumentEmptyException> (!codes.IsEmpty ());
-            Contract.Requires<InvalidOperationException> (codes.Distinct ().Count () > ICodeSetService.PairCount); // at least 3 members
-            Contract.Requires<InvalidOperationException> (codes.Distinct ().Count () <= ICodeSetService.ListMaxCount); // up to max members
+            Contract.Requires<InvalidOperationException> (codes.Distinct ().Count () > Service.PairCount); // at least 3 members
+            Contract.Requires<InvalidOperationException> (codes.Distinct ().Count () <= Service.ListMaxCount); // up to max members
             Contract.Requires<InvalidOperationException> (codes.Distinct ().Count () < (1 + codes.Max () - codes.Min ())); // not full
             Contract.Ensures (Contract.Result<CodeSetList> ().IsNot (null));
 
@@ -45,8 +45,8 @@ namespace DD.Collections.ICodeSet {
         internal CodeSetList (IEnumerable<Code> codes) {
             Contract.Requires<ArgumentNullException> (codes.IsNot (null));
             Contract.Requires<ArgumentEmptyException> (!codes.IsEmpty ());
-            Contract.Requires<ArgumentException> (codes.Distinct ().Count () > ICodeSetService.PairCount);
-            Contract.Requires<ArgumentException> (codes.Distinct ().Count () <= ICodeSetService.ListMaxCount);
+            Contract.Requires<ArgumentException> (codes.Distinct ().Count () > Service.PairCount);
+            Contract.Requires<ArgumentException> (codes.Distinct ().Count () <= Service.ListMaxCount);
             Contract.Requires<ArgumentException> (codes.Distinct ().Count () < (1 + codes.Max () - codes.Min ()));
 
             Contract.Ensures (Theory.Construct (codes, this));
@@ -146,8 +146,8 @@ namespace DD.Collections.ICodeSet {
 
                 // private
                 success.Assert (self.sorted.IsNot (null));
-                success.Assert (self.sorted.Count > ICodeSetService.PairCount);
-                success.Assert (self.sorted.Count <= ICodeSetService.ListMaxCount);
+                success.Assert (self.sorted.Count > Service.PairCount);
+                success.Assert (self.sorted.Count <= Service.ListMaxCount);
 
                 // public <- private
                 success.Assert (self.First == self.sorted[0]);
@@ -155,8 +155,8 @@ namespace DD.Collections.ICodeSet {
                 success.Assert (self.Count == self.sorted.Count);
 
                 // constraints
-                success.Assert (self.Count > ICodeSetService.PairCount);
-                success.Assert (self.Count <= ICodeSetService.ListMaxCount);
+                success.Assert (self.Count > Service.PairCount);
+                success.Assert (self.Count <= Service.ListMaxCount);
                 success.Assert (self.Count != self.Length);
 
                 return success;

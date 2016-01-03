@@ -15,11 +15,11 @@ namespace DD.Collections.ICodeSet {
 
     /// <summary>Stores ICodeSet's where (Value)Equals == SetEquals == SequenceEqual == ReferenceEquals
     /// </summary>
-    public class ICodeSetDictionary<T> : IDictionary<ICodeSet, T> {
+    public class Dictionary<T> : IDictionary<ICodeSet, T> {
 
         #region Ctor
 
-        public ICodeSetDictionary () {
+        public Dictionary () {
             unique = new C5.HashDictionary<ICodeSet, T> ();
         }
 
@@ -167,7 +167,7 @@ namespace DD.Collections.ICodeSet {
         #endregion
     }
 
-    public sealed class ICodeSetDictionary : ICodeSetDictionary<int> {
+    public sealed class ICodeSetDictionary : Dictionary<int> {
 
         #region Fields
 

@@ -14,16 +14,9 @@ using DD.Text;
 namespace DD.Collections.ICodeSet {
 
     /// <summary>Produces Reduced ICodeSet's</summary>
-    public static class ICodeSetStaticFactory {
+    public static class Factory {
 
         #region From items To ICodeSet
-
-        public static ICodeSet From (this string utf16) {
-            Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
-            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
-
-            return string.IsNullOrEmpty (utf16) ? CodeSetNone.Singleton : From (utf16.Decode ());
-        }
 
         public static ICodeSet From (char req, params char[] opt) {
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
@@ -40,14 +33,7 @@ namespace DD.Collections.ICodeSet {
             else {
                 codeList = new List<Code> () { req };
             }
-            return From (codeList);
-        }
-
-        public static ICodeSet From (this IEnumerable<char> chars) {
-            Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
-            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
-
-            return chars.IsNullOrEmpty () ? CodeSetNone.Singleton : From (BitSetArray.From (chars.ToValues ()));
+            return codeList.ToICodeSet ();
         }
 
         public static ICodeSet From (Code req, params Code[] opt) {
@@ -63,17 +49,35 @@ namespace DD.Collections.ICodeSet {
             else { // type Code is never null
                 codeList = new List<Code> () { req };
             }
-            return From (codeList);
+            return codeList.ToICodeSet() ;
         }
 
-        public static ICodeSet From (IEnumerable<Code> codes) {
+        public static ICodeSet From (string utf16) {
+        	Contract.Requires<ArgumentNullException>(utf16.IsNot (null));
+        	Contract.Requires<ArgumentEmptyException>(utf16.IsNot (string.Empty));
+        	Contract.Requires<ArgumentException>(utf16.CanDecode());
+        	
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
 
-            return codes.IsNullOrEmpty () ? CodeSetNone.Singleton : From (BitSetArray.From (codes.ToValues ()));
+            return utf16.Decode().ToICodeSet ();
         }
 
-        public static ICodeSet From (this BitSetArray bits) {
+        public static ICodeSet ToICodeSet (this IEnumerable<char> chars) {
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
+
+            return chars.IsNullOrEmpty () ? CodeSetNone.Singleton : BitSetArray.From (chars.ToValues ()).ToICodeSet ();
+        }
+
+        public static ICodeSet ToICodeSet (this IEnumerable<Code> codes) {
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
+
+            return codes.IsNullOrEmpty () ? CodeSetNone.Singleton : BitSetArray.From (codes.ToValues ()).ToICodeSet ();
+        }
+
+        public static ICodeSet ToICodeSet (this BitSetArray bits) {
             Contract.Requires<ArgumentException> (bits.IsNullOrEmpty () || bits.Length <= Code.MaxCount || (int)bits.Last <= Code.MaxValue);
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
@@ -81,7 +85,7 @@ namespace DD.Collections.ICodeSet {
             return bits.IsNullOrEmpty () ? CodeSetNone.Singleton : bits.Reduce ();
         }
 
-        public static ICodeSet From (this ICodeSet iset) {
+        public static ICodeSet ToICodeSet (this ICodeSet iset) {
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
 
@@ -98,7 +102,7 @@ namespace DD.Collections.ICodeSet {
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
 
-            return From (self.BitUnion (that, more));
+            return ToICodeSet (self.BitUnion (that, more));
         }
 
         public static ICodeSet Union (this IEnumerable<ICodeSet> sets) {
@@ -108,7 +112,7 @@ namespace DD.Collections.ICodeSet {
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
 
-            return From (sets.BitUnion ());
+            return ToICodeSet (sets.BitUnion ());
         }
 
         #endregion
@@ -119,7 +123,7 @@ namespace DD.Collections.ICodeSet {
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
 
-            return From (self.BitIntersection (that, more));
+            return ToICodeSet (self.BitIntersection (that, more));
         }
 
         public static ICodeSet Intersection (this IEnumerable<ICodeSet> sets) {
@@ -129,7 +133,7 @@ namespace DD.Collections.ICodeSet {
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
 
-            return From (sets.BitIntersection ());
+            return ToICodeSet (sets.BitIntersection ());
         }
 
         #endregion
@@ -140,7 +144,7 @@ namespace DD.Collections.ICodeSet {
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
 
-            return From (self.BitDisjunction (that, more));
+            return ToICodeSet (self.BitDisjunction (that, more));
         }
 
         public static ICodeSet Disjunction (this IEnumerable<ICodeSet> sets) {
@@ -150,7 +154,7 @@ namespace DD.Collections.ICodeSet {
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
 
-            return From (sets.BitDisjunction ());
+            return ToICodeSet (sets.BitDisjunction ());
         }
 
         #endregion
@@ -161,7 +165,7 @@ namespace DD.Collections.ICodeSet {
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
 
-            return From (self.BitDifference (that, more));
+            return ToICodeSet (self.BitDifference (that, more));
         }
 
         public static ICodeSet Difference (this IEnumerable<ICodeSet> sets) {
@@ -171,7 +175,7 @@ namespace DD.Collections.ICodeSet {
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
 
-            return From (sets.BitDifference ());
+            return ToICodeSet (sets.BitDifference ());
         }
 
         #endregion
@@ -182,7 +186,7 @@ namespace DD.Collections.ICodeSet {
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
 
-            return From (self.BitComplement ());
+            return ToICodeSet (self.BitComplement ());
         }
 
         #endregion

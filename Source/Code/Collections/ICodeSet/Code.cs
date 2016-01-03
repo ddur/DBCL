@@ -130,7 +130,7 @@ namespace DD.Collections.ICodeSet {
 
         [Pure]
         int ICodeSet.Length {
-            get { return ICodeSetService.UnitCount; }
+            get { return Service.UnitCount; }
         }
 
         [Pure]
@@ -156,7 +156,7 @@ namespace DD.Collections.ICodeSet {
 
         [Pure]
         int ICollection<Code>.Count {
-            get { return ICodeSetService.UnitCount; }
+            get { return Service.UnitCount; }
         }
 
         /// <summary> Returns True if collection Contains (IsSupersetOf) specified code
@@ -282,7 +282,7 @@ namespace DD.Collections.ICodeSet {
 
         [ContractInvariantMethod]
         private void Invariant () {
-            Contract.Invariant (((ICodeSet)this).Count == ICodeSetService.UnitCount);
+            Contract.Invariant (((ICodeSet)this).Count == Service.UnitCount);
             Contract.Invariant (((ICodeSet)this).Count == ((ICodeSet)this).Length);
             Contract.Invariant (((ICodeSet)this).First == ((ICodeSet)this).Last);
         }

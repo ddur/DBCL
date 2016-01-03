@@ -13,7 +13,7 @@ namespace DD.Collections.ICodeSet {
     /// <summary>
     /// ICodeSet Set-Relations.
     /// </summary>
-    public static class ICodeSetRelations {
+    public static class Relations {
 
         #region ICodeSet Set Relations
 
@@ -194,7 +194,7 @@ namespace DD.Collections.ICodeSet {
             // Maybe Equals if Range&Count equals
             if (self.First == that.First && self.Last == that.Last && self.Count == that.Count) {
                 // 100% Equals if this is a couple of pairSet|fullSet(unitSet included)
-                if (self.Count == ICodeSetService.PairCount || self.Count == self.Length) { return true; }
+                if (self.Count == Service.PairCount || self.Count == self.Length) { return true; }
             }
             else {
                 // 100% Not Equals if Range|Count is not equal.

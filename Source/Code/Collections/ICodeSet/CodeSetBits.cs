@@ -120,8 +120,8 @@ namespace DD.Collections.ICodeSet {
         #region Fields
 
         private readonly BitSetArray sorted;
-        private readonly int start = ICodeSetService.NoneStart;
-        private readonly int final = ICodeSetService.NoneFinal;
+        private readonly int start = Service.NoneStart;
+        private readonly int final = Service.NoneFinal;
 
         #endregion
 
@@ -213,8 +213,8 @@ namespace DD.Collections.ICodeSet {
                 success.Assert (!self.sorted.IsNull ());
 
                 success.Assert (self.sorted.Count == 0);
-                success.Assert (self.start == ICodeSetService.NoneStart);
-                success.Assert (self.final == ICodeSetService.NoneFinal);
+                success.Assert (self.start == Service.NoneStart);
+                success.Assert (self.final == Service.NoneFinal);
 
                 return success;
             }
@@ -282,8 +282,8 @@ namespace DD.Collections.ICodeSet {
                     success.Assert (self.final.HasCodeValue ());
                 }
                 else {
-                    success.Assert (self.start == ICodeSetService.NoneStart);
-                    success.Assert (self.final == ICodeSetService.NoneFinal);
+                    success.Assert (self.start == Service.NoneStart);
+                    success.Assert (self.final == Service.NoneFinal);
                 }
 
                 // public <- private

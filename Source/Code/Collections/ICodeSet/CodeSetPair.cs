@@ -54,7 +54,7 @@ namespace DD.Collections.ICodeSet {
 
         [Pure]
         public override int Count {
-            get { return ICodeSetService.PairCount; }
+            get { return Service.PairCount; }
         }
 
         [Pure]
@@ -116,7 +116,7 @@ namespace DD.Collections.ICodeSet {
                 success.Assert (self.Last == self.final);
 
                 // constraints
-                success.Assert (self.Count == ICodeSetService.PairCount);
+                success.Assert (self.Count == Service.PairCount);
 
                 return success;
             }

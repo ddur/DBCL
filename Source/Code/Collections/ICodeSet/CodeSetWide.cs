@@ -24,7 +24,7 @@ namespace DD.Collections.ICodeSet {
 
         public static CodeSetWide From (params Code[] codes) {
             Contract.Requires<ArgumentNullException> (codes.IsNot (null));
-            Contract.Requires<InvalidOperationException> (codes.Distinct ().Count ().InRange (ICodeSetService.PairCount + 1, codes.Span () - 1));	// not Null/Code/Pair/Full
+            Contract.Requires<InvalidOperationException> (codes.Distinct ().Count ().InRange (Service.PairCount + 1, codes.Span () - 1));	// not Null/Code/Pair/Full
             Contract.Requires<InvalidOperationException> (codes.Min ().UnicodePlane () != codes.Max ().UnicodePlane ()); // one Page
             Contract.Ensures (Contract.Result<CodeSetWide> ().IsNot (null));
 
@@ -33,7 +33,7 @@ namespace DD.Collections.ICodeSet {
 
         public static CodeSetWide From (IEnumerable<Code> codes) {
             Contract.Requires<ArgumentNullException> (codes.IsNot (null));
-            Contract.Requires<InvalidOperationException> (codes.Distinct ().Count ().InRange (ICodeSetService.PairCount + 1, codes.Span () - 1));	// not Null/Code/Pair/Full
+            Contract.Requires<InvalidOperationException> (codes.Distinct ().Count ().InRange (Service.PairCount + 1, codes.Span () - 1));	// not Null/Code/Pair/Full
             Contract.Requires<InvalidOperationException> (codes.Min ().UnicodePlane () != codes.Max ().UnicodePlane ()); // one Page
             Contract.Ensures (Contract.Result<CodeSetWide> ().IsNot (null));
 
@@ -42,7 +42,7 @@ namespace DD.Collections.ICodeSet {
 
         public static CodeSetWide From (BitSetArray bits, int offset = 0) {
             Contract.Requires<ArgumentNullException> (bits.IsNot (null));
-            Contract.Requires<InvalidOperationException> (bits.Count.InRange (ICodeSetService.PairCount + 1, bits.Span () - 1));	// not Null/Code/Pair/Full
+            Contract.Requires<InvalidOperationException> (bits.Count.InRange (Service.PairCount + 1, bits.Span () - 1));	// not Null/Code/Pair/Full
             Contract.Requires<IndexOutOfRangeException> (offset.InRange (0, Code.MaxValue - (int)bits.Last));
             Contract.Requires<InvalidOperationException> ((bits.First + offset).UnicodePlane () != (bits.Last + offset).UnicodePlane ()); // one Page
             Contract.Ensures (Contract.Result<CodeSetWide> ().IsNot (null));
@@ -53,7 +53,7 @@ namespace DD.Collections.ICodeSet {
         private CodeSetWide (IEnumerable<Code> codes) {
             Contract.Requires<ArgumentNullException> (codes.IsNot (null));
             Contract.Requires<ArgumentEmptyException> (!codes.IsEmpty ());
-            Contract.Requires<ArgumentException> (codes.Distinct ().Count () > ICodeSetService.PairCount);
+            Contract.Requires<ArgumentException> (codes.Distinct ().Count () > Service.PairCount);
             Contract.Requires<ArgumentException> (codes.Distinct ().Count () < (1 + codes.Max () - codes.Min ()));
             Contract.Requires<ArgumentException> (codes.Min ().UnicodePlane () != codes.Max ().UnicodePlane ());
 
@@ -84,7 +84,7 @@ namespace DD.Collections.ICodeSet {
 
         private CodeSetWide (BitSetArray bits, int offset = 0) {
             Contract.Requires<ArgumentNullException> (bits.IsNot (null));
-            Contract.Requires<InvalidOperationException> (bits.Count.InRange (ICodeSetService.PairCount + 1, bits.Span () - 1));	// not Null/Code/Pair/Full
+            Contract.Requires<InvalidOperationException> (bits.Count.InRange (Service.PairCount + 1, bits.Span () - 1));	// not Null/Code/Pair/Full
             Contract.Requires<IndexOutOfRangeException> (offset.InRange (0, Code.MaxValue - (int)bits.Last));
             Contract.Requires<InvalidOperationException> ((bits.First + offset).UnicodePlane () != (bits.Last + offset).UnicodePlane ());
 
@@ -275,7 +275,7 @@ namespace DD.Collections.ICodeSet {
                 success.Assert (self.count == counter);
                 success.Assert ((self.start) == startPlane.First);
                 success.Assert ((self.final) == finalPlane.Last);
-                success.Assert (self.count > ICodeSetService.PairCount);		// not Null-Pair
+                success.Assert (self.count > Service.PairCount);		// not Null-Pair
                 success.Assert (self.count < (1 + self.final - self.start));	// not Full
 
                 // public <- private
@@ -284,7 +284,7 @@ namespace DD.Collections.ICodeSet {
                 success.Assert (self.Last == self.final);
 
                 // constraints
-                success.Assert (self.Count > ICodeSetService.PairCount);	// not Null-Pair
+                success.Assert (self.Count > Service.PairCount);	// not Null-Pair
                 success.Assert (self.Count < self.Length); 					// not Full
                 success.Assert (self.First.UnicodePlane () != self.Last.UnicodePlane ()); // spans over single unicode plane
 

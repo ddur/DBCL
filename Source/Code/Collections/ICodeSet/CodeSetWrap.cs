@@ -17,7 +17,7 @@ namespace DD.Collections.ICodeSet {
     /// <remarks>Can be empty, can be full, can contain up to <see cref="Code.MaxCodeCount">Code.MaxCodeCount-1</see> codes</remarks>
     /// </summary>
     [Serializable]
-    public sealed class CodeSetWrap : CodeSet {
+    internal sealed class CodeSetWrap : CodeSet {
 
         #region Ctor
 

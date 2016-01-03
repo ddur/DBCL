@@ -14,10 +14,10 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest {
 
         [Test]
         public void AreEqual () {
-            Assert.AreEqual (ICodeSetService.UnitCount, 1);
-            Assert.AreEqual (ICodeSetService.PairCount, 2);
-            Assert.AreEqual (ICodeSetService.NoneStart, -1);
-            Assert.AreEqual (ICodeSetService.NoneFinal, -2);
+            Assert.AreEqual (Service.UnitCount, 1);
+            Assert.AreEqual (Service.PairCount, 2);
+            Assert.AreEqual (Service.NoneStart, -1);
+            Assert.AreEqual (Service.NoneFinal, -2);
         }
     }
 }

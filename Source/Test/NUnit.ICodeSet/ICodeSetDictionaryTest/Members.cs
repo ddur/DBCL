@@ -15,7 +15,7 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest {
     [TestFixture]
     public class Members {
         private ICodeSetDictionary icsDict;
-        private ICodeSetDictionary<long> icsDictLong;
+        private Dictionary<long> icsDictLong;
 
         [Test]
         public void Add_Key () {
@@ -53,7 +53,7 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest {
 
         [Test]
         public void Add_KeyAndValue_Typed () {
-            icsDictLong = new ICodeSetDictionary<long> ();
+            icsDictLong = new Dictionary<long> ();
             Assert.That (
                 delegate {
                     icsDictLong.Add (CodeSetFull.From (0, 5), 8);
@@ -80,7 +80,7 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest {
 
         [Test]
         public void Add_KeyValuePair_Typed () {
-            icsDictLong = new ICodeSetDictionary<long> ();
+            icsDictLong = new Dictionary<long> ();
             Assert.That (
                 delegate {
                     icsDictLong.Add (new KeyValuePair<ICodeSet, long> (CodeSetFull.From (0, 5), 8));
@@ -165,7 +165,7 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest {
 
         [Test]
         public void Item_Set_Typed () {
-            icsDictLong = new ICodeSetDictionary<long> ();
+            icsDictLong = new Dictionary<long> ();
             Assert.That (
                 delegate {
                     icsDictLong.Add (new KeyValuePair<ICodeSet, long> (CodeSetFull.From (0, 5), 8));
@@ -214,7 +214,7 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest {
 
         [Test]
         public void Remove_KeyValuePair_Typed () {
-            icsDictLong = new ICodeSetDictionary<long> ();
+            icsDictLong = new Dictionary<long> ();
             Assert.That (
                 delegate {
                     icsDictLong.Add (new KeyValuePair<ICodeSet, long> (CodeSetFull.From (0, 5), 8));

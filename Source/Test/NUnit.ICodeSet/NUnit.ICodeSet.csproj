@@ -87,6 +87,7 @@
     <Compile Include="ICodeSetServiceTest\Members\Span.cs" />
     <Compile Include="ICodeSetServiceTest\Members\ToCodes.cs" />
     <Compile Include="ICodeSetServiceTest\Members\ToValues.cs" />
+    <Compile Include="ICodeSetStaticFactoryTest\FromToICodeSet.cs" />
     <Compile Include="ICodeSetStaticFactoryTest\Members.cs" />
     <Compile Include="ICodeSetRelationsTest\Members\Compare.cs" />
     <Compile Include="ICodeSetRelationsTest\Members\Equals.cs" />
