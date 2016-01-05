@@ -34,7 +34,9 @@
 
 @Rem Local OpenCover Override
 @if "%appveyor%" == "True" goto nolocal
+@rem use OpenCover release build for local build and coverage reports
 @set OpenCoverCommand=%OpenCoverReleaseBuild%
+@rem copy OpenCover release build into SharpDevelop bin&src
 @del /Q /S E:\GitHub\SharpDevelop\bin\Tools\OpenCover\*
 @del /Q /S E:\GitHub\SharpDevelop\src\Tools\OpenCover\*
 @xcopy E:\GitHub\opencover\main\bin\Release\* E:\GitHub\SharpDevelop\src\Tools\OpenCover\ /S
@@ -62,8 +64,12 @@
 @echo.
 
 @Rem Local Build?
-@if not "%appveyor%" == "True" if exist "C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" ("C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" DBCL.sln)
+@if "%appveyor%" == "True" goto run-all-tests
+@if not exist "C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" goto run-all-tests
+@if not exist "E:\cov-analysis-win64-7.7.0.4\bin\cov-build.exe" goto run-all-tests
+@E:\cov-analysis-win64-7.7.0.4\bin\cov-build --dir cov-int "C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" DBCL.sln
 
+:run-all-tests
 @call :run-single-test "Extensions"  "+[DBCL]DD.Extends*"
 @call :run-single-test "ICodeSet"    "+[DBCL]DD.Collections.ICodeSet* +[DBCL]DD.Text*"
 @call :run-single-test "BitSetArray" "+[DBCL]DD.Collections.BitSetArray*"
