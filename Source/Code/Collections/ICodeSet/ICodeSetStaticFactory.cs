@@ -14,6 +14,8 @@ using DD.Text;
 namespace DD.Collections.ICodeSet {
 
     /// <summary>Produces Reduced ICodeSet's</summary>
+    /// <remarks>By default do not allow producing empty set</remarks>
+    /// <remarks>Empty set is required evil, produced by some of set operations</remarks>
     public static class Factory {
 
         #region From items To ICodeSet
@@ -22,18 +24,18 @@ namespace DD.Collections.ICodeSet {
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
 
-            List<Code> codeList;
+            List<char> charList;
             if (!opt.IsNull () && opt.Length > 0) {
-                codeList = new List<Code> (1 + opt.Length);
-                codeList.Add (req);
-                foreach (Code code in opt) {
-                    codeList.Add (code);
+                charList = new List<char> (1 + opt.Length);
+                charList.Add (req);
+                foreach (char code in opt) {
+                    charList.Add (code);
                 }
             }
             else {
-                codeList = new List<Code> () { req };
+                charList = new List<char> () { req };
             }
-            return codeList.ToICodeSet ();
+            return charList.ToICodeSet ();
         }
 
         public static ICodeSet From (Code req, params Code[] opt) {
@@ -53,8 +55,19 @@ namespace DD.Collections.ICodeSet {
         }
 
         public static ICodeSet From (string utf16) {
-        	Contract.Requires<ArgumentNullException>(utf16.IsNot (null));
-        	Contract.Requires<ArgumentEmptyException>(utf16.IsNot (string.Empty));
+        	Contract.Requires<ArgumentNullException>(!utf16.Is (null));
+        	Contract.Requires<ArgumentEmptyException>(!utf16.Is (string.Empty));
+        	Contract.Requires<ArgumentException>(utf16.CanDecode());
+        	
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
+
+            return utf16.ToICodeSet ();
+        }
+
+        public static ICodeSet ToICodeSet (this string utf16) {
+        	Contract.Requires<ArgumentNullException>(!utf16.Is (null));
+        	Contract.Requires<ArgumentEmptyException>(!utf16.Is (string.Empty));
         	Contract.Requires<ArgumentException>(utf16.CanDecode());
         	
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
@@ -64,32 +77,34 @@ namespace DD.Collections.ICodeSet {
         }
 
         public static ICodeSet ToICodeSet (this IEnumerable<char> chars) {
-            Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
+        	Contract.Requires<ArgumentNullException>(!chars.Is (null));
+        	Contract.Requires<ArgumentEmptyException>(!chars.IsEmpty());
+
+        	Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
 
-            return chars.IsNullOrEmpty () ? CodeSetNone.Singleton : BitSetArray.From (chars.ToValues ()).ToICodeSet ();
+            return BitSetArray.From (chars.ToValues ()).ToICodeSet ();
         }
 
         public static ICodeSet ToICodeSet (this IEnumerable<Code> codes) {
+        	Contract.Requires<ArgumentNullException>(!codes.Is (null));
+        	Contract.Requires<ArgumentEmptyException>(!codes.IsEmpty());
+
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
 
-            return codes.IsNullOrEmpty () ? CodeSetNone.Singleton : BitSetArray.From (codes.ToValues ()).ToICodeSet ();
+            return BitSetArray.From (codes.ToValues ()).ToICodeSet ();
         }
 
         public static ICodeSet ToICodeSet (this BitSetArray bits) {
-            Contract.Requires<ArgumentException> (bits.IsNullOrEmpty () || bits.Length <= Code.MaxCount || (int)bits.Last <= Code.MaxValue);
+            Contract.Requires<ArgumentNullException> (!bits.Is (null));
+            Contract.Requires<ArgumentEmptyException> (!bits.IsEmpty());
+            Contract.Requires<ArgumentException> ((int)bits.Last <= Code.MaxValue, "Last bit is larger than Code.MaxValue");
+
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
 
             return bits.IsNullOrEmpty () ? CodeSetNone.Singleton : bits.Reduce ();
-        }
-
-        public static ICodeSet ToICodeSet (this ICodeSet iset) {
-            Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
-            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
-
-            return iset.IsNullOrEmpty () ? CodeSetNone.Singleton : iset.Reduce ();
         }
 
         #endregion

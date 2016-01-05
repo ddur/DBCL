@@ -14,7 +14,7 @@ using DD.Text;
 
 namespace DD.Collections.ICodeSet {
 
-    public class DistinctFactory {
+    public class Distinct {
 
         #region Embeds
 
@@ -389,7 +389,7 @@ namespace DD.Collections.ICodeSet {
         private static class Theory {
 
             [Pure]
-            public static bool Result (DistinctFactory self, ICodeSet result) {
+            public static bool Result (Distinct self, ICodeSet result) {
                 Success success = true;
 
                 success.Assert (result.IsNot (null));
@@ -404,7 +404,7 @@ namespace DD.Collections.ICodeSet {
             }
 
             [Pure]
-            public static bool From (string utf16, DistinctFactory self, ICodeSet result) {
+            public static bool From (string utf16, Distinct self, ICodeSet result) {
                 Success success = true;
 
                 if (!utf16.IsNullOrEmpty ()) {
@@ -417,7 +417,7 @@ namespace DD.Collections.ICodeSet {
             }
 
             [Pure]
-            public static bool From (IEnumerable<char> chars, DistinctFactory self, ICodeSet result) {
+            public static bool From (IEnumerable<char> chars, Distinct self, ICodeSet result) {
                 Success success = true;
 
                 if (!chars.IsNullOrEmpty ()) {
@@ -430,7 +430,7 @@ namespace DD.Collections.ICodeSet {
             }
 
             [Pure]
-            public static bool From (IEnumerable<Code> codes, DistinctFactory self, ICodeSet result) {
+            public static bool From (IEnumerable<Code> codes, Distinct self, ICodeSet result) {
                 Success success = true;
 
                 if (!codes.IsNullOrEmpty ()) {
@@ -443,7 +443,7 @@ namespace DD.Collections.ICodeSet {
             }
 
             [Pure]
-            public static bool From (IEnumerable<int> values, DistinctFactory self, ICodeSet result) {
+            public static bool From (IEnumerable<int> values, Distinct self, ICodeSet result) {
                 Success success = true;
 
                 if (!values.IsNullOrEmpty ()) {
