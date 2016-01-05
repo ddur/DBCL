@@ -193,7 +193,6 @@ namespace DD.Collections.ICodeSet {
         /// <returns></returns>
         [Pure]
         public static BitSetArray ToCompact (this ICodeSet self) {
-            // TODO Ensures Theory
             Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
             Contract.Ensures (Contract.Result<BitSetArray> ().IsCompact ());
 
