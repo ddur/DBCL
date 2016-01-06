@@ -21,7 +21,7 @@ test_script:
 - cmd: c:\projects\dbcl\zip-artifacts.bat
 - cmd: c:\projects\dbcl\upload-coveralls.bat
 - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
-- cmd: upload-codecov.bat
+- cmd: upload-codecov.bat > null
 - codecov -X gcov -f "c:\projects\dbcl\reports\OpenCover.BitSetArray.xml"
 - codecov -X gcov -f "c:\projects\dbcl\reports\OpenCover.ICodeSet.xml"
 - codecov -X gcov -f "c:\projects\dbcl\reports\OpenCover.Extensions.xml"
