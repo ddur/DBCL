@@ -2,7 +2,6 @@ version: 0.90.{build}
 os: Visual Studio 2013
 configuration: Debug
 platform: Any CPU
-shallow_clone: true
 clone_folder: c:\projects\dbcl
 environment:
   COVERALLS_REPO_TOKEN:
@@ -21,11 +20,7 @@ test_script:
 - cmd: c:\projects\dbcl\zip-artifacts.bat
 - cmd: c:\projects\dbcl\upload-coveralls.bat
 - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
-- pip install codecov
-- codecov -X gcov -f "c:\projects\dbcl\reports\OpenCover.BitSetArray.xml"
-- codecov -X gcov -f "c:\projects\dbcl\reports\OpenCover.ICodeSet.xml"
-- codecov -X gcov -f "c:\projects\dbcl\reports\OpenCover.Extensions.xml"
-- codecov -X gcov -f "c:\projects\dbcl\reports\OpenCover.Diagnostics.xml"
+- cmd: upload-codecov.bat > null
 artifacts:
 - path: reports\*.7z
   name: Coverage
