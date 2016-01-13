@@ -50,7 +50,7 @@ namespace DD.Collections.ICodeSet {
 
             private readonly BitSetArray sorted;
 
-            // stupid but so far this helps static checker to pass
+            // stupid but so far this helps code-contracts static checker to pass
             private readonly int count;
 
             private readonly int length;
@@ -96,6 +96,16 @@ namespace DD.Collections.ICodeSet {
                 }
             }
 
+            /// <summary>
+            /// This ICodeSet implementation is temporary, must be reduced
+            /// </summary>
+            [Pure]
+            public override bool IsReduced {
+                get {
+                    return false;
+                }
+            }
+    
             [Pure]
             public override IEnumerator<Code> GetEnumerator () {
                 foreach (var code in sorted) {
@@ -117,7 +127,7 @@ namespace DD.Collections.ICodeSet {
 
             [ContractInvariantMethod]
             private void Invariant () {
-                //Contract.Invariant(Theory.Invariant(this));
+                Contract.Invariant(Theory.Invariant(this));
             }
 
             #endregion

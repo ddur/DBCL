@@ -150,6 +150,13 @@ namespace DD.Collections.ICodeSet {
         }
 
         [Pure]
+        public override bool IsReduced {
+            get {
+        		return Count > Service.ListMaxCount && First.UnicodePlane() == Last.UnicodePlane();
+            }
+        }
+
+        [Pure]
         public override IEnumerator<Code> GetEnumerator () {
             foreach (Code code in this.sorted) {
                 yield return this.start + code;

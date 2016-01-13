@@ -55,10 +55,21 @@ namespace DD.Collections.ICodeSet {
 
         #region Const
 
+        /// <summary>
+        /// Min code-point value: 0
+        /// </summary>
         public const int MinValue = 0;
-        public const int MaxValue = 0x10FFFF; // Max code-point value
 
-        public const int MinCount = 0;
+        /// <summary>
+        /// Max code-point value: 0x10FFFF (1114111)
+        /// </summary>
+        public const int MaxValue = 0x10FFFF;
+
+        internal const int MinCount = 0;
+
+        /// <summary>
+        /// Max code-points count: 0x110000 (1114112)
+        /// </summary>
         public const int MaxCount = 1 + MaxValue; // MinValue.Count + [1..maxValue].Count; ie.Sequence[0..3].Count=4
 
         #endregion
@@ -141,6 +152,13 @@ namespace DD.Collections.ICodeSet {
         [Pure]
         Code ICodeSet.Last {
             get { return this; }
+        }
+
+        [Pure]
+        public bool IsReduced {
+            get {
+        		return true;
+            }
         }
 
         #endregion

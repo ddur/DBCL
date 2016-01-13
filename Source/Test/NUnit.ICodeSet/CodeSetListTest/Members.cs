@@ -46,6 +46,10 @@ namespace DD.Collections.ICodeSet.CodeSetListTest {
 
             // Length
             Assert.True (csl.Length == 1 + csl.Last - csl.First);
+
+            // IsReduced
+            Assert.True (csl.IsReduced);
+
         }
     }
 }

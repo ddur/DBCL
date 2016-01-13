@@ -73,6 +73,13 @@ namespace DD.Collections.ICodeSet {
         }
 
         [Pure]
+        public override bool IsReduced {
+            get {
+        		return First != Last;
+            }
+        }
+
+        [Pure]
         public override IEnumerator<Code> GetEnumerator () {
             yield return this.start;
             yield return this.final;

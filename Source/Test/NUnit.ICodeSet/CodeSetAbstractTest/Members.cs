@@ -18,7 +18,7 @@ namespace DD.Collections.ICodeSet.CodeSetAbstractTest {
         [Test]
         public void CompareTo_EQ () {
             CodeSet acset = CodeSetList.From (new Code[] { 1, 5, 7 });
-            ICodeSet icset = CodeSetPage.From (new Code[] { 1, 5, 7 });
+            ICodeSet icset = CodeSetMask.From (new Code[] { 1, 5, 7 });
             Assert.True (acset.CompareTo (icset) == 0);
 
             acset = CodeSetNone.Singleton;
@@ -31,11 +31,11 @@ namespace DD.Collections.ICodeSet.CodeSetAbstractTest {
 
         [Test]
         public void CompareTo_LT () {
-            CodeSet acset = CodeSetPage.From (new Code[] { 1, 5, 7 });
+            CodeSet acset = CodeSetMask.From (new Code[] { 1, 5, 7 });
             ICodeSet icset = new Code (11);
             Assert.True (acset.CompareTo (icset) < 0);
 
-            icset = CodeSetPage.From (new Code[] { 0, 1, 5, 7 });
+            icset = CodeSetMask.From (new Code[] { 0, 1, 5, 7 });
             Assert.True (acset.CompareTo (icset) < 0);
 
             acset = CodeSetNone.Singleton;
@@ -44,7 +44,7 @@ namespace DD.Collections.ICodeSet.CodeSetAbstractTest {
 
         [Test]
         public void CompareTo_GT () {
-            CodeSet acset = CodeSetPage.From (new Code[] { 1, 5, 7 });
+            CodeSet acset = CodeSetMask.From (new Code[] { 1, 5, 7 });
             ICodeSet icset = new Code (5);
             Assert.True (acset.CompareTo (icset) > 0);
 
@@ -108,7 +108,7 @@ namespace DD.Collections.ICodeSet.CodeSetAbstractTest {
         [Test]
         public void Equals_IEqualityComparerOfICodeSet () {
             CodeSet cset_a = CodeSetList.From (new Code[] { 0, 1, 5, 7 });
-            CodeSet cset_b = CodeSetPage.From (new Code[] { 0, 1, 5, 7 });
+            CodeSet cset_b = CodeSetMask.From (new Code[] { 0, 1, 5, 7 });
             CodeSet cset_c = CodeSetList.From (new Code[] { 1, 5, 7 });
 
             Assert.True (cset_a.Equals (cset_a, cset_b));
@@ -135,7 +135,7 @@ namespace DD.Collections.ICodeSet.CodeSetAbstractTest {
         [Test]
         public void Equals_ObjectOverride () {
             CodeSet cset_a = CodeSetList.From (new Code[] { 0, 1, 5, 7 });
-            CodeSet cset_b = CodeSetPage.From (new Code[] { 0, 1, 5, 7 });
+            CodeSet cset_b = CodeSetMask.From (new Code[] { 0, 1, 5, 7 });
             CodeSet cset_c = CodeSetList.From (new Code[] { 1, 5, 7 });
 
             Assert.True (cset_a.Equals ((object)cset_a));
@@ -160,7 +160,7 @@ namespace DD.Collections.ICodeSet.CodeSetAbstractTest {
         [Test]
         public void GetHashCode_ObjectOverride () {
             CodeSet cset_a = CodeSetList.From (new Code[] { 0, 1, 5, 7 });
-            CodeSet cset_b = CodeSetPage.From (new Code[] { 0, 1, 5, 7 });
+            CodeSet cset_b = CodeSetMask.From (new Code[] { 0, 1, 5, 7 });
 
             Assert.True (cset_a.GetHashCode () == cset_b.GetHashCode ());
         }
@@ -168,7 +168,7 @@ namespace DD.Collections.ICodeSet.CodeSetAbstractTest {
         [Test]
         public void GetHashCode_IEqualityComparerOfICodeSet () {
             CodeSet cset_a = CodeSetList.From (new Code[] { 0, 1, 5, 7 });
-            CodeSet cset_b = CodeSetPage.From (new Code[] { 0, 1, 5, 7 });
+            CodeSet cset_b = CodeSetMask.From (new Code[] { 0, 1, 5, 7 });
 
             Assert.True (cset_a.GetHashCode (cset_a) == cset_a.GetHashCode (cset_b));
             Assert.True (cset_b.GetHashCode (cset_a) == cset_b.GetHashCode (cset_b));
@@ -177,7 +177,7 @@ namespace DD.Collections.ICodeSet.CodeSetAbstractTest {
         [Test]
         public void IsReadOnly_Get () {
             CodeSet cset_a = CodeSetList.From (new Code[] { 0, 1, 5, 7 });
-            CodeSet cset_b = CodeSetPage.From (new Code[] { 0, 1, 5, 7 });
+            CodeSet cset_b = CodeSetMask.From (new Code[] { 0, 1, 5, 7 });
             CodeSet cset_c = CodeSetNone.Singleton;
 
             Assert.True (cset_a.IsReadOnly);
@@ -204,7 +204,7 @@ namespace DD.Collections.ICodeSet.CodeSetAbstractTest {
         [Test]
         public void op_Equality () {
             CodeSet cset_a = CodeSetList.From (new Code[] { 0, 1, 5, 7 });
-            CodeSet cset_b = CodeSetPage.From (new Code[] { 0, 1, 5, 7 });
+            CodeSet cset_b = CodeSetMask.From (new Code[] { 0, 1, 5, 7 });
 
             Assert.True (cset_a == cset_b);
             Assert.True (cset_b == cset_a);
@@ -229,7 +229,7 @@ namespace DD.Collections.ICodeSet.CodeSetAbstractTest {
         [Test]
         public void op_Inequality () {
             CodeSet cset_a = CodeSetList.From (new Code[] { 0, 1, 5, 7 });
-            CodeSet cset_b = CodeSetPage.From (new Code[] { 0, 1, 3, 7 });
+            CodeSet cset_b = CodeSetMask.From (new Code[] { 0, 1, 3, 7 });
 
             Assert.True (cset_a != cset_b);
             Assert.True (cset_b != cset_a);

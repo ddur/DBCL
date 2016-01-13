@@ -73,6 +73,7 @@ namespace DD.Collections.ICodeSet.CodeSetPageTest {
         [Test]
         public void FromCodes () {
             CodeSetPage csp;
+            csp = CodeSetPage.From (0, 1, 12, 33, 65535);
             csp = CodeSetPage.From (new List<Code> () { 0, 1, 12, 33, 65535 });
         }
 

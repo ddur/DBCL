@@ -46,6 +46,9 @@ namespace DD.Collections.ICodeSet {
         public abstract Code Last { get; }
 
         [Pure]
+        public abstract bool IsReduced { get; }
+
+        [Pure]
         IEnumerator IEnumerable.GetEnumerator () { return this.GetEnumerator (); }
 
         [Pure]

@@ -46,13 +46,13 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
         [Test]
         public void ICodeSet_Empty () {
             Assert.True (CodeSetNone.Singleton.IsEmpty ());
-            Assert.True (CodeSetBits.From ().IsEmpty ());
+            Assert.True (CodeSetWrap.From ().IsEmpty ());
         }
 
         [Test]
         public void ICodeSet_NotEmpty () {
-            Assert.False (CodeSetBits.From (1).IsEmpty ());
-            Assert.False (CodeSetBits.From (10, 11, 20).IsEmpty ());
+            Assert.False (CodeSetMask.From (1).IsEmpty ());
+            Assert.False (CodeSetMask.From (10, 11, 20).IsEmpty ());
         }
     }
 }

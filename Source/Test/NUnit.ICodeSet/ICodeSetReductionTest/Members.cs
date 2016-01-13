@@ -21,12 +21,19 @@ namespace DD.Collections.ICodeSet.ICodeSetReductionTest {
             Assert.True (CodeSetPair.From (3, 4).IsReduced ());
             Assert.True (CodeSetFull.From (3, 44).IsReduced ());
             Assert.True (CodeSetList.From (3, 7, 9, 15, 80).IsReduced ());
-            Assert.True (CodeSetPage.From (3, 7, 9, 15, 80).IsReduced ());
+            Assert.True (CodeSetMask.From (3, 7, 9, 15, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93).IsReduced ());
             Assert.True (CodeSetWide.From (new Code[] { 3, 7, 9, 15, 80, 70000 }).IsReduced ());
             Assert.True (CodeSetDiff.From (CodeSetFull.From (1, 80000), CodeSetWide.From (new Code[] { 3, 7, 9, 15, 80, 70000 })).IsReduced ());
 
-            Assert.False (CodeSetBits.From (3, 7, 9, 15, 80).IsReduced ());
+            Assert.False (CodeSetMask.From (3).IsReduced ());
+            Assert.False (CodeSetMask.From (3, 7).IsReduced ());
+            Assert.False (CodeSetMask.From (3, 7, 9, 15, 80).IsReduced ());
+            Assert.False (CodeSetMask.From (CodeSetFull.From (1, 80)).IsReduced ());
+
+            Assert.False (CodeSetWrap.From ().IsReduced ());
             Assert.False (CodeSetWrap.From (BitSetArray.From (3, 7, 9, 15, 80)).IsReduced ());
+            Assert.False (CodeSetWrap.From (3, 7, 9, 15, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93).IsReduced ());
+            Assert.False (CodeSetWrap.From (CodeSetFull.From (1, 80000)).IsReduced ());
         }
 
         [Test, TestCaseSource ("Expected")]
@@ -119,11 +126,11 @@ namespace DD.Collections.ICodeSet.ICodeSetReductionTest {
                 yield return new Tuple<BitSetArray, Type> (BitSetArray.From (66, 250, 254), typeof (CodeSetList));
                 yield return new Tuple<BitSetArray, Type> (BitSetArray.From (0, 1, 2, 3, 4, 9, 10, 12, 13, 16, 17, 18, 19, 20, 21, 22), typeof (CodeSetList));
 
-                // bits -> Mask if length <= MaskMaxCount
+                // bits -> Mask if length <= char.MaxValue
                 yield return new Tuple<BitSetArray, Type> (BitSetArray.From (0, 1, 2, 3, 4, 9, 10, 12, 13, 16, 17, 18, 19, 20, 21, 22, 200), typeof (CodeSetMask));
 
-                // bits -> Diff attempt failed -> Page
-                yield return new Tuple<BitSetArray, Type> (BitSetArray.From (0, 1, 2, 3, 4, 9, 10, 12, 13, 16, 17, 18, 19, 20, 21, 25, 700), typeof (CodeSetPage));
+                // bits -> Diff attempt failed -> Mask
+                yield return new Tuple<BitSetArray, Type> (BitSetArray.From (0, 1, 2, 3, 4, 9, 10, 12, 13, 16, 17, 18, 19, 20, 21, 25, 700), typeof (CodeSetMask));
             }
         }
 
@@ -150,8 +157,8 @@ namespace DD.Collections.ICodeSet.ICodeSetReductionTest {
                 }
                 yield return new Tuple<BitSetArray, Type> (bits, typeof (CodeSetDiff));
 
-                // bits -> Diff/Page
-                bits = BitSetArray.From (Enumerable.Range (60000, 10000)); // between pages
+                // bits -> Diff/Mask
+                bits = BitSetArray.From (Enumerable.Range (64000, 66000)); // between pages
                 var r = new Random ();
                 for (var i = 0; i < 50; i++) {
                     bits.Set (r.Next (65300, 65520), false);
@@ -177,6 +184,8 @@ namespace DD.Collections.ICodeSet.ICodeSetReductionTest {
 
                 // bits -> Diff attempt failed -> Wide
                 var bits = BitSetArray.Size (100000);
+                bits[0] = true;
+                bits[90000] = true;
                 var r = new Random ();
                 for (var i = 0; i < 500; i++) {
                     bits.Set (r.Next (40000, 65535));

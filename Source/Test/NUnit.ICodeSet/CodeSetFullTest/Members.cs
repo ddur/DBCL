@@ -30,6 +30,7 @@ namespace DD.Collections.ICodeSet.CodeSetFullTest {
             Assert.True (codeSetFull.Last == 7);
             Assert.True (codeSetFull.Count == codeSetFull.Length);
             Assert.True (codeSetFull.Length == 1 + codeSetFull.Last - codeSetFull.First);
+            Assert.True (codeSetFull.IsReduced);
 
             // indexer
             Assert.True (codeSetFull[1]);

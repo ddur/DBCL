@@ -126,7 +126,7 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members {
 
         [Test]
         public void ReferenceEqual () {
-            ICodeSet a = CodeSetPage.From (0, 2, 11);
+            ICodeSet a = CodeSetMask.From (0, 2, 11);
 
             Assert.IsTrue (a.IsSubsetOf (a));
             Assert.IsTrue (a.IsSupersetOf (a));
@@ -140,7 +140,7 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members {
 
         [Test]
         public void SetEqual () {
-            ICodeSet a = CodeSetPage.From (0, 2, 4);
+            ICodeSet a = CodeSetMask.From (0, 2, 4);
             ICodeSet b = CodeSetList.From (0, 2, 4);
 
             Assert.IsTrue (a.IsSubsetOf (b));

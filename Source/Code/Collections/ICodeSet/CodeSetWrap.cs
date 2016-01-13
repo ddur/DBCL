@@ -50,20 +50,21 @@ namespace DD.Collections.ICodeSet {
             return new CodeSetWrap (codes);
         }
 
-        public static CodeSetWrap From (BitSetArray bits) {
+        public static CodeSetWrap From (BitSetArray bits, int offset = 0) {
             Contract.Requires<ArgumentNullException> (bits.IsNot (null));
-            Contract.Requires<IndexOutOfRangeException> (bits.Count == 0 || bits.Length.IsCodesCount () || bits.Last.HasCodeValue ());
+            Contract.Requires<IndexOutOfRangeException> (bits.Count == 0 || ( (bits.First + offset).HasCodeValue() && (bits.Last + offset).HasCodeValue ()));
             Contract.Ensures (Contract.Result<CodeSetWrap> ().IsNot (null));
 
-            return new CodeSetWrap (bits);
+            return new CodeSetWrap (bits, offset);
         }
 
-        /// <summary>Quick shallow clone</summary>
+        /// <summary>Quick shallow clone, sharing private readonly guts</summary>
         /// <param name="wrap">CodeSetWrap</param>
         private CodeSetWrap (CodeSetWrap wrap) {
             Contract.Requires<ArgumentNullException> (wrap.IsNot (null));
             Contract.Ensures (Theory.Construct (wrap, this));
 
+            offset = wrap.offset;
             sorted = wrap.sorted;
         }
 
@@ -76,12 +77,13 @@ namespace DD.Collections.ICodeSet {
 
         /// <summary>Copy(bits) &amp; bits.TrimExcess()</summary>
         /// <param name="bits">BitSetArray</param>
-        private CodeSetWrap (BitSetArray bits) {
+        private CodeSetWrap (BitSetArray bits, int offset = 0) {
             Contract.Requires<ArgumentNullException> (bits.IsNot (null));
-            Contract.Requires<IndexOutOfRangeException> (bits.Count == 0 || bits.Length.IsCodesCount () || bits.Last.HasCodeValue ());
+            Contract.Requires<IndexOutOfRangeException> (bits.Count == 0 || ( (bits.First + offset).HasCodeValue() && (bits.Last + offset).HasCodeValue ()));
             Contract.Ensures (Theory.Construct (bits, this));
 
             sorted = BitSetArray.Copy (bits);
+            this.offset = offset;
             sorted.TrimExcess ();
         }
 
@@ -90,6 +92,7 @@ namespace DD.Collections.ICodeSet {
         #region Fields
 
         private readonly BitSetArray sorted;
+        private readonly int offset = 0;
 
         #endregion
 
@@ -98,7 +101,7 @@ namespace DD.Collections.ICodeSet {
         [Pure]
         public override bool this[Code code] {
             get {
-                return sorted.Count != 0 && sorted[code.Value];
+                return sorted.Count != 0 && sorted[code.Value + offset];
             }
         }
 
@@ -121,7 +124,7 @@ namespace DD.Collections.ICodeSet {
             get {
                 if (sorted.Count != 0) {
                     Contract.Assume (sorted.First.HasValue);
-                    return (int)sorted.First;
+                    return (int)sorted.First + offset;
                 }
                 throw new InvalidOperationException ();
             }
@@ -132,28 +135,32 @@ namespace DD.Collections.ICodeSet {
             get {
                 if (sorted.Count != 0) {
                     Contract.Assume (sorted.Last.HasValue);
-                    return (int)sorted.Last;
+                    return (int)sorted.Last + offset;
                 }
                 throw new InvalidOperationException ();
+            }
+        }
+
+        /// <summary>
+        /// This ICodeSet implementation is temporary, must be reduced 
+        /// </summary>
+        [Pure]
+        public override bool IsReduced {
+            get {
+        		return false;
             }
         }
 
         [Pure]
         public override IEnumerator<Code> GetEnumerator () {
             foreach (var code in sorted) {
-                yield return (Code)code;
+                yield return (Code)(code + offset);
             }
         }
 
         #endregion
 
         #region Extended
-
-        public BitSetArray ToBitSetArray () {
-            Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
-
-            return BitSetArray.Copy (this.sorted);
-        }
 
         public IEnumerable<Code> Complement {
             get {

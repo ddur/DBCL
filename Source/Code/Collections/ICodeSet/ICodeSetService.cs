@@ -175,13 +175,9 @@ namespace DD.Collections.ICodeSet {
             if (self.IsNull () || self.Count == 0) {
                 return BitSetArray.Empty ();
             }
-            var icsWrap = self as CodeSetWrap;
-            if (!icsWrap.IsNull ()) {
-                return icsWrap.ToBitSetArray ();
-            }
             var ret = BitSetArray.Size (self.Last + 1);
             foreach (int code in self) {
-                ret._Set (code, true);
+                ret._Set (code);
             }
             return ret;
         }
@@ -198,10 +194,6 @@ namespace DD.Collections.ICodeSet {
 
             if (self.IsNull () || self.Count == 0)
                 return BitSetArray.Empty ();
-
-            var bits = self as CodeSetPage;
-            if (bits.IsNot (null))
-                return bits.ToCompact ();
 
             var ret = BitSetArray.Size (self.Length);
             foreach (int code in self) {

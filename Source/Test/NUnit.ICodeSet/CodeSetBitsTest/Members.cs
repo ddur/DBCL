@@ -58,12 +58,15 @@ namespace DD.Collections.ICodeSet.CodeSetBitsTest {
             Assert.True (csb.Length == 1);
             Assert.True (csb.First == 12);
             Assert.True (csb.Last == 12);
+            Assert.False (csb.IsReduced);
+
 
             csb = CodeSetBits.From (new List<Code> () { 1, 12, 33, 20 });
             Assert.True (csb.Count == 4);
             Assert.True (csb.Length == 33);
             Assert.True (csb.First == 1);
             Assert.True (csb.Last == 33);
+            Assert.False (csb.IsReduced);
         }
 
         [Test]

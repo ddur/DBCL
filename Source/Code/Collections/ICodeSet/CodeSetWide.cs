@@ -194,6 +194,18 @@ namespace DD.Collections.ICodeSet {
         }
 
         [Pure]
+        public override bool IsReduced {
+            get {
+//        		foreach (var set in planes) {
+//        			if (!set.IsReduced) {
+//        				return false;
+//        			}
+//        		}
+        		return true;
+            }
+        }
+
+        [Pure]
         public override IEnumerator<Code> GetEnumerator () {
             foreach (ICodeSet codeSet in this.planes) {
                 foreach (Code code in codeSet) {

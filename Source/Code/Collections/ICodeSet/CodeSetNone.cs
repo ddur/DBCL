@@ -68,6 +68,13 @@ namespace DD.Collections.ICodeSet {
         }
 
         [Pure]
+        public override bool IsReduced {
+            get {
+        		return true;
+            }
+        }
+
+        [Pure]
         public override IEnumerator<Code> GetEnumerator () {
             yield break;
         }

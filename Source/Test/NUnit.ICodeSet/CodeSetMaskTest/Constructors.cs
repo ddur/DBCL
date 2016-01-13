@@ -9,11 +9,12 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using DD.Collections;
 
 namespace DD.Collections.ICodeSet.CodeSetMaskTest {
 
     [TestFixture]
-    public class Construction {
+    public static class Construction {
 
         #region From ParamsCode
 
@@ -146,7 +147,7 @@ namespace DD.Collections.ICodeSet.CodeSetMaskTest {
             }
 
             [Test]
-            public void InvalidLastInt () {
+            public void InvalidLastBitMask () {
                 var arg = new int[] { 1, 1, 0 };
                 Assert.That (
                     delegate {
@@ -299,5 +300,79 @@ namespace DD.Collections.ICodeSet.CodeSetMaskTest {
         }
 
         #endregion
+
+        #region From BitSetArray
+
+        public class FromBitSetArray {
+
+            [Test]
+            public void InvalidItemsPlusMinusOffset () {
+                var arg = BitSetArray.From(0);
+                Assert.That (
+                    delegate {
+                        CodeSetMask.From (arg, Code.MinValue - 1);
+                    }, Throws.TypeOf<ArgumentException> ()
+                );
+                Assert.That (
+                    delegate {
+                        CodeSetMask.From (arg, Code.MaxValue + 1);
+                    }, Throws.TypeOf<ArgumentException> ()
+                );
+                Assert.That (
+                    delegate {
+                        CodeSetMask.From (arg, int.MinValue);
+                    }, Throws.TypeOf<ArgumentException> ()
+                );
+                Assert.That (
+                    delegate {
+                        CodeSetMask.From (arg, int.MaxValue);
+                    }, Throws.TypeOf<ArgumentException> ()
+                );
+
+                arg = BitSetArray.From (0, Code.MaxValue);
+
+                Assert.That (
+                    delegate {
+                        CodeSetMask.From (arg, 1); // 1114112
+                    }, Throws.TypeOf<ArgumentException> ()
+                );
+                Assert.That (
+                    delegate {
+                        CodeSetMask.From (arg, -1); // -1
+                    }, Throws.TypeOf<ArgumentException> ()
+                );
+            }
+
+            [Test]
+            public void ValidItemsPlusMinusOffset () {
+                var arg = BitSetArray.From(0);
+                Assert.That (
+                    delegate {
+                        CodeSetMask.From (arg, Code.MinValue);
+                    }, Throws.Nothing
+                );
+                Assert.That (
+                    delegate {
+                        CodeSetMask.From (arg, Code.MaxValue);
+                    }, Throws.Nothing
+                );
+
+                arg = BitSetArray.From (Code.MaxValue/2);
+
+                Assert.That (
+                    delegate {
+                        CodeSetMask.From (arg, 100000);
+                    }, Throws.Nothing
+                );
+                Assert.That (
+                    delegate {
+                        CodeSetMask.From (arg, -100000);
+                    }, Throws.Nothing
+                );
+            }
+
+        }
+        #endregion
+
     }
 }

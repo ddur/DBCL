@@ -85,6 +85,13 @@ namespace DD.Collections.ICodeSet {
         }
 
         [Pure]
+        public override bool IsReduced {
+            get {
+                return Count > Service.PairCount;
+            }
+        }
+
+        [Pure]
         public override IEnumerator<Code> GetEnumerator () {
             for (int item = this.start; item <= this.final; item++) {
                 yield return (Code)item;

@@ -85,7 +85,7 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members {
 
         [Test]
         public void SetEqual () {
-            ICodeSet a = CodeSetPage.From (1, 2, 5);
+            ICodeSet a = CodeSetMask.From (1, 2, 5);
             ICodeSet b = CodeSetList.From (1, 2, 5);
 
             Assert.IsTrue (a.Overlaps (b));
@@ -99,8 +99,8 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members {
 
         [Test]
         public void Overlaps_IsTrue () {
-            ICodeSet a = CodeSetPage.From (1, 2, 3, 4, 5, 7, 10);
-            ICodeSet b = CodeSetPage.From (0, 4, 9);
+            ICodeSet a = CodeSetMask.From (1, 2, 3, 4, 5, 7, 10);
+            ICodeSet b = CodeSetMask.From (0, 4, 9);
 
             Assert.IsTrue (a.Overlaps (b));
             Assert.IsTrue (b.Overlaps (a));
@@ -133,8 +133,8 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members {
 
         [Test]
         public void Overlaps_IsFalse () {
-            ICodeSet a = CodeSetPage.From (1, 3, 5);
-            ICodeSet b = CodeSetPage.From (0, 2, 4);
+            ICodeSet a = CodeSetMask.From (1, 3, 5);
+            ICodeSet b = CodeSetMask.From (0, 2, 4);
 
             Assert.IsFalse (a.Overlaps (b));
             Assert.IsFalse (b.Overlaps (a));

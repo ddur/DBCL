@@ -102,15 +102,13 @@ namespace DD.Collections.ICodeSet {
             Contract.Requires<IndexOutOfRangeException> (offset.InRange (0, Code.MaxValue - (int)self.Last));
 
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
-            Contract.Ensures (Contract.Result<ICodeSet> () is CodeSetPage || Contract.Result<ICodeSet> () is CodeSetWide);
+            Contract.Ensures (Contract.Result<ICodeSet> () is CodeSetMask || Contract.Result<ICodeSet> () is CodeSetWide);
 
             Contract.Assume (self.First.HasValue);
             Contract.Assume (self.Last.HasValue);
 
-            Code start = (int)self.First + offset;
-            Code final = (int)self.Last + offset;
-            if (start.UnicodePlane () == final.UnicodePlane ()) {
-                return CodeSetPage.From (self, offset);
+            if (self.Span() < char.MaxValue) {
+            	return CodeSetMask.From (self, offset);
             }
             return CodeSetWide.From (self, offset);
         }
@@ -128,17 +126,7 @@ namespace DD.Collections.ICodeSet {
 
         [Pure]
         public static bool IsReduced (this ICodeSet self) {
-            return (
-                self is Code ||
-                self is CodeSetNone ||
-                self is CodeSetPair ||
-                self is CodeSetFull ||
-                self is CodeSetList ||
-                self is CodeSetMask ||
-                self is CodeSetDiff ||
-                self is CodeSetPage ||
-                self is CodeSetWide
-            );
+            return self.IsReduced;
         }
 
         [Pure]
@@ -232,7 +220,7 @@ namespace DD.Collections.ICodeSet {
                         success.Assert (self.Count <= Service.ListMaxCount);
                     }
                     else if (self is CodeSetMask) {
-                        success.Assert (self.Span () <= Service.MaskMaxSpan);
+                        success.Assert (self.Length <= char.MaxValue);
                     }
                     else if (self is CodeSetDiff) {
                         success.Assert (self.Length > Service.MaskMaxSpan);

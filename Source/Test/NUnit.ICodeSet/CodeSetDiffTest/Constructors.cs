@@ -43,11 +43,11 @@ namespace DD.Collections.ICodeSet.CodeSetDiffTest {
 
             // requires a.Count = a.Length
             Assert.Throws<InvalidOperationException> (
-                delegate { csd = CodeSetDiff.From (CodeSetPage.From (new Code[] { 0, 1, 3, 4 }), CodeSetPair.From (1, 3)); }
+                delegate { csd = CodeSetDiff.From (CodeSetMask.From (new Code[] { 0, 1, 3, 4 }), CodeSetPair.From (1, 3)); }
             );
             // requires a is CodeSetFull
             Assert.Throws<InvalidOperationException> (
-                delegate { csd = CodeSetDiff.From (CodeSetBits.From (new Code[] { 0, 1, 2, 3, 4 }), CodeSetPair.From (1, 3)); }
+                delegate { csd = CodeSetDiff.From (CodeSetMask.From (new Code[] { 0, 1, 2, 3, 4 }), CodeSetPair.From (1, 3)); }
             );
 
             // requires a.Last > b.Last

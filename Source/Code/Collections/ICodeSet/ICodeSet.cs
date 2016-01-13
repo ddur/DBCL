@@ -46,6 +46,11 @@ namespace DD.Collections.ICodeSet {
         Code Last {
             get;
         }
+
+        [Pure]
+        bool IsReduced {
+        	get;
+        }
     }
 
     [ContractClassFor (typeof (ICodeSet))]
@@ -84,6 +89,9 @@ namespace DD.Collections.ICodeSet {
 
         [Pure]
         public abstract Code Last { get; }
+
+        [Pure]
+        public abstract bool IsReduced { get; }
 
         #endregion
 

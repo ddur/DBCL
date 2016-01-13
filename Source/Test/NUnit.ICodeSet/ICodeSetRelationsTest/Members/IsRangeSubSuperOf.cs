@@ -61,7 +61,7 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members {
 
         [Test]
         public void ReferenceEqual () {
-            ICodeSet a = CodeSetPage.From (1, 2, 7);
+            ICodeSet a = CodeSetMask.From (1, 2, 7);
 
             Assert.True (a.IsRangeSubsetOf (a));
 
@@ -70,7 +70,7 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members {
 
         [Test]
         public void RangeEqual () {
-            ICodeSet a = CodeSetPage.From (1, 2, 5);
+            ICodeSet a = CodeSetMask.From (1, 2, 5);
             ICodeSet b = CodeSetList.From (1, 2, 5);
 
             Assert.True (a.IsRangeSubsetOf (b));
@@ -88,7 +88,7 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members {
         [Test]
         public void ProperRangeSubset () {
             ICodeSet a = CodeSetList.From (0, 1, 2, 5);
-            ICodeSet b = CodeSetPage.From (1, 2, 5);
+            ICodeSet b = CodeSetMask.From (1, 2, 5);
 
             Assert.True (b.IsRangeSubsetOf (a));
             Assert.False (a.IsRangeSubsetOf (b));
@@ -110,7 +110,7 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members {
 
         [Test]
         public void NotRangeSubset () {
-            ICodeSet a = CodeSetPage.From (0, 1, 2, 5);
+            ICodeSet a = CodeSetMask.From (0, 1, 2, 5);
             ICodeSet b = CodeSetList.From (1, 2, 3, 4, 7);
 
             Assert.False (a.IsRangeSubsetOf (b));

@@ -63,7 +63,7 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members {
 
         [Test]
         public void SetEqual () {
-            ICodeSet a = CodeSetPage.From (6, 9, 28);
+            ICodeSet a = CodeSetMask.From (6, 9, 28);
             ICodeSet b = CodeSetList.From (6, 9, 28);
 
             Assert.IsTrue (a.RangeOverlaps (b));

@@ -5,6 +5,7 @@
 // --------------------------------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using NUnit.Framework;
 
@@ -14,8 +15,11 @@ namespace DD.Collections.ICodeSet.CodeSetPageTest {
     public class Members {
 
         [Test]
-        public void Indexer () {
+        public void IndexerAndEnumerator () {
+
             CodeSetPage csp;
+            List<Code> arg;
+
             Random r = new Random ();
 
             Code C = r.Next (char.MinValue + 10, char.MaxValue);
@@ -24,17 +28,23 @@ namespace DD.Collections.ICodeSet.CodeSetPageTest {
                 D = r.Next (char.MinValue + 10, char.MaxValue);
             }
 
-            csp = CodeSetPage.From (new List<Code> () { 1, 2, 40 });
+            arg = new List<Code> () { 1, 2, 2, 40 };
+            csp = CodeSetPage.From (arg);
             Assert.False (csp[C]);
             Assert.False (csp[D]);
+            Assert.True (csp.SequenceEqual(arg.OrderBy (x => x).Distinct()));
 
-            csp = CodeSetPage.From (new List<Code> () { 1, 2, 50, C });
+            arg = new List<Code> () { 1, 3, 2, 50, C };
+            csp = CodeSetPage.From (arg);
             Assert.True (csp[C]);
             Assert.False (csp[D]);
+            Assert.True (csp.SequenceEqual(arg.OrderBy (x => x).Distinct()));
 
-            csp = CodeSetPage.From (new List<Code> () { 1, C, D });
+            arg = new List<Code> () { 3, 2, 1, 1, C, D };
+            csp = CodeSetPage.From (arg);
             Assert.True (csp[C]);
             Assert.True (csp[D]);
+            Assert.True (csp.SequenceEqual(arg.OrderBy (x => x).Distinct()));
         }
 
         [Test]
@@ -46,6 +56,14 @@ namespace DD.Collections.ICodeSet.CodeSetPageTest {
             Assert.True (csp.Length == 33);
             Assert.True (csp.First == 1);
             Assert.True (csp.Last == 33);
+            Assert.False (csp.IsReduced);
+
+            csp = CodeSetPage.From (new List<Code> () { 1, 12, 33, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 15, 16, 17 });
+            Assert.True (csp.Count == 17);
+            Assert.True (csp.Length == 33);
+            Assert.True (csp.First == 1);
+            Assert.True (csp.Last == 33);
+            Assert.True (csp.IsReduced);
         }
 
         [Test]

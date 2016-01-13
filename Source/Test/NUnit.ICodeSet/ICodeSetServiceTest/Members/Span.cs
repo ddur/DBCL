@@ -41,7 +41,7 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
         [Test]
         public void IEnumerableCode_Empty () {
             Assert.AreEqual (0, CodeSetNone.Singleton.Span ());
-            Assert.AreEqual (0, CodeSetBits.From ().Span ());
+            Assert.AreEqual (0, CodeSetWrap.From ().Span ());
             Assert.AreEqual (0, (new Code[0]).Span ());
         }
 

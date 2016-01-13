@@ -106,6 +106,13 @@ namespace DD.Collections.ICodeSet {
         }
 
         [Pure]
+        public override bool IsReduced {
+            get {
+        		return Count > Service.PairCount && Count <= Service.ListMaxCount && Count < Length;
+            }
+        }
+
+        [Pure]
         public override IEnumerator<Code> GetEnumerator () {
             return this.sorted.GetEnumerator ();
         }

@@ -33,8 +33,8 @@ namespace DD.Collections.ICodeSet {
             Contract.Requires<InvalidOperationException> (a.First < b.First);
             Contract.Requires<InvalidOperationException> (b.Last < a.Last);
 
-            // this.count > PairCount
-            Contract.Requires<InvalidOperationException> ((a.Count - b.Count) > Service.PairCount);
+            // Has more members than Service.ListMaxCount (>CodeSetList.MaxCount)
+            Contract.Requires<InvalidOperationException> ((a.Count - b.Count) > Service.ListMaxCount);
 
             Contract.Ensures (Contract.Result<CodeSetDiff> ().IsNot (null));
 
@@ -59,8 +59,8 @@ namespace DD.Collections.ICodeSet {
             Contract.Requires<ArgumentException> (a.First < b.First);
             Contract.Requires<ArgumentException> (b.Last < a.Last);
 
-            // this.count > PairCount
-            Contract.Requires<ArgumentException> ((a.Count - b.Count) > Service.PairCount);
+            // this.count > Service.ListMaxCount (>CodeSetList.MaxCount)
+            Contract.Requires<ArgumentException> ((a.Count - b.Count) > Service.ListMaxCount);
 
             Contract.Ensures (Theory.Construct (a, b, this));
 
@@ -111,6 +111,13 @@ namespace DD.Collections.ICodeSet {
         public override Code Last {
             get {
                 return this.aSet.Last;
+            }
+        }
+
+        [Pure]
+        public override bool IsReduced {
+            get {
+              	return true; // reduced by Constructor Code-Contracts
             }
         }
 

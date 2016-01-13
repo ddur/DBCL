@@ -156,7 +156,7 @@ namespace DD.Collections.ICodeSet.ICodeSetRelationsTest.Members {
             Assert.IsTrue (b.QuickSetEquals (a) == true);
 
             a = CodeSetList.From (0, 1, 2, 3, 4, 5, 6, 9);
-            b = CodeSetPage.From (0, 1, 2, 3, 4, 5, 6, 9);
+            b = CodeSetMask.From (0, 1, 2, 3, 4, 5, 6, 9);
             Assert.IsTrue (a.SetEquals (b));
             Assert.IsTrue (b.SetEquals (a));
             Assert.IsTrue (a.SequenceEqual (b));

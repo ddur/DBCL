@@ -13,11 +13,11 @@ namespace DD.Collections.ICodeSet.CodeSetDiffTest {
     [TestFixture]
     public class Members {
         private static readonly CodeSetDiff csd1 = CodeSetDiff.From (CodeSetFull.From (Code.MinValue, Code.MaxValue), new Code (Code.MaxValue / 2));
-        private static readonly CodeSetDiff csd2 = CodeSetDiff.From (CodeSetFull.From (90, 203), CodeSetFull.From (100, 200));
+        private static readonly CodeSetDiff csd2 = CodeSetDiff.From (CodeSetFull.From (90, 207), CodeSetFull.From (100, 200));
 
         [Test]
         public void AsEnumerable () {
-            Assert.True (csd2.SequenceEqual (new Code[] { 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 201, 202, 203 }));
+            Assert.True (csd2.SequenceEqual (new Code[] { 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 201, 202, 203, 204, 205, 206, 207 }));
         }
 
         [Test]
@@ -26,16 +26,18 @@ namespace DD.Collections.ICodeSet.CodeSetDiffTest {
             Assert.True (csd1.Length == Code.MaxCount);
             Assert.True (csd1.First.Value == Code.MinValue);
             Assert.True (csd1.Last.Value == Code.MaxValue);
+            Assert.True (csd1.IsReduced);
 
-            Assert.True (csd2.Count == 13);
-            Assert.True (csd2.Length == 203 - 90 + 1);
+            Assert.True (csd2.Count == 17);
+            Assert.True (csd2.Length == 207 - 90 + 1);
             Assert.True (csd2.First.Value == 90);
-            Assert.True (csd2.Last.Value == 203);
+            Assert.True (csd2.Last.Value == 207);
+            Assert.True (csd2.IsReduced);
         }
 
         [Test]
         public void Indexer () {
-            var codes = new Code[] { 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 201, 202, 203 };
+            var codes = new Code[] { 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 201, 202, 203, 204, 205, 206, 207 };
             foreach (var code in codes) {
                 Assert.True (csd2[code]);
             }

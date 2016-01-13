@@ -28,15 +28,15 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
         }
 
         [Test]
-        public void FromCodeSetPage () {
+        public void FromCodeSetMask () {
             BitSetArray compact;
-            ICodeSet a = CodeSetPage.From (22, 65, 77);
+            ICodeSet a = CodeSetMask.From (22, 65, 77);
 
             compact = a.ToCompact ();
             Assert.IsTrue (compact.Count == 3);
             Assert.IsTrue (compact.IsCompact ());
 
-            a = CodeSetPage.From (20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 33);
+            a = CodeSetMask.From (20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 33);
             compact = a.ToCompact ();
             Assert.IsTrue (compact.Count == 11);
             Assert.IsTrue (compact.IsCompact ());

@@ -24,7 +24,7 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest {
             icsDict.Add (CodeSetList.From (new Code[] { 0, 2, 4, 6, 8, 10 }));
             Assert.True (icsDict[CodeSetFull.From (0, 5)] == 0);
             Assert.True (icsDict[CodeSetList.From (new Code[] { 0, 2, 4, 6, 8, 10 })] == 1);
-            Assert.True (icsDict[CodeSetPage.From (new Code[] { 0, 2, 4, 6, 8, 10 })] == 1);
+            Assert.True (icsDict[CodeSetMask.From (new Code[] { 0, 2, 4, 6, 8, 10 })] == 1);
 
             // add duplicate
             Assert.Throws<ArgumentException> (
@@ -34,7 +34,7 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest {
             );
             Assert.Throws<ArgumentException> (
                 delegate {
-                    icsDict.Add (CodeSetPage.From (new Code[] { 0, 2, 4, 6, 8, 10 }));
+                    icsDict.Add (CodeSetMask.From (new Code[] { 0, 2, 4, 6, 8, 10 }));
                 }
             );
         }

@@ -166,6 +166,16 @@ namespace DD.Collections.ICodeSet {
             }
         }
 
+        /// <summary>
+        /// This ICodeSet implementation is temporary, must be reduced 
+        /// </summary>
+        [Pure]
+        public override bool IsReduced {
+            get {
+                return false;
+            }
+        }
+
         [Pure]
         public override IEnumerator<Code> GetEnumerator () {
             foreach (var code in this.sorted) {

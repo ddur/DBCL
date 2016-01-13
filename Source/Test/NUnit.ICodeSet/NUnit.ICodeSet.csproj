@@ -55,7 +55,8 @@
     <Compile Include="CodeSetFullTest\Members.cs" />
     <Compile Include="CodeSetListTest\Constructors.cs" />
     <Compile Include="CodeSetListTest\Members.cs" />
-    <Compile Include="CodeSetMask_Test\Constructors.cs" />
+    <Compile Include="CodeSetMaskTest\Constructors.cs" />
+    <Compile Include="CodeSetMaskTest\Members.cs" />
     <Compile Include="CodeSetNoneTest\Members.cs" />
     <Compile Include="CodeSetPageTest\Constructors.cs" />
     <Compile Include="CodeSetPageTest\Members.cs" />
@@ -106,10 +107,11 @@
     <Compile Include="ICodeSetServiceTest\Members\IsNullOrEmpty_ICodeSet.cs" />
     <Compile Include="ICodeSetServiceTest\Members\ToBitSetArray.cs" />
     <Compile Include="ICodeSetServiceTest\Members\ToCompact.cs" />
+    <Compile Include="ICodeSetStaticFactoryTest\ToICodeSet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="CodeSetMask_Test\" />
+    <Folder Include="CodeSetMaskTest" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Code\DBCL.csproj">
