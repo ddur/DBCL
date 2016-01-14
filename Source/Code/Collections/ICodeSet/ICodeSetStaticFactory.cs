@@ -151,7 +151,9 @@ namespace DD.Collections.ICodeSet {
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
 
-            return ToICodeSet (self.BitDisjunction (that, more));
+            var args = new List<ICodeSet>() {self, that};
+            if (!more.IsNullOrEmpty()) { args.AddRange(more); }
+            return args.Disjunction();
         }
 
         public static ICodeSet Disjunction (this IEnumerable<ICodeSet> sets) {
