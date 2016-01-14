@@ -246,7 +246,7 @@ namespace DD.Collections.ICodeSet {
             Contract.Ensures (Theory.Result (this, Contract.Result<ICodeSet> ()));
             Contract.Ensures (Theory.From (bits, this, Contract.Result<ICodeSet> ()));
 
-            return bits.IsNullOrEmpty () ? CodeSetNone.Singleton : From ((ICodeSet)CodeSetBits.From (bits, 0));
+            return bits.IsNullOrEmpty () ? CodeSetNone.Singleton : From ((ICodeSet)CodeSetWrap.From (bits, 0));
         }
 
         private ICodeSet QuickFrom (BitSetArray bits) {

@@ -55,51 +55,39 @@ namespace DD.Collections.ICodeSet {
         }
 
         public static ICodeSet From (string utf16) {
-        	Contract.Requires<ArgumentNullException>(!utf16.Is (null));
-        	Contract.Requires<ArgumentEmptyException>(!utf16.Is (string.Empty));
-        	Contract.Requires<ArgumentException>(utf16.CanDecode());
+            Contract.Requires<ArgumentException>(utf16.IsNullOrEmpty() || utf16.CanDecode());
         	
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
 
-            return utf16.ToICodeSet ();
+            return utf16.IsNullOrEmpty () ? CodeSetNone.Singleton : utf16.ToICodeSet ();
         }
 
         public static ICodeSet ToICodeSet (this string utf16) {
-        	Contract.Requires<ArgumentNullException>(!utf16.Is (null));
-        	Contract.Requires<ArgumentEmptyException>(!utf16.Is (string.Empty));
-        	Contract.Requires<ArgumentException>(utf16.CanDecode());
+            Contract.Requires<ArgumentException>(utf16.IsNullOrEmpty() || utf16.CanDecode());
         	
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
 
-            return utf16.Decode().ToICodeSet ();
+            return utf16.IsNullOrEmpty () ? CodeSetNone.Singleton : utf16.Decode().ToICodeSet ();
         }
 
         public static ICodeSet ToICodeSet (this IEnumerable<char> chars) {
-        	Contract.Requires<ArgumentNullException>(!chars.Is (null));
-        	Contract.Requires<ArgumentEmptyException>(!chars.IsEmpty());
-
         	Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
 
-            return BitSetArray.From (chars.ToValues ()).ToICodeSet ();
+            return chars.IsNullOrEmpty () ? CodeSetNone.Singleton : BitSetArray.From (chars.ToValues ()).ToICodeSet ();
         }
 
         public static ICodeSet ToICodeSet (this IEnumerable<Code> codes) {
-        	Contract.Requires<ArgumentNullException>(!codes.Is (null));
-        	Contract.Requires<ArgumentEmptyException>(!codes.IsEmpty());
-
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
 
-            return BitSetArray.From (codes.ToValues ()).ToICodeSet ();
+            return codes.IsNullOrEmpty () ? CodeSetNone.Singleton : BitSetArray.From (codes.ToValues ()).ToICodeSet ();
         }
 
         public static ICodeSet ToICodeSet (this BitSetArray bits) {
-            Contract.Requires<ArgumentNullException> (!bits.Is (null));
-            Contract.Requires<ArgumentEmptyException> (!bits.IsEmpty());
-            Contract.Requires<ArgumentException> ((int)bits.Last <= Code.MaxValue, "Last bit is larger than Code.MaxValue");
+            Contract.Requires<ArgumentException> (bits.IsNullOrEmpty() || (int)bits.Last <= Code.MaxValue, "Last bit is larger than Code.MaxValue");
 
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
@@ -117,7 +105,9 @@ namespace DD.Collections.ICodeSet {
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
 
-            return ToICodeSet (self.BitUnion (that, more));
+            var args = new List<ICodeSet>() {self, that};
+            if (!more.IsNullOrEmpty()) { args.AddRange(more); }
+            return Union (args);
         }
 
         public static ICodeSet Union (this IEnumerable<ICodeSet> sets) {
@@ -201,7 +191,7 @@ namespace DD.Collections.ICodeSet {
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
 
-            return ToICodeSet (self.BitComplement ());
+            return self.BitComplement ().ToICodeSet();
         }
 
         #endregion

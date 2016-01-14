@@ -107,6 +107,7 @@
     <Compile Include="ICodeSetServiceTest\Members\ToBitSetArray.cs" />
     <Compile Include="ICodeSetServiceTest\Members\ToCompact.cs" />
     <Compile Include="ICodeSetStaticFactoryTest\ToICodeSet.cs" />
+    <Compile Include="ICodeSetStaticFactoryTest\Union.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

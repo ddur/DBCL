@@ -184,7 +184,6 @@ namespace DD.Collections.ICodeSet {
                 if (self.Count != 0) {
                     success.Assert (!(
                         self is CodeSetNone ||
-                        self is CodeSetBits ||
                         self is CodeSetWrap
                     ));
 
@@ -208,7 +207,6 @@ namespace DD.Collections.ICodeSet {
                     success.Assert (self.Length == 0);
                     success.Assert (
                         self is CodeSetNone ||
-                        self is CodeSetBits ||
                         self is CodeSetWrap
                     );
                 }

@@ -17,19 +17,13 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
 			[Test]
 			public void Null () {
 				const char[] chars = null;
-				Assert.Throws ( typeof(ArgumentNullException),
-				        delegate {
-				            chars.ToICodeSet();
-				        });
+                Assert.True (ReferenceEquals (CodeSetNone.Singleton, chars.ToICodeSet()));
 			}
 			
 			[Test]
 			public void Empty () {
 				var chars = new char[0];
-				Assert.Throws ( typeof(ArgumentEmptyException),
-				        delegate {
-				            chars.ToICodeSet();
-				        });
+                Assert.True (ReferenceEquals (CodeSetNone.Singleton, chars.ToICodeSet()));
 			}
 			
 			[Test]

@@ -48,7 +48,7 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
         [Test]
         public void IEnumerableCode_NotEmpty () {
             Assert.AreEqual (10, CodeSetPair.From (1, 10).Span ());
-            Assert.AreEqual (100, CodeSetBits.From (1, 20, 100).Span ());
+            Assert.AreEqual (100, CodeSetWrap.From (1, 20, 100).Span ());
             Assert.AreEqual (1000, CodeSetList.From (901, 1000, 1111, 1900).Span ());
         }
     }
