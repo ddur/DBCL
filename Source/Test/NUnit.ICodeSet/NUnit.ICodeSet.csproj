@@ -87,6 +87,7 @@
     <Compile Include="ICodeSetServiceTest\Members\ToCodes.cs" />
     <Compile Include="ICodeSetServiceTest\Members\ToValues.cs" />
     <Compile Include="ICodeSetStaticFactoryTest\Complement.cs" />
+    <Compile Include="ICodeSetStaticFactoryTest\Difference.cs" />
     <Compile Include="ICodeSetStaticFactoryTest\Disjunction.cs" />
     <Compile Include="ICodeSetStaticFactoryTest\FromToICodeSet.cs" />
     <Compile Include="ICodeSetStaticFactoryTest\Intersection.cs" />

@@ -103,7 +103,7 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
             }
 
             [Test]
-            public void Invalid() {
+            public void Invalid_Throws() {
                 const string Utf16 = "abc\uDC00\uD800def";
                 Assert.Throws ( typeof(ArgumentException),
                         delegate {

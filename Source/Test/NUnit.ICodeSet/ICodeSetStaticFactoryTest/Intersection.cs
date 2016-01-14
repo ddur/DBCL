@@ -6,6 +6,7 @@
  * 
  */
 using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
@@ -65,6 +66,33 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
             var ics_intersection = ics_a.Intersection(ics_b, ics_c);
 
             Assert.True (ics_intersection.Equals(ics_c));
+        }
+
+        [Test]
+        public void Throws_ArgumentNullException_WhenNullOperands()
+        {
+            Assert.Throws ( typeof(ArgumentNullException),
+                    delegate {
+                               ((List<ICodeSet>)null).Intersection();
+                    });
+        }
+
+        [Test]
+        public void Throws_ArgumentException_WhenNoOperands()
+        {
+            Assert.Throws ( typeof(ArgumentException),
+                    delegate {
+                               (new List<ICodeSet>()).Intersection();
+                    });
+        }
+
+        [Test]
+        public void Throws_ArgumentException_WhenOneOperand()
+        {
+            Assert.Throws ( typeof(ArgumentException),
+                    delegate {
+                               (new List<ICodeSet>()).Intersection();
+                    });
         }
     }
 }

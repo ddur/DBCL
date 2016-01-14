@@ -6,6 +6,7 @@
  * 
  */
 using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
@@ -55,5 +56,31 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
 
             Assert.True (ics_union.SequenceEqual("abd".ToICodeSet()));
         }
-    }
+
+        [Test]
+        public void Throws_ArgumentNullException_WhenNullOperands()
+        {
+            Assert.Throws ( typeof(ArgumentNullException),
+                    delegate {
+                               ((List<ICodeSet>)null).Union();
+                    });
+        }
+
+        [Test]
+        public void Throws_ArgumentException_WhenNoOperands()
+        {
+            Assert.Throws ( typeof(ArgumentException),
+                    delegate {
+                               (new List<ICodeSet>()).Union();
+                    });
+        }
+
+        [Test]
+        public void Throws_ArgumentException_WhenOneOperand()
+        {
+            Assert.Throws ( typeof(ArgumentException),
+                    delegate {
+                               (new List<ICodeSet>()).Union();
+                    });
+        }    }
 }
