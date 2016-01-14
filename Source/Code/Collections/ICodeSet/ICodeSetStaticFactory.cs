@@ -107,7 +107,7 @@ namespace DD.Collections.ICodeSet {
 
             var args = new List<ICodeSet>() {self, that};
             if (!more.IsNullOrEmpty()) { args.AddRange(more); }
-            return Union (args);
+            return args.Union();
         }
 
         public static ICodeSet Union (this IEnumerable<ICodeSet> sets) {
@@ -128,7 +128,9 @@ namespace DD.Collections.ICodeSet {
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
 
-            return ToICodeSet (self.BitIntersection (that, more));
+            var args = new List<ICodeSet>() {self, that};
+            if (!more.IsNullOrEmpty()) { args.AddRange(more); }
+            return args.Intersection();
         }
 
         public static ICodeSet Intersection (this IEnumerable<ICodeSet> sets) {

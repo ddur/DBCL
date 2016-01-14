@@ -88,6 +88,7 @@
     <Compile Include="ICodeSetServiceTest\Members\ToValues.cs" />
     <Compile Include="ICodeSetStaticFactoryTest\Complement.cs" />
     <Compile Include="ICodeSetStaticFactoryTest\FromToICodeSet.cs" />
+    <Compile Include="ICodeSetStaticFactoryTest\Intersection.cs" />
     <Compile Include="ICodeSetStaticFactoryTest\Members.cs" />
     <Compile Include="ICodeSetRelationsTest\Members\Compare.cs" />
     <Compile Include="ICodeSetRelationsTest\Members\Equals.cs" />

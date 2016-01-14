@@ -109,6 +109,7 @@ namespace DD.Collections.ICodeSet.CodeTest {
             Assert.False (a.Equals (c as object));
 
             Assert.False (a.Equals (x));
+            Assert.False (a.Equals (null));
         }
 
         [Test, TestCaseSource ("ValidCode")]

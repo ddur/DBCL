@@ -238,6 +238,12 @@ namespace DD.Collections.ICodeSet {
         #region IEquatable<ICodeSet>
 
         [Pure]
+        public override bool Equals (object obj) {
+            Contract.Ensures (Contract.Result<bool> () == ((obj is ICodeSet) && this.SetEquals ((ICodeSet)obj)));
+            return (obj is ICodeSet) && this.SetEquals ((ICodeSet)obj);
+        }
+
+        [Pure]
         public bool Equals (ICodeSet that) {
             Contract.Ensures (Contract.Result<bool> () == this.SetEquals (that));
             return this.SetEquals (that);
@@ -308,14 +314,6 @@ namespace DD.Collections.ICodeSet {
         #endregion
 
         #region Methods
-
-        [Pure]
-        public override bool Equals (object obj) {
-            // disable once InvokeAsExtensionMethod
-            Contract.Ensures (Contract.Result<bool> () == ((obj is ICodeSet) && this.SetEquals ((ICodeSet)obj)));
-            // disable once InvokeAsExtensionMethod
-            return (obj is ICodeSet) && this.SetEquals ((ICodeSet)obj);
-        }
 
         [Pure]
         public override string ToString () {
