@@ -20,7 +20,7 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
             Assert.True (((CodeSetList)null).IsNullOrEmpty ());
             Assert.True (((CodeSetFull)null).IsNullOrEmpty ());
             Assert.True (((CodeSetDiff)null).IsNullOrEmpty ());
-            Assert.True (((CodeSetPage)null).IsNullOrEmpty ());
+            Assert.True (((CodeSetMask)null).IsNullOrEmpty ());
             Assert.True (((CodeSetWide)null).IsNullOrEmpty ());
 
             Assert.True ((CodeSetNone.Singleton).IsNullOrEmpty ());

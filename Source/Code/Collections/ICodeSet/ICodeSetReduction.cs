@@ -226,7 +226,7 @@ namespace DD.Collections.ICodeSet {
                         success.Assert (self.Length > Service.MaskMaxSpan);
                     }
                     else {
-                        success.Assert (self is CodeSetPage || self is CodeSetWide);
+                        success.Assert (self is CodeSetWide);
                     }
                     break;
             }

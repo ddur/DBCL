@@ -58,8 +58,6 @@
     <Compile Include="CodeSetMaskTest\Constructors.cs" />
     <Compile Include="CodeSetMaskTest\Members.cs" />
     <Compile Include="CodeSetNoneTest\Members.cs" />
-    <Compile Include="CodeSetPageTest\Constructors.cs" />
-    <Compile Include="CodeSetPageTest\Members.cs" />
     <Compile Include="CodeSetPairTest\Constructors.cs" />
     <Compile Include="CodeSetPairTest\Members.cs" />
     <Compile Include="CodeSetWideTest\Constructors.cs" />
@@ -88,6 +86,7 @@
     <Compile Include="ICodeSetServiceTest\Members\Span.cs" />
     <Compile Include="ICodeSetServiceTest\Members\ToCodes.cs" />
     <Compile Include="ICodeSetServiceTest\Members\ToValues.cs" />
+    <Compile Include="ICodeSetStaticFactoryTest\Complement.cs" />
     <Compile Include="ICodeSetStaticFactoryTest\FromToICodeSet.cs" />
     <Compile Include="ICodeSetStaticFactoryTest\Members.cs" />
     <Compile Include="ICodeSetRelationsTest\Members\Compare.cs" />

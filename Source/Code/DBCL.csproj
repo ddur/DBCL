@@ -155,7 +155,6 @@
     <Compile Include="Collections\ICodeSet\CodeSetFull.cs" />
     <Compile Include="Collections\ICodeSet\CodeSetList.cs" />
     <Compile Include="Collections\ICodeSet\CodeSetNone.cs" />
-    <Compile Include="Collections\ICodeSet\CodeSetPage.cs" />
     <Compile Include="Collections\ICodeSet\CodeSetPair.cs" />
     <Compile Include="Collections\ICodeSet\CodeSetWide.cs" />
     <Compile Include="Collections\ICodeSet\ICodeSet.cs" />
