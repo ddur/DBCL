@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------
 // <copyright file="https://github.com/ddur/DBCL/blob/master/LICENSE" company="DD">
-// Copyright © 2013-2014 Dragan Duric. All Rights Reserved.
+// Copyright © 2013-2016 Dragan Duric. All Rights Reserved.
 // </copyright>
 // --------------------------------------------------------------------------------
 
@@ -11,11 +11,13 @@ using System.Linq;
 
 using DD.Diagnostics;
 
+// TODO? Remove
+
 namespace DD.Collections.ICodeSet {
 
-    /// <summary>Wraps over (and converts to) cloned BitSetArray
-    /// <remarks>Can be empty, can be full, can contain up to <see cref="Code.MaxCodeCount">Code.MaxCodeCount-1</see> codes</remarks>
-    /// </summary>
+    /// <summary>Wraps fast over safe cloned BitSetArray (and converts back to)</summary>
+    /// <remarks><para>Can be empty, can be full, can contain up to <see cref="Code.MaxCodeCount">Code.MaxCodeCount-1</see> codes</para>
+    /// <para>Used as intermediate ICodeSet for Reduction</para></remarks>
     [Serializable]
     internal sealed class CodeSetWrap : CodeSet {
 
