@@ -1966,73 +1966,73 @@ namespace DD.Collections {
             else if (that.IsNull () || that.Count == 0) {
                 // A.Xor(∅)=A
                 // no change
-            }
-            lock (SyncRoot) {
-
-                if (this.count == 0) {
-                    // ∅.Xor(B)=B
-                    // copy that to this
-                    Contract.Assert (that.count != 0);
+            } else {
+                lock (SyncRoot) {
     
-                    this.AddVersion ();
-                    this.count = that.count;
-                    this.range = this.range < that.range ?
-                        that.range :
-                        this.range;
-                    if (this.array.Length < BitSetArray.GetLongArrayLength (this.range)) {
-                        this.array = new long[BitSetArray.GetLongArrayLength (this.range)];
-                    }
-                    Array.Copy (that.array, this.array, that.array.Length);
-                }
-                // Xor ^ => SymmetricExceptWith ⊻
-                else {
-                    Contract.Assert (this.count != 0);
-                    Contract.Assert (that.count != 0);
-    
-                    int this_version = this.version;
-                    long bits_result = 0;
-
-                    //if ((int)this.Last < (int)that.Last) { this.Length = (int)that.Last+1; }
-                    if (this.Length < that.Length) {
-                        this.Length = that.Length;
-                    }
-
-                    int thisArrLen = BitSetArray.GetLongArrayLength (this.range);
-                    int thatArrLen = BitSetArray.GetLongArrayLength (that.range);
-                    Contract.Assert (thisArrLen >= thatArrLen);
-
-                    int index = 0;
-                    int temp_count = 0;
-                    int opLength = thisArrLen <= thatArrLen ?
-                        thisArrLen :
-                        thatArrLen;
-
-                    // for thisArrLen <= thatArrLen
-                    for (index = 0; index < opLength; index++) {
-                        if (this.array[index] != 0 || that.array[index] != 0) {
-                            bits_result = this.array[index] ^ that.array[index];
-                            if (bits_result != this.array[index]) {
-                                if (this_version == this.version) {
-                                    this.AddVersion ();
-                                }
-                                this.array[index] = bits_result;
-                            }
+                    if (this.count == 0) {
+                        // ∅.Xor(B)=B
+                        // copy that to this
+                        Contract.Assert (that.count != 0);
+        
+                        this.AddVersion ();
+                        this.count = that.count;
+                        this.range = this.range < that.range ?
+                            that.range :
+                            this.range;
+                        if (this.array.Length < BitSetArray.GetLongArrayLength (this.range)) {
+                            this.array = new long[BitSetArray.GetLongArrayLength (this.range)];
                         }
-                        temp_count += BitSetArray.CountOnBits (this.array[index]);
+                        Array.Copy (that.array, this.array, that.array.Length);
                     }
-                    // for thisArrLen > thatArrLen
-                    for (index = opLength; index < thisArrLen; index++) {
-                        temp_count += BitSetArray.CountOnBits (this.array[index]);
+                    // Xor ^ => SymmetricExceptWith ⊻
+                    else {
+                        Contract.Assert (this.count != 0);
+                        Contract.Assert (that.count != 0);
+        
+                        int this_version = this.version;
+                        long bits_result = 0;
+    
+                        //if ((int)this.Last < (int)that.Last) { this.Length = (int)that.Last+1; }
+                        if (this.Length < that.Length) {
+                            this.Length = that.Length;
+                        }
+    
+                        int thisArrLen = BitSetArray.GetLongArrayLength (this.range);
+                        int thatArrLen = BitSetArray.GetLongArrayLength (that.range);
+                        Contract.Assert (thisArrLen >= thatArrLen);
+    
+                        int index = 0;
+                        int temp_count = 0;
+                        int opLength = thisArrLen <= thatArrLen ?
+                            thisArrLen :
+                            thatArrLen;
+    
+                        // for thisArrLen <= thatArrLen
+                        for (index = 0; index < opLength; index++) {
+                            if (this.array[index] != 0 || that.array[index] != 0) {
+                                bits_result = this.array[index] ^ that.array[index];
+                                if (bits_result != this.array[index]) {
+                                    if (this_version == this.version) {
+                                        this.AddVersion ();
+                                    }
+                                    this.array[index] = bits_result;
+                                }
+                            }
+                            temp_count += BitSetArray.CountOnBits (this.array[index]);
+                        }
+                        // for thisArrLen > thatArrLen
+                        for (index = opLength; index < thisArrLen; index++) {
+                            temp_count += BitSetArray.CountOnBits (this.array[index]);
+                        }
+                        // This operation can change bit sequence leaving same number of bits set
+                        if (this.count != temp_count) {
+                            this.count = temp_count;
+                        }
+                        // no false bit above result.Length will ever change into true
+                        // Positive logic -> no need to ClearTail()
                     }
-                    // This operation can change bit sequence leaving same number of bits set
-                    if (this.count != temp_count) {
-                        this.count = temp_count;
-                    }
-                    // no false bit above result.Length will ever change into true
-                    // Positive logic -> no need to ClearTail()
                 }
             }
-
             return this;
         }
 
@@ -2129,11 +2129,11 @@ namespace DD.Collections {
                 )
             );
 
-            if (this.range == 0) {
-                // nothing to complement - no change
-            }
-            else {
-                lock (SyncRoot) {
+            lock (SyncRoot) {
+                if (this.range == 0) {
+                    // nothing to complement - no change
+                }
+                else {
                     // This operation will always change bit sequence
                     this.AddVersion ();
 
@@ -3109,26 +3109,27 @@ namespace DD.Collections {
             var other = that as BitSetArray;
             if (other.IsNot (null)) {
                 this.And (other);
-            }
-            lock (SyncRoot) {
-                if (this.count == 0) {
-                    // nothing to IntersectWith
-                }
-                else if (that.IsNull () || that.IsEmpty ()) {
-                    Contract.Assert (this.count != 0);
-                    this.Clear (); // .Clear() will change version
-                }
-                else {
-                    other = BitSetArray.Size (this.range);
-                    foreach (var item in that) {
-                        if (this[item]) {
-                            other._Set (item, true);
-                        }
+            } else {
+                lock (SyncRoot) {
+                    if (this.count == 0) {
+                        // nothing to IntersectWith
                     }
-                    if (other.count != this.count) {
-                        this.AddVersion ();
-                        this.array = other.array;
-                        this.count = other.count;
+                    else if (that.IsNull () || that.IsEmpty ()) {
+                        Contract.Assert (this.count != 0);
+                        this.Clear (); // .Clear() will change version
+                    }
+                    else {
+                        other = BitSetArray.Size (this.range);
+                        foreach (var item in that) {
+                            if (this[item]) {
+                                other._Set (item, true);
+                            }
+                        }
+                        if (other.count != this.count) {
+                            this.AddVersion ();
+                            this.array = other.array;
+                            this.count = other.count;
+                        }
                     }
                 }
             }
