@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------
 // <copyright file="https://github.com/ddur/DBCL/blob/master/LICENSE" company="DD">
-// Copyright © 2013-2014 Dragan Duric. All Rights Reserved.
+// Copyright © 2013-2016 Dragan Duric. All Rights Reserved.
 // </copyright>
 // --------------------------------------------------------------------------------
 
@@ -18,7 +18,7 @@ namespace DD.Collections.ICodeSet {
     /// </summary>
     public static class CodeExtends {
 
-        #region int
+        #region Extends int
 
         [Pure]
         public static bool IsSurrogate (this int self) {
@@ -83,7 +83,7 @@ namespace DD.Collections.ICodeSet {
 
         #endregion
 
-        #region IEnumerable<int>
+        #region Extends IEnumerable<int>
 
         /// <summary>Returns True if collection{int} Contains All (IsSupersetOf) specified characters.
         /// <para>To treat characters as UTF16 encoded, use string argument.</para>
@@ -131,5 +131,6 @@ namespace DD.Collections.ICodeSet {
         }
 
         #endregion
+
     }
 }
