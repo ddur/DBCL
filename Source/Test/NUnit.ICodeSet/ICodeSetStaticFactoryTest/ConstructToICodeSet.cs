@@ -10,7 +10,7 @@ using NUnit.Framework;
 
 namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
 {
-	public static class ToICodeSet {
+	public static class ConstructToICodeSet {
 
 		public class FromIEnumerableOfChar {
 

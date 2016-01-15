@@ -86,11 +86,11 @@
     <Compile Include="ICodeSetServiceTest\Members\Span.cs" />
     <Compile Include="ICodeSetServiceTest\Members\ToCodes.cs" />
     <Compile Include="ICodeSetServiceTest\Members\ToValues.cs" />
-    <Compile Include="ICodeSetStaticFactoryTest\Complement.cs" />
-    <Compile Include="ICodeSetStaticFactoryTest\Difference.cs" />
-    <Compile Include="ICodeSetStaticFactoryTest\Disjunction.cs" />
-    <Compile Include="ICodeSetStaticFactoryTest\FromToICodeSet.cs" />
-    <Compile Include="ICodeSetStaticFactoryTest\Intersection.cs" />
+    <Compile Include="ICodeSetStaticFactoryTest\OpComplement.cs" />
+    <Compile Include="ICodeSetStaticFactoryTest\OpDifference.cs" />
+    <Compile Include="ICodeSetStaticFactoryTest\OpDisjunction.cs" />
+    <Compile Include="ICodeSetStaticFactoryTest\ConstructFrom.cs" />
+    <Compile Include="ICodeSetStaticFactoryTest\OpIntersection.cs" />
     <Compile Include="ICodeSetStaticFactoryTest\Members.cs" />
     <Compile Include="ICodeSetRelationsTest\Members\Compare.cs" />
     <Compile Include="ICodeSetRelationsTest\Members\Equals.cs" />
@@ -109,12 +109,16 @@
     <Compile Include="ICodeSetServiceTest\Members\IsNullOrEmpty_ICodeSet.cs" />
     <Compile Include="ICodeSetServiceTest\Members\ToBitSetArray.cs" />
     <Compile Include="ICodeSetServiceTest\Members\ToCompact.cs" />
-    <Compile Include="ICodeSetStaticFactoryTest\ToICodeSet.cs" />
-    <Compile Include="ICodeSetStaticFactoryTest\Union.cs" />
+    <Compile Include="ICodeSetStaticFactoryTest\ConstructToICodeSet.cs" />
+    <Compile Include="ICodeSetStaticFactoryTest\OpUnion.cs" />
+    <Compile Include="ICodeSetUniqueFactoryTest\ConstructFrom.cs" />
+    <Compile Include="ICodeSetUniqueFactoryTest\OpComplement.cs" />
+    <Compile Include="ICodeSetUniqueFactoryTest\OpDifference.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="CodeSetMaskTest" />
+    <Folder Include="ICodeSetUniqueFactoryTest" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Code\DBCL.csproj">

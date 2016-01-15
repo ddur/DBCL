@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------
 // <copyright file="https://github.com/ddur/DBCL/blob/master/LICENSE" company="DD">
-// Copyright © 2013-2014 Dragan Duric. All Rights Reserved.
+// Copyright © 2013-2016 Dragan Duric. All Rights Reserved.
 // </copyright>
 // --------------------------------------------------------------------------------
 
@@ -20,47 +20,31 @@ namespace DD.Collections.ICodeSet {
 
         #region From items To ICodeSet
 
+        public static ICodeSet From (string utf16) {
+            Contract.Requires<ArgumentException>(utf16.IsNullOrEmpty() || utf16.CanDecode());
+            
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
+
+            return utf16.IsNullOrEmpty () ? CodeSetNone.Singleton : utf16.ToICodeSet ();
+        }
+
         public static ICodeSet From (char req, params char[] opt) {
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
 
-            List<char> charList;
-            if (!opt.IsNull () && opt.Length > 0) {
-                charList = new List<char> (1 + opt.Length);
-                charList.Add (req);
-                foreach (char code in opt) {
-                    charList.Add (code);
-                }
-            }
-            else {
-                charList = new List<char> () { req };
-            }
-            return charList.ToICodeSet ();
+            var args = new List<char>() {req};
+            if (!opt.IsNullOrEmpty()) { args.AddRange(opt); }
+            return args.ToICodeSet ();
         }
 
         public static ICodeSet From (Code req, params Code[] opt) {
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
 
-            List<Code> codeList;
-            if (!opt.IsNull () && opt.Length > 0) {
-                codeList = new List<Code> (1 + opt.Length);
-                codeList.Add (req);
-                codeList.AddRange (opt);
-            }
-            else { // type Code is never null
-                codeList = new List<Code> () { req };
-            }
-            return codeList.ToICodeSet() ;
-        }
-
-        public static ICodeSet From (string utf16) {
-            Contract.Requires<ArgumentException>(utf16.IsNullOrEmpty() || utf16.CanDecode());
-        	
-            Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
-            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
-
-            return utf16.IsNullOrEmpty () ? CodeSetNone.Singleton : utf16.ToICodeSet ();
+            var args = new List<Code>() {req};
+            if (!opt.IsNullOrEmpty()) { args.AddRange(opt); }
+            return args.ToICodeSet() ;
         }
 
         public static ICodeSet ToICodeSet (this string utf16) {

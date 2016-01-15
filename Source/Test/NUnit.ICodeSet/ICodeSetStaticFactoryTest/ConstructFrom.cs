@@ -10,7 +10,7 @@ using NUnit.Framework;
 
 namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
 {
-    public static class From
+    public static class ConstructFrom
     {
         public class CharAndParamsChar {
 

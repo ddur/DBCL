@@ -12,7 +12,7 @@ using NUnit.Framework;
 namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
 {
     [TestFixture]
-    public class Union
+    public class OpUnion
     {
 
         [Test]
