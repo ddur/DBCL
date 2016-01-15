@@ -1,20 +1,20 @@
 ﻿// --------------------------------------------------------------------------------
 // <copyright file="https://github.com/ddur/DBCL/blob/master/LICENSE" company="DD">
-// Copyright © 2013-2014 Dragan Duric. All Rights Reserved.
+// Copyright © 2013-2016 Dragan Duric. All Rights Reserved.
 // </copyright>
 // --------------------------------------------------------------------------------
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Linq;
-using DD.Text;
 
 namespace DD.Collections.ICodeSet {
 
     /// <summary>Wraps around compact bitmask-array</summary>
-    /// <remarks>Cannot be empty, contains at least 1, up to <see cref="Code.MaxCodeCount">Code.MaxCodeCount</see> codes</remarks>
+    /// <remarks><para>Cannot be empty, contains at least 1, up to <see cref="Code.MaxCodeCount">Code.MaxCodeCount</see> codes</para>
+    /// <para>Quick creates ICodeSet from compact int[] mask</para>
+    /// <para>Quick clones from anoter CodeSetWrap</para></remarks>
     [Serializable]
     public sealed class CodeSetMask : CodeSet {
 
@@ -230,7 +230,7 @@ namespace DD.Collections.ICodeSet {
 
         [Pure]
         public override bool IsReduced {
-            get { // More members than list, not full and not wider than character range (16 bits)
+            get { // When more members than list, when not full and not wider than character range (16 bits/8KB)
         		return Count > Service.ListMaxCount && Length > Count && Length < char.MaxValue;
             }
         }
