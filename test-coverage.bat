@@ -41,7 +41,7 @@
 @del /Q /S E:\GitHub\SharpDevelop\src\Tools\OpenCover\*
 @xcopy E:\GitHub\opencover\main\bin\Release\* E:\GitHub\SharpDevelop\src\Tools\OpenCover\ /S
 @xcopy E:\GitHub\opencover\main\bin\Release\* E:\GitHub\SharpDevelop\bin\Tools\OpenCover\ /S
-@pause
+@if "%pause%" == "True" pause
 
 :nolocal
 
@@ -60,7 +60,6 @@
 @echo OpenCover     Command: %OpenCoverCommand%
 @echo OpenCover     Options: %OpenCoverOptions%
 @%OpenCoverCommand% -version 
-@Rem if not "%appveyor%" == "True" pause
 @echo.
 
 @Rem Local Build?
@@ -87,8 +86,9 @@
 -targetargs:"NUnit.%1.dll /result:\"NUnit.%1.xml\" %dbcl_nunit_runner_options%"
 @echo -------------------------------------
 @echo.
-@if "%appveyor%" == "True" exit /b
 @echo %date%
 @echo %time%
-@pause
+@if "%appveyor%" == "True" exit /b
+@if exist ".\Source\Test\NUnit.%1\OpenCover" copy /Y "%dbcl_artifacts_folder%\OpenCover.%1.xml" ".\Source\Test\NUnit.%1\OpenCover\coverage.xml"
+@if "%pause%" == "True" pause
 @exit /b
