@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------
 // <copyright file="https://github.com/ddur/DBCL/blob/master/LICENSE" company="DD">
-// Copyright © 2013-2014 Dragan Duric. All Rights Reserved.
+// Copyright © 2013-2016 Dragan Duric. All Rights Reserved.
 // </copyright>
 // --------------------------------------------------------------------------------
 
@@ -197,7 +197,7 @@ namespace DD.Collections.ICodeSet {
 
             var ret = BitSetArray.Size (self.Length);
             foreach (int code in self) {
-                ret._Set (code - self.First, true);
+                ret._Set (code - self.First);
             }
 
             // first and last bit set == compact
