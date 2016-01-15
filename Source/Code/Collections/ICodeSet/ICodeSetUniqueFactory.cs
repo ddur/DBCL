@@ -22,7 +22,7 @@ namespace DD.Collections.ICodeSet {
         /// <remarks><para>It is private because it is unsafe for public use</para>
         /// <para>It does not copy constructor argument! It holds reference to external BitSetArray</para>
         /// <para>Used to quick wrap ICodeSet over TRANSIENT-ONLY, within parent class created, BitSetArray</para></remarks>
-        private class QuickWrap : CodeSet {
+        internal class QuickWrap : CodeSet {
 
             #region Ctor
 
@@ -317,7 +317,9 @@ namespace DD.Collections.ICodeSet {
         public ICodeSet Union (ICodeSet lhs, ICodeSet rhs, params ICodeSet[] opt) {
             Contract.Ensures (Theory.Result (this, Contract.Result<ICodeSet> ()));
 
-            return QuickFrom (lhs.BitUnion (rhs, opt));
+            var args = new List<ICodeSet>() {lhs, rhs};
+            if (!opt.IsNullOrEmpty()) { args.AddRange(opt); }
+            return Union(args);
         }
 
         public ICodeSet Union (IEnumerable<ICodeSet> sets) {
@@ -336,7 +338,9 @@ namespace DD.Collections.ICodeSet {
         public ICodeSet Intersection (ICodeSet lhs, ICodeSet rhs, params ICodeSet[] opt) {
             Contract.Ensures (Theory.Result (this, Contract.Result<ICodeSet> ()));
 
-            return QuickFrom (lhs.BitIntersection (rhs, opt));
+            var args = new List<ICodeSet>() {lhs, rhs};
+            if (!opt.IsNullOrEmpty()) { args.AddRange(opt); }
+            return Intersection(args);
         }
 
         public ICodeSet Intersection (IEnumerable<ICodeSet> sets) {
@@ -355,7 +359,9 @@ namespace DD.Collections.ICodeSet {
         public ICodeSet Disjunction (ICodeSet lhs, ICodeSet rhs, params ICodeSet[] opt) {
             Contract.Ensures (Theory.Result (this, Contract.Result<ICodeSet> ()));
 
-            return QuickFrom (lhs.BitDisjunction (rhs, opt));
+            var args = new List<ICodeSet>() {lhs, rhs};
+            if (!opt.IsNullOrEmpty()) { args.AddRange(opt); }
+            return Disjunction(args);
         }
 
         public ICodeSet Disjunction (IEnumerable<ICodeSet> sets) {
@@ -374,7 +380,9 @@ namespace DD.Collections.ICodeSet {
         public ICodeSet Difference (ICodeSet lhs, ICodeSet rhs, params ICodeSet[] opt) {
             Contract.Ensures (Theory.Result (this, Contract.Result<ICodeSet> ()));
 
-            return QuickFrom (lhs.BitDifference (rhs, opt));
+            var args = new List<ICodeSet>() {lhs, rhs};
+            if (!opt.IsNullOrEmpty()) { args.AddRange(opt); }
+            return Difference(args);
         }
 
         public ICodeSet Difference (IEnumerable<ICodeSet> sets) {
