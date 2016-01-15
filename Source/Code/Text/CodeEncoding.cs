@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------
 // <copyright file="https://github.com/ddur/DBCL/blob/master/LICENSE" company="DD">
-// Copyright © 2013-2014 Dragan Duric. All Rights Reserved.
+// Copyright © 2013-2016 Dragan Duric. All Rights Reserved.
 // </copyright>
 // --------------------------------------------------------------------------------
 
@@ -205,7 +205,6 @@ namespace DD.Text {
                     var bytes = new byte[codes.Length * 4];
                     Buffer.BlockCopy (codes, 0, bytes, 0, bytes.Length);
                     string encoded = Encoding.UTF32.GetString (bytes);
-                    var r = result.GetEnumerator ();
                     success.Assert (result.SequenceEqual (encoded), result.Length.ToString ());
                 }
                 return success;

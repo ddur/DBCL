@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------
 // <copyright file="https://github.com/ddur/DBCL/blob/master/LICENSE" company="DD">
-// Copyright © 2013-2014 Dragan Duric. All Rights Reserved.
+// Copyright © 2013-2016 Dragan Duric. All Rights Reserved.
 // </copyright>
 // --------------------------------------------------------------------------------
 
@@ -1967,12 +1967,13 @@ namespace DD.Collections {
                 // A.Xor(∅)=A
                 // no change
             }
-            else if (this.count == 0) {
-                // ∅.Xor(B)=B
-                // copy that to this
-                Contract.Assert (that.count != 0);
+            lock (SyncRoot) {
 
-                lock (SyncRoot) {
+                if (this.count == 0) {
+                    // ∅.Xor(B)=B
+                    // copy that to this
+                    Contract.Assert (that.count != 0);
+    
                     this.AddVersion ();
                     this.count = that.count;
                     this.range = this.range < that.range ?
@@ -1983,13 +1984,11 @@ namespace DD.Collections {
                     }
                     Array.Copy (that.array, this.array, that.array.Length);
                 }
-            }
-            // Xor ^ => SymmetricExceptWith ⊻
-            else {
-                Contract.Assert (this.count != 0);
-                Contract.Assert (that.count != 0);
-
-                lock (SyncRoot) {
+                // Xor ^ => SymmetricExceptWith ⊻
+                else {
+                    Contract.Assert (this.count != 0);
+                    Contract.Assert (that.count != 0);
+    
                     int this_version = this.version;
                     long bits_result = 0;
 
@@ -3111,15 +3110,15 @@ namespace DD.Collections {
             if (other.IsNot (null)) {
                 this.And (other);
             }
-            else if (this.count == 0) {
-                // nothing to IntersectWith
-            }
-            else if (that.IsNull () || that.IsEmpty ()) {
-                Contract.Assert (this.count != 0);
-                this.Clear (); // .Clear() will change version
-            }
-            else {
-                lock (SyncRoot) {
+            lock (SyncRoot) {
+                if (this.count == 0) {
+                    // nothing to IntersectWith
+                }
+                else if (that.IsNull () || that.IsEmpty ()) {
+                    Contract.Assert (this.count != 0);
+                    this.Clear (); // .Clear() will change version
+                }
+                else {
                     other = BitSetArray.Size (this.range);
                     foreach (var item in that) {
                         if (this[item]) {
@@ -3600,8 +3599,8 @@ namespace DD.Collections {
 
                 Contract.Ensures (Theory.LengthSet (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), value, this));
 
-                if (this.range != value) {
-                    lock (SyncRoot) {
+                lock (SyncRoot) {
+                    if (this.range != value) {
                         if (this.count != 0) {
                             Contract.Assume (this.First.HasValue);
                             Contract.Assume (this.Last.HasValue);
