@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------
 // <copyright file="https://github.com/ddur/DBCL/blob/master/LICENSE" company="DD">
-// Copyright © 2013-2014 Dragan Duric. All Rights Reserved.
+// Copyright © 2013-2016 Dragan Duric. All Rights Reserved.
 // </copyright>
 // --------------------------------------------------------------------------------
 
@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using DD.Diagnostics;
+
+// TODO? Remove
 
 namespace DD.Collections.ICodeSet {
 
@@ -84,7 +86,7 @@ namespace DD.Collections.ICodeSet {
                 else {
                     this.sorted = BitSetArray.Size (this.final - this.start + 1);
                     foreach (Code code in codes) {
-                        this.sorted._Set (code - this.start, true);
+                        this.sorted._Set (code - this.start);
                     }
                 }
             }
@@ -107,7 +109,7 @@ namespace DD.Collections.ICodeSet {
                 this.final = (int)bits.Last + offset;
                 this.sorted = BitSetArray.Size (this.final - this.start + 1);
                 foreach (Code code in bits) {
-                    this.sorted._Set (code + offset - this.start, true);
+                    this.sorted._Set (code + offset - this.start);
                 }
             }
             else {
