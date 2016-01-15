@@ -114,6 +114,9 @@
     <Compile Include="ICodeSetUniqueFactoryTest\ConstructFrom.cs" />
     <Compile Include="ICodeSetUniqueFactoryTest\OpComplement.cs" />
     <Compile Include="ICodeSetUniqueFactoryTest\OpDifference.cs" />
+    <Compile Include="ICodeSetUniqueFactoryTest\OpDisjunction.cs" />
+    <Compile Include="ICodeSetUniqueFactoryTest\OpIntersection.cs" />
+    <Compile Include="ICodeSetUniqueFactoryTest\OpUnion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
