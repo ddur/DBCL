@@ -187,7 +187,10 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
             [Test]
             public void Empty() {
                 var distinct = new Distinct();
-                Assert.True (ReferenceEquals (CodeSetNone.Singleton, distinct.From(CodeSetWrap.From ())));
+                Assert.True (ReferenceEquals (CodeSetNone.Singleton, distinct.From("")));
+                Assert.True (ReferenceEquals (CodeSetNone.Singleton, distinct.From(new char[0])));
+                Assert.True (ReferenceEquals (CodeSetNone.Singleton, distinct.From(new List<Code>())));
+                Assert.True (ReferenceEquals (CodeSetNone.Singleton, distinct.From(BitSetArray.Empty())));
                 Assert.True (ReferenceEquals (CodeSetNone.Singleton, distinct.From(CodeSetNone.Singleton)));
 
                 Assert.False (distinct.Contains(CodeSetNone.Singleton));

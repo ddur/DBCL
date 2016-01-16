@@ -15,9 +15,37 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
     public class QuickWrapSubClass
     {
         [Test]
-        public void CoverAll()
+        public void Null()
         {
-            var quick = new Distinct.QuickWrap (BitSetArray.From (1, 5, 7));
+            Assert.Throws ( typeof(ArgumentNullException),
+                    delegate {
+                               Distinct.QuickWrap.From ((BitSetArray)null);
+                    });
+        }
+
+        [Test]
+        public void Empty()
+        {
+            Assert.Throws ( typeof(ArgumentException),
+                    delegate {
+                               Distinct.QuickWrap.From (BitSetArray.Empty());
+                    });
+        }
+
+
+        [Test]
+        public void Ivalid()
+        {
+            Assert.Throws ( typeof(ArgumentException),
+                    delegate {
+                               Distinct.QuickWrap.From (BitSetArray.From (1114112));
+                    });
+        }
+
+        [Test]
+        public void Valid()
+        {
+            var quick = Distinct.QuickWrap.From (BitSetArray.From (1, 5, 7));
 
             Assert.True (quick[1] && quick[5] && quick[7]);
             Assert.False (quick[2] | quick[4] | quick[6]);

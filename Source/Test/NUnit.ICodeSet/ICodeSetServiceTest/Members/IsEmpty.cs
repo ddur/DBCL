@@ -46,7 +46,6 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
         [Test]
         public void ICodeSet_Empty () {
             Assert.True (CodeSetNone.Singleton.IsEmpty ());
-            Assert.True (CodeSetWrap.From ().IsEmpty ());
         }
 
         [Test]

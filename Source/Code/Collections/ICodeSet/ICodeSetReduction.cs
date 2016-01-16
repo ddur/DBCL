@@ -26,7 +26,7 @@ namespace DD.Collections.ICodeSet {
                 )
             );
 
-            Contract.Ensures (Contract.Result<ICodeSet> ().Is (null) || !(Contract.Result<ICodeSet> () is CodeSetWrap));
+            Contract.Ensures (Contract.Result<ICodeSet> ().Is (null) || Contract.Result<ICodeSet> ().IsReduced);
 
             #region Reduction
 

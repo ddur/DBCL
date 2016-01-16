@@ -163,20 +163,10 @@ namespace DD.Collections.ICodeSet {
             if (self.Is (null) || ((self.Length - self.Count) == 0))
                 return NoBits;
 
-            // TODO? performance test between two options below
             var complement = BitSetArray.Size (self.Last);
-            if ((self.Length - self.Count) < (self.Length / 2)) {
-                BitSetArray compact = self.ToCompact ();
-                compact.Not ();
-                foreach (var item in compact) {
-                    complement._Set (item + self.First);
-                }
-            }
-            else {
-                for (int item = self.First + 1; item < self.Last; item++) {
-                    if (!self[item]) {
-                        complement._Set (item);
-                    }
+            for (int item = self.First + 1; item < self.Last; item++) {
+                if (!self[item]) {
+                    complement._Set (item);
                 }
             }
             Contract.Assume (complement.Count != 0);

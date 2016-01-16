@@ -26,10 +26,15 @@ namespace DD.Collections.ICodeSet {
 
             #region Ctor
 
-            internal QuickWrap (BitSetArray bits) {
+            public static QuickWrap From(BitSetArray bits) {
                 Contract.Requires<ArgumentNullException> (bits.IsNot (null));
-                Contract.Requires<ArgumentEmptyException> (bits.Count != 0);
-                Contract.Requires<IndexOutOfRangeException> ((int)bits.Last <= Code.MaxValue);
+                return new QuickWrap (bits);
+            }
+
+            private QuickWrap (BitSetArray bits) {
+                Contract.Requires<ArgumentNullException> (bits.IsNot (null));
+                Contract.Requires<ArgumentException> (bits.Count != 0);
+                Contract.Requires<ArgumentException> ((int)bits.Last <= Code.MaxValue);
 
                 Contract.Ensures (Theory.Construct (bits, this));
 
@@ -248,7 +253,7 @@ namespace DD.Collections.ICodeSet {
             Contract.Ensures (Theory.From (bits, this, Contract.Result<ICodeSet> ()));
 
             // bits is created external to this class, it is not transient. Use safe copy of bits!
-            return bits.IsNullOrEmpty () ? CodeSetNone.Singleton : From ((ICodeSet)new QuickWrap (BitSetArray.Copy(bits)));
+            return bits.IsNullOrEmpty () ? CodeSetNone.Singleton : From ((ICodeSet)QuickWrap.From(BitSetArray.Copy(bits)));
         }
 
         /// <summary>
@@ -262,7 +267,7 @@ namespace DD.Collections.ICodeSet {
             Contract.Ensures (Theory.Result (this, Contract.Result<ICodeSet> ()));
             Contract.Ensures (Theory.From (bits, this, Contract.Result<ICodeSet> ()));
 
-            return bits.IsNullOrEmpty () ? CodeSetNone.Singleton : From ((ICodeSet)new QuickWrap (bits));
+            return bits.IsNullOrEmpty () ? CodeSetNone.Singleton : From ((ICodeSet)QuickWrap.From (bits));
         }
 
         public ICodeSet From (ICodeSet iset) {

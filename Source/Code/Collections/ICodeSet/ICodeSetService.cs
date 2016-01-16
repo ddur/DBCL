@@ -175,6 +175,10 @@ namespace DD.Collections.ICodeSet {
             if (self.IsNull () || self.Count == 0) {
                 return BitSetArray.Empty ();
             }
+            var quick = self as Distinct.QuickWrap;
+            if (quick.IsNot (null)) {
+                return quick.ToBitSetArray(); // O(1)
+            }
             var ret = BitSetArray.Size (self.Last + 1);
             foreach (int code in self) {
                 ret._Set (code);

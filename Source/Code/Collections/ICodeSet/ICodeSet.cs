@@ -54,13 +54,9 @@ namespace DD.Collections.ICodeSet {
     }
 
     [ContractClassFor (typeof (ICodeSet))]
-    internal abstract class ICodeSetContractClass : ICodeSet {
+    public abstract class ICodeSetContractClass : ICodeSet {
 
         #region Ctor
-
-        private ICodeSetContractClass () {
-        }
-
         #endregion
 
         #region Contract ICodeSet
@@ -183,8 +179,7 @@ namespace DD.Collections.ICodeSet {
 
                 if (self.Count != 0) {
                     success.Assert (!(
-                        self is CodeSetNone ||
-                        self is CodeSetWrap
+                        self is CodeSetNone
                     ));
 
                     success.Assert (self.First >= Code.MinValue);
@@ -206,8 +201,7 @@ namespace DD.Collections.ICodeSet {
                 else {
                     success.Assert (self.Length == 0);
                     success.Assert (
-                        self is CodeSetNone ||
-                        self is CodeSetWrap
+                        self is CodeSetNone
                     );
                 }
 
