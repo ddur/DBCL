@@ -9,17 +9,17 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 
-namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
+namespace DD.Collections.ICodeSet.QuickWrapTest
 {
     [TestFixture]
-    public class QuickWrapSubClass
+    public class ConstructionAndMembers
     {
         [Test]
         public void Null()
         {
             Assert.Throws ( typeof(ArgumentNullException),
                     delegate {
-                               Distinct.QuickWrap.From ((BitSetArray)null);
+                               QuickWrap.From ((BitSetArray)null);
                     });
         }
 
@@ -28,7 +28,7 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
         {
             Assert.Throws ( typeof(ArgumentException),
                     delegate {
-                               Distinct.QuickWrap.From (BitSetArray.Empty());
+                               QuickWrap.From (BitSetArray.Empty());
                     });
         }
 
@@ -38,14 +38,14 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
         {
             Assert.Throws ( typeof(ArgumentException),
                     delegate {
-                               Distinct.QuickWrap.From (BitSetArray.From (1114112));
+                               QuickWrap.From (BitSetArray.From (1114112));
                     });
         }
 
         [Test]
         public void Valid()
         {
-            var quick = Distinct.QuickWrap.From (BitSetArray.From (1, 5, 7));
+            var quick = QuickWrap.From (BitSetArray.From (1, 5, 7));
 
             Assert.True (quick[1] && quick[5] && quick[7]);
             Assert.False (quick[2] | quick[4] | quick[6]);

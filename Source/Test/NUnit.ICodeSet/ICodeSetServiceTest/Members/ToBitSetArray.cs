@@ -65,7 +65,7 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
             Assert.IsTrue (output.First == a.First);
             Assert.IsTrue (output.Last == a.Last);
 
-            a = Distinct.QuickWrap.From (BitSetArray.From (11, 25, 90, 130, 132, 132, 133, 134, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160));
+            a = QuickWrap.From (BitSetArray.From (11, 25, 90, 130, 132, 132, 133, 134, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160));
             output = a.ToBitSetArray ();
 
             Assert.IsTrue (output.Count == a.Count);

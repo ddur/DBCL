@@ -175,7 +175,7 @@ namespace DD.Collections.ICodeSet {
             if (self.IsNull () || self.Count == 0) {
                 return BitSetArray.Empty ();
             }
-            var quick = self as Distinct.QuickWrap;
+            var quick = self as QuickWrap;
             if (quick.IsNot (null)) {
                 return quick.ToBitSetArray(); // O(1)
             }

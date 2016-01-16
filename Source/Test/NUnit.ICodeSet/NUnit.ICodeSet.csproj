@@ -115,12 +115,13 @@
     <Compile Include="ICodeSetUniqueFactoryTest\OpDisjunction.cs" />
     <Compile Include="ICodeSetUniqueFactoryTest\OpIntersection.cs" />
     <Compile Include="ICodeSetUniqueFactoryTest\OpUnion.cs" />
-    <Compile Include="ICodeSetUniqueFactoryTest\QuickWrapSubClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuickWrapTest\ConstructionAndMembers.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="CodeSetMaskTest" />
     <Folder Include="ICodeSetUniqueFactoryTest" />
+    <Folder Include="QuickWrapTest" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Code\DBCL.csproj">

@@ -164,6 +164,7 @@
     <Compile Include="Collections\ICodeSet\ICodeSetRelations.cs" />
     <Compile Include="Collections\ICodeSet\ICodeSetService.cs" />
     <Compile Include="Collections\ICodeSet\ICodeSetUniqueFactory.cs" />
+    <Compile Include="Collections\ICodeSet\QuickWrap.cs" />
     <Compile Include="Diagnostics\Success.cs" />
     <Compile Include="ExtendsBool.cs" />
     <Compile Include="ExtendsIEnumerable.cs" />
