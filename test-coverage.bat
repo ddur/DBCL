@@ -66,7 +66,8 @@
 @if "%appveyor%" == "True" goto run-all-tests
 @if not exist "C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" goto run-all-tests
 @if not exist "E:\cov-analysis-win64-7.7.0.4\bin\cov-build.exe" goto run-all-tests
-@E:\cov-analysis-win64-7.7.0.4\bin\cov-build --dir cov-int "C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" DBCL.sln
+@Rem E:\cov-analysis-win64-7.7.0.4\bin\cov-build --dir cov-int "C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" DBCL.sln /t:Clean,Build
+@"C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" DBCL.sln /t:Clean,Build
 
 :run-all-tests
 @call :run-single-test "Extensions"  "+[DBCL]DD.Extends*"

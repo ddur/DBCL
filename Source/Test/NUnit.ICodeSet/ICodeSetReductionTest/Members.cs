@@ -59,8 +59,8 @@ namespace DD.Collections.ICodeSet.ICodeSetReductionTest {
             Type type = tuple.Item2;
             ICodeSet result = input.Reduce ();
             Assert.NotNull (result);
-            Assert.True (result.IsReduced ());
             Assert.AreSame (type, result.GetType ());
+            Assert.True (result.IsReduced ());
             if (input.IsNot (null)) {
                 Assert.That (input.SequenceEqual (result.ToValues ()));
             }
@@ -180,13 +180,15 @@ namespace DD.Collections.ICodeSet.ICodeSetReductionTest {
                 yield return new Tuple<BitSetArray, Type> (BitSetArray.From (65530, 65531, 65552), typeof (CodeSetList));
                 yield return new Tuple<BitSetArray, Type> (BitSetArray.From (65530, 65531, 65532, 65533, 65534, 65539, 65540, 65542, 65543, 65546, 65547, 65548, 65549, 65550, 65551, 65552), typeof (CodeSetList));
                 yield return new Tuple<BitSetArray, Type> (BitSetArray.From (65530, 65531, 65532, 65533, 65534, 65539, 65540, 65542, 65543, 65546, 65547, 65548, 65549, 65550, 65551, 65552, 65553), typeof (CodeSetMask));
+                yield return new Tuple<BitSetArray, Type> (BitSetArray.From (65530, 65531, 65532, 65533, 65534, 65539, 65540, 65542, 65543, 65546, 65547, 65548, 65549, 65550, 65551, 65552, 65553, 131064), typeof (CodeSetMask));
+                yield return new Tuple<BitSetArray, Type> (BitSetArray.From (65530, 65531, 65532, 65533, 65534, 65539, 65540, 65542, 65543, 65546, 65547, 65548, 65549, 65550, 65551, 65552, 65553, 131065), typeof (CodeSetWide));
 
                 // bits -> Diff attempt failed -> Wide
                 var bits = BitSetArray.Size (100000);
-                bits[0] = true;
-                bits[90000] = true;
+                bits.Set(0);
+                bits.Set(90000);
                 var r = new Random ();
-                for (var i = 0; i < 500; i++) {
+                for (var i = 0; i < 100; i++) {
                     bits.Set (r.Next (40000, 65535));
                     bits.Set (r.Next (65536, 90000));
                 }

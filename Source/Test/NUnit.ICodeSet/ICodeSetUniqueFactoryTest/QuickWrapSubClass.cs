@@ -34,7 +34,7 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
 
 
         [Test]
-        public void Ivalid()
+        public void Invalid()
         {
             Assert.Throws ( typeof(ArgumentException),
                     delegate {

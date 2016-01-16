@@ -107,7 +107,7 @@ namespace DD.Collections.ICodeSet {
             Contract.Assume (self.First.HasValue);
             Contract.Assume (self.Last.HasValue);
 
-            if (self.Span() < char.MaxValue) {
+            if (self.Span() <= char.MaxValue) {
             	return CodeSetMask.From (self, offset);
             }
             return CodeSetWide.From (self, offset);

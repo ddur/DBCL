@@ -15,7 +15,7 @@ using System.Linq;
 namespace DD.Collections.ICodeSet {
 
     [Serializable]
-    public struct Code : ICodeSet, IEquatable<Code>, IEqualityComparer<Code>, IComparable<Code> {
+    public struct Code : ICode, ICodeSet, IEquatable<Code>, IEqualityComparer<Code>, IComparable<Code> {
 
         #region Ctor
 
@@ -130,12 +130,12 @@ namespace DD.Collections.ICodeSet {
         #region ICodeSet Interface
 
         [Pure]
-        bool ICodeSet.this[Code code] {
+        bool ICode.this[Code code] {
             get { return this.Value == code.Value; }
         }
 
         [Pure]
-        bool ICodeSet.this[int value] {
+        bool ICode.this[int value] {
             get { return this.Value == value; }
         }
 
