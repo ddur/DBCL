@@ -146,7 +146,6 @@
     <Compile Include="Collections\BitSetArray\BitSetArray.Theory.cs" />
     <Compile Include="Collections\ICodeSet\Code.cs" />
     <Compile Include="Collections\ICodeSet\CodeSetMask.cs" />
-    <Compile Include="Collections\ICodeSet\CodeSetWrap.cs" />
     <Compile Include="Collections\ICodeSet\CodeExtended.cs" />
     <Compile Include="Collections\ICodeSet\CodeExtends.cs" />
     <Compile Include="Collections\ICodeSet\CodeSet.cs" />

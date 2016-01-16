@@ -62,8 +62,6 @@
     <Compile Include="CodeSetPairTest\Members.cs" />
     <Compile Include="CodeSetWideTest\Constructors.cs" />
     <Compile Include="CodeSetWideTest\Members.cs" />
-    <Compile Include="CodeSetWrapTest\Constructors.cs" />
-    <Compile Include="CodeSetWrapTest\Members.cs" />
     <Compile Include="CodeTest\AsICodeSet.cs" />
     <Compile Include="CodeTest\AsICollectionOfCode.cs" />
     <Compile Include="CodeTest\AsIComparableOfICodeSet.cs" />
