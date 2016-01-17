@@ -32,10 +32,11 @@
 @Rem OpenCover Command
 @set OpenCoverCommand=%OpenCoverNugetPackage%
 
-@Rem Local OpenCover Override
-@if "%appveyor%" == "True" goto nolocal
+@if "%appveyor%" == "True" goto start_build
+
 @rem use OpenCover release build for local build and coverage reports
 @set OpenCoverCommand=%OpenCoverReleaseBuild%
+
 @rem copy OpenCover release build into SharpDevelop bin&src
 @del /Q /S E:\GitHub\SharpDevelop\bin\Tools\OpenCover\*
 @del /Q /S E:\GitHub\SharpDevelop\src\Tools\OpenCover\*
@@ -43,7 +44,8 @@
 @xcopy E:\GitHub\opencover\main\bin\Release\* E:\GitHub\SharpDevelop\bin\Tools\OpenCover\ /S
 @if "%pause%" == "True" pause
 
-:nolocal
+:start_build
+
 @Rem OpenCover Options
 @set OpenCoverOptions=-register:user -threshold:1 -mergebyhash -hideskipped:All
 
