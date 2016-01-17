@@ -32,19 +32,24 @@
 @Rem OpenCover Command
 @set OpenCoverCommand=%OpenCoverNugetPackage%
 
-@if "%appveyor%" == "True" goto start_build
+@if "%appveyor%" == "True" goto start-opencover
 
 @rem use OpenCover release build for local build and coverage reports
 @set OpenCoverCommand=%OpenCoverReleaseBuild%
 
-@rem copy OpenCover release build into SharpDevelop bin&src
+@rem copy OpenCover release build into SharpDevelop bin
 @del /Q /S E:\GitHub\SharpDevelop\bin\Tools\OpenCover\*
 @del /Q /S E:\GitHub\SharpDevelop\src\Tools\OpenCover\*
 @xcopy E:\GitHub\opencover\main\bin\Release\* E:\GitHub\SharpDevelop\src\Tools\OpenCover\ /S
 @xcopy E:\GitHub\opencover\main\bin\Release\* E:\GitHub\SharpDevelop\bin\Tools\OpenCover\ /S
-@if "%pause%" == "True" pause
 
-:start_build
+@Rem Local Build?
+@if not exist "C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" goto start-opencover
+@"C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" DBCL.sln /t:Clean,Build
+@Rem if not exist "E:\cov-analysis-win64-7.7.0.4\bin\cov-build.exe" goto start-opencover
+@Rem E:\cov-analysis-win64-7.7.0.4\bin\cov-build --dir cov-int "C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" DBCL.sln /t:Clean,Build
+
+:start-opencover
 
 @Rem OpenCover Options
 @set OpenCoverOptions=-register:user -threshold:1 -mergebyhash -hideskipped:All
@@ -62,13 +67,6 @@
 @echo OpenCover     Options: %OpenCoverOptions%
 @%OpenCoverCommand% -version 
 @echo.
-
-@Rem Local Build?
-@if "%appveyor%" == "True" goto run-all-tests
-@if not exist "C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" goto run-all-tests
-@if not exist "E:\cov-analysis-win64-7.7.0.4\bin\cov-build.exe" goto run-all-tests
-@Rem E:\cov-analysis-win64-7.7.0.4\bin\cov-build --dir cov-int "C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" DBCL.sln /t:Clean,Build
-@"C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" DBCL.sln /t:Clean,Build
 
 :run-all-tests
 @call :run-single-test "Extensions"  "+[DBCL]DD.Extends*"
