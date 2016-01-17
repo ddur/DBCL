@@ -29,22 +29,22 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
 
                 var result = distinct.From(req);
                 Assert.IsInstanceOf (typeof(ICodeSet), result);
-                Assert.True (result.IsReduced());
+                Assert.True (result.IsReduced);
                 Assert.True (result.Count == 1);
 
                 result = distinct.From(req, opt_null);
                 Assert.IsInstanceOf (typeof(ICodeSet), result);
-                Assert.True (result.IsReduced());
+                Assert.True (result.IsReduced);
                 Assert.True (result.Count == 1);
 
                 result = distinct.From(req, opt_none);
                 Assert.IsInstanceOf (typeof(ICodeSet), result);
-                Assert.True (result.IsReduced());
+                Assert.True (result.IsReduced);
                 Assert.True (result.Count == 1);
 
                 result = distinct.From(req, opt_one);
                 Assert.IsInstanceOf (typeof(ICodeSet), result);
-                Assert.True (result.IsReduced());
+                Assert.True (result.IsReduced);
                 Assert.True (result.Count == 2);
             }
             
@@ -55,7 +55,7 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
 
                 var result = distinct.From(req, opt);
                 Assert.IsInstanceOf (typeof(ICodeSet), result);
-                Assert.True (result.IsReduced());
+                Assert.True (result.IsReduced);
                 Assert.True (result.Count == 3);
             }
         }
@@ -68,22 +68,22 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
             public void Valid() {
                 var result = distinct.From(2);
                 Assert.IsInstanceOf (typeof(ICodeSet), result);
-                Assert.True (result.IsReduced());
+                Assert.True (result.IsReduced);
                 Assert.True (result.Count == 1);
 
                 result = distinct.From(2, null);
                 Assert.IsInstanceOf (typeof(ICodeSet), result);
-                Assert.True (result.IsReduced());
+                Assert.True (result.IsReduced);
                 Assert.True (result.Count == 1);
 
                 result = distinct.From(2, new Code[0]);
                 Assert.IsInstanceOf (typeof(ICodeSet), result);
-                Assert.True (result.IsReduced());
+                Assert.True (result.IsReduced);
                 Assert.True (result.Count == 1);
 
                 result = distinct.From(2, new Code[] {3});
                 Assert.IsInstanceOf (typeof(ICodeSet), result);
-                Assert.True (result.IsReduced());
+                Assert.True (result.IsReduced);
                 Assert.True (result.Count == 2);
             }
             
@@ -91,7 +91,7 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
             public void ValidAndDoesNotDecode() {
                 var result = distinct.From(2, new Code[] {0xD800, 0xDC07});
                 Assert.IsInstanceOf (typeof(ICodeSet), result);
-                Assert.True (result.IsReduced());
+                Assert.True (result.IsReduced);
                 Assert.True (result.Count == 3);
             }
         }
@@ -125,7 +125,7 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
             public void ValidAndDoesDecode() {
                 const string Utf16 = "abc\uFFFF\u0000\uD801\uDC01def";
                 Assert.IsInstanceOf (typeof(ICodeSet), distinct.From(Utf16));
-                Assert.True (distinct.From(Utf16).IsReduced());
+                Assert.True (distinct.From(Utf16).IsReduced);
                 Assert.True (distinct.From(Utf16).Count == 9);
             }
         }
@@ -204,7 +204,7 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
 
                 var result = distinct.From(2, new Code[] {0xD800, 0xDC07});
                 Assert.IsInstanceOf (typeof(ICodeSet), result);
-                Assert.True (result.IsReduced());
+                Assert.True (result.IsReduced);
                 Assert.True (result.Count == 3);
 
                 Assert.True (distinct.Contains (result));
@@ -250,7 +250,7 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
 
                 var result = distinct.From(BitSetArray.From (2, 3, 4, 5));
                 Assert.IsInstanceOf (typeof(ICodeSet), result);
-                Assert.True (result.IsReduced());
+                Assert.True (result.IsReduced);
                 Assert.True (result.Count == 4);
 
                 Assert.True (distinct.Contains (result));

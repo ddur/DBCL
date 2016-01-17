@@ -17,8 +17,8 @@ namespace DD.Collections.ICodeSet.CodeSetWideTest {
         public void FromBits () {
             CodeSetWide csw;
 
-            csw = CodeSetWide.From (new Code[] { 0, 1, 1114111 });
-            csw = CodeSetWide.From (BitSetArray.From (0, 1, 1114111));
+            csw = CodeSetWide.From (new Code[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 1114111 });
+            csw = CodeSetWide.From (BitSetArray.From (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 1114111));
         }
 
         [Test]
@@ -43,6 +43,7 @@ namespace DD.Collections.ICodeSet.CodeSetWideTest {
             Assert.Throws<InvalidOperationException> (
                 delegate {
                     csw = CodeSetWide.From (BitSetArray.From (
+                        65521, 65522, 65523, 65524,
                         65525, 65526, 65527, 65528,
                         65529, 65530, 65531, 65532,
                         65533, 65534, 65535, 65536,
@@ -58,6 +59,7 @@ namespace DD.Collections.ICodeSet.CodeSetWideTest {
                         4, 5, 6, 7,
                         8, 9, 10, 11,
                         12, 13, 14, 15,
+                        16, 17, 18, 19,
                         60000));
                 }
             );
@@ -70,6 +72,7 @@ namespace DD.Collections.ICodeSet.CodeSetWideTest {
                         4, 5, 6, 7,
                         8, 9, 10, 11,
                         12, 13, 14, 15,
+                        16, 17, 18, 19,
                         66000, Code.MaxValue + 1));
                 }
             );
@@ -79,8 +82,8 @@ namespace DD.Collections.ICodeSet.CodeSetWideTest {
         public void FromCodes () {
             CodeSetWide csw;
 
-            csw = CodeSetWide.From (new Code[] { 0, 1, 65536 });
-            csw = CodeSetWide.From (CodeSetList.From (new Code[] { 0, 1, 140000 }));
+            csw = CodeSetWide.From (new Code[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 65536 });
+            csw = CodeSetWide.From (CodeSetMask.From (new Code[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 140000 }));
         }
 
         [Test]
@@ -107,6 +110,7 @@ namespace DD.Collections.ICodeSet.CodeSetWideTest {
             Assert.Throws<InvalidOperationException> (
                 delegate {
                     csw = CodeSetWide.From (new List<Code> () {
+                        65521, 65522, 65523, 65524,
 						65525, 65526, 65527, 65528,
 						65529, 65530, 65531, 65532,
 						65533, 65534, 65535, 65536,
@@ -123,6 +127,7 @@ namespace DD.Collections.ICodeSet.CodeSetWideTest {
 						4, 5, 6, 7,
 						8, 9, 10, 11,
 						12, 13, 14, 15,
+                        16, 17, 18, 19,
 						60000
 					});
                 }

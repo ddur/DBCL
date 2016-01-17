@@ -121,12 +121,7 @@ namespace DD.Collections.ICodeSet {
             if (self.IsNullOrEmpty ()) {
                 return CodeSetNone.Singleton;
             }
-            return self.IsReduced () ? self : self.ToBitSetArray ().Reduce ();
-        }
-
-        [Pure]
-        public static bool IsReduced (this ICodeSet self) {
-            return self.IsReduced;
+            return self.IsReduced ? self : self.ToBitSetArray ().Reduce ();
         }
 
         [Pure]

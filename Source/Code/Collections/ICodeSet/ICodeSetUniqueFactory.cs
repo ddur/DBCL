@@ -255,7 +255,7 @@ namespace DD.Collections.ICodeSet {
                 Success success = true;
 
                 success.Assert (result.IsNot (null));
-                success.Assert (result.IsReduced ());
+                success.Assert (result.IsReduced);
 
                 if (result.Count != 0) {
                     var key = result;

@@ -24,14 +24,14 @@ namespace DD.Collections.ICodeSet {
             Contract.Requires<ArgumentException>(utf16.IsNullOrEmpty() || utf16.CanDecode());
             
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
-            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced);
 
             return utf16.IsNullOrEmpty () ? CodeSetNone.Singleton : utf16.ToICodeSet ();
         }
 
         public static ICodeSet From (char req, params char[] opt) {
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
-            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced);
 
             var args = new List<char>() {req};
             if (!opt.IsNullOrEmpty()) { args.AddRange(opt); }
@@ -40,7 +40,7 @@ namespace DD.Collections.ICodeSet {
 
         public static ICodeSet From (Code req, params Code[] opt) {
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
-            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced);
 
             var args = new List<Code>() {req};
             if (!opt.IsNullOrEmpty()) { args.AddRange(opt); }
@@ -51,21 +51,21 @@ namespace DD.Collections.ICodeSet {
             Contract.Requires<ArgumentException>(utf16.IsNullOrEmpty() || utf16.CanDecode());
         	
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
-            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced);
 
             return utf16.IsNullOrEmpty () ? CodeSetNone.Singleton : utf16.Decode().ToICodeSet ();
         }
 
         public static ICodeSet ToICodeSet (this IEnumerable<char> chars) {
         	Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
-            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced);
 
             return chars.IsNullOrEmpty () ? CodeSetNone.Singleton : BitSetArray.From (chars.ToValues ()).ToICodeSet ();
         }
 
         public static ICodeSet ToICodeSet (this IEnumerable<Code> codes) {
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
-            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced);
 
             return codes.IsNullOrEmpty () ? CodeSetNone.Singleton : BitSetArray.From (codes.ToValues ()).ToICodeSet ();
         }
@@ -74,7 +74,7 @@ namespace DD.Collections.ICodeSet {
             Contract.Requires<ArgumentException> (bits.IsNullOrEmpty() || (int)bits.Last <= Code.MaxValue, "Last bit is larger than Code.MaxValue");
 
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
-            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced);
 
             return bits.IsNullOrEmpty () ? CodeSetNone.Singleton : bits.Reduce ();
         }
@@ -87,7 +87,7 @@ namespace DD.Collections.ICodeSet {
 
         public static ICodeSet Union (this ICodeSet self, ICodeSet that, params ICodeSet[] more) {
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
-            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced);
 
             var args = new List<ICodeSet>() {self, that};
             if (!more.IsNullOrEmpty()) { args.AddRange(more); }
@@ -99,7 +99,7 @@ namespace DD.Collections.ICodeSet {
             Contract.Requires<ArgumentException> (sets.Count () >= 2, "At least two sets required for any binary operation");
 
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
-            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced);
 
             return sets.BitUnion ().ToICodeSet ();
         }
@@ -110,7 +110,7 @@ namespace DD.Collections.ICodeSet {
 
         public static ICodeSet Intersection (this ICodeSet self, ICodeSet that, params ICodeSet[] more) {
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
-            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced);
 
             var args = new List<ICodeSet>() {self, that};
             if (!more.IsNullOrEmpty()) { args.AddRange(more); }
@@ -122,7 +122,7 @@ namespace DD.Collections.ICodeSet {
             Contract.Requires<ArgumentException> (sets.Count () >= 2, "At least two sets required for any binary operation");
 
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
-            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced);
 
             return sets.BitIntersection ().ToICodeSet ();
         }
@@ -133,7 +133,7 @@ namespace DD.Collections.ICodeSet {
 
         public static ICodeSet Disjunction (this ICodeSet self, ICodeSet that, params ICodeSet[] more) {
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
-            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced);
 
             var args = new List<ICodeSet>() {self, that};
             if (!more.IsNullOrEmpty()) { args.AddRange(more); }
@@ -145,7 +145,7 @@ namespace DD.Collections.ICodeSet {
             Contract.Requires<ArgumentException> (sets.Count () >= 2, "At least two sets required for any binary operation");
 
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
-            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced);
 
             return sets.BitDisjunction ().ToICodeSet ();
         }
@@ -156,7 +156,7 @@ namespace DD.Collections.ICodeSet {
 
         public static ICodeSet Difference (this ICodeSet self, ICodeSet that, params ICodeSet[] more) {
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
-            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced);
 
             var args = new List<ICodeSet>() {self, that};
             if (!more.IsNullOrEmpty()) { args.AddRange(more); }
@@ -168,7 +168,7 @@ namespace DD.Collections.ICodeSet {
             Contract.Requires<ArgumentException> (sets.Count () >= 2, "At least two sets required for any binary operation");
 
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
-            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced);
 
             return sets.BitDifference ().ToICodeSet ();
         }
@@ -179,7 +179,7 @@ namespace DD.Collections.ICodeSet {
 
         public static ICodeSet Complement (this ICodeSet self) {
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
-            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced ());
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced);
 
             return self.BitComplement ().ToICodeSet();
         }

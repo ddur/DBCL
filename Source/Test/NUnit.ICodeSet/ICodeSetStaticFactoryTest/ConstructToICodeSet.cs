@@ -32,7 +32,7 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
 
 				var result = chars.ToICodeSet();
 				Assert.IsInstanceOf (typeof(ICodeSet), result);
-				Assert.True (result.IsReduced());
+				Assert.True (result.IsReduced);
 				Assert.True (result.Count == 3);
 			}
 			

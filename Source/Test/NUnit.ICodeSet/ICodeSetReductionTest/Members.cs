@@ -16,23 +16,23 @@ namespace DD.Collections.ICodeSet.ICodeSetReductionTest {
 
         [Test]
         public void IsReduced () {
-            Assert.True (new Code (3).IsReduced ());
-            Assert.True (CodeSetNone.Singleton.IsReduced ());
-            Assert.True (CodeSetPair.From (3, 4).IsReduced ());
-            Assert.True (CodeSetFull.From (3, 44).IsReduced ());
-            Assert.True (CodeSetList.From (3, 7, 9, 15, 80).IsReduced ());
-            Assert.True (CodeSetMask.From (3, 7, 9, 15, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93).IsReduced ());
-            Assert.True (CodeSetWide.From (new Code[] { 3, 7, 9, 15, 80, 70000 }).IsReduced ());
-            Assert.True (CodeSetDiff.From (CodeSetFull.From (1, 80000), CodeSetWide.From (new Code[] { 3, 7, 9, 15, 80, 70000 })).IsReduced ());
+            Assert.True (new Code (3).IsReduced);
+            Assert.True (CodeSetNone.Singleton.IsReduced);
+            Assert.True (CodeSetPair.From (3, 4).IsReduced);
+            Assert.True (CodeSetFull.From (3, 44).IsReduced);
+            Assert.True (CodeSetList.From (3, 7, 9, 15, 80).IsReduced);
+            Assert.True (CodeSetMask.From (3, 7, 9, 15, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93).IsReduced);
+            Assert.True (CodeSetWide.From (new Code[] { 3, 7, 9, 15, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 70000 }).IsReduced);
+            Assert.True (CodeSetDiff.From (CodeSetFull.From (1, 80000), CodeSetWide.From (new Code[] {3, 7, 9, 15, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 70000 })).IsReduced);
 
-            Assert.False (CodeSetMask.From (3).IsReduced ());
-            Assert.False (CodeSetMask.From (3, 7).IsReduced ());
-            Assert.False (CodeSetMask.From (3, 7, 9, 15, 80).IsReduced ());
-            Assert.False (CodeSetMask.From (CodeSetFull.From (1, 80)).IsReduced ());
+            Assert.False (CodeSetMask.From (3).IsReduced);
+            Assert.False (CodeSetMask.From (3, 7).IsReduced);
+            Assert.False (CodeSetMask.From (3, 7, 9, 15, 80).IsReduced);
+            Assert.False (CodeSetMask.From (CodeSetFull.From (1, 80)).IsReduced);
 
-            Assert.False (QuickWrap.From (BitSetArray.From (3, 7, 9, 15, 80)).IsReduced ());
-            Assert.False (QuickWrap.From (BitSetArray.From (3, 7, 9, 15, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93)).IsReduced ());
-            Assert.False (QuickWrap.From (BitSetArray.Size (80000, true)).IsReduced ());
+            Assert.False (QuickWrap.From (BitSetArray.From (3, 7, 9, 15, 80)).IsReduced);
+            Assert.False (QuickWrap.From (BitSetArray.From (3, 7, 9, 15, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93)).IsReduced);
+            Assert.False (QuickWrap.From (BitSetArray.Size (80000, true)).IsReduced);
         }
 
         [Test, TestCaseSource ("Expected")]
@@ -44,7 +44,7 @@ namespace DD.Collections.ICodeSet.ICodeSetReductionTest {
             Type type = tuple.Item2;
             ICodeSet result = input.Reduce ();
             Assert.NotNull (result);
-            Assert.True (result.IsReduced ());
+            Assert.True (result.IsReduced);
             Assert.AreSame (type, result.GetType ());
             if (input.IsNot (null)) {
                 Assert.That (input.SequenceEqual (result));
@@ -60,7 +60,7 @@ namespace DD.Collections.ICodeSet.ICodeSetReductionTest {
             ICodeSet result = input.Reduce ();
             Assert.NotNull (result);
             Assert.AreSame (type, result.GetType ());
-            Assert.True (result.IsReduced ());
+            Assert.True (result.IsReduced);
             if (input.IsNot (null)) {
                 Assert.That (input.SequenceEqual (result.ToValues ()));
             }
