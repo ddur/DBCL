@@ -44,7 +44,6 @@
 @if "%pause%" == "True" pause
 
 :nolocal
-
 @Rem OpenCover Options
 @set OpenCoverOptions=-register:user -threshold:1 -mergebyhash -hideskipped:All
 
