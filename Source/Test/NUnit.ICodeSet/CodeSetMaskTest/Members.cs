@@ -18,17 +18,17 @@ namespace DD.Collections.ICodeSet.CodeSetMaskTest
         [Test]
         public void AllMembers()
         {
-            var arg = (IEnumerable<Code>)new Code[] { 0, 1, 3, 3 };
+            var arg = (IEnumerable<Code>)new Code[] { 10, 11, 13, 13 };
             var csm = CodeSetMask.From (arg);
-            Assert.True (csm[0]);
-            Assert.True (csm[1]);
-            Assert.False (csm[2]);
-            Assert.True (csm[3]);
+            Assert.True (csm[10]);
+            Assert.True (csm[11]);
+            Assert.False (csm[12]);
+            Assert.True (csm[13]);
             Assert.False (csm[4]);
             Assert.True (csm.Count == 3);
             Assert.True (csm.Length == 4);
-            Assert.True (csm.First == 0);
-            Assert.True (csm.Last == 3);
+            Assert.True (csm.First == 10);
+            Assert.True (csm.Last == 13);
             Assert.False (csm.IsReduced);
             Assert.True (csm.SequenceEqual(arg.OrderBy(x => x).Distinct())); // covers getEnumerator
             
