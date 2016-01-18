@@ -256,7 +256,7 @@ namespace DD.Collections {
 
             object IEnumerator.Current {
                 get {
-                    return ((IEnumerator<int>)this).Current;
+                    return Current;
                 }
             }
 
@@ -472,7 +472,7 @@ namespace DD.Collections {
 
             object IEnumerator.Current {
                 get {
-                    return ((IEnumerator<int>)this).Current;
+                    return Current;
                 }
             }
 
@@ -677,7 +677,7 @@ namespace DD.Collections {
 
             object IEnumerator.Current {
                 get {
-                    return ((IEnumerator<int>)this).Current;
+                    return Current;
                 }
             }
 
