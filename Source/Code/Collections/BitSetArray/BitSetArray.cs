@@ -177,7 +177,7 @@ namespace DD.Collections {
             private void init (BitSetArray that, ref int this_version, ref BitSetArray this_enumerated, ref int this_arrayLen) {
                 this_version = that.version;
                 this_enumerated = that;
-                this_arrayLen = BitSetArray.GetLongArrayLength (this.enumerated.range);
+                this_arrayLen = this.enumerated.array.Length;
 
                 this.arrIndex = 0;
                 this.doNext = this.enumerated.count != 0;
@@ -383,7 +383,7 @@ namespace DD.Collections {
             private void init (BitSetArray that, ref int this_version, ref BitSetArray this_enumerated, ref int this_arrayLen) {
                 this_version = that.version;
                 this_enumerated = that;
-                this_arrayLen = BitSetArray.GetLongArrayLength (this.enumerated.range);
+                this_arrayLen = this.enumerated.array.Length;
 
                 this.arrIndex = 0;
                 this.doNext = this.enumerated.count != this.enumerated.range;
@@ -599,7 +599,7 @@ namespace DD.Collections {
             private void init (BitSetArray that, ref int this_version, ref BitSetArray this_enumerated, ref int this_arrayLen) {
                 this_version = that.version;
                 this_enumerated = that;
-                this_arrayLen = BitSetArray.GetLongArrayLength (this.enumerated.range);
+                this_arrayLen = this.enumerated.array.Length;
 
                 this.arrIndex = this.arrayLen - 1;
                 this.doNext = this.enumerated.count != 0;
