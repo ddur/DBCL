@@ -985,25 +985,29 @@ namespace DD.Collections {
             }
 
             [Pure]
-            public static bool Not (BitSetArray oldState, BitSetArray newState, BitSetArray retValue) {
+            public static bool Not (BitSetArray oldState, bool spanOnly, BitSetArray retState) {
                 Success success = true;
 
-                success.Assert (retValue.IsNot (null));
-                success.Assert (retValue.Is (newState));
+                success.Assert (retState.IsNot (null));
+                success.Assert (retState.range == oldState.range);
+                success.Assert (retState.Count == BitSetArray.CountOnBits(retState.array));
 
-                success.Assert (newState.range == oldState.range);
-
-                if (oldState.range == 0) {
-                    // Empty range domain
-                    // Nothing to change
-                    success.Assert (newState.SequenceEqual (oldState));
-                    success.Assert (newState.version == oldState.version);
-                }
-                else {
-                    // A.Not() == ~A
-                    success.Assert (newState.count == (newState.range - oldState.count));
-                    success.Assert (!newState.Intersect (oldState).Any ());
-                    success.Assert (newState.version != oldState.version);
+                if (spanOnly && oldState.count != 0 && oldState.count != oldState.range) {
+                    success.Assert (retState.version != oldState.version);
+                    success.Assert (retState.count == (int)oldState.Last - (int)oldState.First + 1 - oldState.count);
+                    success.Assert (!retState.Intersect (oldState).Any ());
+                } else {
+                    if (oldState.range == 0) {
+                        // Empty range domain -> Nothing to change
+                        success.Assert (retState.SequenceEqual (oldState));
+                        success.Assert (retState.version == oldState.version);
+                    }
+                    else {
+                        // A.Not() == ~A
+                        success.Assert (retState.count == (retState.range - oldState.count));
+                        success.Assert (!retState.Intersect (oldState).Any ());
+                        success.Assert (retState.version != oldState.version);
+                    }
                 }
 
                 return success;

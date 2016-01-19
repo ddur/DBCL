@@ -20,7 +20,7 @@ namespace DD.Collections.ICodeSet {
         public const int UnitCount = 1;
         public const int PairCount = 2;
 
-        // NOTE: log(16) == 4 tests, TODO: check speed on 32 and 64
+        // NOTE: log(16) == 4 tests, TODO? check speed on 32 and 64
         public const int ListMaxCount = 16;
 
         public const int MaskMaxSpan = 256;

@@ -150,14 +150,15 @@ namespace DD.Collections.ICodeSet {
                 Contract.Assume (self.Last.HasValue);
 
                 // create complement
-                int start = (int)self.First;
-                int final = (int)self.Last;
-                var complement = BitSetArray.Size (self.Length);
-                foreach (var item in self.Complement ()) {
-                    if (item.InRange (start, final)) {
-                        complement._Set (item);
-                    }
-                }
+                var complement = BitSetArray.Copy(self).NotSpan();
+//                int start = (int)self.First;
+//                int final = (int)self.Last;
+//                var complement = BitSetArray.Size (self.Length);
+//                foreach (var item in self.Complement ()) {
+//                    if (item.InRange (start, final)) {
+//                        complement._Set (item);
+//                    }
+//                }
 
                 Contract.Assume (complement.Count != 0);
 

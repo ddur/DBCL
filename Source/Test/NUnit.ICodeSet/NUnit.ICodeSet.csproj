@@ -47,8 +47,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CodeSetAbstractTest\Members.cs" />
-    <Compile Include="CodeSetBitsTest\Constructors.cs" />
-    <Compile Include="CodeSetBitsTest\Members.cs" />
     <Compile Include="CodeSetDiffTest\Constructors.cs" />
     <Compile Include="CodeSetDiffTest\Members.cs" />
     <Compile Include="CodeSetFullTest\Constructors.cs" />

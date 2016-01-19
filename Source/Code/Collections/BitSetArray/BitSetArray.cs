@@ -177,7 +177,7 @@ namespace DD.Collections {
             private void init (BitSetArray that, ref int this_version, ref BitSetArray this_enumerated, ref int this_arrayLen) {
                 this_version = that.version;
                 this_enumerated = that;
-                this_arrayLen = this.enumerated.array.Length;
+                this_arrayLen = BitSetArray.GetLongArrayLength (this.enumerated.range);
 
                 this.arrIndex = 0;
                 this.doNext = this.enumerated.count != 0;
@@ -383,7 +383,7 @@ namespace DD.Collections {
             private void init (BitSetArray that, ref int this_version, ref BitSetArray this_enumerated, ref int this_arrayLen) {
                 this_version = that.version;
                 this_enumerated = that;
-                this_arrayLen = this.enumerated.array.Length;
+                this_arrayLen = BitSetArray.GetLongArrayLength (this.enumerated.range);
 
                 this.arrIndex = 0;
                 this.doNext = this.enumerated.count != this.enumerated.range;
@@ -599,7 +599,7 @@ namespace DD.Collections {
             private void init (BitSetArray that, ref int this_version, ref BitSetArray this_enumerated, ref int this_arrayLen) {
                 this_version = that.version;
                 this_enumerated = that;
-                this_arrayLen = this.enumerated.array.Length;
+                this_arrayLen = BitSetArray.GetLongArrayLength (this.enumerated.range);
 
                 this.arrIndex = this.arrayLen - 1;
                 this.doNext = this.enumerated.count != 0;
@@ -829,7 +829,7 @@ namespace DD.Collections {
         [NonSerialized]
         private const ulong table = 0x4332322132212110;
 
-        // bit counter table		  FEDCBA9876543210
+        // bit counter table          FEDCBA9876543210
 
         [NonSerialized]
         private int? startVersion = null;
@@ -844,10 +844,10 @@ namespace DD.Collections {
         private int? finalMemoize = null;
 
 #if DEBUG // enable read-only access to test private members state
-        public int? StartVersion { get { return startVersion; } }
-        public int? StartMemoize { get { return startMemoize; } }
-        public int? FinalVersion { get { return finalVersion; } }
-        public int? FinalMemoize { get { return finalMemoize; } }
+        internal int? StartVersion { get { return startVersion; } }
+        internal int? StartMemoize { get { return startMemoize; } }
+        internal int? FinalVersion { get { return finalVersion; } }
+        internal int? FinalMemoize { get { return finalMemoize; } }
 #endif
 
         #endregion
@@ -1880,9 +1880,15 @@ namespace DD.Collections {
                         temp_count += BitSetArray.CountOnBits (this.array[index]);
                     }
                     for (index = opLength; index < thisArrLen; index++) {
-                        this.array[index] = 0;
+                        if (this.array[index] != 0) {
+                            if (this_version == this.version) {
+                                this.AddVersion ();
+                            }
+                            this.array[index] = 0;
+                        }
                     }
                     // This operation only can (optionally) decrease number of members
+                    // disable once RedundantCheckBeforeAssignment
                     if (this.count != temp_count) {
                         this.count = temp_count;
                     }
@@ -1973,8 +1979,6 @@ namespace DD.Collections {
                         // ∅.Xor(B)=B
                         // copy that to this
                         Contract.Assert (that.count != 0);
-        
-                        this.AddVersion ();
                         this.count = that.count;
                         this.range = this.range < that.range ?
                             that.range :
@@ -1982,6 +1986,7 @@ namespace DD.Collections {
                         if (this.array.Length < BitSetArray.GetLongArrayLength (this.range)) {
                             this.array = new long[BitSetArray.GetLongArrayLength (this.range)];
                         }
+                        this.AddVersion ();
                         Array.Copy (that.array, this.array, that.array.Length);
                     }
                     // Xor ^ => SymmetricExceptWith ⊻
@@ -2025,6 +2030,7 @@ namespace DD.Collections {
                             temp_count += BitSetArray.CountOnBits (this.array[index]);
                         }
                         // This operation can change bit sequence leaving same number of bits set
+                        // disable once RedundantCheckBeforeAssignment
                         if (this.count != temp_count) {
                             this.count = temp_count;
                         }
@@ -2104,6 +2110,7 @@ namespace DD.Collections {
                         temp_count += BitSetArray.CountOnBits (this.array[index]);
                     }
                     // this operation only can optionally decrease number of members
+                    // disable once RedundantCheckBeforeAssignment
                     if (this.count != temp_count) {
                         this.count = temp_count;
                     }
@@ -2123,9 +2130,39 @@ namespace DD.Collections {
             Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
             Contract.Ensures (
                 Theory.Not (
-                    Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)),
-                    this,
-                    Contract.Result<BitSetArray> ()
+                    Contract.OldValue<BitSetArray> (BitSetArray.Copy(this)),
+                    false, Contract.Result<BitSetArray> ()
+                )
+            );
+
+            return this.not();
+        }
+
+        /// <summary>Complement within First and Last member (Span)
+        /// </summary>
+        /// <returns>BitSetArray</returns>
+        public BitSetArray NotSpan () {
+            Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
+            Contract.Ensures (
+                Theory.Not (
+                    Contract.OldValue<BitSetArray> (BitSetArray.Copy(this)),
+                    true, Contract.Result<BitSetArray> ()
+                )
+            );
+
+            return this.not(true);
+        }
+
+        /// <summary>Complement in two versions
+        /// <para>NOT == this.XOR(this.Clone().SetAll(true))</para>
+        /// </summary>
+        /// <returns></returns>
+        private BitSetArray not (bool spanOnly = false) {
+            Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
+            Contract.Ensures (
+                Theory.Not (
+                    Contract.OldValue<BitSetArray> (BitSetArray.Copy(this)),
+                    spanOnly, Contract.Result<BitSetArray> ()
                 )
             );
 
@@ -2134,25 +2171,45 @@ namespace DD.Collections {
                     // nothing to complement - no change
                 }
                 else {
+                    int opStartItem = 0;
+                    int opFinalItem = 0;
+                    
+                    int opStartIndex = 0;
+                    int opFinalIndex = BitSetArray.GetLongArrayLength (this.range) - 1;
+                    if (spanOnly && this.count != 0 && this.count != this.range) {
+                        opStartItem = (int)First;
+                        opFinalItem = (int)Last;
+                        opStartIndex = (opStartItem >> log2of64);
+                        opFinalIndex = (opFinalItem >> log2of64);
+                    }
+
                     // This operation will always change bit sequence
-                    this.AddVersion ();
+                    this.AddVersion (); // after First&Last accessed, just before change
 
-                    int opLength = BitSetArray.GetLongArrayLength (this.range);
-
-                    this.count = this.range - this.count;
-                    //				if (System.Environment.ProcessorCount > 1 && opLength > 64) {
-                    //					Parallel.For(0, opLength, index => {
-                    //						this.array[index] = ~this.array[index];
-                    //					});
-                    //				}
-                    //				else {
-                    for (int index = 0; index < opLength; index++) {
+                    //                if (System.Environment.ProcessorCount > 1 && opLength > 64) {
+                    //                    Parallel.For(opStart, opFinal, index => {
+                    //                        this.array[index] = ~this.array[index];
+                    //                    });
+                    //                }
+                    //                else {
+                    Contract.Assert (opStartIndex >= 0);
+                    Contract.Assert (opFinalIndex < this.array.Length);
+                    for (int index = opStartIndex; index <= opFinalIndex; index++) {
                         this.array[index] = ~this.array[index];
                     }
-                    //				}
-                    // false bit beyond .Length can change into true
-                    // Not == Negative logic -> ClearTail
-                    this.ClearTail ();
+                    //                }
+
+                    if (spanOnly && this.count != 0 && this.count != this.range) {
+                        // clear head and tail int-mask
+                        this.array[opStartIndex] &= unchecked ((long)(ulong.MaxValue << ((opStartItem) & mask0x3F)));
+                        this.array[opFinalIndex] &= unchecked ((long)(ulong.MaxValue >> (longBits - ((opFinalItem + 1) & mask0x3F))));
+                        this.count = opFinalItem - opStartItem + 1 - this.count;
+                    } else {
+                        // false bits beyond .Lenght can change into true
+                        // Not == Negative logic -> ClearTail
+                        this.ClearTail ();
+                        this.count = this.range - this.count;
+                    }
                 }
             }
             return this;
@@ -2168,95 +2225,95 @@ namespace DD.Collections {
         // http://en.wikipedia.org/wiki/Table_of_logic_symbols
         // http://en.wikipedia.org/wiki/Set_%28mathematics%29
         //
-        //		public BitSetArray Nand(BitSetArray that) {
-        //			Contract.Ensures(
-        //				BitSetArray.Ensures.Nand(
-        //					Contract.OldValue<BitSetArray>(BitSetArray.Copy(this)),
-        //					this,
-        //					Contract.Result<BitSetArray>(),
-        //					that
-        //				)
-        //			);
+        //        public BitSetArray Nand(BitSetArray that) {
+        //            Contract.Ensures(
+        //                BitSetArray.Ensures.Nand(
+        //                    Contract.OldValue<BitSetArray>(BitSetArray.Copy(this)),
+        //                    this,
+        //                    Contract.Result<BitSetArray>(),
+        //                    that
+        //                )
+        //            );
         //
-        //			if (this.Is(that)) {
-        //				// A.Nand(A)=~A
-        //				this.Not(); // .Not will change version
-        //			}
-        //			else if (that.IsNull() that.Count == 0) {
-        //				// A.Nand(∅)=~A
-        //				this.Not(); // .Not will change version
-        //			}
-        //			else if (this.count == 0) {
-        //				// ∅.Nand(B)=~B
-        //				// copy that to this
-        //				Contract.Assert(that.count != 0);
-        //				this.count = that.count;
-        //				this.range = this.range < that.range ?
-        //					  that.range :
-        //					  this.range;
-        //				if (this.array.Length < BitSetArray.GetLongArrayLength(this.range)) {
-        //					this.array = new long[BitSetArray.GetLongArrayLength(this.range)];
-        //				}
-        //				Array.Copy(that.array, this.array, that.array.Length);
-        //				this.Not();
-        //			}
-        //			// Nand
-        //			else {
-        //				Contract.Assert(this.count != 0 && that.count != 0);
-        //				int init_version = this.version;
+        //            if (this.Is(that)) {
+        //                // A.Nand(A)=~A
+        //                this.Not(); // .Not will change version
+        //            }
+        //            else if (that.IsNull() that.Count == 0) {
+        //                // A.Nand(∅)=~A
+        //                this.Not(); // .Not will change version
+        //            }
+        //            else if (this.count == 0) {
+        //                // ∅.Nand(B)=~B
+        //                // copy that to this
+        //                Contract.Assert(that.count != 0);
+        //                this.count = that.count;
+        //                this.range = this.range < that.range ?
+        //                      that.range :
+        //                      this.range;
+        //                if (this.array.Length < BitSetArray.GetLongArrayLength(this.range)) {
+        //                    this.array = new long[BitSetArray.GetLongArrayLength(this.range)];
+        //                }
+        //                Array.Copy(that.array, this.array, that.array.Length);
+        //                this.Not();
+        //            }
+        //            // Nand
+        //            else {
+        //                Contract.Assert(this.count != 0 && that.count != 0);
+        //                int init_version = this.version;
         //
-        //				if (this.Length < that.Length) { this.Length = that.Length; }
+        //                if (this.Length < that.Length) { this.Length = that.Length; }
         //
-        //				int thisArrLen = BitSetArray.GetLongArrayLength(this.range);
-        //				int thatArrLen = BitSetArray.GetLongArrayLength(that.range);
-        //				Contract.Assert(thisArrLen >= thatArrLen);
+        //                int thisArrLen = BitSetArray.GetLongArrayLength(this.range);
+        //                int thatArrLen = BitSetArray.GetLongArrayLength(that.range);
+        //                Contract.Assert(thisArrLen >= thatArrLen);
         //
-        //				int index = 0;
-        //				int temp_count = 0;
-        //				int opLength = thisArrLen <= thatArrLen ?
-        //					  thisArrLen :
-        //					  thatArrLen;
-        //				long temp_bitmask = 0;
+        //                int index = 0;
+        //                int temp_count = 0;
+        //                int opLength = thisArrLen <= thatArrLen ?
+        //                      thisArrLen :
+        //                      thatArrLen;
+        //                long temp_bitmask = 0;
         //
-        //				// for thisArrLen <= thatArrLen
-        //				for (index = 0; index < opLength; index++) {
-        //					if (init_version == this.version) {
-        //						temp_bitmask = this.array[index];
-        //					}
-        //					if (this.array[index] != -1 || that.array[index] != -1) {
-        //						this.array[index] = ~(this.array[index] & that.array[index]);
-        //					}
-        //					temp_count += BitSetArray.CountOnBits(this.array[index]);
-        //					if (init_version == this.version && temp_bitmask != this.array[index]) {
-        //						this.AddVerson();
-        //					}
-        //				}
-        //				  // same version and bit sequence will change?
-        //				  if ( init_version == this.version && thisArrLen > thatArrLen ) {
-        //					  this.AddVerson(); // if (thisArrLen > thatArrLen) ~ will change sequence
-        //				}
-        //				// loop if thisArrLen > thatArrLen
-        //				for (index = opLength; index < thisArrLen; index++) {
-        //					  this.array[index] = ~this.array[index]
-        //					temp_count += BitSetArray.CountOnBits(this.array[index]);
-        //				}
-        //				// This operation can change bit sequence leaving same number of bits set
-        //				if (this.count != temp_count) {
-        //					this.count = temp_count;
-        //				}
-        //				// false bit beyond .Length can change into true
-        //				// Nand == Negative logic -> ClearTail
-        //				this.ClearTail();
-        //			}
+        //                // for thisArrLen <= thatArrLen
+        //                for (index = 0; index < opLength; index++) {
+        //                    if (init_version == this.version) {
+        //                        temp_bitmask = this.array[index];
+        //                    }
+        //                    if (this.array[index] != -1 || that.array[index] != -1) {
+        //                        this.array[index] = ~(this.array[index] & that.array[index]);
+        //                    }
+        //                    temp_count += BitSetArray.CountOnBits(this.array[index]);
+        //                    if (init_version == this.version && temp_bitmask != this.array[index]) {
+        //                        this.AddVerson();
+        //                    }
+        //                }
+        //                  // same version and bit sequence will change?
+        //                  if ( init_version == this.version && thisArrLen > thatArrLen ) {
+        //                      this.AddVerson(); // if (thisArrLen > thatArrLen) ~ will change sequence
+        //                }
+        //                // loop if thisArrLen > thatArrLen
+        //                for (index = opLength; index < thisArrLen; index++) {
+        //                      this.array[index] = ~this.array[index]
+        //                    temp_count += BitSetArray.CountOnBits(this.array[index]);
+        //                }
+        //                // This operation can change bit sequence leaving same number of bits set
+        //                if (this.count != temp_count) {
+        //                    this.count = temp_count;
+        //                }
+        //                // false bit beyond .Length can change into true
+        //                // Nand == Negative logic -> ClearTail
+        //                this.ClearTail();
+        //            }
         //
-        //			return this;
-        //		}
+        //            return this;
+        //        }
 
         #endregion
 
         #endregion
 
-        #region Pure Set Relations
+        #region Set Comparations
 
         [Pure]
         public bool SequenceEqual (BitSetArray that) {
@@ -2638,11 +2695,10 @@ namespace DD.Collections {
 
 #if DEBUG
 
-        [CLSCompliant (false)]
-        public
+        internal
 
 #else
-		private
+        private
 #endif
  void _SetItems (IEnumerable<int> items) {
             Contract.Requires<InvalidOperationException> (this.Length != 0);
@@ -2895,9 +2951,9 @@ namespace DD.Collections {
             }
             else {
                 // Untrimmed array.Length can be equal or (much) larger than Length required by range
-                // shorter	 = <-range.Length----->|------------------>|array.Length
-                // longer	  = <-range.Length----------->|---->|array.Length
-                // first loop:						<----|
+                // shorter     = <-range.Length----->|------------------>|array.Length
+                // longer      = <-range.Length----------->|---->|array.Length
+                // first loop:                        <----|
                 // second loop:  <-------------------|
                 int thisArrLen = BitSetArray.GetLongArrayLength (this.range);
                 int thatArrLen = BitSetArray.GetLongArrayLength (that.range);
@@ -3415,7 +3471,7 @@ namespace DD.Collections {
 
         #endregion
 
-        #region Local
+        #region Private
 
         /// <summary>
         /// int
@@ -3437,9 +3493,9 @@ namespace DD.Collections {
                     // checked by Ensures: Contract.Assert((this.array[rangeLength - 1] & (-1L << (this.range & longMask))) == 0);
                 }
                 // clear tail words(long)
-                // if this.array.Length==0 => !(this.array.Length>rangeLength)
                 if (this.array.Length > rangeLength) { // tail exists
                     for (int i = rangeLength; i < this.array.Length; i++) {
+                        // disable once RedundantCheckBeforeAssignment
                         if (this.array[i] != 0) {
                             this.array[i] = 0;
                         }

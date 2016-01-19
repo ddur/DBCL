@@ -149,7 +149,6 @@
     <Compile Include="Collections\ICodeSet\CodeExtended.cs" />
     <Compile Include="Collections\ICodeSet\CodeExtends.cs" />
     <Compile Include="Collections\ICodeSet\CodeSet.cs" />
-    <Compile Include="Collections\ICodeSet\CodeSetBits.cs" />
     <Compile Include="Collections\ICodeSet\CodeSetDiff.cs" />
     <Compile Include="Collections\ICodeSet\CodeSetFull.cs" />
     <Compile Include="Collections\ICodeSet\CodeSetList.cs" />

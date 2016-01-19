@@ -5,6 +5,7 @@
 // --------------------------------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 using NUnit.Framework;
@@ -131,12 +132,22 @@ namespace DD.Collections.BitSetArrayTest {
                     BitSetArray.From (new int[] { 1, 3, 5, 7, 9, 200 }),
                     BitSetArray.From (new int[] { 0, 2, 4, 6, 8, 120, 201 })
                 );
+
+                // covers And on different size arrays
+                yield return new TestCaseData (
+                    BitSetArray.From (new int[] { 0, 2, 4, 6, 8, 201 }),
+                    BitSetArray.From (new int[] { 31, 33 })
+                );
+                yield return new TestCaseData (
+                    BitSetArray.From (new int[] { 0, 2, 4, 6, 8, 201 }),
+                    BitSetArray.From (new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 60, 61, 62, 63 })
+                );
             }
         }
 
         [Test, TestCaseSource ("OperationTestCases")]
         public void And (BitSetArray thisSet, BitSetArray thatSet) {
-            HashSet<int> hashResult = new HashSet<int> (thisSet);
+            var hashResult = new HashSet<int> (thisSet);
             hashResult.IntersectWith (new HashSet<int> (thatSet));
 
             thisSet.And (thatSet);
@@ -253,17 +264,48 @@ namespace DD.Collections.BitSetArrayTest {
                     hashResult.Add (i);
                 }
             }
-            thisSet.Not ();
-            Assert.That (hashResult.SetEquals (thisSet));
+            //thisSet.Not ();
+            //Assert.That (hashResult.SetEquals (thisSet));
 
             hashResult = new HashSet<int> ();
-            for (int i = 0; i < thatSet.Length; i++) {
-                if (!thatSet.Contains (i)) {
-                    hashResult.Add (i);
+            if (thatSet.Count != 0 && thatSet.Count != thatSet.Length) {
+                for (int i = (int)thatSet.First + 1 ; i < (int)thatSet.Last; i++) {
+                    if (!thatSet.Contains (i)) {
+                        hashResult.Add (i);
+                    }
+                }
+            } else {
+                for (int i = 0; i < thatSet.Length; i++) {
+                    if (!thatSet.Contains (i)) {
+                        hashResult.Add (i);
+                    }
                 }
             }
-            thatSet.Not ();
+            thatSet.NotSpan ();
+            thatSet.Length = thatSet.Length + 1000;
             Assert.That (hashResult.SetEquals (thatSet));
+            Assert.True (thatSet.Count == ((IEnumerable<int>)thatSet).Count());
+        }
+
+
+        [Test]
+        public void NotSpan () {
+            var bits = BitSetArray.Size (1000);
+            bits[500] = true;
+            bits[700] = true;
+            bits.NotSpan ();
+            Assert.True (bits.Count == 199);
+            Assert.False (bits[500]);
+            Assert.True (bits[600]);
+            Assert.False (bits[700]);
+            
+            bits = BitSetArray.Size (1000, true);
+            bits[600] = false;
+            bits.NotSpan ();
+            Assert.True (bits.Count == 1);
+            Assert.False (bits[500]);
+            Assert.True (bits[600]);
+            Assert.False (bits[700]);
         }
 
         [TestFixtureSetUp]

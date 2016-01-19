@@ -17,7 +17,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EB4B3B44-064C-4AE1-A05F-A50374C70D53}"
 	ProjectSection(SolutionItems) = preProject
 		appveyor.yml = appveyor.yml
-		coveragetest.bat = coveragetest.bat
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{0EAAAA13-B949-4444-98AF-EFA12D45682B}"
