@@ -14,26 +14,6 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
     public class Span {
 
         [Test]
-        public void BitSetArray_Null () {
-            BitSetArray isNull = null;
-            Assert.AreEqual (0, isNull.Span ());
-        }
-
-        [Test]
-        public void BitSetArray_Empty () {
-            Assert.AreEqual (0, BitSetArray.Empty ().Span ());
-            Assert.AreEqual (0, BitSetArray.Size (1).Span ());
-            Assert.AreEqual (0, BitSetArray.Size (1000).Span ());
-        }
-
-        [Test]
-        public void BitSetArray_NotEmpty () {
-            Assert.AreEqual (1, BitSetArray.From (1).Span ());
-            Assert.AreEqual (10, BitSetArray.From (1, 10).Span ());
-            Assert.AreEqual (101, BitSetArray.From (900, 1000).Span ());
-        }
-
-        [Test]
         public void IEnumerableCode_Null () {
             Assert.AreEqual (0, ((CodeSet)null).Span ());
         }

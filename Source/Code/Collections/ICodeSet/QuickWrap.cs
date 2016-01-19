@@ -18,12 +18,17 @@ namespace DD.Collections.ICodeSet
     /// <remarks><para>It is private because it is unsafe for public use</para>
     /// <para>It does not copy constructor argument! It holds reference to external BitSetArray</para>
     /// <para>Used to quick wrap ICodeSet over TRANSIENT-ONLY, within parent class created, BitSetArray</para></remarks>
-    internal class QuickWrap : CodeSet {
+    public class QuickWrap : CodeSet {
 
         #region Ctor
 
         public static QuickWrap From(BitSetArray bits) {
             Contract.Requires<ArgumentNullException> (bits.IsNot (null));
+            Contract.Requires<ArgumentException> (bits.Count != 0);
+            Contract.Requires<ArgumentException> ((int)bits.Last <= Code.MaxValue);
+
+            Contract.Ensures (Theory.Construct (bits, Contract.Result<QuickWrap>()));
+
             return new QuickWrap (bits);
         }
 

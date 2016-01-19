@@ -100,9 +100,7 @@
     <Compile Include="ICodeSetRelationsTest\Members\RangeOverlaps.cs" />
     <Compile Include="ICodeSetServiceTest\Constants.cs" />
     <Compile Include="ICodeSetServiceTest\Members\IsCompact.cs" />
-    <Compile Include="ICodeSetServiceTest\Members\IsFull_BitSetArray.cs" />
     <Compile Include="ICodeSetServiceTest\Members\IsFull_ICodeSet.cs" />
-    <Compile Include="ICodeSetServiceTest\Members\IsNullOrEmpty_BitSetArray.cs" />
     <Compile Include="ICodeSetServiceTest\Members\IsNullOrEmpty_ICodeSet.cs" />
     <Compile Include="ICodeSetServiceTest\Members\ToBitSetArray.cs" />
     <Compile Include="ICodeSetServiceTest\Members\ToCompact.cs" />

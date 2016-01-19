@@ -62,6 +62,7 @@
     <Compile Include="BitSetArrayTest\AsIEquatable.cs" />
     <Compile Include="BitSetArrayTest\AsISet.cs" />
     <Compile Include="BitSetArrayTest\Constructors.cs" />
+    <Compile Include="BitSetArrayTest\Extended.cs" />
     <Compile Include="BitSetArrayTest\Factory.cs" />
     <Compile Include="BitSetArrayTest\GetSet.cs" />
     <Compile Include="BitSetArrayTest\Helpers.cs" />

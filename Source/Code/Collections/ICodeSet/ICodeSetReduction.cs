@@ -151,14 +151,6 @@ namespace DD.Collections.ICodeSet {
 
                 // create complement
                 var complement = BitSetArray.Copy(self).NotSpan();
-//                int start = (int)self.First;
-//                int final = (int)self.Last;
-//                var complement = BitSetArray.Size (self.Length);
-//                foreach (var item in self.Complement ()) {
-//                    if (item.InRange (start, final)) {
-//                        complement._Set (item);
-//                    }
-//                }
 
                 Contract.Assume (complement.Count != 0);
 
@@ -178,7 +170,7 @@ namespace DD.Collections.ICodeSet {
                             complement.ReducePartTwo (offset));
                     }
                     else {
-                        // final choice Page/Wide
+                        // final choice Mask/Wide
                         retSet = self.ReducePartTwo (offset);
                     }
                 }

@@ -74,21 +74,26 @@ namespace DD.Collections.ICodeSet {
         }
 
         [Pure]
-        public static int Span (this BitSetArray self) {
-            if (self.IsNull ())
-                return 0;
-            if (self.Count == 0)
-                return 0;
-            return 1 + (int)self.Last - (int)self.First;
-        }
-
-        [Pure]
         public static int Span (this IEnumerable<Code> self) {
             if (self.IsNull ())
                 return 0;
             if (!self.Any ())
                 return 0;
             return 1 + self.Max () - self.Min ();
+        }
+
+        /// <summary>IsCompact if:
+        /// <para>1) is not null</para>
+        /// <para>2) Item1.IsCompact ()</para>
+        /// <para>3) Item1.Length + Item2.IsCodesCount</para></summary>
+        /// <param name="self">BitSetArray</param>
+        /// <returns>bool</returns>
+        [Pure]
+        public static bool IsCompact (this Tuple<BitSetArray, int> self) {
+            if (self.IsNull ()) {
+                return false;
+            }
+            return self.Item1.IsCompact() && (self.Item1.Length + self.Item2).IsCodesCount ();
         }
 
         /// <summary>IsCompact if:
@@ -117,8 +122,8 @@ namespace DD.Collections.ICodeSet {
         /// <param name="self">int[]</param>
         /// <returns>bool</returns>
         [Pure]
-        internal static bool IsCodeCompact (this int[] self) {
-            if (self.IsCodeCompactLast () < 0) {
+        internal static bool IsCompact (this int[] self) {
+            if (self.IsCompactLast () < 0) {
                 return false;
             }
             return true;
@@ -133,7 +138,7 @@ namespace DD.Collections.ICodeSet {
         /// <param name="self">int[]</param>
         /// <returns>-1 if not compact else index of last bit set</returns>
         [Pure]
-        internal static int IsCodeCompactLast (this int[] self) {
+        public static int IsCompactLast (this int[] self) {
             int lastBitIndex = -1;
             if (self.IsNull ()) {
                 return lastBitIndex;
@@ -192,23 +197,24 @@ namespace DD.Collections.ICodeSet {
         /// <param name="self"></param>
         /// <returns></returns>
         [Pure]
-        public static BitSetArray ToCompact (this ICodeSet self) {
-            Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
-            Contract.Ensures (Contract.Result<BitSetArray> ().IsCompact ());
+        public static Tuple<BitSetArray, int> ToCompact (this ICodeSet self) {
+            Contract.Ensures (Contract.Result<Tuple<BitSetArray, int>> ().IsNot (null));
+            Contract.Ensures (Contract.Result<Tuple<BitSetArray, int>> ().Item1.IsNot (null));
+            Contract.Ensures (Contract.Result<Tuple<BitSetArray, int>> ().Item1.IsCompact ());
 
-            if (self.IsNull () || self.Count == 0)
-                return BitSetArray.Empty ();
+            Tuple<BitSetArray, int> retTuple;
+            if (!self.IsNull () && self.Count != 0) {
 
-            var ret = BitSetArray.Size (self.Length);
-            foreach (int code in self) {
-                ret._Set (code - self.First);
+                var bits = BitSetArray.Size (self.Length);
+                foreach (int code in self) {
+                    bits._Set (code - self.First);
+                }
+                retTuple = new Tuple<BitSetArray, int> (bits, self.First);
+            } else {
+                retTuple = new Tuple<BitSetArray, int> (BitSetArray.Empty (), 0);
             }
 
-            // first and last bit set == compact
-            Contract.Assert (ret[0]);
-            Contract.Assert (ret[ret.Length - 1]);
-
-            return ret;
+            return retTuple;
         }
 
         #endregion
@@ -222,29 +228,13 @@ namespace DD.Collections.ICodeSet {
         }
 
         [Pure]
-        public static bool IsEmpty (this BitSetArray self) {
-            Contract.Requires<ArgumentNullException> (self.IsNot (null));
-            return self.Count == 0;
-        }
-
-        [Pure]
         public static bool IsNullOrEmpty (this ICodeSet self) {
-            return self.IsNull () || self.Count == 0;
-        }
-
-        [Pure]
-        public static bool IsNullOrEmpty (this BitSetArray self) {
             return self.IsNull () || self.Count == 0;
         }
 
         [Pure]
         public static bool IsFull (this ICodeSet self) {
             return !self.IsNull () && self.Count != 0 && self.Count == self.Length;
-        }
-
-        [Pure]
-        public static bool IsFull (this BitSetArray self) {
-            return !self.IsNull () && self.Count != 0 && (self.Count == self.Span ());
         }
 
         #endregion
