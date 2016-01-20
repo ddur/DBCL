@@ -27,12 +27,14 @@ namespace DD.Collections.ICodeSet.CodeSetDiffTest {
             Assert.True (csd1.First.Value == Code.MinValue);
             Assert.True (csd1.Last.Value == Code.MaxValue);
             Assert.True (csd1.IsReduced);
+            Assert.False (csd1.IsEmpty);
 
             Assert.True (csd2.Count == 17);
             Assert.True (csd2.Length == 207 - 90 + 1);
             Assert.True (csd2.First.Value == 90);
             Assert.True (csd2.Last.Value == 207);
             Assert.True (csd2.IsReduced);
+            Assert.False (csd2.IsEmpty);
         }
 
         [Test]

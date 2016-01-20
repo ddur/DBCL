@@ -6,9 +6,8 @@
 
 using System;
 using System.Collections.Generic;
-
 using System.Linq;
-using DD.Collections;
+
 using NUnit.Framework;
 
 namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {

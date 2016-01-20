@@ -50,6 +50,8 @@ namespace DD.Collections.ICodeSet.CodeSetListTest {
             // IsReduced
             Assert.True (csl.IsReduced);
 
+            // IsEmpty
+            Assert.False (csl.IsEmpty);
         }
     }
 }

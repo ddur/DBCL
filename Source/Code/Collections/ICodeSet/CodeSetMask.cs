@@ -208,6 +208,13 @@ namespace DD.Collections.ICodeSet {
         }
 
         [Pure]
+        public override bool IsEmpty {
+            get {
+                return false;
+            }
+        }
+
+        [Pure]
         public override int Count {
             get {
                 return count;

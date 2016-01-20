@@ -19,14 +19,14 @@ namespace DD.Collections.ICodeSet {
         #region Ctor
 
         public static CodeSetFull From (Code first, Code last) {
-            Contract.Requires<InvalidOperationException> ((first + Service.PairCount) <= last);
+            Contract.Requires<ArgumentException> ((first + Service.PairCount) <= last);
             Contract.Ensures (Contract.Result<CodeSetFull> ().IsNot (null));
 
             return new CodeSetFull (first, last);
         }
 
         internal CodeSetFull (Code first, Code last) {
-            Contract.Requires<InvalidOperationException> ((first + Service.PairCount) <= last);
+            Contract.Requires<ArgumentException> ((first + Service.PairCount) <= last);
 
             // Input -> private
             Contract.Ensures (this.start == first);
@@ -53,6 +53,13 @@ namespace DD.Collections.ICodeSet {
         public override bool this[Code code] {
             get {
                 return this.start <= code && this.final >= code;
+            }
+        }
+
+        [Pure]
+        public override bool IsEmpty {
+            get {
+                return false;
             }
         }
 

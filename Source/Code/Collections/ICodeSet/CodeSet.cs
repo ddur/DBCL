@@ -37,6 +37,9 @@ namespace DD.Collections.ICodeSet {
         }
 
         [Pure]
+        public abstract bool IsEmpty { get; }
+
+        [Pure]
         public abstract int Length { get; }
 
         [Pure]

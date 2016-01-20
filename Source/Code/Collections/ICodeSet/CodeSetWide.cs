@@ -24,8 +24,8 @@ namespace DD.Collections.ICodeSet {
 
         public static CodeSetWide From (params Code[] codes) {
             Contract.Requires<ArgumentNullException> (codes.IsNot (null));
-            Contract.Requires<InvalidOperationException> (codes.Distinct ().Count ().InRange (Service.ListMaxCount + 1, codes.Span () - 1));	// not Null/Code/Pair/Full
-            Contract.Requires<InvalidOperationException> (codes.Min ().UnicodePlane () != codes.Max ().UnicodePlane ()); // one Page
+            Contract.Requires<ArgumentException> (codes.Distinct ().Count ().InRange (Service.ListMaxCount + 1, codes.Span () - 1));	// not Null/Code/Pair/Full
+            Contract.Requires<ArgumentException> (codes.Min ().UnicodePlane () != codes.Max ().UnicodePlane ()); // one Page
             Contract.Ensures (Contract.Result<CodeSetWide> ().IsNot (null));
 
             return new CodeSetWide (codes as IEnumerable<Code>);
@@ -33,8 +33,8 @@ namespace DD.Collections.ICodeSet {
 
         public static CodeSetWide From (IEnumerable<Code> codes) {
             Contract.Requires<ArgumentNullException> (codes.IsNot (null));
-            Contract.Requires<InvalidOperationException> (codes.Distinct ().Count ().InRange (Service.ListMaxCount + 1, codes.Span () - 1));	// not Null/Code/Pair/Full
-            Contract.Requires<InvalidOperationException> (codes.Min ().UnicodePlane () != codes.Max ().UnicodePlane ()); // one Page
+            Contract.Requires<ArgumentException> (codes.Distinct ().Count ().InRange (Service.ListMaxCount + 1, codes.Span () - 1));	// not Null/Code/Pair/Full
+            Contract.Requires<ArgumentException> (codes.Min ().UnicodePlane () != codes.Max ().UnicodePlane ()); // one Page
             Contract.Ensures (Contract.Result<CodeSetWide> ().IsNot (null));
 
             return new CodeSetWide (codes);
@@ -42,9 +42,9 @@ namespace DD.Collections.ICodeSet {
 
         public static CodeSetWide From (BitSetArray bits, int offset = 0) {
             Contract.Requires<ArgumentNullException> (bits.IsNot (null));
-            Contract.Requires<InvalidOperationException> (bits.Count.InRange (Service.ListMaxCount + 1, bits.Span () - 1));	// not Null/Code/Pair/Full
-            Contract.Requires<IndexOutOfRangeException> (offset.InRange (0, Code.MaxValue - (int)bits.Last));
-            Contract.Requires<InvalidOperationException> ((bits.First + offset).UnicodePlane () != (bits.Last + offset).UnicodePlane ()); // one Page
+            Contract.Requires<ArgumentException> (bits.Count.InRange (Service.ListMaxCount + 1, bits.Span () - 1));	// not Null/Code/Pair/Full
+            Contract.Requires<ArgumentException> (offset.InRange (0, Code.MaxValue - (int)bits.Last));
+            Contract.Requires<ArgumentException> ((bits.First + offset).UnicodePlane () != (bits.Last + offset).UnicodePlane ()); // one Page
             Contract.Ensures (Contract.Result<CodeSetWide> ().IsNot (null));
 
             return new CodeSetWide (bits, offset);
@@ -88,9 +88,9 @@ namespace DD.Collections.ICodeSet {
 
         private CodeSetWide (BitSetArray bits, int offset = 0) {
             Contract.Requires<ArgumentNullException> (bits.IsNot (null));
-            Contract.Requires<InvalidOperationException> (bits.Count.InRange (Service.PairCount + 1, bits.Span () - 1));	// not Null/Code/Pair/Full
-            Contract.Requires<IndexOutOfRangeException> (offset.InRange (0, Code.MaxValue - (int)bits.Last));
-            Contract.Requires<InvalidOperationException> ((bits.First + offset).UnicodePlane () != (bits.Last + offset).UnicodePlane ());
+            Contract.Requires<ArgumentException> (bits.Count.InRange (Service.PairCount + 1, bits.Span () - 1));	// not Null/Code/Pair/Full
+            Contract.Requires<ArgumentException> (offset.InRange (0, Code.MaxValue - (int)bits.Last));
+            Contract.Requires<ArgumentException> ((bits.First + offset).UnicodePlane () != (bits.Last + offset).UnicodePlane ());
 
             Contract.Ensures (Theory.Construct (bits, offset, this));
 
@@ -168,6 +168,13 @@ namespace DD.Collections.ICodeSet {
         }
 
         [Pure]
+        public override bool IsEmpty {
+            get {
+                return false;
+            }
+        }
+
+        [Pure]
         public override int Count {
             get {
                 return this.count;
@@ -231,6 +238,7 @@ namespace DD.Collections.ICodeSet {
                 Success success = true;
 
                 // input -> private
+                success.Assert (codes.Any());
                 success.Assert (codes.Distinct ().Count () == self.count);
                 var e = self.GetEnumerator ();
                 foreach (var item in codes.Distinct ().OrderBy (code => (code))) {
@@ -255,6 +263,7 @@ namespace DD.Collections.ICodeSet {
                 Success success = true;
 
                 // input -> private
+                success.Assert (bits.Count != 0);
                 success.Assert (bits.Count == self.Count);
                 var e = self.GetEnumerator ();
                 foreach (Code item in bits) {
@@ -270,6 +279,7 @@ namespace DD.Collections.ICodeSet {
                     count += item.Count;
                 }
                 success.Assert (count == self.count);
+                success.Assert (self.IsEmpty == false);
 
                 return success;
             }
@@ -298,6 +308,7 @@ namespace DD.Collections.ICodeSet {
                     success.Assert (iCodeSet.IsReduced);
                     counter += iCodeSet.Count;
                 }
+                success.Assert (self.IsEmpty == false);
                 success.Assert (self.count == counter);
                 success.Assert ((self.start) == startPlane.First);
                 success.Assert ((self.final) == finalPlane.Last);

@@ -1,10 +1,8 @@
-﻿/*
- * Created by SharpDevelop.
- * User: ddur
- * Date: 1.1.2016.
- * Time: 15:53
- *
- */
+﻿// --------------------------------------------------------------------------------
+// <copyright file="https://github.com/ddur/DBCL/blob/master/LICENSE" company="DD">
+// Copyright © 2013-2016 Dragan Duric. All Rights Reserved.
+// </copyright>
+// --------------------------------------------------------------------------------
 
 using System;
 using System.Collections.Generic;

@@ -42,32 +42,32 @@ namespace DD.Collections.ICodeSet.CodeSetDiffTest {
             );
 
             // requires a.Count = a.Length
-            Assert.Throws<InvalidOperationException> (
+            Assert.Throws<ArgumentException> (
                 delegate { csd = CodeSetDiff.From (CodeSetMask.From (new Code[] { 0, 1, 3, 4 }), CodeSetPair.From (1, 3)); }
             );
             // requires a is CodeSetFull
-            Assert.Throws<InvalidOperationException> (
+            Assert.Throws<ArgumentException> (
                 delegate { csd = CodeSetDiff.From (CodeSetMask.From (new Code[] { 0, 1, 2, 3, 4 }), CodeSetPair.From (1, 3)); }
             );
 
             // requires a.Last > b.Last
-            Assert.Throws<InvalidOperationException> (
+            Assert.Throws<ArgumentException> (
                 delegate { csd = CodeSetDiff.From (CodeSetFull.From (0, 100), CodeSetPair.From (1, 100)); }
             );
-            Assert.Throws<InvalidOperationException> (
+            Assert.Throws<ArgumentException> (
                 delegate { csd = CodeSetDiff.From (CodeSetFull.From (0, 100), CodeSetPair.From (1, 101)); }
             );
 
             // requires a.First < b.First
-            Assert.Throws<InvalidOperationException> (
+            Assert.Throws<ArgumentException> (
                 delegate { csd = CodeSetDiff.From (CodeSetFull.From (1, 100), CodeSetPair.From (1, 99)); }
             );
-            Assert.Throws<InvalidOperationException> (
+            Assert.Throws<ArgumentException> (
                 delegate { csd = CodeSetDiff.From (CodeSetFull.From (1, 100), CodeSetPair.From (0, 99)); }
             );
 
             // requires .Count > 2
-            Assert.Throws<InvalidOperationException> (
+            Assert.Throws<ArgumentException> (
                 delegate { csd = CodeSetDiff.From (CodeSetFull.From (1, 4), CodeSetPair.From (2, 3)); }
             );
         }

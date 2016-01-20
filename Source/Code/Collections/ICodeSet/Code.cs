@@ -127,7 +127,7 @@ namespace DD.Collections.ICodeSet {
 
         #region ICodeSet Interfaces
 
-        #region ICodeSet Interface
+        #region ICode Interface
 
         [Pure]
         bool ICode.this[Code code] {
@@ -138,6 +138,17 @@ namespace DD.Collections.ICodeSet {
         bool ICode.this[int value] {
             get { return this.Value == value; }
         }
+
+        [Pure]
+        bool ICode.IsEmpty {
+            get {
+                return false;
+            }
+        }
+
+        #endregion
+
+        #region ICodeSet Interface
 
         [Pure]
         int ICodeSet.Length {
@@ -155,7 +166,7 @@ namespace DD.Collections.ICodeSet {
         }
 
         [Pure]
-        public bool IsReduced {
+        bool ICodeSet.IsReduced {
             get {
         		return true;
             }
@@ -306,6 +317,7 @@ namespace DD.Collections.ICodeSet {
 
         [ContractInvariantMethod]
         private void Invariant () {
+            Contract.Invariant (((ICodeSet)this).IsEmpty == false);
             Contract.Invariant (((ICodeSet)this).Count == Service.UnitCount);
             Contract.Invariant (((ICodeSet)this).Count == ((ICodeSet)this).Length);
             Contract.Invariant (((ICodeSet)this).First == ((ICodeSet)this).Last);

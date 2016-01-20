@@ -156,6 +156,7 @@
     <Compile Include="Collections\ICodeSet\CodeSetNone.cs" />
     <Compile Include="Collections\ICodeSet\CodeSetPair.cs" />
     <Compile Include="Collections\ICodeSet\CodeSetWide.cs" />
+    <Compile Include="Collections\ICodeSet\ICode.cs" />
     <Compile Include="Collections\ICodeSet\ICodeSet.cs" />
     <Compile Include="Collections\ICodeSet\ICodeSetDictionary.cs" />
     <Compile Include="Collections\ICodeSet\ICodeSetStaticFactory.cs" />

@@ -27,6 +27,8 @@ namespace DD.Collections.ICodeSet.CodeSetPairTest {
             Assert.True (csp.First == 1);
             Assert.True (csp.Last == 7);
             Assert.True (csp.Length == 1 + csp.Last - csp.First);
+            Assert.True (csp.IsReduced);
+            Assert.False (csp.IsEmpty);
 
             // indexer
             Assert.True (csp[1]);
@@ -46,6 +48,8 @@ namespace DD.Collections.ICodeSet.CodeSetPairTest {
             Assert.True (csp.First == Code.MinValue);
             Assert.True (csp.Last == Code.MaxValue);
             Assert.True (csp.Length == 1 + csp.Last - csp.First);
+            Assert.True (csp.IsReduced);
+            Assert.False (csp.IsEmpty);
 
             // indexer
             Assert.True (csp[Code.MinValue]);

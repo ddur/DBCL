@@ -1,10 +1,9 @@
-﻿/*
- * Created by SharpDevelop.
- * User: ddur
- * Date: 15.1.2016.
- * Time: 12:43
- * 
- */
+﻿// --------------------------------------------------------------------------------
+// <copyright file="https://github.com/ddur/DBCL/blob/master/LICENSE" company="DD">
+// Copyright © 2013-2016 Dragan Duric. All Rights Reserved.
+// </copyright>
+// --------------------------------------------------------------------------------
+
 using System;
 using System.Linq;
 using NUnit.Framework;
@@ -54,6 +53,7 @@ namespace DD.Collections.ICodeSet.QuickWrapTest
             Assert.True (quick.Last == 7);
             Assert.True (quick.Length == 7);
             Assert.False (quick.IsReduced);
+            Assert.False (quick.IsEmpty);
             Assert.True (quick.SequenceEqual (new Code[] { 1, 5, 7 }));
             Assert.True (quick.ToBitSetArray().SequenceEqual (BitSetArray.From (1, 5, 7)));
             Assert.True (quick.ToBitSetArray().SetEquals (BitSetArray.From (1, 5, 7)));

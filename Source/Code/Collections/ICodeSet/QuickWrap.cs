@@ -1,10 +1,9 @@
-﻿/*
- * Created by SharpDevelop.
- * User: ddur
- * Date: 17.1.2016.
- * Time: 0:15
- * 
- */
+﻿// --------------------------------------------------------------------------------
+// <copyright file="https://github.com/ddur/DBCL/blob/master/LICENSE" company="DD">
+// Copyright © 2013-2016 Dragan Duric. All Rights Reserved.
+// </copyright>
+// --------------------------------------------------------------------------------
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
@@ -74,6 +73,13 @@ namespace DD.Collections.ICodeSet
         public override bool this[Code code] {
             get {
                 return sorted[code.Value];
+            }
+        }
+
+        [Pure]
+        public override bool IsEmpty {
+            get {
+                return false;
             }
         }
 
@@ -151,6 +157,7 @@ namespace DD.Collections.ICodeSet
 
                 success.Assert (!bits.IsNull ());
                 success.Assert (bits.Count > 0);
+                success.Assert (self.IsEmpty == false);
 
                 success.Assert (bits.First.HasValue);
                 success.Assert (bits.Last.HasValue);
@@ -170,6 +177,7 @@ namespace DD.Collections.ICodeSet
                 // private
                 success.Assert (!self.sorted.IsNull ());
                 success.Assert (self.sorted.Count > 0);
+                success.Assert (self.IsEmpty == false);
 
                 success.Assert (self.sorted.First.HasValue);
                 success.Assert (self.sorted.Last.HasValue);

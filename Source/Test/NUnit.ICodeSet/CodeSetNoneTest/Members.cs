@@ -20,6 +20,8 @@ namespace DD.Collections.ICodeSet.CodeSetNullTest {
             Assert.Throws<InvalidOperationException> (delegate { Code c = csn.First; });
             Assert.Throws<InvalidOperationException> (delegate { Code c = csn.Last; });
 
+            Assert.True (csn.IsEmpty);
+            Assert.True (csn.IsReduced);
             Assert.True (csn.Count == 0);
             Assert.True (csn.Length == 0);
             Assert.True (csn.SequenceEqual (new Code[0]));

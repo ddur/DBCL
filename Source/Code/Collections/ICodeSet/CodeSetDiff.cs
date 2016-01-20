@@ -26,15 +26,15 @@ namespace DD.Collections.ICodeSet {
             Contract.Requires<ArgumentEmptyException> (!b.IsEmpty ());
 
             // a is full range
-            Contract.Requires<InvalidOperationException> (a.Count == a.Length);
-            Contract.Requires<InvalidOperationException> (a is CodeSetFull);
+            Contract.Requires<ArgumentException> (a.Count == a.Length);
+            Contract.Requires<ArgumentException> (a is CodeSetFull);
 
             // b is proper-inner range subset of a
-            Contract.Requires<InvalidOperationException> (a.First < b.First);
-            Contract.Requires<InvalidOperationException> (b.Last < a.Last);
+            Contract.Requires<ArgumentException> (a.First < b.First);
+            Contract.Requires<ArgumentException> (b.Last < a.Last);
 
             // Has more members than Service.ListMaxCount (>CodeSetList.MaxCount)
-            Contract.Requires<InvalidOperationException> ((a.Count - b.Count) > Service.ListMaxCount);
+            Contract.Requires<ArgumentException> ((a.Count - b.Count) > Service.ListMaxCount);
 
             Contract.Ensures (Contract.Result<CodeSetDiff> ().IsNot (null));
 
@@ -83,6 +83,13 @@ namespace DD.Collections.ICodeSet {
         public override bool this[Code code] {
             get {
                 return !this.bSet[code] && this.aSet[code];
+            }
+        }
+
+        [Pure]
+        public override bool IsEmpty {
+            get {
+                return false;
             }
         }
 

@@ -23,9 +23,9 @@ namespace DD.Collections.ICodeSet {
         public static CodeSetList From (params Code[] codes) {
             Contract.Requires<ArgumentNullException> (codes.IsNot (null));
             Contract.Requires<ArgumentEmptyException> (!codes.IsEmpty ());
-            Contract.Requires<InvalidOperationException> (codes.Distinct ().Count () > Service.PairCount); // at least 3 members
-            Contract.Requires<InvalidOperationException> (codes.Distinct ().Count () <= Service.ListMaxCount); // up to max members
-            Contract.Requires<InvalidOperationException> (codes.Distinct ().Count () < (1 + codes.Max () - codes.Min ())); // not full
+            Contract.Requires<ArgumentException> (codes.Distinct ().Count () > Service.PairCount); // at least 3 members
+            Contract.Requires<ArgumentException> (codes.Distinct ().Count () <= Service.ListMaxCount); // up to max members
+            Contract.Requires<ArgumentException> (codes.Distinct ().Count () < (1 + codes.Max () - codes.Min ())); // not full
             Contract.Ensures (Contract.Result<CodeSetList> ().IsNot (null));
 
             return new CodeSetList ((IEnumerable<Code>)codes);
@@ -34,9 +34,9 @@ namespace DD.Collections.ICodeSet {
         public static CodeSetList From (IEnumerable<Code> codes) {
             Contract.Requires<ArgumentNullException> (codes.IsNot (null));
             Contract.Requires<ArgumentEmptyException> (!codes.IsEmpty ());
-            Contract.Requires<InvalidOperationException> (codes.Distinct ().Count () > Service.PairCount); // at least 3 members
-            Contract.Requires<InvalidOperationException> (codes.Distinct ().Count () <= Service.ListMaxCount); // up to max members
-            Contract.Requires<InvalidOperationException> (codes.Distinct ().Count () < (1 + codes.Max () - codes.Min ())); // not full
+            Contract.Requires<ArgumentException> (codes.Distinct ().Count () > Service.PairCount); // at least 3 members
+            Contract.Requires<ArgumentException> (codes.Distinct ().Count () <= Service.ListMaxCount); // up to max members
+            Contract.Requires<ArgumentException> (codes.Distinct ().Count () < (1 + codes.Max () - codes.Min ())); // not full
             Contract.Ensures (Contract.Result<CodeSetList> ().IsNot (null));
 
             return new CodeSetList (codes);
@@ -74,6 +74,13 @@ namespace DD.Collections.ICodeSet {
         public override bool this[Code code] {
             get {
                 return (this.sorted.BinarySearch (code) >= 0);
+            }
+        }
+
+        [Pure]
+        public override bool IsEmpty {
+            get {
+                return false;
             }
         }
 

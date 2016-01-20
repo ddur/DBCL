@@ -1,10 +1,9 @@
-﻿/*
- * Created by SharpDevelop.
- * User: ddur
- * Date: 19.1.2016.
- * Time: 16:27
- * 
- */
+﻿// --------------------------------------------------------------------------------
+// <copyright file="https://github.com/ddur/DBCL/blob/master/LICENSE" company="DD">
+// Copyright © 2013-2016 Dragan Duric. All Rights Reserved.
+// </copyright>
+// --------------------------------------------------------------------------------
+
 using System;
 using NUnit.Framework;
 
@@ -45,6 +44,15 @@ namespace DD.Collections.BitSetArrayTest.Extended {
 
     [TestFixture]
     public class IsEmpty_This_BitSetArray {
+
+        [Test]
+        public void BitSetArray_Null_Throws () {
+            Assert.Throws<ArgumentNullException> (
+                delegate {
+                    ((BitSetArray)null).IsEmpty ();
+                }
+            );
+        }
 
         [Test]
         public void IsTrue () {

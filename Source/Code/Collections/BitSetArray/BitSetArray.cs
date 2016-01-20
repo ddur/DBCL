@@ -3750,7 +3750,7 @@ namespace DD.Collections {
         }
 
         private void SetCacheFirst (int value) {
-            Contract.Requires<InvalidOperationException> (Length != 0);
+            Contract.Requires<InvalidOperationException> (this.Length != 0);
             Contract.Requires<ArgumentException> (this.InRange (value));
 
             Contract.Ensures (Theory.FirstCashedAfterSet (this, value));
@@ -3792,7 +3792,7 @@ namespace DD.Collections {
         /// </summary>
         /// <param name="value"></param>
         private void SetCacheLast (int value) {
-            Contract.Requires<InvalidOperationException> (Length != 0);
+            Contract.Requires<InvalidOperationException> (this.Length != 0);
             Contract.Requires<ArgumentException> (this.InRange (value));
 
             Contract.Ensures (Theory.LastCachedAfterSet (this, value));

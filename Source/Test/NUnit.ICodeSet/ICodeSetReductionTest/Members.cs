@@ -16,7 +16,7 @@ namespace DD.Collections.ICodeSet.ICodeSetReductionTest {
 
         [Test]
         public void IsReduced () {
-            Assert.True (new Code (3).IsReduced);
+            Assert.True (((ICodeSet)new Code (3)).IsReduced);
             Assert.True (CodeSetNone.Singleton.IsReduced);
             Assert.True (CodeSetPair.From (3, 4).IsReduced);
             Assert.True (CodeSetFull.From (3, 44).IsReduced);

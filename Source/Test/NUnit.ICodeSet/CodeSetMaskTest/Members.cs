@@ -1,10 +1,9 @@
-﻿/*
- * Created by SharpDevelop.
- * User: ddur
- * Date: 7.1.2016.
- * Time: 20:55
- *
- */
+﻿// --------------------------------------------------------------------------------
+// <copyright file="https://github.com/ddur/DBCL/blob/master/LICENSE" company="DD">
+// Copyright © 2013-2016 Dragan Duric. All Rights Reserved.
+// </copyright>
+// --------------------------------------------------------------------------------
+
 using System;
 using System.Linq;
 using NUnit.Framework;
@@ -34,15 +33,19 @@ namespace DD.Collections.ICodeSet.CodeSetMaskTest
             
             csm = CodeSetMask.From ((IEnumerable<Code>)new Code[] { 0, 1, 3, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 });
             Assert.True (csm.IsReduced);
+            Assert.False (csm.IsEmpty);
 
             csm = CodeSetMask.From ((IEnumerable<Code>)new Code[] { 0, 1, 3, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 1024 });
             Assert.True (csm.IsReduced);
+            Assert.False (csm.IsEmpty);
 
             csm = CodeSetMask.From ((IEnumerable<Code>)new Code[] { 0, 1, 3, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 1024, 65536 });
             Assert.False (csm.IsReduced);
+            Assert.False (csm.IsEmpty);
 
             csm = CodeSetMask.From ((IEnumerable<Code>)new Code[] { 0, 1, 3, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 });
             Assert.False (csm.IsReduced);
+            Assert.False (csm.IsEmpty);
         }
     }
 }

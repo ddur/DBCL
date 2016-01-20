@@ -67,11 +67,13 @@ namespace DD.Collections.ICodeSet.CodeSetWideTest {
 
         [Test]
         public void Properties () {
+            Assert.True (!csw1.IsEmpty);
             Assert.True (csw1.Count == 20);
             Assert.True (csw1.Length == Code.MaxCount);
             Assert.True (csw1.First.Value == 0);
             Assert.True (csw1.Last.Value == Code.MaxValue);
 
+            Assert.True (!csw1.IsEmpty);
             Assert.True (csw2.Count == 20);
             Assert.True (csw2.Length == 1 + 65537);
             Assert.True (csw2.First.Value == 0);

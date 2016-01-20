@@ -5,37 +5,29 @@
 // --------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using System.Linq;
 
-namespace DD.Collections.ICodeSet {
 
-    /// <summary>ICodeSet interface
-    /// <remarks>ICodeSet implementation requires sorted/ordered IEnumerable&lt;Code&gt;</remarks>
+namespace DD.Collections.ICodeSet
+{
+    /// <summary>
+    /// Description of ICode.
     /// </summary>
-    public interface ICodeSet :
-        ICode, ICollection<Code>, IEnumerable<Code>, IEquatable<ICodeSet>,
-        IEqualityComparer<ICodeSet>, IComparable<ICodeSet> {
+    public interface ICode {
 
         [Pure]
-        int Length {
+        bool this[Code code] {
             get;
         }
 
         [Pure]
-        Code First {
+        bool this[int code] {
             get;
         }
 
         [Pure]
-        Code Last {
+        bool IsEmpty {
             get;
-        }
-
-        [Pure]
-        bool IsReduced {
-        	get;
         }
     }
 }
