@@ -104,7 +104,7 @@ namespace DD.Text {
         }
 
         [Pure]
-        public static Code Decode (this char prev, char next) {
+        internal static Code Decode (this char prev, char next) {
             Contract.Ensures (Theory.Decode (prev, next, Contract.Result<Code> ()));
             Contract.EnsuresOnThrow<ArgumentException> (Theory.CanDecode (prev, next, false));
 
@@ -147,7 +147,7 @@ namespace DD.Text {
         }
 
         [Pure]
-        public static bool CanDecode (this char prev, char next) {
+        internal static bool CanDecode (this char prev, char next) {
             Contract.Ensures (Theory.CanDecode (prev, next, Contract.Result<bool> ()));
             return (char.IsHighSurrogate (prev) && char.IsLowSurrogate (next) ||
                     !char.IsHighSurrogate (prev) && !char.IsLowSurrogate (next));
