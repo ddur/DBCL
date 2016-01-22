@@ -19,6 +19,11 @@ namespace DD.Collections.ICodeSet {
         IEqualityComparer<ICodeSet>, IComparable<ICodeSet> {
 
         [Pure]
+        bool this[Code code] {
+            get;
+        }
+
+        [Pure]
         int Length {
             get;
         }

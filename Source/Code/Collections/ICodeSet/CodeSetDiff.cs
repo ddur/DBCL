@@ -82,7 +82,14 @@ namespace DD.Collections.ICodeSet {
         [Pure]
         public override bool this[Code code] {
             get {
-                return !this.bSet[code] && this.aSet[code];
+                return this.aSet[code.Value] && !this.bSet[code.Value];
+            }
+        }
+
+        [Pure]
+        public override bool this[int value] {
+            get {
+                return this.aSet[value] && !this.bSet[value];
             }
         }
 

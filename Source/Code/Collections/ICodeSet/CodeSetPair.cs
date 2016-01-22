@@ -40,8 +40,8 @@ namespace DD.Collections.ICodeSet {
 
         #region Fields
 
-        private readonly Code start;
-        private readonly Code final;
+        private readonly int start;
+        private readonly int final;
 
         #endregion
 
@@ -49,7 +49,12 @@ namespace DD.Collections.ICodeSet {
 
         [Pure]
         public override bool this[Code code] {
-            get { return code == this.start || code == this.final; }
+            get { return code.Value == this.start || code.Value == this.final; }
+        }
+
+        [Pure]
+        public override bool this[int value] {
+            get { return value == this.start || value == this.final; }
         }
 
         [Pure]

@@ -16,11 +16,6 @@ namespace DD.Collections.ICodeSet
     public interface ICode {
 
         [Pure]
-        bool this[Code code] {
-            get;
-        }
-
-        [Pure]
         bool this[int code] {
             get;
         }

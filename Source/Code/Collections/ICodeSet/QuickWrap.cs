@@ -14,9 +14,8 @@ using DD.Diagnostics;
 namespace DD.Collections.ICodeSet
 {
     /// <summary>QuickWrap ICodeSet over BitSetArray</summary>
-    /// <remarks><para>It is private because it is unsafe for public use</para>
     /// <para>It does not copy constructor argument! It holds reference to external BitSetArray</para>
-    /// <para>Used to quick wrap ICodeSet over TRANSIENT-ONLY, within parent class created, BitSetArray</para></remarks>
+    /// <para>Use to quick wrap ICodeSet over transient-only BitSetArray</para></remarks>
     public class QuickWrap : CodeSet {
 
         #region Ctor
@@ -73,6 +72,13 @@ namespace DD.Collections.ICodeSet
         public override bool this[Code code] {
             get {
                 return sorted[code.Value];
+            }
+        }
+
+        [Pure]
+        public override bool this[int value] {
+            get {
+                return sorted[value];
             }
         }
 

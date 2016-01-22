@@ -130,11 +130,6 @@ namespace DD.Collections.ICodeSet {
         #region ICode Interface
 
         [Pure]
-        bool ICode.this[Code code] {
-            get { return this.Value == code.Value; }
-        }
-
-        [Pure]
         bool ICode.this[int value] {
             get { return this.Value == value; }
         }
@@ -149,6 +144,11 @@ namespace DD.Collections.ICodeSet {
         #endregion
 
         #region ICodeSet Interface
+
+        [Pure]
+        bool ICodeSet.this[Code code] {
+            get { return this.Value == code.Value; }
+        }
 
         [Pure]
         int ICodeSet.Length {

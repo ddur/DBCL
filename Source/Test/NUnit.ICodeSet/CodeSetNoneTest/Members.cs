@@ -30,6 +30,9 @@ namespace DD.Collections.ICodeSet.CodeSetNullTest {
             for (int i = 1; i <= 10; i++) {
                 Assert.False (csn[r.Next (Code.MinValue, Code.MaxValue)]);
             }
+            for (int i = 1; i <= 10; i++) {
+                Assert.False (csn[(Code)r.Next (Code.MinValue, Code.MaxValue)]);
+            }
         }
     }
 }

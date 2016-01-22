@@ -32,8 +32,8 @@ namespace DD.Collections.ICodeSet {
             Contract.Ensures (this.start == first);
             Contract.Ensures (this.final == last);
 
-            this.start = first;
-            this.final = last;
+            this.start = first.Value;
+            this.final = last.Value;
             this.count = 1 + this.final - this.start;
         }
 
@@ -41,8 +41,8 @@ namespace DD.Collections.ICodeSet {
 
         #region Fields
 
-        private readonly Code start;
-        private readonly Code final;
+        private readonly int start;
+        private readonly int final;
         private readonly int count;
 
         #endregion
@@ -52,7 +52,14 @@ namespace DD.Collections.ICodeSet {
         [Pure]
         public override bool this[Code code] {
             get {
-                return this.start <= code && this.final >= code;
+                return this.start <= code.Value && this.final >= code.Value;
+            }
+        }
+
+        [Pure]
+        public override bool this[int value] {
+            get {
+                return this.start <= value && this.final >= value;
             }
         }
 

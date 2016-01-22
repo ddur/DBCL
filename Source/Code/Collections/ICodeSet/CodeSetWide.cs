@@ -161,9 +161,18 @@ namespace DD.Collections.ICodeSet {
         [Pure]
         public override bool this[Code code] {
             get {
-                int currentPlane = code.UnicodePlane ();
-                return currentPlane.InRange (this.startPlane, this.finalPlane)
+                int currentPlane = code.Value >> 16;
+                return this.startPlane <= currentPlane && currentPlane <= this.finalPlane
                     && planes[currentPlane - this.startPlane][code];
+            }
+        }
+
+        [Pure]
+        public override bool this[int value] {
+            get {
+                int currentPlane = value >> 16;
+                return this.startPlane <= currentPlane && currentPlane <= this.finalPlane
+                    && planes[currentPlane - this.startPlane][value];
             }
         }
 

@@ -48,6 +48,8 @@ namespace DD.Collections.ICodeSet.QuickWrapTest
 
             Assert.True (quick[1] && quick[5] && quick[7]);
             Assert.False (quick[2] | quick[4] | quick[6]);
+            Assert.True (quick[(Code)1] && quick[(Code)5] && quick[(Code)7]);
+            Assert.False (quick[(Code)2] | quick[(Code)4] | quick[(Code)6]);
             Assert.True (quick.Count == 3);
             Assert.True (quick.First == 1);
             Assert.True (quick.Last == 7);

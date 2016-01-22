@@ -117,7 +117,7 @@ namespace DD.Collections.ICodeSet {
             int index = 0;
             int mask = 0;
             foreach (var code in codes) {
-                item = code.Value - start.Value;
+                item = code.Value - start;
                 index = item >> ShiftRightBits;
                 mask = 1 << (item & ShiftLeftMask);
                 if ((sorted[index] & mask) == 0) {
@@ -185,8 +185,8 @@ namespace DD.Collections.ICodeSet {
 
         #region Fields
 
-        private readonly Code start = Code.MaxValue;
-        private readonly Code final = Code.MinValue;
+        private readonly int start = Code.MaxValue;
+        private readonly int final = Code.MinValue;
         private readonly int count = 0;
         private readonly int[] sorted;
         private const int ShiftRightBits = 5;
@@ -199,8 +199,19 @@ namespace DD.Collections.ICodeSet {
         [Pure]
         public override bool this[Code code] {
             get {
-                if (code.Value.InRange (start.Value, final.Value)) {
-                    int item = code.Value - start.Value;
+                if (code.Value.InRange (start, final)) {
+                    int item = code.Value - start;
+                    return (sorted[item >> ShiftRightBits] & 1u << (item & ShiftLeftMask)) != 0;
+                }
+                return false;
+            }
+        }
+
+        [Pure]
+        public override bool this[int value] {
+            get {
+                if (value.InRange (start, final)) {
+                    int item = value - start;
                     return (sorted[item >> ShiftRightBits] & 1u << (item & ShiftLeftMask)) != 0;
                 }
                 return false;

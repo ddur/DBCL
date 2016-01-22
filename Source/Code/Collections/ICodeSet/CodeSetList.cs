@@ -35,7 +35,7 @@ namespace DD.Collections.ICodeSet {
             Contract.Requires<ArgumentNullException> (codes.IsNot (null));
             Contract.Requires<ArgumentEmptyException> (!codes.IsEmpty ());
             Contract.Requires<ArgumentException> (codes.Distinct ().Count () > Service.PairCount); // at least 3 members
-            Contract.Requires<ArgumentException> (codes.Distinct ().Count () <= Service.ListMaxCount); // up to max members
+            Contract.Requires<ArgumentException> (codes.Distinct ().Count () <= Service.ListMaxCount); // up to max list members
             Contract.Requires<ArgumentException> (codes.Distinct ().Count () < (1 + codes.Max () - codes.Min ())); // not full
             Contract.Ensures (Contract.Result<CodeSetList> ().IsNot (null));
 
@@ -45,17 +45,21 @@ namespace DD.Collections.ICodeSet {
         internal CodeSetList (IEnumerable<Code> codes) {
             Contract.Requires<ArgumentNullException> (codes.IsNot (null));
             Contract.Requires<ArgumentEmptyException> (!codes.IsEmpty ());
-            Contract.Requires<ArgumentException> (codes.Distinct ().Count () > Service.PairCount);
-            Contract.Requires<ArgumentException> (codes.Distinct ().Count () <= Service.ListMaxCount);
-            Contract.Requires<ArgumentException> (codes.Distinct ().Count () < (1 + codes.Max () - codes.Min ()));
+            Contract.Requires<ArgumentException> (codes.Distinct ().Count () > Service.PairCount); // not pair
+            Contract.Requires<ArgumentException> (codes.Distinct ().Count () <= Service.ListMaxCount); // up to max list members
+            Contract.Requires<ArgumentException> (codes.Distinct ().Count () < (1 + codes.Max () - codes.Min ())); // not full
 
             Contract.Ensures (Theory.Construct (codes, this));
 
             if (codes is ICodeSet) {
-                this.sorted = new List<Code> (codes); // creates sorted&distinct list from sorted set
+                foreach (var item in codes) {
+                    this.sorted.Add (item);
+                }
             }
             else {
-                this.sorted = new List<Code> (codes.Distinct ().OrderBy (item => (item)));
+                foreach (var item in codes.Distinct ().OrderBy (item => (item))) {
+                    this.sorted.Add (item);
+                }
             }
             this.sorted.TrimExcess ();
         }
@@ -64,7 +68,7 @@ namespace DD.Collections.ICodeSet {
 
         #region Fields
 
-        private readonly List<Code> sorted;
+        private readonly List<int> sorted = new List<int>(16);
 
         #endregion
 
@@ -73,7 +77,14 @@ namespace DD.Collections.ICodeSet {
         [Pure]
         public override bool this[Code code] {
             get {
-                return (this.sorted.BinarySearch (code) >= 0);
+                return (this.sorted.BinarySearch (code.Value) >= 0);
+            }
+        }
+
+        [Pure]
+        public override bool this[int value] {
+            get {
+                return (this.sorted.BinarySearch (value) >= 0);
             }
         }
 
@@ -121,7 +132,9 @@ namespace DD.Collections.ICodeSet {
 
         [Pure]
         public override IEnumerator<Code> GetEnumerator () {
-            return this.sorted.GetEnumerator ();
+            foreach (Code item in this.sorted) {
+                yield return item;
+            }
         }
 
         #endregion
@@ -149,7 +162,11 @@ namespace DD.Collections.ICodeSet {
                 success.Assert (self.sorted.Count == codes.Distinct ().Count ());
                 success.Assert (self.sorted[0] == codes.Min ());
                 success.Assert (self.sorted[self.sorted.Count - 1] == codes.Max ());
-                success.Assert (self.sorted.SequenceEqual (codes.Distinct ().OrderBy (item => (item))));
+                int index = 0;
+                foreach (int item in codes.Distinct ().OrderBy (code => (code.Value))) {
+                    success.Assert (self.sorted[index] == item);
+                    ++index;
+                }
 
                 return success;
             }

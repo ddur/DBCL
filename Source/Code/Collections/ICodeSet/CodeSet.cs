@@ -24,17 +24,13 @@ namespace DD.Collections.ICodeSet {
 
         #endregion
 
-        #region ICodeSet
+        #region ICode & ICodeSet
 
         [Pure]
         public abstract bool this[Code code] { get; }
 
         [Pure]
-        public bool this[int value] {
-            get {
-                return value.HasCodeValue () && this[(Code)value];
-            }
-        }
+        public abstract bool this[int value] { get; }
 
         [Pure]
         public abstract bool IsEmpty { get; }

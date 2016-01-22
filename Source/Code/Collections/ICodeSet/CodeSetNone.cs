@@ -38,6 +38,14 @@ namespace DD.Collections.ICodeSet {
         }
 
         [Pure]
+        public override bool this[int value] {
+            get {
+                Contract.Ensures (Contract.Result<bool> () == false);
+                return false;
+            }
+        }
+
+        [Pure]
         public override bool IsEmpty {
             get {
                 return true;
