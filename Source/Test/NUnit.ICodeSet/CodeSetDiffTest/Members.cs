@@ -42,10 +42,12 @@ namespace DD.Collections.ICodeSet.CodeSetDiffTest {
             var codes = new Code[] { 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 201, 202, 203, 204, 205, 206, 207 };
             foreach (var code in codes) {
                 Assert.True (csd2[code]);
+                Assert.True (csd2[code.Value]);
             }
             codes = new Code[] { 0, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 120, 130, 140, 150, 160, 170, 180, 190, 199, 200 };
             foreach (var code in codes) {
                 Assert.False (csd2[code]);
+                Assert.False (csd2[code.Value]);
             }
         }
     }
