@@ -24,7 +24,5 @@ artifacts:
   name: OpenCover
 - path: reports\NUnit.*.xml
   name: NUnit
-- path: reports\*.htm
-  name: ReportGenerator
-- path: reports\*.js
+- path: reports\ReportGenerator.zip
   name: ReportGenerator
