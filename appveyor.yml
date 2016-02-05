@@ -19,7 +19,7 @@ test_script:
 - cmd: c:\projects\dbcl\Scripts\zip-artifacts.bat
 - cmd: c:\projects\dbcl\Scripts\upload-coveralls.bat
 - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
-- cmd: c:\projects\dbcl\Scripts\upload-codecov.bat > null
+- cmd: c:\projects\dbcl\Scripts\upload-codecov.bat
 artifacts:
-- path: c:\projects\dbcl\reports\*.7z
+- path: reports\*.7z
   name: Coverage
