@@ -8,31 +8,31 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using DD.Collections;
 using DD.Text;
+using DD.Collections.ICodeSet;
 
 using NUnit.Framework;
 
-namespace DD.Collections.ICodeSet.CodeTest {
+namespace DD.Text {
 
     [TestFixture]
-    public class EncodeToString {
-
-        private static IEnumerable<TestCaseData> EncodeToStringOrThrow {
-            get {
-                return DataSource.CodeToStringOrThrow;
-            }
-        }
+    public class EncodeToStringTest {
 
         private static IEnumerable<int> ValidCode {
             get {
-                return DataSource.ValidCodeValue;
+                return DD.Collections.ICodeSet.CodeTest.DataSource.ValidCodeValue;
             }
         }
 
         private static IEnumerable<int> InvalidCode {
             get {
-                return DataSource.InvalidCodeValue;
+                return DD.Collections.ICodeSet.CodeTest.DataSource.InvalidCodeValue;
+            }
+        }
+
+        private static IEnumerable<TestCaseData> EncodeToStringOrThrow {
+            get {
+                return DataSource.CodeToStringOrThrow;
             }
         }
 

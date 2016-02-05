@@ -1,5 +1,5 @@
 @set dbcl_build_folder=%appveyor_build_folder%
-@if not "%appveyor%" == "True" set dbcl_build_folder=%cd%
+@if "%dbcl_build_folder%" == "" set dbcl_build_folder=%cd%
 
 @set dbcl_artifacts_folder=%dbcl_build_folder%\reports
 @if exist %dbcl_artifacts_folder%\. (del /Q %dbcl_artifacts_folder%\*) else (md %dbcl_artifacts_folder%)
@@ -69,9 +69,10 @@
 @echo.
 
 :run-all-tests
-@call :run-single-test "Extensions"  "+[DBCL]DD.Extends*"
-@call :run-single-test "ICodeSet"    "+[DBCL]DD.Collections.ICodeSet* +[DBCL]DD.Text*"
 @call :run-single-test "BitSetArray" "+[DBCL]DD.Collections.BitSetArray*"
+@call :run-single-test "ICodeSet"    "+[DBCL]DD.Collections.ICodeSet*"
+@call :run-single-test "Extensions"  "+[DBCL]DD.Extends*"
+@call :run-single-test "Text"        "+[DBCL]DD.Text*"
 @exit /b
 
 :run-single-test

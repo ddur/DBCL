@@ -40,3 +40,4 @@ using System.Diagnostics.Contracts;
 [assembly: InternalsVisibleTo ("NUnit.Diagnostics")]
 [assembly: InternalsVisibleTo ("NUnit.Extensions")]
 [assembly: InternalsVisibleTo ("NUnit.ICodeSet")]
+[assembly: InternalsVisibleTo ("NUnit.Text")]

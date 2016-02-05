@@ -8,15 +8,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using DD.Collections;
-using DD.Text;
-
+using DD.Collections.ICodeSet;
 using NUnit.Framework;
 
-namespace DD.Collections.ICodeSet.CodeTest {
+namespace DD.Text {
 
     [TestFixture]
-    public class DecodeString {
+    public class DecodeStringTest {
 
         private IEnumerable<TestCaseData> PrevNextToBool {
             get {

@@ -72,8 +72,6 @@
     <Compile Include="CodeTest\CodeStruct.cs" />
     <Compile Include="CodeTest\Compiler.cs" />
     <Compile Include="CodeTest\DataSource.cs" />
-    <Compile Include="CodeTest\DecodeString.cs" />
-    <Compile Include="CodeTest\EncodeToString.cs" />
     <Compile Include="ICodeSetDictionaryTest\Constructors.cs" />
     <Compile Include="ICodeSetDictionaryTest\Members.cs" />
     <Compile Include="ICodeSetOperationsTest\Members.cs" />
