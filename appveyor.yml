@@ -20,5 +20,5 @@ test_script:
 - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
 - cmd: c:\projects\dbcl\Scripts\upload-codecov.bat > null
 artifacts:
-- path: reports\*.7z
+- path: reports\*.*
   name: Coverage
