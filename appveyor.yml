@@ -20,5 +20,11 @@ test_script:
 - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
 - cmd: c:\projects\dbcl\Scripts\upload-codecov.bat > null
 artifacts:
-- path: reports\*.*
-  name: Coverage
+- path: reports\OpenCover.*.xml
+  name: OpenCover
+- path: reports\NUnit.*.xml
+  name: NUnit
+- path: reports\*.htm
+  name: ReportGenerator
+- path: reports\*.js
+  name: ReportGenerator
