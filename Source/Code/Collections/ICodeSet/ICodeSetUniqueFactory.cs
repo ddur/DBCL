@@ -22,7 +22,27 @@ namespace DD.Collections.ICodeSet {
 
         #endregion
 
-        #region From items
+        #region Range to ICodeSet
+
+        public ICodeSet Range (Code start, Code final) {
+            Contract.Requires<ArgumentException> (start <= final);
+
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced);
+
+            switch (final - start + 1) {
+                case 1:
+                    return From (start);
+                case 2:
+                    return From (CodeSetPair.From (start, final));
+                default:
+                    return From (CodeSetFull.From (start, final));
+            }
+        }
+
+        #endregion
+
+        #region From items to ICodeSet
 
         public ICodeSet From (string utf16) {
             Contract.Requires<ArgumentException> (utf16.IsNullOrEmpty() || utf16.CanDecode ());

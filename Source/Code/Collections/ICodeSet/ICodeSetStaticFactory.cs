@@ -18,18 +18,38 @@ namespace DD.Collections.ICodeSet {
     /// <remarks>Empty set is required evil, produced by some of set operations</remarks>
     public static class Factory {
 
+        #region Range To ICodeSet
+
+        public static ICodeSet Range (this Code start, Code final) {
+            Contract.Requires<ArgumentException> (start <= final);
+
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced);
+
+            switch (final - start + 1) {
+                case 1:
+                    return (Code)start;
+                case 2:
+                    return CodeSetPair.From (start, final);
+                default:
+                    return CodeSetFull.From (start, final);
+            }
+        }
+
+        #endregion
+
         #region From items To ICodeSet
 
-        public static ICodeSet From (string utf16) {
-            Contract.Requires<ArgumentException>(utf16.IsNullOrEmpty() || utf16.CanDecode());
-            
+        public static ICodeSet From (this string utf16) {
+            Contract.Requires<ArgumentException> (utf16.IsNullOrEmpty () || utf16.CanDecode ());
+
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced);
 
             return utf16.IsNullOrEmpty () ? CodeSetNone.Singleton : utf16.ToICodeSet ();
         }
 
-        public static ICodeSet From (char req, params char[] opt) {
+        public static ICodeSet From (this char req, params char[] opt) {
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced);
 
@@ -38,7 +58,7 @@ namespace DD.Collections.ICodeSet {
             return args.ToICodeSet ();
         }
 
-        public static ICodeSet From (Code req, params Code[] opt) {
+        public static ICodeSet From (this Code req, params Code[] opt) {
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced);
 

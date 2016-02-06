@@ -177,10 +177,39 @@
     <Compile Include="Text\CodeEncoding.cs" />
     <Compile Include="Text\LineEnumerator.cs" />
     <Compile Include="Text\LineSource.cs" />
+    <Compile Include="Text\UniCode\Category.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Category.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Text\UniCode\Block.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Block.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Text\UniCode\Block.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Block.cs</LastGenOutput>
+    </None>
+    <None Include="Text\UniCode\Version5\Blocks.txt" />
+    <None Include="Text\UniCode\Version5\DerivedGeneralCategory.txt" />
+    <None Include="Text\UniCode\Version8\Blocks.txt" />
+    <None Include="Text\UniCode\Version8\DerivedGeneralCategory.txt" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Text\UniCode\Category.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Category.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Text\UniCode\Version8" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

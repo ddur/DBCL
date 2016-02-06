@@ -1,0 +1,104 @@
+﻿<#@ template language="C#"  hostspecific="true" #>
+<#@ output extension=".cs" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+<#@ import namespace="System.Collections.Generic" #>
+
+using System;
+using DD.Collections.ICodeSet;
+    
+namespace DD.Text.UniCode
+{
+    public static class Block
+    {
+        
+<#
+        try
+        {
+            string SourceName = @"Version5\Blocks.txt";
+            string FileName = Host.ResolvePath ( SourceName );
+            
+            var lines = File.ReadLines ( FileName );
+            var header = new List<string>();
+            var blocks = new List<Tuple<string, string, string, string>>();
+            bool data = false;
+
+            var regexOptions = RegexOptions.Compiled | RegexOptions.ExplicitCapture;
+            var rangeRegex = new Regex(@"^(?<start>[0123456789ABCDEF]{4,6})\.{2}(?<final>[0123456789ABCDEF]{4,6});\s*(?<label>.+)$", regexOptions);
+
+            foreach (var line in lines) {
+                var match = rangeRegex.Match(line);
+                if (match.Success) {
+                    data = true;
+                    var start = "";
+                    var final = "";
+                    var label = "";
+                    foreach (var groupName in rangeRegex.GetGroupNames()) {
+                        switch (groupName) {
+                            case "start":
+                                start = match.Groups[groupName].Value;
+                                break;
+                            case "final":
+                                final = match.Groups[groupName].Value;
+                                break;
+                            case "label":
+                                label = match.Groups[groupName].Value;
+                                break;
+                        }
+                    }
+                    label = Regex.Replace (label, @"[^\w\d]", "");
+                       blocks.Add (new Tuple<string, string, string, string> (line, start, final, label));
+                }
+                if (!data) {
+                    if (string.IsNullOrWhiteSpace(line) || line[0] == '#') {
+                           header.Add ( line );
+                    }
+                }
+            }
+
+            WriteLine ( " ".PadRight(8) + "#region Imported Header" );
+            WriteLine ( "" );
+            foreach (var line in header )
+            {
+                if (!string.IsNullOrWhiteSpace(line)) {
+                    WriteLine ("// " + line);
+                } else {
+                    WriteLine ("");
+                }
+            }
+            WriteLine (" ".PadRight(8) + "#endregion" );
+
+            WriteLine ("");
+            WriteLine (" ".PadRight(8) + "#region Properties");
+            WriteLine ("");
+
+            foreach (var tuple in blocks ) {
+                var title = tuple.Item1;
+                var start = tuple.Item2;
+                var final = tuple.Item3;
+                var label = tuple.Item4;
+                var cache = "_" + label.Substring (0, 1).ToLower() + label.Substring (1) + "_";
+                WriteLine (" ".PadRight(8) + "/// <summary>");
+                WriteLine (" ".PadRight(8) + "/// " +  title);
+                WriteLine (" ".PadRight(8) + "/// </summary>");
+                WriteLine (" ".PadRight(8) + "public static ICodeSet " + label + " {");
+                WriteLine (" ".PadRight(12) + "get {");
+                WriteLine (" ".PadRight(16)     + "if (" + cache + " == null) {");
+                WriteLine (" ".PadRight(20)         + cache + " = ((Code)0x" + start + ").Range (0x" + final + ");");
+                WriteLine (" ".PadRight(16)     + "}");
+                WriteLine (" ".PadRight(16)     + "return " + cache + ";");
+                WriteLine (" ".PadRight(12) + "}");
+                WriteLine (" ".PadRight(8) + "}");
+                WriteLine (" ".PadRight(8) + "private static ICodeSet " + cache + ";");
+                WriteLine ( "" );
+            }
+            WriteLine ( "" );
+            WriteLine (" ".PadRight(8) + "#endregion");
+        }
+        catch ( Exception e ) {
+            Console.WriteLine ( e.Message );
+        }#>
+    }
+}
