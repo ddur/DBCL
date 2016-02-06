@@ -5,6 +5,7 @@
 // --------------------------------------------------------------------------------
 
 using System;
+
 using NUnit.Framework;
 
 namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
@@ -117,7 +118,96 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
                 Assert.True (Factory.From(Utf16).IsReduced);
                 Assert.True (Factory.From(Utf16).Count == 9);
             }
-            
+        }
+
+        public class Range {
+
+            [Test]
+            public void OneMember () {
+                // arrange
+                int start;
+                var random = new Random ();
+
+                // act
+                start = random.Next (Code.MinValue, Code.MaxValue);
+
+                // assert
+                Assert.True (((Code)start).Range(start) is Code);
+
+                // act
+                start = Code.MinValue;
+
+                // assert
+                Assert.True (((Code)start).Range(start) is Code);
+
+                // act
+                start = Code.MaxValue;
+
+                // assert
+                Assert.True (((Code)start).Range(start) is Code);
+            }
+
+            [Test]
+            public void TwoMembers () {
+                // arrange
+                int start;
+                int final;
+                var random = new Random ();
+
+                // act
+                start = random.Next (Code.MinValue, Code.MaxValue-1);
+                final = start + 1;
+
+                // assert
+                Assert.True (((Code)start).Range(final) is CodeSetPair);
+
+                // act
+                start = Code.MinValue;
+                final = start + 1;
+
+                // assert
+                Assert.True (((Code)start).Range(final) is CodeSetPair);
+
+                // act
+                final = Code.MaxValue;
+                start = final - 1;
+
+                // assert
+                Assert.True (((Code)start).Range(final) is CodeSetPair);
+            }
+
+            [Test]
+            public void FullRange () {
+                // arrange
+                int start;
+                int final;
+                var random = new Random ();
+
+                // act
+                start = random.Next (Code.MinValue, (Code.MaxValue/2)-1);
+                final = random.Next ((Code.MaxValue/2)+1, Code.MaxValue);
+
+                // assert
+                Assert.True (((Code)start).Range(final) is CodeSetFull);
+            }
+
+            [Test]
+            public void InvalidRange () {
+                // arrange
+                int start;
+                int final;
+                var random = new Random ();
+
+                // act
+                final = random.Next (Code.MinValue, (Code.MaxValue/2)-1);
+                start = random.Next ((Code.MaxValue/2)+1, Code.MaxValue);
+
+                // assert
+                Assert.Throws (typeof(ArgumentException),
+                        delegate {
+                            ((Code)start).Range(final);
+                        });
+            }
         }
     }
 }

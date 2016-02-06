@@ -270,5 +270,101 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
                 Assert.True (collection.Count == 1);
             }
         }
+
+        public class Range {
+
+            Distinct distinct = new Distinct();
+
+            [Test]
+            public void OneMember () {
+                // arrange
+                int start;
+                int final;
+                var random = new Random ();
+
+                // act
+                start = random.Next (Code.MinValue, Code.MaxValue);
+                final = start;
+
+                // assert
+                Assert.True (distinct.Range(start, final) is Code);
+
+                // act
+                start = Code.MinValue;
+                final = start;
+
+                // assert
+                Assert.True (distinct.Range(start, final) is Code);
+
+                // act
+                start = Code.MaxValue;
+                final = start;
+
+                // assert
+                Assert.True (distinct.Range(start, final) is Code);
+            }
+
+            [Test]
+            public void TwoMembers () {
+                // arrange
+                int start;
+                int final;
+                var random = new Random ();
+
+                // act
+                start = random.Next (Code.MinValue, Code.MaxValue-1);
+                final = start + 1;
+
+                // assert
+                Assert.True (distinct.Range(start, final) is CodeSetPair);
+
+                // act
+                start = Code.MinValue;
+                final = start + 1;
+
+                // assert
+                Assert.True (distinct.Range(start, final) is CodeSetPair);
+
+                // act
+                final = Code.MaxValue;
+                start = final - 1;
+
+                // assert
+                Assert.True (distinct.Range(start, final) is CodeSetPair);
+            }
+
+            [Test]
+            public void FullRange () {
+                // arrange
+                int start;
+                int final;
+                var random = new Random ();
+
+                // act
+                start = random.Next (Code.MinValue, (Code.MaxValue/2)-1);
+                final = random.Next ((Code.MaxValue/2)+1, Code.MaxValue);
+
+                // assert
+                Assert.True (distinct.Range(start, final) is CodeSetFull);
+            }
+
+            [Test]
+            public void InvalidRange () {
+                // arrange
+                int start;
+                int final;
+                var random = new Random ();
+
+                // act
+                final = random.Next (Code.MinValue, (Code.MaxValue/2)-1);
+                start = random.Next ((Code.MaxValue/2)+1, Code.MaxValue);
+
+                // assert
+                Assert.Throws (typeof(ArgumentException),
+                        delegate {
+                            distinct.Range(start, final);
+                        });
+            }
+        }
     }
 }
