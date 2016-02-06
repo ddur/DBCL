@@ -27,7 +27,7 @@
 
 @Rem OpenCover Nuget Package
 @Rem set OpenCoverNugetPackage=".\packages\OpenCover.4.6.166\tools\OpenCover.Console.exe"
-@set OpenCoverNugetPackage=".\packages\OpenCover.4.6.434-rc\tools\OpenCover.Console.exe"
+@set OpenCoverNugetPackage=".\packages\OpenCover.4.6.515-rc\tools\OpenCover.Console.exe"
 
 @Rem OpenCover Command
 @set OpenCoverCommand=%OpenCoverNugetPackage%
