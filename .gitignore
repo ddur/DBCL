@@ -11,6 +11,9 @@ cov-int*
 # OpenCover & coverage.xml via SharpDevelop
 /Source/Test/**/[Oo]pen[Cc]over/
 
+#Source Monitor projects http://www.campwoodsw.com/sourcemonitor.html
+/Projects/*.smproj
+
 # Build Folders (you can keep bin if you'd like, to store dlls and pdbs)
 [Bb]in/
 [Oo]bj/
