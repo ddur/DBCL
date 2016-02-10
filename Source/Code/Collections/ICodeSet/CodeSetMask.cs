@@ -92,6 +92,36 @@ namespace DD.Collections.ICodeSet {
             return new CodeSetMask (bits, offset);
         }
 
+        /// <summary>
+        /// For internal use only
+        /// </summary>
+        /// <remarks>Efficiently creates CodeSetMask on Release build (without contracts)</remarks>
+        /// <remarks>Attn: Uses mask reference (no local copy) and does not check&count bits</remarks>
+        /// <param name="mask"></param>
+        /// <param name="start"></param>
+        /// <param name="final"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        internal static CodeSetMask From (int[] mask, int start, int final, int count ) {
+            Contract.Requires<ArgumentNullException> (mask.IsNot (null), "Argument mask is null");
+            Contract.Requires<ArgumentEmptyException> (mask.Length != 0, "Empty mask array");
+
+            Contract.Requires<ArgumentException> (((Code.MaxValue >> 5) + 1) >= mask.Length, "Too large mask array");
+            Contract.Requires<ArgumentException> ((mask[0] & 1) != 0, "First mask bit must be set");
+            Contract.Requires<ArgumentException> (mask[mask.Length - 1] != 0, "Last mask int must be greater than 0");
+
+            Contract.Requires<ArgumentException> (start.HasCodeValue ());
+            Contract.Requires<ArgumentException> (final.HasCodeValue ());
+            Contract.Requires<ArgumentException> (start < final, "Argument start is equal or greater than final");
+            Contract.Requires<ArgumentException> (count < 1 + final - start, "Argument count is equal or greater than 1 + final - start");
+            Contract.Requires<ArgumentException> (final == mask.IsCompactLast () + start, "Argument mask does not match final argument");
+            Contract.Requires<ArgumentException> (count == BitSetArray.CountOnBits(mask), "Argument count does not match mask bits-count");
+
+            Contract.Ensures (Contract.Result<CodeSetMask> ().IsNot (null));
+
+            return new CodeSetMask (mask, start, final, count);
+        }
+
         private CodeSetMask (IEnumerable<Code> codes) {
             Contract.Requires<ArgumentNullException> (codes.IsNot (null));
             Contract.Requires<ArgumentEmptyException> (!codes.IsEmpty ());
@@ -153,6 +183,27 @@ namespace DD.Collections.ICodeSet {
             sorted = new int[mask.Length];
             Array.Copy (mask, sorted, sorted.Length);
             count = BitSetArray.CountOnBits(mask);
+        }
+
+        private CodeSetMask (int[] mask, int start, int final, int count ) {
+            Contract.Requires<ArgumentNullException> (mask.IsNot (null), "Argument mask is null");
+            Contract.Requires<ArgumentEmptyException> (mask.Length != 0, "Empty mask array");
+
+            Contract.Requires<ArgumentException> (((Code.MaxValue >> 5) + 1) >= mask.Length, "Too large mask array");
+            Contract.Requires<ArgumentException> ((mask[0] & 1) != 0, "First mask bit must be set");
+            Contract.Requires<ArgumentException> (mask[mask.Length - 1] != 0, "Last mask int must be greater than 0");
+
+            Contract.Requires<ArgumentException> (start.HasCodeValue ());
+            Contract.Requires<ArgumentException> (final.HasCodeValue ());
+            Contract.Requires<ArgumentException> (start < final, "Argument start is equal or greater than final");
+            Contract.Requires<ArgumentException> (count < 1 + final - start, "Argument count is equal or greater than 1 + final - start");
+            Contract.Requires<ArgumentException> (final == mask.IsCompactLast () + start, "Argument mask does not match final argument");
+            Contract.Requires<ArgumentException> (count == BitSetArray.CountOnBits(mask), "Argument count does not match mask bits-count");
+
+            sorted = mask;
+            this.start = start;
+            this.final = final;
+            this.count = count;
         }
 
         private CodeSetMask (BitSetArray bits, int offset = 0) {
@@ -267,14 +318,17 @@ namespace DD.Collections.ICodeSet {
 
         #endregion
 
-        #region Extended
+        #region Invariant
 
         [ContractInvariantMethod] [Pure]
         private void CodeSetMaskInvariant () {
             Contract.Invariant (this.Count > Code.MinCount && this.Count <= Code.MaxCount);
         }
 
-        
+        #endregion
+
+        #region Enumerator
+
         public class Enumerator : IEnumerator<Code>, IEnumerator, IDisposable {
             private const int int32Bits = sizeof (int) * 8;
             protected readonly CodeSetMask enumerated;
@@ -407,6 +461,16 @@ namespace DD.Collections.ICodeSet {
                     return success;
                 }
             }
+        }
+
+        #endregion
+
+        #region Extended
+
+        public Tuple <int[], int> ToCompactArray() {
+            var retValue = new int [sorted.Length];
+            Array.Copy (sorted, retValue, sorted.Length);
+            return new Tuple<int[], int> (retValue, start);
         }
 
         #endregion

@@ -29,6 +29,19 @@ namespace DD.Text
         }
 
         /// <summary>
+        /// Convert string to string array of lines
+        /// </summary>
+        /// <param name="self"></param>
+        /// <returns>string[]</returns>
+        public static string[] ToLines (this string self) {
+            var lines = new List<string>();
+            foreach (var line in self.GetLineEnumerator()) {
+                lines.Add(line);
+            }
+            return lines.ToArray();
+        }
+
+        /// <summary>
         /// Decode utf-16 encoded string into IEnumerableOf(Code)
         /// </summary>
         /// <param name="string"></param>
@@ -52,6 +65,19 @@ namespace DD.Text
         }
 
         /// <summary>
+        /// Convert string to array of Codes
+        /// </summary>
+        /// <param name="self"></param>
+        /// <returns>string[]</returns>
+        public static Code[] ToCodes (this string self) {
+            var codes = new List<Code>();
+            foreach (var code in self.GetCodeEnumerator()) {
+                codes.Add(code);
+            }
+            return codes.ToArray();
+        }
+
+        /// <summary>
         /// Decode utf-16 encoded string into IEnumerableOf(int) UTF code points
         /// </summary>
         /// <param name="string"></param>
@@ -61,5 +87,19 @@ namespace DD.Text
                 yield return c;
             }
         }
+
+        /// <summary>
+        /// Convert string to array of Int32
+        /// </summary>
+        /// <param name="self"></param>
+        /// <returns>string[]</returns>
+        public static int[] ToIntCodes (this string self) {
+            var codes = new List<int>();
+            foreach (var code in self.GetCodeEnumerator()) {
+                codes.Add(code);
+            }
+            return codes.ToArray();
+        }
+
     }
 }

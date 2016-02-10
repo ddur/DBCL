@@ -35,7 +35,8 @@ using System.Diagnostics.Contracts;
 // Build Numbers by using the '*' as shown below:
 [assembly: AssemblyVersion ("0.9.*")]
 
-//
+[assembly: InternalsVisibleTo ("UniCodeClassGenerator")]
+
 [assembly: InternalsVisibleTo ("NUnit.BitSetArray")]
 [assembly: InternalsVisibleTo ("NUnit.Diagnostics")]
 [assembly: InternalsVisibleTo ("NUnit.Extensions")]

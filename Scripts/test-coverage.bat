@@ -45,7 +45,8 @@
 
 @Rem Local Build?
 @if not exist "C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" goto start-opencover
-@"C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" DBCL.sln /t:Clean,Build
+@"C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" DBCL.sln /t:Clean,Build,Release
+@"C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" DBCL.sln /t:Clean,Build,Debug
 @Rem if not exist "E:\cov-analysis-win64-7.7.0.4\bin\cov-build.exe" goto start-opencover
 @Rem E:\cov-analysis-win64-7.7.0.4\bin\cov-build --dir cov-int "C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe" DBCL.sln /t:Clean,Build
 
@@ -72,7 +73,7 @@
 @call :run-single-test "BitSetArray" "+[DBCL]DD.Collections.BitSetArray*"
 @call :run-single-test "ICodeSet"    "+[DBCL]DD.Collections.ICodeSet*"
 @call :run-single-test "Extensions"  "+[DBCL]DD.Extends*"
-@call :run-single-test "Text"        "+[DBCL]DD.Text* -[DBCL]DD.Text.UniCode*"
+@call :run-single-test "Text"        "+[DBCL]DD.Text*"
 @exit /b
 
 :run-single-test

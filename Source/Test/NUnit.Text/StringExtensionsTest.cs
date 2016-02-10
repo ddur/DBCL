@@ -62,7 +62,6 @@ namespace DD.Text
         public void GetCodeEnumeratorInvalidTest (string data)
         {
             // arrange
-            var result = new List<Code>();
             var e = data.GetCodeEnumerator();
 
             // act & assert
@@ -81,13 +80,68 @@ namespace DD.Text
             foreach (var item in e) {
                 result.Add (item);
             }
-            var compare = new List<int> ();
-            foreach (var item in code) {
-                compare.Add (item);
-            }
 
             // assert
-            Assert.True (result.SequenceEqual(compare));
+            int index = 0;
+            foreach (var item in code) {
+                Assert.True (result[index] == item.Value);
+                index += 1;
+            }
+        }
+
+        [Test, TestCaseSource ("InvalidString")]
+        public void ToCodesInvalidTest (string data)
+        {
+            // arrange & act & assert
+            Assert.That (
+                delegate {
+                    data.ToCodes();
+                }, Throws.ArgumentException);
+        }
+
+        [Test, TestCaseSource ("ValidString")]
+        public void ToCodesValidTest (string data, IEnumerable<Code> code)
+        {
+            // arrange & act
+            var result = data.ToCodes();
+
+            // assert
+            Assert.True (result.SequenceEqual(code));
+        }
+
+        [Test, TestCaseSource ("InvalidString")]
+        public void ToIntCodesInvalidTest (string data)
+        {
+            // arrange & act & assert
+            Assert.That (
+                delegate {
+                    data.ToIntCodes();
+                }, Throws.ArgumentException);
+        }
+
+        [Test, TestCaseSource ("ValidString")]
+        public void ToIntCodesValidTest (string data, IEnumerable<Code> code)
+        {
+            // arrange & act
+            int[] result = data.ToIntCodes();
+
+            // assert
+            int index = 0;
+            foreach (var item in code) {
+                Assert.True (result[index] == item.Value);
+                index += 1;
+            }
+        }
+
+        [Test]
+        public void ToLinesTest()
+        {
+            // arrange & act
+            const string input = "\r\r\r\n \r\n \r\n \r \n \n\n\n\r\n\n";
+            var lines = input.ToLines();
+
+            // assert
+            Assert.True (lines.Length == 12);
         }
     }
 }
