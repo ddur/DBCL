@@ -13,7 +13,7 @@ namespace DD.Collections.ICodeSet
 {
 
     /// <summary>
-    /// Cannot be empty, matches quick, create&enumerate slow
+    /// Cannot be empty, matches O(func), enumerate O(BitSetArray), create O(K+N)
     /// </summary>
     public class CodeSetFunc : CodeSet
     {

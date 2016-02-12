@@ -194,9 +194,7 @@ namespace DD.Collections.ICodeSet {
                 return quick.ToBitSetArray(); // O(1)
             }
             var ret = BitSetArray.Size (self.Last + 1);
-            foreach (int code in self) {
-                ret._Set (code);
-            }
+            ret._Set (self.ToValues(), true); // O(N) .. O(self.Enumerator)
             return ret;
         }
 

@@ -2773,14 +2773,14 @@ namespace DD.Collections {
                 foreach (var item in items) {
                     if (this.InRange (item)) {
                         if (item < start) { start = item; }
-                        if (item > final) { final = item; }
+                        final = item;
                         if (((array[item >> log2of64] & 1L << (item & mask0x3F)) != 0) == value) {
                             // no change
                         }
                         else {
                             // flip bit value
                             array[item >> log2of64] ^= 1L << (item & mask0x3F);
-                            ++counter; // count changes
+                            counter += 1; // count changes
                         }
                     }
                 }
@@ -2792,7 +2792,7 @@ namespace DD.Collections {
                     } else {
                         this.count -= counter;
                     }
-                    Contract.Assert (this.count >= 0 && this.count < this.range);
+                    Contract.Assert (this.count >= 0 && this.count <= this.range);
 
                     // TODO: Test cache
                     if (this.count == 1) {
@@ -2895,7 +2895,7 @@ namespace DD.Collections {
                     } else {
                         this.count -= counter;
                     }
-                    Contract.Assert (this.count >= 0 && this.count < this.range);
+                    Contract.Assert (this.count >= 0 && this.count <= this.range);
 
                     // TODO: Test cache
                     if (this.count == 1) {
