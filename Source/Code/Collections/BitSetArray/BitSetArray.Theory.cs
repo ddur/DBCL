@@ -1127,27 +1127,32 @@ namespace DD.Collections {
             [Pure]
             public static bool IndexerSetItemValue (BitSetArray oldState, int item, bool setValue, BitSetArray newState) {
                 Success success = true;
-                if (setValue.Bool () && item.InRange (0, newState.range - 1)) {
-                    if (oldState[item]) {
-                        success.Assert (newState.Count == oldState.Count);
-                        success.Assert (newState.Version == oldState.Version);
+                if (oldState.InRange (item)) {
+                    if (setValue.Bool ()) {
+                        if (oldState[item]) {
+                            success.Assert (newState.Count == oldState.Count);
+                            success.Assert (newState.Version == oldState.Version);
+                        }
+                        else {
+                            success.Assert (newState.Count == oldState.Count + 1);
+                            success.Assert (newState.Version != oldState.Version);
+                        }
+                        success.Assert (newState[item]);
                     }
                     else {
-                        success.Assert (newState.Count == oldState.Count + 1);
-                        success.Assert (newState.Version != oldState.Version);
+                        if (oldState[item]) {
+                            success.Assert (newState.Count == oldState.Count - 1);
+                            success.Assert (newState.Version != oldState.Version);
+                        }
+                        else {
+                            success.Assert (newState.Count == oldState.Count);
+                            success.Assert (newState.Version == oldState.Version);
+                        }
+                        success.Assert (!newState[item]);
                     }
-                    success.Assert (newState[item]);
-                }
-                else {
-                    if (oldState[item]) {
-                        success.Assert (newState.Count == oldState.Count - 1);
-                        success.Assert (newState.Version != oldState.Version);
-                    }
-                    else {
-                        success.Assert (newState.Count == oldState.Count);
-                        success.Assert (newState.Version == oldState.Version);
-                    }
-                    success.Assert (!newState[item]);
+                } else {
+                    success.Assert (newState.Count == oldState.Count);
+                    success.Assert (newState.Version == oldState.Version);
                 }
                 return success;
             }
@@ -1156,37 +1161,45 @@ namespace DD.Collections {
             public static bool Get (BitSetArray self, int item, bool getValue) {
                 Success success = true;
 
-                success.Assert (item.InRange (0, self.range - 1));
-                success.Assert (getValue == ((self.array[item / 64] & (1L << (item % 64))) != 0));
-                success.Assert (getValue == self[item]);
+                if (item.InRange (0, self.range - 1)) {
+                    success.Assert (getValue == ((self.array[item / 64] & (1L << (item % 64))) != 0));
+                    success.Assert (getValue == self[item]);
+                } else {
+                    success.Assert (getValue == false);
+                }
 
                 return success;
             }
 
             [Pure]
-            public static bool Set (BitSetArray oldState, int item, bool setValue, BitSetArray newState) {
+            public static bool Set (BitSetArray oldState, int item, bool setValue, BitSetArray newState, bool retValue) {
                 Success success = true;
 
                 success.Assert (setValue == setValue.Bool ());
-                success.Assert (item.InRange (0, newState.range - 1));
-
-                if (oldState[item] == setValue) {
-                    success.Assert (newState.count == oldState.count);
-                    success.Assert (newState.version == oldState.version);
-                    success.Assert (oldState[item] == setValue);
-                    success.Assert (newState[item] == setValue);
-                }
-                else if (setValue) {
-                    success.Assert (newState.count == oldState.count + 1);
-                    success.Assert (newState.version != oldState.version);
-                    success.Assert (!oldState[item]);
-                    success.Assert (newState[item]);
-                }
-                else {
-                    success.Assert (newState.count == oldState.count - 1);
-                    success.Assert (newState.version != oldState.version);
-                    success.Assert (oldState[item]);
-                    success.Assert (!newState[item]);
+                if (item.InRange (0, newState.range - 1)) {
+                    if (oldState[item] == setValue) {
+                        success.Assert (newState.count == oldState.count);
+                        success.Assert (newState.version == oldState.version);
+                        success.Assert (oldState[item] == setValue);
+                        success.Assert (newState[item] == setValue);
+                        success.Assert (retValue == false);
+                    }
+                    else if (setValue) {
+                        success.Assert (newState.count == oldState.count + 1);
+                        success.Assert (newState.version != oldState.version);
+                        success.Assert (!oldState[item]);
+                        success.Assert (newState[item]);
+                        success.Assert (retValue == true);
+                    }
+                    else {
+                        success.Assert (newState.count == oldState.count - 1);
+                        success.Assert (newState.version != oldState.version);
+                        success.Assert (oldState[item]);
+                        success.Assert (!newState[item]);
+                        success.Assert (retValue == true);
+                    }
+                } else {
+                    success.Assert (retValue == false);
                 }
 
                 return success;

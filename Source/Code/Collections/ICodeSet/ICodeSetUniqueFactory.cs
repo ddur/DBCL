@@ -318,7 +318,7 @@ namespace DD.Collections.ICodeSet {
                 Success success = true;
 
                 if (!bits.IsNullOrEmpty ()) {
-                    success.Assert (bits.ToCodes ().Distinct ().OrderBy (item => (item)).SequenceEqual (result));
+                    success.Assert (bits.ToCodes (0).Distinct ().OrderBy (item => (item)).SequenceEqual (result));
                 }
                 else {
                     success.Assert (result.Count == 0);

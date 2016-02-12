@@ -779,9 +779,24 @@ namespace DD.Collections {
 
         #region Fields
 
+        /// <summary>
+        /// private Length
+        /// </summary>
         private int range = 0;
+
+        /// <summary>
+        /// private Count
+        /// </summary>
         private int count = 0;
+
+        /// <summary>
+        /// private Version
+        /// </summary>
         private int version = int.MaxValue;
+
+        /// <summary>
+        /// private members bit-array
+        /// </summary>
         private long[] array = new long[0];
 
         [NonSerialized]
@@ -1810,26 +1825,13 @@ namespace DD.Collections {
             [Pure]
             get {
                 Contract.Ensures (Theory.IndexerGetItemValue (this, item, Contract.Result<bool> ()));
-
-                if (this.InRange (item)) {
-                    Contract.Assert ((item >> log2of64).InRange (0, this.array.Length - 1));
-                    return this._Get (item);
-                }
-                else {
-                    return false;
-                }
+                return this._Get (item);
             }
-            set {
+            set { // returns void, only way to return error is exception
                 Contract.Requires<IndexOutOfRangeException> (
                     (value.Bool () == true && this.InRange (item)) || value.Bool () == false);
                 Contract.Ensures (Theory.IndexerSetItemValue (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), item, value, this));
-
-                if (!value.Bool () && (!this.InRange (item))) {
-                    // if index is outside of BitSetArray range accept false value
-                }
-                else {
-                    this._Set (item, value);
-                }
+                this._Set (item, value.Bool());
             }
         }
 
@@ -2591,9 +2593,43 @@ namespace DD.Collections {
 
         #region Other
 
+        /// <summary>Add IEnumerable&lt;int&gt; of valid items
+        /// Throws <exception cref="System.IndexOutOfRangeException"/> if item &lt; 0 || item == int.MaxValue
+        /// <remarks>
+        /// <para>ICollection.Add return value is void, so only way to return error to caller is exception.</para>
+        /// </remarks>
+        /// </summary>
+        /// <param name="items"></param>
+        public int Add (IEnumerable<int> items) {
+            Contract.Requires<ArgumentNullException> (items.IsNot (null));
+            Contract.Requires<IndexOutOfRangeException> (ValidMembers (items));
+            // TODO Contract.Ensures (Theory.ICollectionAdd (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), items, this));
+
+            if (items.IsEmpty()) { return 0; }
+            int final = int.MinValue;
+            foreach (var item in items) {
+                if (item > final) { final = item; }
+            }
+            if (final >= this.range) {
+                this.Length = final + 1;
+            }
+            return this._Set (items, true);
+        }
+
+        /// <summary>Removes IEnumerable&lt;int&gt; items where item is member
+        /// <para>No exceptions thrown.</para>
+        /// </summary>
+        /// <param name="items">int</param>
+        /// <returns>Number of items removed.</returns>
+        public int Remove (IEnumerable<int> items) {
+            // TODO Contract.Ensures (Theory.Remove (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), item, this, Contract.Result<bool> ()));
+            return items.IsNullOrEmpty() ? 0 : this._Set(items, false);
+        }
+
+        // TODO: Implement Add/Remove for range of items
+
         [Pure]
         public bool Get (int item) {
-            Contract.Requires<IndexOutOfRangeException> (this.InRange (item));
             Contract.Ensures (Theory.Get (this, item, Contract.Result<bool> ()));
 
             return _Get (item);
@@ -2601,145 +2637,245 @@ namespace DD.Collections {
 
         [Pure]
         internal bool _Get (int item) {
-            Contract.Requires<IndexOutOfRangeException> (this.InRange (item));
             Contract.Ensures (Theory.Get (this, item, Contract.Result<bool> ()));
 
-            bool value;
+            bool value = false;
             lock (SyncRoot) {
-                Contract.Assert (this.InRange (item), "Race condition, contract invalidated before lock acquired");
-                value = 0 != (array[item >> log2of64] & 1L << (item & mask0x3F));
+                if (this.InRange (item)) {
+                    value = 0 != (array[item >> log2of64] & 1L << (item & mask0x3F));
+                }
             }
             return value;
         }
 
         /// <summary>
-        /// Set Item
+        /// Set/Clear item if this.InRange(item)
         /// </summary>
-        /// <remarks>Item must be in range else exception is thrown</remarks>
+        /// <remarks>Use Add to add any valid item and exception on invalid item.</remarks>
         /// <param name="item"></param>
         /// <param name="value"></param>
-        /// <returns></returns>
+        /// <returns>true if item set/cleared else returns false</returns>
         public bool Set (int item, bool value = true) {
-            Contract.Requires<IndexOutOfRangeException> (this.InRange (item));
-            Contract.Ensures (Theory.Set (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), item, value, this));
+            Contract.Ensures (Theory.Set (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), item, value, this, Contract.Result<bool>()));
 
             return _Set (item, value);
         }
 
+        /// <summary>
+        /// Set/Clear item if this.InRange(item) - internal
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="value"></param>
+        /// <returns>true if item set/cleared else returns false</returns>
         internal bool _Set (int item, bool value = true) {
-            Contract.Requires<IndexOutOfRangeException> (this.InRange (item));
-            Contract.Ensures (Theory.Set (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), item, value, this));
+            Contract.Ensures (Theory.Set (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), item, value, this, Contract.Result<bool>()));
 
             value = value.Bool ();
             bool isChanged = false;
 
             lock (SyncRoot) {
-                Contract.Assert (this.InRange (item), "Race condition, contract invalidated before lock acquired");
-                if (((array[item >> log2of64] & 1L << (item & mask0x3F)) != 0) == value) {
-                    // no change
-                }
-                else {
-                    // flip bit value
-                    array[item >> log2of64] ^= 1L << (item & mask0x3F);
-
-                    var last_version = this.version;
-                    isChanged = true;
-                    this.AddVersion ();
-
-                    if (value) {
-                        Contract.Assert (this.count < this.range);
-                        ++this.count;
+                if (this.InRange (item)) {
+                    if (((array[item >> log2of64] & 1L << (item & mask0x3F)) != 0) == value) {
+                        // no change
                     }
                     else {
-                        Contract.Assert (this.count > 0);
-                        --this.count;
+                        // flip bit value
+                        array[item >> log2of64] ^= 1L << (item & mask0x3F);
+    
+                        var last_version = this.version;
+                        isChanged = true;
+                        this.AddVersion ();
+    
+                        if (value) {
+                            Contract.Assert (this.count < this.range);
+                            ++this.count;
+                        }
+                        else {
+                            Contract.Assert (this.count > 0);
+                            --this.count;
+                        }
+                        if (this.count == 1) {
+                            this.SetCacheFirst (item);
+                            this.SetCacheLast (item);
+                        }
+                        else {
+                            if (value) {
+                                if (this.startVersion == last_version) {
+                                    // cache has not expired
+                                    if (this.startMemoize != null && item < (int)this.startMemoize) {
+                                        // new start item set, update cache
+                                        this.startMemoize = item;
+                                    }
+                                    this.startVersion = this.version;
+                                }
+                                if (this.finalVersion == last_version) {
+                                    // cache has not expired
+                                    if (this.finalMemoize != null && item > (int)this.finalMemoize) {
+                                        // new final item set, update cache
+                                        this.finalMemoize = item;
+                                    }
+                                    this.finalVersion = this.version;
+                                }
+                            }
+                            else {
+                                if (this.startVersion == last_version) {
+                                    // cache has not expired
+                                    if (this.startMemoize != null && item != (int)this.startMemoize) {
+                                        // start item is not cleared, cache is alive
+                                        this.startVersion = this.version;
+                                    }
+                                }
+                                if (this.finalVersion == last_version) {
+                                    // cache has not expired
+                                    if (this.finalMemoize != null && item != (int)this.finalMemoize) {
+                                        // final item is not cleared, cache is alive
+                                        this.finalVersion = this.version;
+                                    }
+                                }
+                            }
+                        }
+                        Contract.Assert (this[item] == value);
                     }
+                }
+            }
+            return isChanged;
+        }
+
+        /// <summary>
+        /// Set/Clear IEnumerable&lt;int&gt; items where this.InRange (item)
+        /// </summary>
+        /// <remarks>Use Add to add any valid item and exception on invalid item.</remarks>
+        /// <param name="items">IEnumerable&lt;int&gt;</param>
+        /// <param name="value">bool, if true then set, else clear</param>
+        /// <returns>number of members set/cleared</returns>
+        public int Set (IEnumerable<int> items, bool value = true) {
+            // TODO: Contract.Ensures (Theory.SetInRange (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), item, value, this));
+            return _Set(items, value);
+        }
+
+        /// <summary>
+        /// Set/Clear IEnumerable&lt;int&gt; items where this.InRange (item) - internal
+        /// </summary>
+        /// <param name="items">IEnumerable&lt;int&gt;</param>
+        /// <param name="value">bool, if true then set, else clear</param>
+        /// <returns>number of members set/cleared</returns>
+        internal int _Set (IEnumerable<int> items, bool value = true) {
+            // TODO: Contract.Ensures (Theory.TrySet (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), item, value, this));
+
+            lock (SyncRoot) {
+                if (items.IsNullOrEmpty()) { return 0; }
+
+                value = value.Bool ();
+                int counter = 0;
+                long start = long.MaxValue;
+                long final = long.MinValue;
+
+                foreach (var item in items) {
+                    if (this.InRange (item)) {
+                        if (item < start) { start = item; }
+                        if (item > final) { final = item; }
+                        if (((array[item >> log2of64] & 1L << (item & mask0x3F)) != 0) == value) {
+                            // no change
+                        }
+                        else {
+                            // flip bit value
+                            array[item >> log2of64] ^= 1L << (item & mask0x3F);
+                            ++counter; // count changes
+                        }
+                    }
+                }
+                if (counter != 0) {
+                    var last_version = this.version;
+                    this.AddVersion ();
+                    if (value) {
+                        this.count += counter;
+                    } else {
+                        this.count -= counter;
+                    }
+                    Contract.Assert (this.count >= 0 && this.count < this.range);
+
+                    // TODO: Test cache
                     if (this.count == 1) {
-                        this.SetCacheFirst (item);
-                        this.SetCacheLast (item);
+                        this.SetCacheFirst ((int)start);
+                        this.SetCacheLast ((int)final);
                     }
                     else {
                         if (value) {
                             if (this.startVersion == last_version) {
-                                // cache has not expired
-                                if (this.startMemoize != null && item < (int)this.startMemoize) {
+                                // start cache has not expired
+                                if (this.startMemoize != null && start < (int)this.startMemoize) {
                                     // new start item set, update cache
-                                    this.startMemoize = item;
+                                    this.startMemoize = (int)start;
                                 }
                                 this.startVersion = this.version;
                             }
                             if (this.finalVersion == last_version) {
-                                // cache has not expired
-                                if (this.finalMemoize != null && item > (int)this.finalMemoize) {
+                                // final cache has not expired
+                                if (this.finalMemoize != null && final > (int)this.finalMemoize) {
                                     // new final item set, update cache
-                                    this.finalMemoize = item;
+                                    this.finalMemoize = (int)final;
                                 }
                                 this.finalVersion = this.version;
                             }
                         }
                         else {
                             if (this.startVersion == last_version) {
-                                // cache has not expired
-                                if (this.startMemoize != null && item != (int)this.startMemoize) {
+                                // start cache has not expired
+                                if (this.startMemoize != null && _Get((int)this.startMemoize)) {
                                     // start item is not cleared, cache is alive
                                     this.startVersion = this.version;
                                 }
                             }
                             if (this.finalVersion == last_version) {
-                                // cache has not expired
-                                if (this.finalMemoize != null && item != (int)this.finalMemoize) {
+                                // final cache has not expired
+                                if (this.finalMemoize != null && _Get((int)this.finalMemoize)) {
                                     // final item is not cleared, cache is alive
                                     this.finalVersion = this.version;
                                 }
                             }
                         }
                     }
-                    Contract.Assert (this[item] == value);
                 }
+                return counter;
             }
-            return isChanged;
         }
 
-        // TODO: Fast internal? Add/Remove (IEnumerable<int>), ignore invalid items, return count added/removed
-        // TODO! Use wherewer .Add/.Set used in loop
-
         /// <summary>
-        /// Set/Clear Range of Items
+        /// Set/Clear Range of items where this.InRange (item);
         /// </summary>
-        /// <remarks>Items must be in range else exception is thrown</remarks>
+        /// <remarks>Use Add to add any valid item and exception on invalid range items.</remarks>
         /// <param name="start"></param>
         /// <param name="final"></param>
         /// <param name="value"></param>
-        /// <returns>true if changed</returns>
-        public bool Set (int start, int final, bool value = true) {
-            Contract.Requires<ArgumentException> (start <= final);
-            Contract.Requires<IndexOutOfRangeException> (this.InRange (start));
-            Contract.Requires<IndexOutOfRangeException> (this.InRange (final));
+        /// <returns>number of members set/cleared</returns>
+        public int Set (int start, int final, bool value = true) {
             // TODO: Contract.Ensures (Theory.Set (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), item, value, this));
 
-            return _Set (start, final, value);
+            return _Set(start, final, value);
+
         }
 
         /// <summary>
-        /// Internal version for fast range-set
+        /// Set/Clear Range of items where this.InRange (item);
         /// </summary>
         /// <param name="start"></param>
         /// <param name="final"></param>
         /// <param name="value"></param>
         /// <returns>true if changed</returns>
-        internal bool _Set (int start, int final, bool value = true) {
-            Contract.Requires<ArgumentException> (start <= final);
-            Contract.Requires<IndexOutOfRangeException> (this.InRange (start));
-            Contract.Requires<IndexOutOfRangeException> (this.InRange (final));
+        internal int _Set (int start, int final, bool value = true) {
             // TODO: Contract.Ensures (Theory.Set (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), item, value, this));
-
-            value = value.Bool ();
-            int counter = 0;
-            var item = start;
+            // TODO: implement fast set/clear of array data when range index is larger than 2
 
             lock (SyncRoot) {
-                Contract.Assert (this.InRange (start), "Race condition, contract invalidated before lock acquired");
-                Contract.Assert (this.InRange (final), "Race condition, contract invalidated before lock acquired");
+
+                if (start > final) { return 0;}
+
+                if (start < 0) { start = 0; }
+                if (final >= this.range) { final = this.range - 1; }
+
+                value = value.Bool ();
+                int counter = 0;
+                var item = start;
 
                 for (; item <= final; item++) {
                     if (((array[item >> log2of64] & 1L << (item & mask0x3F)) != 0) == value) {
@@ -2802,9 +2938,8 @@ namespace DD.Collections {
                             }
                         }
                     }
-                    return true;
                 }
-                return false;
+                return counter;
             }
         }
 
@@ -3259,12 +3394,8 @@ namespace DD.Collections {
             }
             else {
                 // this will never ExceptWith(that) outside this.Length
-                foreach (var item in that) {
-                    // ExceptWith can simply ignore any value otside this.Length
-                    if (this.InRange (item)) {
-                        this._Set (item, false); // -> this.AddVersion
-                    }
-                }
+                // ExceptWith can simply ignore any value otside this.Length
+                this._Set (that, false); // -> this.AddVersion
             }
         }
 
@@ -3279,9 +3410,9 @@ namespace DD.Collections {
                 Theory.IntersectWith (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), that, this)
             );
 
-            var tempSet = that as BitSetArray;
-            if (tempSet.IsNot (null)) {
-                this.And (tempSet);
+            var other = that as BitSetArray;
+            if (other.IsNot (null)) {
+                this.And (other);
             } else {
                 lock (SyncRoot) {
                     if (this.count == 0) {
@@ -3292,17 +3423,9 @@ namespace DD.Collections {
                         this.Clear (); // .Clear() will change version
                     }
                     else {
-                        tempSet = BitSetArray.Size (this.range);
-                        foreach (var item in that) {
-                            if (this[item]) {
-                                tempSet._Set (item, true);
-                            }
-                        }
-                        if (tempSet.count != this.count) {
-                            this.AddVersion ();
-                            this.array = tempSet.array;
-                            this.count = tempSet.count;
-                        }
+                        other = BitSetArray.Size (this.range);
+                        other._Set (that);
+                        this.And (other);
                     }
                 }
             }
@@ -3312,7 +3435,7 @@ namespace DD.Collections {
         /// <remarks>
         /// <para>For this operation is irrelevant wheter IEnumerable{int} is a set (contains no duplicates) or not.</para>
         /// <para>For this operation argument set IEnumerableOf{int} is not required to be within BitSetArray.domain.</para></remarks>
-        /// <para>Since resulting set of SymmetricExceptWith operation MUST be within BitSetArray.domain,</para>
+        /// <para>Since resulting set of SymmetricExceptWith operation cannot be outside BitSetArray.domain,</para>
         /// <para>IEnumerableOf{int} argument members outside BitSetArray.domain are ignored.</para></remarks>
         /// </summary>
         /// <param name="that"></param>
@@ -3523,28 +3646,15 @@ namespace DD.Collections {
                 return false; // empty is never subset nor superset
             }
             else {
-                // that.domain can be wider/larger than BitSetArray.domain
-                // but test is required only within BitSetArray.domain
-
-                // find Max member to prevent multiple resizing of testSet
-                int maxMember = int.MinValue;
-                foreach (int item in that) {
-                    if (item > maxMember)
-                        maxMember = item;
-                }
-                if (ValidMember (maxMember)) {
-                    testSet = BitSetArray.Size (maxMember + 1);
-                    // add members to test set
-                    foreach (var item in that) {
-                        if (ValidMember (item)
-                            && !testSet[item]) {
-                            testSet._Set (item, true);
-                        }
-                    }
-
+                // that.domain can be wider/larger than BitSetArray.domain => not subset
+                try {
+                    // On invalid "that" member exception is thrown
+                    testSet = BitSetArray.From (that); // fast enough, uses _InitItems
                     return this.IsSubsetOf (testSet);
+                } catch {
+                    // "that" is not subset, contains members outside BitSetArray.domain
+                    return false;
                 }
-                return false;
             }
         }
 

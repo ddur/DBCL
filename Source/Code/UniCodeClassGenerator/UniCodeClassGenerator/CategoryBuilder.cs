@@ -56,7 +56,6 @@ namespace UniCodeClassGenerator
                     Console.Write (" OK");
 
                     // TODO compare bits.Count with Total code points
-                    var compactArray = CodeSetMask.From (bits).ToCompactArray();
                     if (bits.Count == 0) {
                         WriteLine ("CodeSetNone.Singleton;");
                     }
@@ -115,6 +114,7 @@ namespace UniCodeClassGenerator
                         }
                         itemBuilder.WriteLine (20, ");");
 
+                        var compactBitMask = CodeSetMask.From (bits).ToCompactBitMask();
                         var maskBuilder = new SourceBuilder();
                         maskBuilder.Write ("CodeSetMask.From (new int[] {");
                         maskBuilder.WriteLine ();
@@ -122,7 +122,7 @@ namespace UniCodeClassGenerator
                         var maskLineBuilder = new SourceBuilder();
                         var firstMask = true;
                         var countMask = 0;
-                        foreach (var item in compactArray.Item1) {
+                        foreach (var item in compactBitMask.Masks) {
                             countMask += 1;
                             if (firstMask) {
                                 firstMask = false;
@@ -132,7 +132,7 @@ namespace UniCodeClassGenerator
                                 maskLineBuilder.Write (", " + item);
                             }
                             if (maskLineBuilder.Length > 80) {
-                                if (countMask < compactArray.Item1.Length) {
+                                if (countMask < compactBitMask.Masks.Count) {
                                     maskLineBuilder.Write (","); // end of line
                                     firstMask = true; // start new line
                                 }
@@ -144,7 +144,7 @@ namespace UniCodeClassGenerator
                             maskBuilder.WriteLine (24, maskLineBuilder.ToString()); // last mask line
                             maskLineBuilder.Clear();
                         }
-                        maskBuilder.WriteLine (20,"}, " + bits.First + ", " + bits.Last + ", " + bits.Count + ");");
+                        maskBuilder.WriteLine (20,"}, " + compactBitMask.Start + ", " + compactBitMask.Final + ", " + compactBitMask.Count + ");");
                         if (itemBuilder.Length < maskBuilder.Length) {
                             Write (itemBuilder.ToString());
                         } else {

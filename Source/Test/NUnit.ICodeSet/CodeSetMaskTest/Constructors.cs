@@ -109,8 +109,8 @@ namespace DD.Collections.ICodeSet.CodeSetMaskTest {
                 int[] arg = null;
                 Assert.That (
                     delegate {
-                        CodeSetMask.From (arg);
-                    }, Throws.TypeOf<ArgumentNullException> ()
+                        CodeSetMask.From (arg, 1, 10, 5);
+                    }, Throws.TypeOf<ArgumentNullException> ().And.Message.EqualTo ("Precondition failed: array.IsNot(null)")
                 );
             }
 
@@ -119,94 +119,190 @@ namespace DD.Collections.ICodeSet.CodeSetMaskTest {
                 var arg = new int[0];
                 Assert.That (
                     delegate {
-                        var x = CodeSetMask.From (arg);
-                    }, Throws.TypeOf<ArgumentEmptyException> ()
+                        var x = CodeSetMask.From (arg, 1, 10, 5);
+                    }, Throws.TypeOf<ArgumentEmptyException> ().And.Message.EqualTo ("Precondition failed: array.Length != 0")
                 );
             }
 
             [Test]
-            public void InvalidNoBits () {
-                var arg = new int[] { 0 };
-                Assert.That (
-                    delegate {
-                        CodeSetMask.From (arg);
-                    }, Throws.TypeOf<ArgumentException> ()
-                );
-            }
-
-            [Test]
-            public void InvalidFirstBit () {
-                var arg = new int[] { 2 };
-                Assert.That (
-                    delegate {
-                        CodeSetMask.From (arg);
-                    }, Throws.TypeOf<ArgumentException> ()
-                );
-            }
-
-            [Test]
-            public void InvalidLastBitMask () {
-                var arg = new int[] { 1, 1, 0 };
-                Assert.That (
-                    delegate {
-                        CodeSetMask.From (arg);
-                    }, Throws.TypeOf<ArgumentException> ()
-                );
-            }
-
-            [Test]
-            public void InvalidLastBit () {
+            public void InvalidBitsToLargeArray () {
                 var arg = new int[(Code.MaxValue >> 5) + 2];
                 arg[0] = 1;
                 arg[arg.Length - 1] = 1; // 1114112
                 Assert.That (
                     delegate {
-                        CodeSetMask.From (arg);
-                    }, Throws.TypeOf<ArgumentException> ()
+                        var x = CodeSetMask.From (arg, 0, Code.MaxValue, 2);
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: ((Code.MaxValue >> 5) + 1) >= array.Length")
                 );
             }
 
             [Test]
-            public void InvalidOffset () {
+            public void InvalidBitsNoBits () {
+                var arg = new int[] { 0 };
+                Assert.That (
+                    delegate {
+                        CodeSetMask.From (arg, 1, 10, 5);
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: (array[0] & 1) != 0")
+                );
+            }
+
+            [Test]
+            public void InvalidBitsFirstBit () {
+                var arg = new int[] { 2 };
+                Assert.That (
+                    delegate {
+                        CodeSetMask.From (arg, 1, 10, 5);
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: (array[0] & 1) != 0")
+                );
+            }
+
+            [Test]
+            public void InvalidBitsLastBitMask () {
+                var arg = new int[] { 1, 1, 0 };
+                Assert.That (
+                    delegate {
+                        CodeSetMask.From (arg, 0, 10, 2);
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: array[array.Length - 1] != 0")
+                );
+            }
+
+            [Test]
+            public void InvalidStartValue () {
                 var arg = new int[] { 1 };
                 Assert.That (
                     delegate {
-                        CodeSetMask.From (arg, Code.MinValue - 1);
-                    }, Throws.TypeOf<ArgumentException> ()
+                        CodeSetMask.From (arg, 0, 0, 1);
+                    }, Throws.Nothing
                 );
                 Assert.That (
                     delegate {
-                        CodeSetMask.From (arg, Code.MaxValue + 1);
-                    }, Throws.TypeOf<ArgumentException> ()
+                        CodeSetMask.From (arg, Code.MinValue - 1, 0, 1);
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: start.HasCodeValue()")
                 );
                 Assert.That (
                     delegate {
-                        CodeSetMask.From (arg, int.MinValue);
-                    }, Throws.TypeOf<ArgumentException> ()
+                        CodeSetMask.From (arg, Code.MaxValue + 1, 0, 1);
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: start.HasCodeValue()")
                 );
                 Assert.That (
                     delegate {
-                        CodeSetMask.From (arg, int.MaxValue);
-                    }, Throws.TypeOf<ArgumentException> ()
+                        CodeSetMask.From (arg, int.MinValue, 0, 1);
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: start.HasCodeValue()")
+                );
+                Assert.That (
+                    delegate {
+                        CodeSetMask.From (arg, int.MaxValue, 0, 1);
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: start.HasCodeValue()")
                 );
             }
 
             [Test]
-            public void InvalidBitsPlusOffset () {
+            public void InvalidFinalValue () {
+                var arg = new int[] { 1 };
+                Assert.That (
+                    delegate {
+                        CodeSetMask.From (arg, 0, 0, 1);
+                    }, Throws.Nothing
+                );
+                Assert.That (
+                    delegate {
+                        CodeSetMask.From (arg, 0, Code.MinValue - 1, 1);
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: final.HasCodeValue()")
+                );
+                Assert.That (
+                    delegate {
+                        CodeSetMask.From (arg, 0, Code.MaxValue + 1, 1);
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: final.HasCodeValue()")
+                );
+                Assert.That (
+                    delegate {
+                        CodeSetMask.From (arg, 0, int.MinValue, 1);
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: final.HasCodeValue()")
+                );
+                Assert.That (
+                    delegate {
+                        CodeSetMask.From (arg, 0, int.MaxValue, 1);
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: final.HasCodeValue()")
+                );
+            }
+
+            [Test]
+            public void InvalidStartValueGreaterThanFinal () {
                 var arg = new int[(Code.MaxValue >> 5) + 1];
                 arg[0] = 1;
                 arg[arg.Length - 1] = -1;
                 Assert.That (
                     delegate {
-                        CodeSetMask.From (arg, 1); // 1114112
-                    }, Throws.TypeOf<ArgumentException> ()
+                        CodeSetMask.From (arg, 1114111, 1114110, 33);
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: start <= final")
                 );
+            }
 
-                arg = new int[] { 3 };
+            [Test]
+            public void InvalidCountValue () {
+                var arg = new int[] { 1 };
                 Assert.That (
                     delegate {
-                        CodeSetMask.From (arg, Code.MaxValue);
-                    }, Throws.TypeOf<ArgumentException> ()
+                        CodeSetMask.From (arg, 0, 0, 0);
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: count > 0")
+                );
+                Assert.That (
+                    delegate {
+                        CodeSetMask.From (arg, 0, 0, 2);
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: count <= (final - start + 1)")
+                );
+            }
+
+            [Test]
+            public void InvalidBitsLastBitItemPlusStart () {
+                var arg = new int[(Code.MaxValue >> 5) + 1];
+                arg[0] = 1;
+                arg[arg.Length - 1] = -1;
+                Assert.That (
+                    delegate {
+                        CodeSetMask.From (arg, 0, Code.MaxValue, 33);
+                    }, Throws.Nothing
+                );
+                Assert.That (
+                    delegate {
+                        CodeSetMask.From (arg, 1, Code.MaxValue, 33); // 1114112
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: final == array.IsCompactLast () + start")
+                );
+
+                arg = new int[] { 9 };
+                Assert.That (
+                    delegate {
+                        CodeSetMask.From (arg, Code.MaxValue - 1, Code.MaxValue, 2);
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: final == array.IsCompactLast () + start")
+                );
+            }
+
+            [Test]
+            public void InvalidBitsLastBitItem () {
+                var arg = new int[(Code.MaxValue >> 5) + 1];
+                arg[0] = 1;
+                arg[arg.Length - 1] = 1;
+                Assert.That (
+                    delegate {
+                        CodeSetMask.From (arg, 0, Code.MaxValue, 2);
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: final == array.IsCompactLast () + start")
+                );
+            }
+
+            [Test]
+            public void InvalidBitsCount () {
+                var arg = new int[(Code.MaxValue >> 5) + 1];
+                arg[0] = 1;
+                arg[arg.Length - 1] = -1;
+                Assert.That (
+                    delegate {
+                        CodeSetMask.From (arg, 0, 1114111, 33);
+                    }, Throws.Nothing
+                );
+                Assert.That (
+                    delegate {
+                        CodeSetMask.From (arg, 0, 1114111, 34);
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: count == BitSetArray.CountOnBits(array)")
                 );
             }
 
@@ -217,14 +313,14 @@ namespace DD.Collections.ICodeSet.CodeSetMaskTest {
                 arg[arg.Length - 1] = -1;
                 Assert.That (
                     delegate {
-                        CodeSetMask.From (arg);
+                        CodeSetMask.From (arg, 0, 1114111, 33);
                     }, Throws.Nothing
                 );
 
                 arg = new int[] { 1 };
                 Assert.That (
                     delegate {
-                        CodeSetMask.From (arg);
+                        CodeSetMask.From (arg, 0, 0, 1);
                     }, Throws.Nothing
                 );
             }
@@ -248,7 +344,7 @@ namespace DD.Collections.ICodeSet.CodeSetMaskTest {
 
             [Test]
             public void InvalidOffsetExtreme () {
-                var arg = CodeSetMask.From (new int[] { 1 });
+                var arg = CodeSetMask.From (1);
                 Assert.That (
                     delegate {
                         CodeSetMask.From (arg, int.MinValue);
@@ -289,11 +385,16 @@ namespace DD.Collections.ICodeSet.CodeSetMaskTest {
             [Test]
             public void Valid () {
                 var arg = CodeSetMask.From (CodeSetPair.From (1, 1114111));
+                CodeSetMask clone = null;
                 Assert.That (
                     delegate {
-                        CodeSetMask.From (arg);
+                        clone = CodeSetMask.From (arg);
                     }, Throws.Nothing
                 );
+                Assert.True (clone.SequenceEqual(arg));
+                Assert.True (clone.First == arg.First);
+                Assert.True (clone.Last == arg.Last);
+                Assert.True (clone.Count == arg.Count);
             }
         }
 
@@ -372,5 +473,28 @@ namespace DD.Collections.ICodeSet.CodeSetMaskTest {
         }
         #endregion
 
+        #region From CompactBitMask
+
+        public class FromCompactBitMask {
+
+            // CompactBitMask is struct, cannot be null
+
+            [Test]
+            public void Valid () {
+                var arg = CodeSetMask.From (CodeSetPair.From (1, 1114111));
+                CodeSetMask clone = null;
+                Assert.That (
+                    delegate {
+                        clone = CodeSetMask.From (CodeSetMask.From (arg).ToCompactBitMask());
+                    }, Throws.Nothing
+                );
+                Assert.True (clone.SequenceEqual(arg));
+                Assert.True (clone.First == arg.First);
+                Assert.True (clone.Last == arg.Last);
+                Assert.True (clone.Count == arg.Count);
+            }
+        }
+
+        #endregion
     }
 }

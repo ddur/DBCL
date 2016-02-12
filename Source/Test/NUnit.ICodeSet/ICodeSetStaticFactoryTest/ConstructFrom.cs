@@ -209,5 +209,96 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
                         });
             }
         }
+
+        public class PredicateOfCode {
+
+            [Test]
+            public void Null () {
+
+                // arrange
+                Predicate<Code> func = null;
+
+                // act & assert
+                Assert.That (func.From() is CodeSetNone);
+            }
+
+            [Test]
+            public void Empty () {
+
+                // arrange
+                Predicate<Code> func = x => false;
+
+                // act & assert
+                Assert.That (func.From() is CodeSetNone);
+            }
+
+            [Test]
+            public void Valid () {
+
+                // arrange
+                int count = 0;
+                // disable once ConvertClosureToMethodGroup
+                Predicate<Code> func = x => x.IsHighSurrogate();
+
+                // act
+                var result = func.From();
+
+                // assert
+                count = 0;
+                for (int index = Code.MinValue; index <= Code.MaxValue; index++) {
+                    Assert.True (((Code)index).IsHighSurrogate() == result[index]);
+                    if (index.IsHighSurrogate()) count += 1;
+                }
+                Assert.True (count == result.Count);
+
+                count = 0;
+                for (Code index = result.First; index <= result.Last; index++) {
+                    Assert.True (index.IsHighSurrogate() == result[index]);
+                    if (index.IsHighSurrogate()) count += 1;
+                }
+                Assert.True (count == result.Count);
+                Assert.That (result is CodeSetFull);
+
+                var compare = CodeSetFunc.From (func);
+                Assert.That (compare.SequenceEqual (result));
+            }
+        }
+
+        public class AnyICodeSet {
+
+            [Test]
+            public void Null () {
+                // arrange
+                ICodeSet result = null;
+
+                // act & assert
+                Assert.That (
+                    delegate {
+                        result = Factory.From ((ICodeSet)null);
+                    }, Throws.Nothing
+                );
+
+                Assert.That (result is CodeSetNone);
+            }
+
+            [Test]
+            public void Valid () {
+                var arg = CodeSetMask.From (CodeSetPair.From (1, 1114111));
+                ICodeSet result = null;
+                Assert.That (
+                    delegate {
+                        result = Factory.From (arg);
+                    }, Throws.Nothing
+                );
+
+                Assert.That (!arg.IsReduced);
+                Assert.That (result.IsReduced);
+
+                Assert.True (result.SequenceEqual(arg));
+                Assert.True (result.First == arg.First);
+                Assert.True (result.Last == arg.Last);
+                Assert.True (result.Count == arg.Count);
+            }
+        }
     }
 }

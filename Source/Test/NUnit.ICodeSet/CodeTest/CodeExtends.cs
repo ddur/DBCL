@@ -239,5 +239,25 @@ namespace DD.Collections.ICodeSet.CodeTest {
             Assert.That (testRange.ContainsAll ("ABCDEFGHa"), Is.False);
             Assert.That (testRange.ContainsAll ("abcdefgh"), Is.False);
         }
+
+        [Test]
+        public void PredicateOfCodeToCodes_Null () {
+            Assert.That (((Predicate<Code>)null).ToCodes().IsEmpty());
+        }
+
+        [Test]
+        public void PredicateOfCodeToCodes_Valid () {
+            Assert.That (!((Predicate<Code>)(x=>x==1)).ToCodes().IsEmpty());
+        }
+
+        [Test]
+        public void PredicateOfCodeToIntCodes_Null () {
+            Assert.That (((Predicate<Code>)null).ToIntCodes().IsEmpty());
+        }
+
+        [Test]
+        public void PredicateOfCodeToIntCodes_Valid () {
+            Assert.That (!((Predicate<Code>)(x=>x==1)).ToIntCodes().IsEmpty());
+        }
     }
 }

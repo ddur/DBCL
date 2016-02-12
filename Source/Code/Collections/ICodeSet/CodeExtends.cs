@@ -130,6 +130,41 @@ namespace DD.Collections.ICodeSet {
             return true;
         }
 
+        /// <summary>
+        /// Converts Predicate&lt;Code&gt; into IEnumerable&lt;Code&gt;
+        /// </summary>
+        /// <remarks>Use pure (functional) predicate only!</remarks>
+        /// <param name="extended">Predicate&lt;Code&gt;</param>
+        /// <returns>IEnumerable&lt;Code&gt;</returns>
+        [Pure]
+        public static IEnumerable<Code> ToCodes (this Predicate<Code> extended) {
+            if (extended != null) {
+                for (int item = Code.MinValue; item <= Code.MaxValue; item++) {
+                    if (extended (item)) {
+                        yield return item;
+                    }
+                }
+            }
+            yield break;
+        }
+
+        /// <summary>
+        /// Converts Predicate&lt;Code&gt; into IEnumerable&lt;Code&gt;
+        /// </summary>
+        /// <remarks>Use pure (functional) predicate only!</remarks>
+        /// <param name="extended">Predicate&lt;Code&gt;</param>
+        /// <returns>IEnumerable&lt;Code&gt;</returns>
+        public static IEnumerable<int> ToIntCodes (this Predicate<Code> extended) {
+            if (extended != null) {
+                for (int item = Code.MinValue; item <= Code.MaxValue; item++) {
+                    if (extended ((Code)item)) {
+                        yield return item;
+                    }
+                }
+            }
+            yield break;
+        }
+
         #endregion
 
     }

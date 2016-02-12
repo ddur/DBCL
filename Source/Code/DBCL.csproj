@@ -135,6 +135,9 @@
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Collections.Immutable">
+      <HintPath>..\..\packages\System.Collections.Immutable.1.1.37\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -146,6 +149,7 @@
     <Compile Include="Collections\BitSetArray\BitSetArray.Theory.cs" />
     <Compile Include="Collections\BitSetArray\BitSetArrayExtended.cs" />
     <Compile Include="Collections\ICodeSet\Code.cs" />
+    <Compile Include="Collections\ICodeSet\CodeSetFunc.cs" />
     <Compile Include="Collections\ICodeSet\CodeSetMask.cs" />
     <Compile Include="Collections\ICodeSet\CodeExtended.cs" />
     <Compile Include="Collections\ICodeSet\CodeExtends.cs" />
@@ -156,6 +160,7 @@
     <Compile Include="Collections\ICodeSet\CodeSetNone.cs" />
     <Compile Include="Collections\ICodeSet\CodeSetPair.cs" />
     <Compile Include="Collections\ICodeSet\CodeSetWide.cs" />
+    <Compile Include="Collections\ICodeSet\CompactBitMask.cs" />
     <Compile Include="Collections\ICodeSet\ICode.cs" />
     <Compile Include="Collections\ICodeSet\ICodeSet.cs" />
     <Compile Include="Collections\ICodeSet\ICodeSetDictionary.cs" />
@@ -188,10 +193,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Text\UniCode\Version5\Blocks.txt" />
-    <None Include="Text\UniCode\Version5\DerivedGeneralCategory.txt" />
-    <None Include="Text\UniCode\Version8\Blocks.txt" />
-    <None Include="Text\UniCode\Version8\DerivedGeneralCategory.txt" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

@@ -15,13 +15,15 @@ namespace DD.Collections {
     public static class BitSetArrayExtended
     {
 
+        /// <summary>
+        /// If NullOrEmpty return 0
+        /// Else return (1+Last-First)
+        /// </summary>
+        /// <param name="self"></param>
+        /// <returns></returns>
         [Pure]
         public static int Span (this BitSetArray self) {
-            if (self.IsNull ())
-                return 0;
-            if (self.Count == 0)
-                return 0;
-            return 1 + (int)self.Last - (int)self.First;
+            return self.IsNull() ? 0 : (self.Count == 0 ? 0 : ((int)self.Last - (int)self.First + 1));
         }
 
         [Pure]

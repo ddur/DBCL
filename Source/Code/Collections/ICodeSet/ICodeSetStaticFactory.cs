@@ -40,6 +40,18 @@ namespace DD.Collections.ICodeSet {
 
         #region From items To ICodeSet
 
+        public static ICodeSet From (this Predicate<Code> func) {
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced);
+
+            if (func.Is(null) || func.ToCodes().IsEmpty()) {
+                return CodeSetNone.Singleton;
+            }
+            var bits = BitSetArray.Size (Code.MaxCount);
+            bits.Set (func.ToIntCodes());
+            return bits.ToICodeSet();
+        }
+
         public static ICodeSet From (this string utf16) {
             Contract.Requires<ArgumentException> (utf16.IsNullOrEmpty () || utf16.CanDecode ());
 
@@ -65,6 +77,13 @@ namespace DD.Collections.ICodeSet {
             var args = new List<Code>() {req};
             if (!opt.IsNullOrEmpty()) { args.AddRange(opt); }
             return args.ToICodeSet() ;
+        }
+
+        public static ICodeSet From (ICodeSet iCodeSet) {
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced);
+
+            return iCodeSet.Reduce() ;
         }
 
         public static ICodeSet ToICodeSet (this string utf16) {

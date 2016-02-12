@@ -19,7 +19,8 @@ namespace DD.Collections.ICodeSet {
         public const int UnitCount = 1;
         public const int PairCount = 2;
 
-        // NOTE: log(16) == 4 tests, TODO? check speed on 32 and 64
+        // NOTE: log(16) == 4 tests worst case
+        // TODO? compare speed on 32 and 64
         public const int ListMaxCount = 16;
 
         public const int MaskMaxSpan = 256;
@@ -29,19 +30,28 @@ namespace DD.Collections.ICodeSet {
 
         #region To Service
 
-        public static IEnumerable<Code> ToCodes (this IEnumerable<int> ints, int offset = 0) {
-            Contract.Requires<ArgumentNullException> (ints.IsNot (null));
-            Contract.Requires<ArgumentException> (Contract.ForAll (ints, x => (x + offset).HasCodeValue ()));
+        /// <summary>
+        /// Converts IEnumerable&lt;int&gt; into IEnumerable&lt;Code&gt; with offset
+        /// <exception cref="System.ArgumentNullException">When self is null</exception>
+        /// <exception cref="System.ArgumentException">When self contains non-Code value</exception>
+        /// <exception cref="System.InvalidCastException">When self contains non-Code value</exception>
+        /// </summary>
+        /// <param name="self">IEnumerable&lt;int&gt;</param>
+        /// <param name="offset">int</param>
+        /// <returns>IEnumerable&lt;Code&gt;</returns>
+        public static IEnumerable<Code> ToCodes (this IEnumerable<int> self, int offset) {
+            Contract.Requires<ArgumentNullException> (self.IsNot (null));
+            Contract.Requires<ArgumentException> (Contract.ForAll (self, x => (x + offset).HasCodeValue ()));
             Contract.Ensures (Contract.Result<IEnumerable<Code>> ().IsNot (null));
 
             if (offset == 0) {
-                foreach (var code in ints) {
+                foreach (var code in self) {
                     yield return (Code)code;
                 }
             }
             else {
                 int shifted;
-                foreach (var code in ints) {
+                foreach (var code in self) {
                     shifted = code + offset;
                     yield return (Code)shifted;
                 }

@@ -181,6 +181,7 @@ namespace DD.Collections.BitSetArrayTest {
         [Test]
         public void ValidRangeAndItem () {
             Assert.That (BitSetArray.ValidMembers ((IEnumerable<int>)null) == false);
+            Assert.That (BitSetArray.ValidMembers (new int[0]) == true);
             Assert.That (BitSetArray.ValidMembers (new int[] { 0, int.MinValue }) == false);
             Assert.That (BitSetArray.ValidMembers (new int[] { 0, int.MinValue / 2 }) == false);
             Assert.That (BitSetArray.ValidMembers (new int[] { 0, -1 }) == false);
