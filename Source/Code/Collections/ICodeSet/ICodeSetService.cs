@@ -70,6 +70,18 @@ namespace DD.Collections.ICodeSet {
             }
         }
 
+        public static IEnumerable<int> ToValues (this IEnumerable<Code> codes, int offset) {
+            Contract.Ensures (Contract.Result<IEnumerable<int>> ().IsNot (null));
+            if (codes.IsNot (null)) {
+                foreach (Code code in codes) {
+                    yield return code.Value + offset;
+                }
+            }
+            else {
+                yield break;
+            }
+        }
+
         public static IEnumerable<int> ToValues (this IEnumerable<char> codes) {
             Contract.Ensures (Contract.Result<IEnumerable<int>> ().IsNot (null));
             if (codes.IsNot (null)) {
@@ -177,9 +189,10 @@ namespace DD.Collections.ICodeSet {
         /// <summary>Returns BitSetArray(self.Last+1) where BitSetArray.Item == self.Item
         /// </summary>
         /// <param name="self"></param>
+        /// <param name="offset"></param>
         /// <returns></returns>
         [Pure]
-        public static BitSetArray ToBitSetArray (this ICodeSet self) {
+        public static BitSetArray ToBitSetArray (this ICodeSet self, int offset = 0) {
             Contract.Ensures (
                 (self.IsNull () && Contract.Result<BitSetArray> ().Count == 0) ||
                 (self.Count == Contract.Result<DD.Collections.BitSetArray> ().Count)
@@ -189,13 +202,13 @@ namespace DD.Collections.ICodeSet {
             if (self.IsNull () || self.Count == 0) {
                 return BitSetArray.Empty ();
             }
-            var quick = self as QuickWrap;
-            if (quick.IsNot (null)) {
-                return quick.ToBitSetArray(); // O(1)
+            if (offset == 0) {
+                var quick = self as QuickWrap;
+                if (quick.IsNot (null)) {
+                    return quick.ToBitSetArray(); // O(1)
+                }
             }
-            var ret = BitSetArray.Size (self.Last + 1);
-            ret._Set (self.ToValues(), true); // O(N) .. O(self.Enumerator)
-            return ret;
+            return BitSetArray.From (self.ToValues(offset)); // O(N) .. O(self.Enumerator)
         }
 
         /// <summary>Returns compact BitSetArray(self.Length) where BitSetArray.Item == self.Item-self.First (offset)
@@ -212,10 +225,7 @@ namespace DD.Collections.ICodeSet {
             Tuple<BitSetArray, int> retTuple;
             if (!self.IsNull () && self.Count != 0) {
 
-                var bits = BitSetArray.Size (self.Length);
-                foreach (int code in self) {
-                    bits._Set (code - self.First);
-                }
+                var bits = self.ToBitSetArray(-self.First);
                 retTuple = new Tuple<BitSetArray, int> (bits, self.First);
             } else {
                 retTuple = new Tuple<BitSetArray, int> (BitSetArray.Empty (), 0);
