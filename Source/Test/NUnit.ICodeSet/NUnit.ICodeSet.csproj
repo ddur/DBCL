@@ -51,8 +51,6 @@
     <Compile Include="CodeSetDiffTest\Members.cs" />
     <Compile Include="CodeSetFullTest\Constructors.cs" />
     <Compile Include="CodeSetFullTest\Members.cs" />
-    <Compile Include="CodeSetFuncTest\Construct.cs" />
-    <Compile Include="CodeSetFuncTest\Members.cs" />
     <Compile Include="CodeSetListTest\Constructors.cs" />
     <Compile Include="CodeSetListTest\Members.cs" />
     <Compile Include="CodeSetMaskTest\Constructors.cs" />
@@ -114,9 +112,6 @@
     <Compile Include="ICodeSetUniqueFactoryTest\OpUnion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuickWrapTest\ConstructionAndMembers.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="CodeSetFuncTest" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Code\DBCL.csproj">
