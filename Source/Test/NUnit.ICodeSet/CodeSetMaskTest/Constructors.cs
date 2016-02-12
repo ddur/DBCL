@@ -110,7 +110,11 @@ namespace DD.Collections.ICodeSet.CodeSetMaskTest {
                 Assert.That (
                     delegate {
                         CodeSetMask.From (arg, 1, 10, 5);
+#if DEBUG
                     }, Throws.TypeOf<ArgumentNullException> ().And.Message.EqualTo ("Precondition failed: array.IsNot(null)")
+#else
+                    }, Throws.TypeOf<ArgumentNullException> ().And.Message.EqualTo ("Precondition failed.")
+#endif
                 );
             }
 
@@ -120,7 +124,11 @@ namespace DD.Collections.ICodeSet.CodeSetMaskTest {
                 Assert.That (
                     delegate {
                         var x = CodeSetMask.From (arg, 1, 10, 5);
+#if DEBUG
                     }, Throws.TypeOf<ArgumentEmptyException> ().And.Message.EqualTo ("Precondition failed: array.Length != 0")
+#else
+                    }, Throws.TypeOf<ArgumentEmptyException> ().And.Message.EqualTo ("Precondition failed.")
+#endif
                 );
             }
 
@@ -132,7 +140,11 @@ namespace DD.Collections.ICodeSet.CodeSetMaskTest {
                 Assert.That (
                     delegate {
                         var x = CodeSetMask.From (arg, 0, Code.MaxValue, 2);
+#if DEBUG
                     }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: ((Code.MaxValue >> 5) + 1) >= array.Length")
+#else
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed.")
+#endif
                 );
             }
 
@@ -142,7 +154,11 @@ namespace DD.Collections.ICodeSet.CodeSetMaskTest {
                 Assert.That (
                     delegate {
                         CodeSetMask.From (arg, 1, 10, 5);
+#if DEBUG
                     }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: (array[0] & 1) != 0")
+#else
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed.")
+#endif
                 );
             }
 
@@ -152,7 +168,11 @@ namespace DD.Collections.ICodeSet.CodeSetMaskTest {
                 Assert.That (
                     delegate {
                         CodeSetMask.From (arg, 1, 10, 5);
+#if DEBUG
                     }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: (array[0] & 1) != 0")
+#else
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed.")
+#endif
                 );
             }
 
@@ -162,7 +182,11 @@ namespace DD.Collections.ICodeSet.CodeSetMaskTest {
                 Assert.That (
                     delegate {
                         CodeSetMask.From (arg, 0, 10, 2);
+#if DEBUG
                     }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: array[array.Length - 1] != 0")
+#else
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed.")
+#endif
                 );
             }
 
@@ -177,22 +201,38 @@ namespace DD.Collections.ICodeSet.CodeSetMaskTest {
                 Assert.That (
                     delegate {
                         CodeSetMask.From (arg, Code.MinValue - 1, 0, 1);
+#if DEBUG
                     }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: start.HasCodeValue()")
+#else
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed.")
+#endif
                 );
                 Assert.That (
                     delegate {
                         CodeSetMask.From (arg, Code.MaxValue + 1, 0, 1);
+#if DEBUG
                     }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: start.HasCodeValue()")
+#else
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed.")
+#endif
                 );
                 Assert.That (
                     delegate {
                         CodeSetMask.From (arg, int.MinValue, 0, 1);
+#if DEBUG
                     }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: start.HasCodeValue()")
+#else
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed.")
+#endif
                 );
                 Assert.That (
                     delegate {
                         CodeSetMask.From (arg, int.MaxValue, 0, 1);
+#if DEBUG
                     }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: start.HasCodeValue()")
+#else
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed.")
+#endif
                 );
             }
 
@@ -207,22 +247,38 @@ namespace DD.Collections.ICodeSet.CodeSetMaskTest {
                 Assert.That (
                     delegate {
                         CodeSetMask.From (arg, 0, Code.MinValue - 1, 1);
+#if DEBUG
                     }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: final.HasCodeValue()")
+#else
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed.")
+#endif
                 );
                 Assert.That (
                     delegate {
                         CodeSetMask.From (arg, 0, Code.MaxValue + 1, 1);
+#if DEBUG
                     }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: final.HasCodeValue()")
+#else
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed.")
+#endif
                 );
                 Assert.That (
                     delegate {
                         CodeSetMask.From (arg, 0, int.MinValue, 1);
+#if DEBUG
                     }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: final.HasCodeValue()")
+#else
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed.")
+#endif
                 );
                 Assert.That (
                     delegate {
                         CodeSetMask.From (arg, 0, int.MaxValue, 1);
+#if DEBUG
                     }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: final.HasCodeValue()")
+#else
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed.")
+#endif
                 );
             }
 
@@ -234,7 +290,11 @@ namespace DD.Collections.ICodeSet.CodeSetMaskTest {
                 Assert.That (
                     delegate {
                         CodeSetMask.From (arg, 1114111, 1114110, 33);
+#if DEBUG
                     }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: start <= final")
+#else
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed.")
+#endif
                 );
             }
 
@@ -244,12 +304,20 @@ namespace DD.Collections.ICodeSet.CodeSetMaskTest {
                 Assert.That (
                     delegate {
                         CodeSetMask.From (arg, 0, 0, 0);
+#if DEBUG
                     }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: count > 0")
+#else
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed.")
+#endif
                 );
                 Assert.That (
                     delegate {
                         CodeSetMask.From (arg, 0, 0, 2);
+#if DEBUG
                     }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: count <= (final - start + 1)")
+#else
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed.")
+#endif
                 );
             }
 
@@ -266,14 +334,22 @@ namespace DD.Collections.ICodeSet.CodeSetMaskTest {
                 Assert.That (
                     delegate {
                         CodeSetMask.From (arg, 1, Code.MaxValue, 33); // 1114112
+#if DEBUG
                     }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: final == array.IsCompactLast () + start")
+#else
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed.")
+#endif
                 );
 
                 arg = new int[] { 9 };
                 Assert.That (
                     delegate {
                         CodeSetMask.From (arg, Code.MaxValue - 1, Code.MaxValue, 2);
+#if DEBUG
                     }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: final == array.IsCompactLast () + start")
+#else
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed.")
+#endif
                 );
             }
 
@@ -285,7 +361,11 @@ namespace DD.Collections.ICodeSet.CodeSetMaskTest {
                 Assert.That (
                     delegate {
                         CodeSetMask.From (arg, 0, Code.MaxValue, 2);
+#if DEBUG
                     }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: final == array.IsCompactLast () + start")
+#else
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed.")
+#endif
                 );
             }
 
@@ -302,7 +382,11 @@ namespace DD.Collections.ICodeSet.CodeSetMaskTest {
                 Assert.That (
                     delegate {
                         CodeSetMask.From (arg, 0, 1114111, 34);
+#if DEBUG
                     }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed: count == BitSetArray.CountOnBits(array)")
+#else
+                    }, Throws.TypeOf<ArgumentException> ().And.Message.EqualTo ("Precondition failed.")
+#endif
                 );
             }
 

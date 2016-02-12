@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace DD.Collections.ICodeSet
 {
-	internal struct CompactBitMask
+	public struct CompactBitMask
 	{
 		/// <summary>
 		/// Int32 Bit Mask Array

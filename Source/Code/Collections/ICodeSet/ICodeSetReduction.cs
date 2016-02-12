@@ -154,12 +154,12 @@ namespace DD.Collections.ICodeSet {
 
                 Contract.Assume (complement.Count != 0);
 
-                var notSet = complement.ReducePartOne (offset);
-                if (notSet.IsNot (null)) {
+                var complementSet = complement.ReducePartOne (offset);
+                if (complementSet.IsNot (null)) {
                     // if reduced to Code/Pair/Full/List/Mask, return DiffSet
                     retSet = CodeSetDiff.From (
                         CodeSetFull.From ((int)self.First + offset, (int)self.Last + offset),
-                        notSet);
+                        complementSet);
                 }
                 else {
                     // not reduced, check size

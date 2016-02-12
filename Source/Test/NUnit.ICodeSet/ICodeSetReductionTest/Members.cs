@@ -39,7 +39,7 @@ namespace DD.Collections.ICodeSet.ICodeSetReductionTest {
         public void Reduce_ICodeSet (Tuple<BitSetArray, Type> tuple) {
             ICodeSet input = null;
             if (!tuple.Item1.IsNullOrEmpty ()) {
-                input = QuickWrap.From (tuple.Item1);
+                input = QuickWrap.Safe (tuple.Item1);
             }
             Type type = tuple.Item2;
             ICodeSet result = input.Reduce ();

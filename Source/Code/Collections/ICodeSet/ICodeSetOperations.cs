@@ -163,12 +163,7 @@ namespace DD.Collections.ICodeSet {
             if (self.Is (null) || ((self.Length - self.Count) == 0))
                 return NoBits;
 
-            var complement = BitSetArray.Size (self.Last);
-            for (int item = self.First + 1; item < self.Last; item++) {
-                if (!self[item]) {
-                    complement._Set (item);
-                }
-            }
+            var complement = self.ToBitSetArray().NotSpan();
             Contract.Assume (complement.Count != 0);
             return complement;
         }

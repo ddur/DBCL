@@ -86,13 +86,13 @@ namespace DD.Collections.ICodeSet {
         /// <remarks>Efficiently creates CodeSetMask on Release build (without contracts)</remarks>
         /// <param name="mask"></param>
         /// <returns>CodeSetMask</returns>
-        internal static CodeSetMask From (CompactBitMask mask) {
+        public static CodeSetMask From (CompactBitMask mask) {
             Contract.Requires<ArgumentNullException>(!mask.Is(null), "Argument is null");
 
             return new CodeSetMask (mask.Masks.ToArray(), mask.Start, mask.Final, mask.Count);
         }
         /// <summary>
-        /// For internal use only (Text.UniCode.Category.generated.cs)
+        /// Creates CodeSetMask from generated code (Text.UniCode.Category.generated.cs)
         /// </summary>
         /// <remarks>Efficiently creates CodeSetMask on Release build (without contracts)</remarks>
         /// <remarks>Attn: Uses array reference (no local copy) and does not check&count bits</remarks>
@@ -101,7 +101,7 @@ namespace DD.Collections.ICodeSet {
         /// <param name="final"></param>
         /// <param name="count"></param>
         /// <returns>CodeSetMask</returns>
-        internal static CodeSetMask From (int[] array, int start, int final, int count) {
+        public static CodeSetMask From (int[] array, int start, int final, int count) {
             Contract.Requires<ArgumentNullException>(array.IsNot(null));
             Contract.Requires<ArgumentEmptyException> (array.Length != 0);
 

@@ -30,7 +30,7 @@ namespace DD.Collections.ICodeSet.ICodeSetOperationsTest {
                 Assert.True (bitsA.Last < a.Last);
                 Assert.AreEqual (bitsA.Count + iCodeSetA.Count, iCodeSetA.Length);
 
-                iCodeSetA = QuickWrap.From (bitsA);
+                iCodeSetA = QuickWrap.Safe (bitsA);
                 Assert.False (bitsA.SequenceEqual (iCodeSetA.BitComplement ()));
 
                 bitsA.Or (a);
@@ -45,7 +45,7 @@ namespace DD.Collections.ICodeSet.ICodeSetOperationsTest {
                 Assert.True (bitsB.Last < b.Last);
                 Assert.AreEqual (bitsB.Count + iCodeSetB.Count, iCodeSetB.Length);
 
-                iCodeSetB = QuickWrap.From (bitsB);
+                iCodeSetB = QuickWrap.Safe (bitsB);
                 Assert.False (bitsB.SequenceEqual (iCodeSetB.BitComplement ()));
 
                 bitsB.Or (b);

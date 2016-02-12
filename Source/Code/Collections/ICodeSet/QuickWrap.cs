@@ -20,7 +20,17 @@ namespace DD.Collections.ICodeSet
 
         #region Ctor
 
-        public static QuickWrap From(BitSetArray bits) {
+        public static QuickWrap Safe (BitSetArray bits) {
+            Contract.Requires<ArgumentNullException> (bits.IsNot (null));
+            Contract.Requires<ArgumentException> (bits.Count != 0);
+            Contract.Requires<ArgumentException> ((int)bits.Last <= Code.MaxValue);
+
+            Contract.Ensures (Theory.Construct (bits, Contract.Result<QuickWrap>(), true));
+
+            return new QuickWrap (BitSetArray.Copy (bits));
+        }
+
+        public static QuickWrap From (BitSetArray bits) {
             Contract.Requires<ArgumentNullException> (bits.IsNot (null));
             Contract.Requires<ArgumentException> (bits.Count != 0);
             Contract.Requires<ArgumentException> ((int)bits.Last <= Code.MaxValue);
@@ -158,7 +168,7 @@ namespace DD.Collections.ICodeSet
         private static class Theory {
 
             [Pure]
-            public static bool Construct (BitSetArray bits, QuickWrap self) {
+            public static bool Construct (BitSetArray bits, QuickWrap self, bool safe = false) {
                 Success success = true;
 
                 success.Assert (!bits.IsNull ());
@@ -171,7 +181,11 @@ namespace DD.Collections.ICodeSet
                 success.Assert (self.sorted.First.HasCodeValue ());
                 success.Assert (self.sorted.Last.HasCodeValue ());
 
-                success.Assert (self.sorted.Is (bits));
+                if (safe) {
+                    success.Assert (!self.sorted.Is (bits));
+                } else {
+                    success.Assert (self.sorted.Is (bits));
+                }
 
                 return success;
             }
