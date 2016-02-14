@@ -70,8 +70,8 @@ namespace DD.Collections {
                 }
                 this.ClearTail ();
                 this.count = this.range;
-                this.SetCacheFirst (0);
-                this.SetCacheLast (this.range - 1);
+                this.setCacheFirst (0);
+                this.setCacheLast (this.range - 1);
             }
         }
 
@@ -858,12 +858,10 @@ namespace DD.Collections {
         [NonSerialized]
         private int? finalMemoize = null;
 
-#if DEBUG // enable read-only access to test private members state
-        internal int? StartVersion { get { return startVersion; } }
-        internal int? StartMemoize { get { return startMemoize; } }
-        internal int? FinalVersion { get { return finalVersion; } }
-        internal int? FinalMemoize { get { return finalMemoize; } }
-#endif
+        internal int? CachedFirstItem_Version { get { return startVersion; } }
+        internal int? CachedFirstItem_Value { get { return startMemoize; } }
+        internal int? CachedLastItem_Version { get { return finalVersion; } }
+        internal int? CachedLastItem_Value { get { return finalMemoize; } }
 
         #endregion
 
@@ -905,25 +903,22 @@ namespace DD.Collections {
         [Pure]
         public static BitSetArray From (IEnumerable<int> items) {
             Contract.Requires<ArgumentNullException> (items.IsNot (null));
-            Contract.Requires<IndexOutOfRangeException> (ValidMembers (items));
+            Contract.Requires<ArgumentEmptyException> (!items.IsEmpty ());
 
             Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
             Contract.Ensures (Theory.From (Contract.Result<BitSetArray> (), items));
 
-            BitSetArray retValue;
-            if (items.IsEmpty ()) {
-                retValue = new BitSetArray ();
+            int minValue = int.MaxValue;
+            int maxValue = int.MinValue;
+            foreach (int item in items) {
+                if (item < minValue) minValue = item;
+                if (item > maxValue) maxValue = item;
             }
-            else {
-                int maxValue = int.MinValue;
-                foreach (int item in items) {
-                    if (item > maxValue)
-                        maxValue = item;
-                }
-                Contract.Assert (maxValue != int.MinValue);
-                retValue = new BitSetArray (maxValue + 1);
-                retValue._InitItems (items);
-            }
+            if (minValue < 0) { throw new IndexOutOfRangeException(); }
+            if (maxValue == int.MinValue) { throw new IndexOutOfRangeException(); }
+
+            var retValue = new BitSetArray (maxValue + 1);
+            retValue._InitItems (items);
             return retValue;
         }
 
@@ -2596,19 +2591,25 @@ namespace DD.Collections {
         /// <summary>Add IEnumerable&lt;int&gt; of valid items
         /// Throws <exception cref="System.IndexOutOfRangeException"/> if item &lt; 0 || item == int.MaxValue
         /// <remarks>
-        /// <para>ICollection.Add return value is void, so only way to return error to caller is exception.</para>
         /// </remarks>
         /// </summary>
         /// <param name="items"></param>
-        public int Add (IEnumerable<int> items) {
-            Contract.Requires<ArgumentNullException> (items.IsNot (null));
-            Contract.Requires<IndexOutOfRangeException> (ValidMembers (items));
-            // TODO Contract.Ensures (Theory.ICollectionAdd (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), items, this));
+        /// <returns>Number of members added.</returns>
+        public int AddMembers (IEnumerable<int> items) {
+            // TODO? Contract.Ensures (Theory.ICollectionAdd (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), items, this));
 
-            if (items.IsEmpty()) { return 0; }
+            if (items.IsNullOrEmpty()) { return 0; }
+            int start = int.MaxValue;
             int final = int.MinValue;
             foreach (var item in items) {
+                if (item < start) { start = item; }
                 if (item > final) { final = item; }
+            }
+            if (start < 0) {
+                throw new IndexOutOfRangeException();
+            }
+            if (final == int.MaxValue) {
+                throw new IndexOutOfRangeException();
             }
             if (final >= this.range) {
                 this.Length = final + 1;
@@ -2621,8 +2622,8 @@ namespace DD.Collections {
         /// </summary>
         /// <param name="items">int</param>
         /// <returns>Number of items removed.</returns>
-        public int Remove (IEnumerable<int> items) {
-            // TODO Contract.Ensures (Theory.Remove (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), item, this, Contract.Result<bool> ()));
+        public int RemoveMembers (IEnumerable<int> items) {
+            // TODO? Contract.Ensures (Theory.Remove (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), item, this, Contract.Result<bool> ()));
             return items.IsNullOrEmpty() ? 0 : this._Set(items, false);
         }
 
@@ -2682,7 +2683,8 @@ namespace DD.Collections {
                         // flip bit value
                         array[item >> log2of64] ^= 1L << (item & mask0x3F);
     
-                        var last_version = this.version;
+                        var oldVersion = this.version;
+                        var oldCount = this.count;
                         isChanged = true;
                         this.AddVersion ();
     
@@ -2694,47 +2696,8 @@ namespace DD.Collections {
                             Contract.Assert (this.count > 0);
                             --this.count;
                         }
-                        if (this.count == 1) {
-                            this.SetCacheFirst (item);
-                            this.SetCacheLast (item);
-                        }
-                        else {
-                            if (value) {
-                                if (this.startVersion == last_version) {
-                                    // cache has not expired
-                                    if (this.startMemoize != null && item < (int)this.startMemoize) {
-                                        // new start item set, update cache
-                                        this.startMemoize = item;
-                                    }
-                                    this.startVersion = this.version;
-                                }
-                                if (this.finalVersion == last_version) {
-                                    // cache has not expired
-                                    if (this.finalMemoize != null && item > (int)this.finalMemoize) {
-                                        // new final item set, update cache
-                                        this.finalMemoize = item;
-                                    }
-                                    this.finalVersion = this.version;
-                                }
-                            }
-                            else {
-                                if (this.startVersion == last_version) {
-                                    // cache has not expired
-                                    if (this.startMemoize != null && item != (int)this.startMemoize) {
-                                        // start item is not cleared, cache is alive
-                                        this.startVersion = this.version;
-                                    }
-                                }
-                                if (this.finalVersion == last_version) {
-                                    // cache has not expired
-                                    if (this.finalMemoize != null && item != (int)this.finalMemoize) {
-                                        // final item is not cleared, cache is alive
-                                        this.finalVersion = this.version;
-                                    }
-                                }
-                            }
-                        }
-                        Contract.Assert (this[item] == value);
+                        Contract.Assert (_Get(item) == value);
+                        updateCache (oldVersion, oldCount, item, item, value);
                     }
                 }
             }
@@ -2767,13 +2730,13 @@ namespace DD.Collections {
 
                 value = value.Bool ();
                 int counter = 0;
-                long start = long.MaxValue;
-                long final = long.MinValue;
+                long newStart = long.MaxValue;
+                long newFinal = long.MinValue;
 
                 foreach (var item in items) {
                     if (this.InRange (item)) {
-                        if (item < start) { start = item; }
-                        final = item;
+                        if (item < newStart) { newStart = item; }
+                        newFinal = item;
                         if (((array[item >> log2of64] & 1L << (item & mask0x3F)) != 0) == value) {
                             // no change
                         }
@@ -2785,7 +2748,8 @@ namespace DD.Collections {
                     }
                 }
                 if (counter != 0) {
-                    var last_version = this.version;
+                    var oldVersion = this.version;
+                    var oldCount = this.count;
                     this.AddVersion ();
                     if (value) {
                         this.count += counter;
@@ -2793,48 +2757,7 @@ namespace DD.Collections {
                         this.count -= counter;
                     }
                     Contract.Assert (this.count >= 0 && this.count <= this.range);
-
-                    // TODO: Test cache
-                    if (this.count == 1) {
-                        this.SetCacheFirst ((int)start);
-                        this.SetCacheLast ((int)final);
-                    }
-                    else {
-                        if (value) {
-                            if (this.startVersion == last_version) {
-                                // start cache has not expired
-                                if (this.startMemoize != null && start < (int)this.startMemoize) {
-                                    // new start item set, update cache
-                                    this.startMemoize = (int)start;
-                                }
-                                this.startVersion = this.version;
-                            }
-                            if (this.finalVersion == last_version) {
-                                // final cache has not expired
-                                if (this.finalMemoize != null && final > (int)this.finalMemoize) {
-                                    // new final item set, update cache
-                                    this.finalMemoize = (int)final;
-                                }
-                                this.finalVersion = this.version;
-                            }
-                        }
-                        else {
-                            if (this.startVersion == last_version) {
-                                // start cache has not expired
-                                if (this.startMemoize != null && _Get((int)this.startMemoize)) {
-                                    // start item is not cleared, cache is alive
-                                    this.startVersion = this.version;
-                                }
-                            }
-                            if (this.finalVersion == last_version) {
-                                // final cache has not expired
-                                if (this.finalMemoize != null && _Get((int)this.finalMemoize)) {
-                                    // final item is not cleared, cache is alive
-                                    this.finalVersion = this.version;
-                                }
-                            }
-                        }
-                    }
+                    updateCache (oldVersion, oldCount, (int)newStart, (int)newFinal, value);
                 }
                 return counter;
             }
@@ -2858,26 +2781,26 @@ namespace DD.Collections {
         /// <summary>
         /// Set/Clear Range of items where this.InRange (item);
         /// </summary>
-        /// <param name="start"></param>
-        /// <param name="final"></param>
+        /// <param name="rangeStart"></param>
+        /// <param name="rangeFinal"></param>
         /// <param name="value"></param>
         /// <returns>true if changed</returns>
-        internal int _Set (int start, int final, bool value = true) {
+        internal int _Set (int rangeStart, int rangeFinal, bool value = true) {
             // TODO: Contract.Ensures (Theory.Set (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), item, value, this));
             // TODO: implement fast set/clear of array data when range index is larger than 2
 
             lock (SyncRoot) {
 
-                if (start > final) { return 0;}
+                if (rangeStart > rangeFinal) { return 0;}
 
-                if (start < 0) { start = 0; }
-                if (final >= this.range) { final = this.range - 1; }
+                if (rangeStart < 0) { rangeStart = 0; }
+                if (rangeFinal >= this.range) { rangeFinal = this.range - 1; }
 
                 value = value.Bool ();
                 int counter = 0;
-                var item = start;
+                var item = rangeStart;
 
-                for (; item <= final; item++) {
+                for (; item <= rangeFinal; item++) {
                     if (((array[item >> log2of64] & 1L << (item & mask0x3F)) != 0) == value) {
                         // no change
                     }
@@ -2888,7 +2811,8 @@ namespace DD.Collections {
                     }
                 }
                 if (counter != 0) {
-                    var last_version = this.version;
+                    var oldVersion = this.version;
+                    var oldCount = this.count;
                     this.AddVersion ();
                     if (value) {
                         this.count += counter;
@@ -2896,61 +2820,63 @@ namespace DD.Collections {
                         this.count -= counter;
                     }
                     Contract.Assert (this.count >= 0 && this.count <= this.range);
-
-                    // TODO: Test cache
-                    if (this.count == 1) {
-                        this.SetCacheFirst (item);
-                        this.SetCacheLast (item);
-                    }
-                    else {
-                        if (value) {
-                            if (this.startVersion == last_version) {
-                                // start cache has not expired
-                                if (this.startMemoize != null && start < (int)this.startMemoize) {
-                                    // new start item set, update cache
-                                    this.startMemoize = start;
-                                }
-                                this.startVersion = this.version;
-                            }
-                            if (this.finalVersion == last_version) {
-                                // final cache has not expired
-                                if (this.finalMemoize != null && final > (int)this.finalMemoize) {
-                                    // new final item set, update cache
-                                    this.finalMemoize = final;
-                                }
-                                this.finalVersion = this.version;
-                            }
-                        }
-                        else {
-                            if (this.startVersion == last_version) {
-                                // start cache has not expired
-                                if (this.startMemoize != null && !((int)this.startMemoize).InRange(start, final)) {
-                                    // start item is not cleared, cache is alive
-                                    this.startVersion = this.version;
-                                }
-                            }
-                            if (this.finalVersion == last_version) {
-                                // final cache has not expired
-                                if (this.finalMemoize != null && !((int)this.finalMemoize).InRange(start, final)) {
-                                    // final item is not cleared, cache is alive
-                                    this.finalVersion = this.version;
-                                }
-                            }
-                        }
-                    }
+                    updateCache (oldVersion, oldCount, rangeStart, rangeFinal, value);
                 }
                 return counter;
             }
         }
 
-#if DEBUG
+        private void updateCache (int oldVersion, int oldCount, int newStart, int newFinal, bool newValue) {
 
-        internal
+            if (oldCount == 0) {
+                // set was empty, accept new values
+                Contract.Assert (this.count != 0);
+                this.setCacheFirst ((int)newStart);
+                this.setCacheLast ((int)newFinal);
+            }
+            else {
+                if (newValue) {
+                    if (this.startVersion == oldVersion) {
+                        // start cache has not expired
+                        Contract.Assume (this.startMemoize != null);
+                        if (newStart < (int)this.startMemoize) {
+                            // new start item set -> update cache
+                            this.startMemoize = newStart;
+                        }
+                        this.startVersion = this.version;
+                    }
+                    if (this.finalVersion == oldVersion) {
+                        // final cache has not expired
+                        Contract.Assume (this.finalMemoize != null);
+                        if (newFinal > (int)this.finalMemoize) {
+                            // new final item set -> update cache
+                            this.finalMemoize = (int)newFinal;
+                        }
+                        this.finalVersion = this.version;
+                    }
+                }
+                else {
+                    if (this.startVersion == oldVersion) {
+                        // start cache has not expired
+                        Contract.Assume (this.startMemoize != null);
+                        if (_Get((int)this.startMemoize)) {
+                            // start item is not cleared, cache is alive
+                            this.startVersion = this.version;
+                        }
+                    }
+                    if (this.finalVersion == oldVersion) {
+                        // final cache has not expired
+                        Contract.Assume (this.finalMemoize != null);
+                        if (_Get((int)this.finalMemoize)) {
+                            // final item is not cleared, cache is alive
+                            this.finalVersion = this.version;
+                        }
+                    }
+                }
+            }
+        }
 
-#else
-        private
-#endif
- void _InitItems (IEnumerable<int> items) {
+        internal void _InitItems (IEnumerable<int> items) {
             Contract.Requires<InvalidOperationException> (this.Length != 0);
             Contract.Requires<InvalidOperationException> (this.Count == 0);
             Contract.Requires<ArgumentNullException> (items.IsNot (null));
@@ -2982,8 +2908,8 @@ namespace DD.Collections {
                         }
                     }
                 }
-                this.SetCacheFirst (minValue);
-                this.SetCacheLast (maxValue);
+                this.setCacheFirst (minValue);
+                this.setCacheLast (maxValue);
                 Contract.Assume (this.Count > 0);
             }
         }
@@ -3009,8 +2935,8 @@ namespace DD.Collections {
                                     this.array[i] = -1L;
                             }
                             this.ClearTail ();
-                            this.SetCacheFirst (0);
-                            this.SetCacheLast (this.range - 1);
+                            this.setCacheFirst (0);
+                            this.setCacheLast (this.range - 1);
                         }
                     }
                     else {
@@ -3018,6 +2944,7 @@ namespace DD.Collections {
                             this.AddVersion ();
                             this.count = 0;
                             for (int i = 0; i < rangeLength; i++) {
+                                // disable once RedundantCheckBeforeAssignment
                                 if (this.array[i] != 0)
                                     this.array[i] = 0;
                             }
@@ -3976,7 +3903,7 @@ namespace DD.Collections {
             }
         }
 
-        private void SetCacheFirst (int value) {
+        private void setCacheFirst (int value) {
             Contract.Requires<InvalidOperationException> (this.Length != 0);
             Contract.Requires<ArgumentException> (this.InRange (value));
 
@@ -4018,7 +3945,7 @@ namespace DD.Collections {
         ///
         /// </summary>
         /// <param name="value"></param>
-        private void SetCacheLast (int value) {
+        private void setCacheLast (int value) {
             Contract.Requires<InvalidOperationException> (this.Length != 0);
             Contract.Requires<ArgumentException> (this.InRange (value));
 

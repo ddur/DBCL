@@ -70,10 +70,7 @@ namespace DD.Collections.ICodeSet {
             if (self.Count <= Service.ListMaxCount) {
                 Contract.Assert (self.Count > Service.PairCount);
 
-                // only if spans wider than ICodeSetService.MaskMaxSpan?
-                // if (self.Span() > ICodeSetService.MaskMaxSpan) {
                 return CodeSetList.From (self.ToCodes (offset));
-                //}
             }
 
             #endregion

@@ -39,7 +39,7 @@ namespace DD.Collections.ICodeSet {
         /// <param name="self">IEnumerable&lt;int&gt;</param>
         /// <param name="offset">int</param>
         /// <returns>IEnumerable&lt;Code&gt;</returns>
-        public static IEnumerable<Code> ToCodes (this IEnumerable<int> self, int offset) {
+        public static IEnumerable<Code> ToCodes (this IEnumerable<int> self, int offset = 0) {
             Contract.Requires<ArgumentNullException> (self.IsNot (null));
             Contract.Requires<ArgumentException> (Contract.ForAll (self, x => (x + offset).HasCodeValue ()));
             Contract.Ensures (Contract.Result<IEnumerable<Code>> ().IsNot (null));
@@ -48,12 +48,9 @@ namespace DD.Collections.ICodeSet {
                 foreach (var code in self) {
                     yield return (Code)code;
                 }
-            }
-            else {
-                int shifted;
+            } else {
                 foreach (var code in self) {
-                    shifted = code + offset;
-                    yield return (Code)shifted;
+                    yield return (Code)(code + offset);
                 }
             }
         }

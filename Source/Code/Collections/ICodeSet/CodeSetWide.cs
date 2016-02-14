@@ -75,8 +75,8 @@ namespace DD.Collections.ICodeSet {
                 }
             }
             Contract.Assume (start <= final);
-            this.createPlanes (ref this.startPlane, ref this.finalPlane, ref this.planes);
-            this.computePlanes (codes);
+            this.createPlaneSets (ref this.startPlane, ref this.finalPlane, ref this.planes);
+            this.populatePlaneBits (codes);
             if (iCodeSet.IsNot (null)) {
                 this.count = iCodeSet.Count;
             } else {
@@ -101,11 +101,11 @@ namespace DD.Collections.ICodeSet {
             this.final = (Code)((int)bits.Last + offset);
             this.count += bits.Count;
 
-            this.createPlanes (ref this.startPlane, ref this.finalPlane, ref this.planes);
-            this.computePlanes (bits, offset);
+            this.createPlaneSets (ref this.startPlane, ref this.finalPlane, ref this.planes);
+            this.populatePlaneBits (bits, offset);
         }
 
-        private BitSetArray[] createEmptyBitPlanes () {
+        private BitSetArray[] createPlaneBits () {
             var bitPlanes = new BitSetArray[this.planes.Length];
             for (int i = 0; i < this.planes.Length; i++) {
                 bitPlanes[i] = BitSetArray.Size (char.MaxValue + 1);
@@ -113,29 +113,29 @@ namespace DD.Collections.ICodeSet {
             return bitPlanes;
         }
 
-        private void createPlanes (ref int thisStartPlane, ref int thisFinalPlane, ref ICodeSet[] thisPlanes) {
+        private void createPlaneSets (ref int thisStartPlane, ref int thisFinalPlane, ref ICodeSet[] thisPlanes) {
             thisStartPlane = this.start.UnicodePlane ();
             thisFinalPlane = this.final.UnicodePlane ();
             thisPlanes = new ICodeSet[1 + thisFinalPlane - thisStartPlane];
         }
 
-        private void computePlanes (IEnumerable<int> bits, int offset) {
-            var bitPlanes = createEmptyBitPlanes ();
+        private void populatePlaneBits (IEnumerable<int> bits, int offset) {
+            var bitPlanes = createPlaneBits ();
             foreach (var item in bits) {
                 bitPlanes[(item >> 16) - this.startPlane]._Set (item & 0xFFFF);
             }
-            createPlaneSets (bitPlanes, offset);
+            populatePlaneSets (bitPlanes, offset);
         }
 
-        private void computePlanes (IEnumerable<Code> codes) {
-            var bitPlanes = createEmptyBitPlanes ();
+        private void populatePlaneBits (IEnumerable<Code> codes) {
+            var bitPlanes = createPlaneBits ();
             foreach (Code code in codes) {
                 bitPlanes[code.UnicodePlane () - this.startPlane]._Set (code & 0xFFFF);
             }
-            createPlaneSets (bitPlanes);
+            populatePlaneSets (bitPlanes);
         }
 
-        private void createPlaneSets (BitSetArray[] bitPlanes, int offset = 0) {
+        private void populatePlaneSets (BitSetArray[] bitPlanes, int offset = 0) {
             int index = 0;
             foreach (var bitPlane in bitPlanes) {
                 this.planes[index] = bitPlane.Reduce (offset + ((index + startPlane) << 16));

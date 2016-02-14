@@ -18,8 +18,28 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
             var arg = ((IEnumerable<int>)null);
             Assert.Throws<ArgumentNullException> (
                 delegate {
+                    arg.ToCodes ();
+                }
+            );
+            Assert.Throws<ArgumentNullException> (
+                delegate {
                     arg.ToCodes (0);
                 }
+            );
+        }
+
+        [Test]
+        public void WhenArgIEnumerableIsEmpty () {
+            var arg = new int[0];
+            Assert.That (
+                delegate {
+                    arg.ToCodes ();
+                }, Throws.Nothing
+            );
+            Assert.That (
+                delegate {
+                    arg.ToCodes (1000);
+                }, Throws.Nothing
             );
         }
 
@@ -28,7 +48,7 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
             var arg = new int[] { 0, 1, 2, 3 };
             Assert.That (
                 delegate {
-                    arg.ToCodes (0);
+                    arg.ToCodes ();
                 }, Throws.Nothing
             );
             Assert.That (
@@ -43,9 +63,15 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
             var arg = new int[] { int.MinValue, int.MaxValue, 2, 3 };
             Assert.Throws<ArgumentException> (
                 delegate {
-                    arg.ToCodes (0);
+                    arg.ToCodes ();
                 }
             );
+            Assert.Throws<ArgumentException> (
+                delegate {
+                    arg.ToCodes (10);
+                }
+            );
+
 
             arg = new int[] { 0, 1, 2, 3 };
             Assert.Throws<ArgumentException> (
