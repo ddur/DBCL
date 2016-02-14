@@ -37,7 +37,6 @@ namespace UniCodeClassGenerator
             OpenStaticClass ("Category");
 
             bool data = false;
-//            int countDown = 0;
             int countData = 0;
 
             var categoryName = string.Empty;
@@ -155,13 +154,6 @@ namespace UniCodeClassGenerator
                     Console.WriteLine ();
 
                     data = false;
-//                    if (countData == 0) {
-//                        WriteLine (24, "CodeSetNone.Singleton;");
-//                    } else if (countData == 1) {
-//                        WriteLine (";");
-//                    } else {
-//                        WriteLine (");");
-//                    }
                     countData = 0;
                     WriteLine (16,         "}");
                     WriteLine (16,         "return (" + unionCatName + ");");
@@ -186,27 +178,14 @@ namespace UniCodeClassGenerator
                         if (Int32.TryParse (startValue, NumberStyles.HexNumber, null, out startInt)) {
                             if (!string.IsNullOrWhiteSpace (finalValue)
                                 && Int32.TryParse (finalValue, NumberStyles.HexNumber, null, out finalInt)) {
-                                bits._Set (startInt, finalInt);
+                                bits._SetMembersRange (startInt, finalInt);
                             } else {
-                                bits._Set (startInt); 
+                                bits._SetMember (startInt); 
                             }
                         } else {
                             throw new ArgumentException (line);
                         }
                         countData += 1;
-//                        if (countDown == 2) {
-//                            countDown -= 1;
-//                        } else if (countDown == 1){
-//                            countDown -= 1;
-//                            WriteLine (".Union (");
-//                        } else {
-//                            WriteLine (",");
-//                        }
-//                        if (string.IsNullOrWhiteSpace (finalValue)) {
-//                            Write (24, "((Code)0x" + startValue + ")");
-//                        } else {
-//                            Write (24, "((Code)0x" + startValue + ").Range (0x" + finalValue + ")");
-//                        }
                     } else {
                         throw new ArgumentException ("No data match: " + line);
                     }
@@ -224,7 +203,6 @@ namespace UniCodeClassGenerator
                         categoryName = categoryMatch.Groups["name"].Value;
                         propertyName = categoryName.Replace ("_", "");
                         unionCatName = "_" + propertyName.Substring (0, 1).ToLower() + propertyName.Substring (1) + "_";
-//                        countDown = 2;
                         WriteLine ();
                         WriteLine (08, "/// <summary>");
                         WriteLine (08, "/// Derived " +  categoryName.Replace ('_', ' '));

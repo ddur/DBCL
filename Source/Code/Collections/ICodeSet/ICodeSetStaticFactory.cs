@@ -48,7 +48,7 @@ namespace DD.Collections.ICodeSet {
                 return CodeSetNone.Singleton;
             }
             var bits = BitSetArray.Size (Code.MaxCount);
-            bits.Set (func.ToIntCodes());
+            bits._SetMembers (func.ToIntCodes());
             return bits.ToICodeSet();
         }
 

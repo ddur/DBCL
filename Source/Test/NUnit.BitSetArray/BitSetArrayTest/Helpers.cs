@@ -216,21 +216,21 @@ namespace DD.Collections.BitSetArrayTest {
             Assert.AreEqual (test.Version, int.MaxValue);
 
             // increment version by changing bit
-            test.Set (0, true);
+            test.SetMember (0, true);
 
             // confirm version number looped back into int.MinValue
             Assert.AreEqual (test.Version, int.MinValue);
 
             for (int i = 0; i < 10; i++) {
-                test.Set (0, false);
-                test.Set (0, true);
+                test.SetMember (0, false);
+                test.SetMember (0, true);
             }
 
             // confirm version number has correct value
             Assert.AreEqual (test.Version, int.MinValue + 20);
 
             for (int i = 0; i < 10; i++) {
-                test.Set (0, true);
+                test.SetMember (0, true);
             }
 
             // confirm version did not change

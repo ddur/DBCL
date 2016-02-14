@@ -145,7 +145,7 @@ namespace DD.Collections.BitSetArrayTest {
             Assert.That (copy.Last == test.Last);
             Assert.That (copy.IsNot (test));
             copy.Length = 1;
-            copy.Set (0, true);
+            copy.SetMember (0, true);
             Assert.That (copy.Count != test.Count);
             Assert.That (copy.Length != test.Length);
             Assert.That (copy.First != test.First);
@@ -164,7 +164,7 @@ namespace DD.Collections.BitSetArrayTest {
             Assert.That (copy.First == test.First);
             Assert.That (copy.Last == test.Last);
             Assert.That (copy.IsNot (test));
-            copy.Set (0, true);
+            copy.SetMember (0, true);
             Assert.That (copy.Count != test.Count);
             Assert.That (copy.Length != test.Length);
             Assert.That (copy.First != test.First);
@@ -179,12 +179,12 @@ namespace DD.Collections.BitSetArrayTest {
             Assert.That (copy.First == test.First);
             Assert.That (copy.Last == test.Last);
             Assert.That (copy.IsNot (test));
-            copy.Set (0, false);
+            copy.SetMember (0, false);
             Assert.That (copy.Count == test.Count - 1);
             Assert.That (copy.Length == test.Length);
             Assert.That (copy.First == test.First + 1);
             Assert.That (copy.Last == test.Last);
-            copy.Set (copy.Length - 1, false);
+            copy.SetMember (copy.Length - 1, false);
             Assert.That (copy.Last == test.Last - 1);
 
             // copy full to empty space
@@ -238,12 +238,12 @@ namespace DD.Collections.BitSetArrayTest {
             Assert.That (copy.First == test.First);
             Assert.That (copy.Last == test.Last);
 
-            copy.Set (0, false);
+            copy.SetMember (0, false);
             Assert.That (copy.Count == test.Count - 1);
             Assert.That (copy.Length == test.Length);
             Assert.That (copy.First == test.First + 1);
             Assert.That (copy.Last == test.Last);
-            copy.Set ((int)copy.Last, false);
+            copy.SetMember ((int)copy.Last, false);
             Assert.That (copy.Count == test.Count - 2);
             Assert.That (copy.Last == test.Last - 1);
 

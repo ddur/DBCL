@@ -39,7 +39,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{0EAAAA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnit.Text", "Source\Test\NUnit.Text\NUnit.Text.csproj", "{9D761E03-1000-447A-A81C-EC3ABAB21EDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniCodeClassGenerator", "Source\Code\UniCodeClassGenerator\UniCodeClassGenerator\UniCodeClassGenerator.csproj", "{0AC896BC-CBBB-48B9-8704-F6992107B951}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniCodeClassGenerator", "Source\Code\UniCodeClassGenerator\UniCodeClassGenerator.csproj", "{0AC896BC-CBBB-48B9-8704-F6992107B951}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

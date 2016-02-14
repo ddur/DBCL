@@ -137,22 +137,22 @@ namespace DD.Collections.ICodeSet.ICodeSetReductionTest {
             get {
                 // bits -> Diff/Code
                 BitSetArray bits = BitSetArray.From (Enumerable.Range (66000, 5000));
-                bits.Set (67000, false); // one not member
+                bits.SetMember (67000, false); // one not member
                 yield return new Tuple<BitSetArray, Type> (bits, typeof (CodeSetDiff));
 
                 // bits -> Diff/Pair
-                bits.Set (67900, false); // two not members
+                bits.SetMember (67900, false); // two not members
                 yield return new Tuple<BitSetArray, Type> (bits, typeof (CodeSetDiff));
 
                 // bits -> Diff/List
-                bits.Set (67100, false); // three not members (List)
+                bits.SetMember (67100, false); // three not members (List)
                 yield return new Tuple<BitSetArray, Type> (bits, typeof (CodeSetDiff));
-                bits.Set (67500, false); // four not members (List)
+                bits.SetMember (67500, false); // four not members (List)
                 yield return new Tuple<BitSetArray, Type> (bits, typeof (CodeSetDiff));
 
                 // bits -> Diff/Full
                 foreach (var item in Enumerable.Range (67000, 1000)) {
-                    bits.Set (item, false); // range of not members (Full)
+                    bits.SetMember (item, false); // range of not members (Full)
                 }
                 yield return new Tuple<BitSetArray, Type> (bits, typeof (CodeSetDiff));
 
@@ -160,14 +160,14 @@ namespace DD.Collections.ICodeSet.ICodeSetReductionTest {
                 bits = BitSetArray.From (Enumerable.Range (64000, 66000)); // between pages
                 var r = new Random ();
                 for (var i = 0; i < 50; i++) {
-                    bits.Set (r.Next (65300, 65520), false);
+                    bits.SetMember (r.Next (65300, 65520), false);
                 }
                 yield return new Tuple<BitSetArray, Type> (bits, typeof (CodeSetDiff));
 
                 // bits -> Diff/Wide
                 for (var i = 0; i < 50; i++) {
-                    bits.Set (r.Next (65500, 65535), false);
-                    bits.Set (r.Next (65536, 65700), false);
+                    bits.SetMember (r.Next (65500, 65535), false);
+                    bits.SetMember (r.Next (65536, 65700), false);
                 }
                 yield return new Tuple<BitSetArray, Type> (bits, typeof (CodeSetDiff));
             }
@@ -185,12 +185,12 @@ namespace DD.Collections.ICodeSet.ICodeSetReductionTest {
 
                 // bits -> Diff attempt failed -> Wide
                 var bits = BitSetArray.Size (100000);
-                bits.Set(0);
-                bits.Set(90000);
+                bits.SetMember(0);
+                bits.SetMember(90000);
                 var r = new Random ();
                 for (var i = 0; i < 100; i++) {
-                    bits.Set (r.Next (40000, 65535));
-                    bits.Set (r.Next (65536, 90000));
+                    bits.SetMember (r.Next (40000, 65535));
+                    bits.SetMember (r.Next (65536, 90000));
                 }
                 yield return new Tuple<BitSetArray, Type> (bits, typeof (CodeSetWide));
             }

@@ -145,69 +145,69 @@ namespace DD.Collections.BitSetArrayTest {
         }
 
         [Test]
-        public void BitGet () {
+        public void BitGetMember () {
             BitSetArray test = BitSetArray.Mask (new int[] { 1057 }, 11);
             Assert.That (delegate {
-                test.Get (int.MinValue);
+                test.GetMember (int.MinValue);
             }, Throws.Nothing);
-            Assert.That (test.Get (int.MinValue) == false);
+            Assert.That (test.GetMember (int.MinValue) == false);
             Assert.That (delegate {
-                test.Get (-1);
+                test.GetMember (-1);
             }, Throws.Nothing);
-            Assert.That (test.Get (-1) == false);
+            Assert.That (test.GetMember (-1) == false);
 
-            Assert.That (test.Get (0) == true);
-            Assert.That (test.Get (1) == false);
-            Assert.That (test.Get (2) == false);
-            Assert.That (test.Get (3) == false);
-            Assert.That (test.Get (4) == false);
-            Assert.That (test.Get (5) == true);
-            Assert.That (test.Get (6) == false);
-            Assert.That (test.Get (7) == false);
-            Assert.That (test.Get (8) == false);
-            Assert.That (test.Get (9) == false);
-            Assert.That (test.Get (10) == true);
+            Assert.That (test.GetMember (0) == true);
+            Assert.That (test.GetMember (1) == false);
+            Assert.That (test.GetMember (2) == false);
+            Assert.That (test.GetMember (3) == false);
+            Assert.That (test.GetMember (4) == false);
+            Assert.That (test.GetMember (5) == true);
+            Assert.That (test.GetMember (6) == false);
+            Assert.That (test.GetMember (7) == false);
+            Assert.That (test.GetMember (8) == false);
+            Assert.That (test.GetMember (9) == false);
+            Assert.That (test.GetMember (10) == true);
             Assert.That (delegate {
-                test.Get (11);
+                test.GetMember (11);
             }, Throws.Nothing);
-            Assert.That (test.Get (11) == false);
+            Assert.That (test.GetMember (11) == false);
             Assert.That (delegate {
-                test.Get (int.MaxValue);
+                test.GetMember (int.MaxValue);
             }, Throws.Nothing);
-            Assert.That (test.Get (int.MaxValue) == false);
+            Assert.That (test.GetMember (int.MaxValue) == false);
 
             test = BitSetArray.Empty ();
             Assert.That (delegate {
-                test.Get (int.MinValue);
+                test.GetMember (int.MinValue);
             }, Throws.Nothing);
             Assert.That (delegate {
-                test.Get (-1);
+                test.GetMember (-1);
             }, Throws.Nothing);
             Assert.That (delegate {
-                test.Get (0);
+                test.GetMember (0);
             }, Throws.Nothing);
             Assert.That (delegate {
-                test.Get (1);
+                test.GetMember (1);
             }, Throws.Nothing);
             Assert.That (delegate {
-                test.Get (int.MaxValue);
+                test.GetMember (int.MaxValue);
             }, Throws.Nothing);
-            Assert.That (test.Get (int.MinValue) == false);
-            Assert.That (test.Get (-1) == false);
-            Assert.That (test.Get (0) == false);
-            Assert.That (test.Get (1) == false);
-            Assert.That (test.Get (int.MaxValue) == false);
+            Assert.That (test.GetMember (int.MinValue) == false);
+            Assert.That (test.GetMember (-1) == false);
+            Assert.That (test.GetMember (0) == false);
+            Assert.That (test.GetMember (1) == false);
+            Assert.That (test.GetMember (int.MaxValue) == false);
         }
 
         [Test]
-        public void BitSet_Items_Null () {
+        public void BitSetMembers_Null () {
 
             // arrange
             var test = BitSetArray.Size (10);
             int[] items = null;
 
             // act
-            test.Set (items);
+            test.SetMembers (items);
 
             // assert
             Assert.That (test.Count == 0);
@@ -215,21 +215,21 @@ namespace DD.Collections.BitSetArrayTest {
 
 
         [Test]
-        public void BitSet_Items_Empty () {
+        public void BitSetMembers_Empty () {
 
             // arrange
             var test = BitSetArray.Size (10);
             var items = new int[0];;
 
             // act
-            test.Set (items);
+            test.SetMembers (items);
 
             // assert
             Assert.That (test.Count == 0);
         }
 
         [Test]
-        public void BitSet_Items_Valid_FalseTrue () {
+        public void BitSetMembers_FromFalseToTrue () {
 
             // arrange
             var test = BitSetArray.Size (10);
@@ -243,7 +243,7 @@ namespace DD.Collections.BitSetArrayTest {
 
             // act
             var items = new int [] {int.MinValue, -1, 2, 7, 2, 7, int.MaxValue};
-            test.Set (items);
+            test.SetMembers (items);
 
             // assert postconditions
             Assert.That (test.CachedFirstItem_Version == test.Version);
@@ -264,7 +264,7 @@ namespace DD.Collections.BitSetArrayTest {
             Assert.False (test[9]);
 
             // act
-            test.Set (new int[] {4, 6}); // cache valid - no need to update value, update version
+            test.SetMembers (new int[] {4, 6}); // cache valid - no need to update value, update version
 
             // assert postconditions
             Assert.That (test.CachedFirstItem_Version == test.Version);
@@ -285,7 +285,7 @@ namespace DD.Collections.BitSetArrayTest {
             Assert.False (test[9]);
 
             // act
-            test.Set (new int[] {0, 9}); // cache valid - update cache value and version
+            test.SetMembers (new int[] {0, 9}); // cache valid - update cache value and version
 
             // assert postconditions
             Assert.That (test.CachedFirstItem_Version == test.Version);
@@ -306,7 +306,7 @@ namespace DD.Collections.BitSetArrayTest {
             Assert.True (test[9]);
 
             // act
-            test.Set (new int[] {0, 9}, false); // invalidates cache
+            test.SetMembers (new int[] {0, 9}, false); // invalidates cache
 
             // assert postconditions
             Assert.That (test.CachedFirstItem_Version != test.Version);
@@ -327,7 +327,7 @@ namespace DD.Collections.BitSetArrayTest {
             Assert.False (test[9]);
 
             // act
-            test.Set (new int[] {0, 9}); // cache invalidated - does not update cache
+            test.SetMembers (new int[] {0, 9}); // cache invalidated - does not update cache
 
             // assert postconditions
             Assert.That (test.CachedFirstItem_Version != test.Version);
@@ -351,14 +351,14 @@ namespace DD.Collections.BitSetArrayTest {
 
 
         [Test]
-        public void BitSet_Items_Valid_FalseFalse () {
+        public void BitSetMembers_FromFalseToFalse () {
 
             // arrange
             var test = BitSetArray.Size (10);
             var items = new int [] {int.MinValue, -1, 0, 8, 0, 8, int.MaxValue};
 
             // act
-            test.Set (items, false);
+            test.SetMembers (items, false);
 
             // assert
             Assert.That (test.Count == 0);
@@ -371,7 +371,7 @@ namespace DD.Collections.BitSetArrayTest {
         }
 
         [Test]
-        public void BitSet_Items_Valid_TrueFalse () {
+        public void BitSetMembers_FromTrueToFalse () {
 
             // arrange
             var test = BitSetArray.Size (10, true);
@@ -385,7 +385,7 @@ namespace DD.Collections.BitSetArrayTest {
 
             // act
             var items = new int [] {int.MinValue, -1, 2, 7, 2, 7, int.MaxValue};
-            test.Set (items, false);
+            test.SetMembers (items, false);
 
             // assert postconditions
             Assert.That (test.CachedFirstItem_Version == test.Version);
@@ -406,7 +406,7 @@ namespace DD.Collections.BitSetArrayTest {
             Assert.That (test[9]);
 
             // act
-            test.Set (new int[] {4, 6}, false); // cache valid - no need to update value, update version
+            test.SetMembers (new int[] {4, 6}, false); // cache valid - no need to update value, update version
 
             // assert postconditions
             Assert.That (test.CachedFirstItem_Version == test.Version);
@@ -427,7 +427,7 @@ namespace DD.Collections.BitSetArrayTest {
             Assert.That (test[9]);
 
             // act
-            test.Set (new int[] {0, 9}, false); // invalidates cache
+            test.SetMembers (new int[] {0, 9}, false); // invalidates cache
 
             // assert postconditions
             Assert.That (test.CachedFirstItem_Version != test.Version);
@@ -447,7 +447,7 @@ namespace DD.Collections.BitSetArrayTest {
             Assert.That (test[8]);
             Assert.False (test[9]);
 
-            test.Set (new int[] {3, 5}, false); // cache invalidated - does not update cache
+            test.SetMembers (new int[] {3, 5}, false); // cache invalidated - does not update cache
 
             // assert postconditions
             Assert.That (test.CachedFirstItem_Version != test.Version);
@@ -472,7 +472,7 @@ namespace DD.Collections.BitSetArrayTest {
             Assert.That (test.Last == 8);
 
             // act
-            test.Set (new int[] {0, 9}); // cache valid - update cache value and version
+            test.SetMembers (new int[] {0, 9}); // cache valid - update cache value and version
 
             // assert postconditions
             Assert.That (test.CachedFirstItem_Version == test.Version);
@@ -494,14 +494,14 @@ namespace DD.Collections.BitSetArrayTest {
         }
 
         [Test]
-        public void BitSet_Items_Valid_TrueTrue () {
+        public void BitSetMembers_FromTrueToTrue () {
 
             // arrange
             var test = BitSetArray.Size (10, true);
             var items = new int [] {int.MinValue, -1, 0, 8, 0, 8, int.MaxValue};
 
             // act
-            test.Set (items);
+            test.SetMembers (items);
 
             // assert
             Assert.That (test.Count == 10);
@@ -513,11 +513,11 @@ namespace DD.Collections.BitSetArrayTest {
         }
 
         [Test]
-        public void BitSet_Item () {
+        public void BitSetMember () {
 
             var test = BitSetArray.Size (10);
 
-            test.Set (5); // first/last cached
+            test.SetMember (5); // first/last cached
             int expected_version = int.MinValue;
             Assert.AreEqual (expected_version, test.Version);
 
@@ -528,7 +528,7 @@ namespace DD.Collections.BitSetArrayTest {
             Assert.AreEqual (5, test.CachedLastItem_Value);
 
             // update cache.First
-            test.Set (3);
+            test.SetMember (3);
             ++expected_version;
 
             Assert.AreEqual (expected_version, test.Version);
@@ -540,7 +540,7 @@ namespace DD.Collections.BitSetArrayTest {
             Assert.AreEqual (5, test.CachedLastItem_Value);
 
             // update cache.Last
-            test.Set (7);
+            test.SetMember (7);
             ++expected_version;
 
             Assert.AreEqual (expected_version, test.Version);
@@ -552,7 +552,7 @@ namespace DD.Collections.BitSetArrayTest {
             Assert.AreEqual (7, test.CachedLastItem_Value);
 
             // cache is alive (version updated)
-            test.Set (4);
+            test.SetMember (4);
             ++expected_version;
 
             Assert.AreEqual (expected_version, test.Version);
@@ -564,7 +564,7 @@ namespace DD.Collections.BitSetArrayTest {
             Assert.AreEqual (7, test.CachedLastItem_Value);
 
             // invalidate cache.First
-            test.Set (3, false);
+            test.SetMember (3, false);
             ++expected_version;
 
             Assert.AreEqual (expected_version, test.Version);
@@ -576,7 +576,7 @@ namespace DD.Collections.BitSetArrayTest {
             Assert.AreEqual (7, test.CachedLastItem_Value);
 
             // cache.First is invalidated (dead)
-            test.Set (3);
+            test.SetMember (3);
             ++expected_version;
 
             Assert.AreEqual (expected_version, test.Version);
@@ -588,7 +588,7 @@ namespace DD.Collections.BitSetArrayTest {
             Assert.AreEqual (7, test.CachedLastItem_Value);
 
             // cache.First is invalidated (dead)
-            test.Set (3, false);
+            test.SetMember (3, false);
             ++expected_version;
 
             Assert.AreEqual (expected_version, test.Version);
@@ -600,7 +600,7 @@ namespace DD.Collections.BitSetArrayTest {
             Assert.AreEqual (7, test.CachedLastItem_Value);
 
             // invalidate cache.Last
-            test.Set (7, false);
+            test.SetMember (7, false);
             ++expected_version;
 
             // cache.Last is invalidated (dead)
@@ -634,204 +634,204 @@ namespace DD.Collections.BitSetArrayTest {
 
             var reset = new List<int> (test);
             foreach (var item in reset) {
-                test.Set (item, false);
+                test.SetMember (item, false);
             }
             Assert.AreEqual (0, test.Count);
 
         }
 
         [Test]
-        public void BitSet_Random () {
+        public void BitSetMember_Random () {
             var r = new Random ();
             int random_item = 0;
             var test = BitSetArray.Size (1000);
             for (int i = 0; i < 100; i++) {
-                test.Set (r.Next (int.MinValue, int.MaxValue));
-                test.Set (r.Next (int.MinValue, int.MaxValue), false);
+                test.SetMember (r.Next (int.MinValue, int.MaxValue));
+                test.SetMember (r.Next (int.MinValue, int.MaxValue), false);
             }
             for (int i = 0; i < 100; i++) {
                 random_item = r.Next (int.MinValue, int.MaxValue);
-                test.Set (random_item);
-                test.Set (random_item, false);
-                test.Set (random_item);
+                test.SetMember (random_item);
+                test.SetMember (random_item, false);
+                test.SetMember (random_item);
             }
         }
 
         [Test]
-        public void BitSet_Throws () {
+        public void BitSetMember_Throws () {
             BitSetArray test = BitSetArray.From (5, 0, 10);
             Assert.That (delegate {
-                test.Set (int.MinValue, false);
+                test.SetMember (int.MinValue, false);
             }, Throws.Nothing);
             Assert.That (delegate {
-                test.Set (int.MinValue, true);
+                test.SetMember (int.MinValue, true);
             }, Throws.Nothing);
-            Assert.False (test.Set (int.MinValue, false));
-            Assert.False (test.Set (int.MinValue, true));
+            Assert.False (test.SetMember (int.MinValue, false));
+            Assert.False (test.SetMember (int.MinValue, true));
 
             Assert.That (delegate {
-                test.Set (-1, false);
+                test.SetMember (-1, false);
             }, Throws.Nothing);
             Assert.That (delegate {
-                test.Set (-1, true);
+                test.SetMember (-1, true);
             }, Throws.Nothing);
-            Assert.False (test.Set (-1, false));
-            Assert.False (test.Set (-1, true));
+            Assert.False (test.SetMember (-1, false));
+            Assert.False (test.SetMember (-1, true));
 
             Assert.That (delegate {
-                test.Set (0, false);
+                test.SetMember (0, false);
             }, Throws.Nothing);
             Assert.That (delegate {
-                test.Set (1, true);
+                test.SetMember (1, true);
             }, Throws.Nothing);
             Assert.That (delegate {
-                test.Set (2, false);
+                test.SetMember (2, false);
             }, Throws.Nothing);
             Assert.That (delegate {
-                test.Set (3, true);
+                test.SetMember (3, true);
             }, Throws.Nothing);
             Assert.That (delegate {
-                test.Set (4, false);
+                test.SetMember (4, false);
             }, Throws.Nothing);
             Assert.That (delegate {
-                test.Set (5, true);
+                test.SetMember (5, true);
             }, Throws.Nothing);
             Assert.That (delegate {
-                test.Set (6, false);
+                test.SetMember (6, false);
             }, Throws.Nothing);
             Assert.That (delegate {
-                test.Set (7, true);
+                test.SetMember (7, true);
             }, Throws.Nothing);
             Assert.That (delegate {
-                test.Set (8, false);
+                test.SetMember (8, false);
             }, Throws.Nothing);
             Assert.That (delegate {
-                test.Set (9, true);
+                test.SetMember (9, true);
             }, Throws.Nothing);
             Assert.That (delegate {
-                test.Set (10, false);
+                test.SetMember (10, false);
             }, Throws.Nothing);
 
             test = BitSetArray.From (5, 0, 10);
-            Assert.True (test.Set (0, false));
-            Assert.True (test.Set (1, true));
-            Assert.False (test.Set (2, false));
-            Assert.True (test.Set (3, true));
-            Assert.False (test.Set (4, false));
-            Assert.False (test.Set (5, true));
-            Assert.False (test.Set (6, false));
-            Assert.True (test.Set (7, true));
-            Assert.False (test.Set (8, false));
-            Assert.True (test.Set (9, true));
-            Assert.True (test.Set (10, false));
+            Assert.True (test.SetMember (0, false));
+            Assert.True (test.SetMember (1, true));
+            Assert.False (test.SetMember (2, false));
+            Assert.True (test.SetMember (3, true));
+            Assert.False (test.SetMember (4, false));
+            Assert.False (test.SetMember (5, true));
+            Assert.False (test.SetMember (6, false));
+            Assert.True (test.SetMember (7, true));
+            Assert.False (test.SetMember (8, false));
+            Assert.True (test.SetMember (9, true));
+            Assert.True (test.SetMember (10, false));
 
             Assert.That (delegate {
-                test.Set (11, false);
+                test.SetMember (11, false);
             }, Throws.Nothing);
             Assert.That (delegate {
-                test.Set (11, true);
+                test.SetMember (11, true);
             }, Throws.Nothing);
             Assert.That (delegate {
-                test.Set (int.MaxValue, false);
+                test.SetMember (int.MaxValue, false);
             }, Throws.Nothing);
             Assert.That (delegate {
-                test.Set (int.MaxValue, true);
+                test.SetMember (int.MaxValue, true);
             }, Throws.Nothing);
 
             test = BitSetArray.Empty ();
             Assert.That (delegate {
-                test.Set (int.MinValue, true);
+                test.SetMember (int.MinValue, true);
             }, Throws.Nothing);
             Assert.That (delegate {
-                test.Set (-1, true);
+                test.SetMember (-1, true);
             }, Throws.Nothing);
             Assert.That (delegate {
-                test.Set (0, true);
+                test.SetMember (0, true);
             }, Throws.Nothing);
             Assert.That (delegate {
-                test.Set (1, true);
+                test.SetMember (1, true);
             }, Throws.Nothing);
             Assert.That (delegate {
-                test.Set (int.MaxValue, true);
+                test.SetMember (int.MaxValue, true);
             }, Throws.Nothing);
 
-            Assert.False (test.Set (int.MinValue, true));
-            Assert.False (test.Set (-1, true));
-            Assert.False (test.Set (0, true));
-            Assert.False (test.Set (1, true));
-            Assert.False (test.Set (int.MaxValue, true));
+            Assert.False (test.SetMember (int.MinValue, true));
+            Assert.False (test.SetMember (-1, true));
+            Assert.False (test.SetMember (0, true));
+            Assert.False (test.SetMember (1, true));
+            Assert.False (test.SetMember (int.MaxValue, true));
 
             Assert.That (delegate {
-                test.Set (int.MinValue, false);
+                test.SetMember (int.MinValue, false);
             }, Throws.Nothing);
             Assert.That (delegate {
-                test.Set (-1, false);
+                test.SetMember (-1, false);
             }, Throws.Nothing);
             Assert.That (delegate {
-                test.Set (0, false);
+                test.SetMember (0, false);
             }, Throws.Nothing);
             Assert.That (delegate {
-                test.Set (1, false);
+                test.SetMember (1, false);
             }, Throws.Nothing);
             Assert.That (delegate {
-                test.Set (int.MaxValue, false);
+                test.SetMember (int.MaxValue, false);
             }, Throws.Nothing);
 
-            Assert.False (test.Set (int.MinValue, false));
-            Assert.False (test.Set (-1, false));
-            Assert.False (test.Set (0, false));
-            Assert.False (test.Set (1, false));
-            Assert.False (test.Set (int.MaxValue, false));
+            Assert.False (test.SetMember (int.MinValue, false));
+            Assert.False (test.SetMember (-1, false));
+            Assert.False (test.SetMember (0, false));
+            Assert.False (test.SetMember (1, false));
+            Assert.False (test.SetMember (int.MaxValue, false));
         }
 
         [Test]
-        public void Bit_InitItems () {
+        public void BitInitMembers () {
 
 #if DEBUG // In Release build this internal method throws no contract exceptions
             var test = BitSetArray.Size (2);
             Assert.That (delegate {
-                test.initItems (new int[] { 0 }, 0, 0);
+                test._InitMembers (new int[] { 0 }, 0, 0);
             }, Throws.Nothing);
 
             test = BitSetArray.Size (2);
             Assert.That (delegate {
-                test.initItems (new int[] { 0, 1 }, 0, 1);
+                test._InitMembers (new int[] { 0, 1 }, 0, 1);
             }, Throws.Nothing);
 
             test = BitSetArray.Size (2);
             Assert.That (delegate {
-                test.initItems (new int[] { 1 }, 1, 1);
+                test._InitMembers (new int[] { 1 }, 1, 1);
             }, Throws.Nothing);
 
             test = BitSetArray.Size (2);
             Assert.That (delegate {
-                test.initItems (null, 0, 0);
+                test._InitMembers (null, 0, 0);
             }, Throws.TypeOf<ArgumentNullException> ());
             Assert.That (delegate {
-                test.initItems (new int[0], 0, 0);
+                test._InitMembers (new int[0], 0, 0);
             }, Throws.TypeOf<ArgumentEmptyException> ());
             Assert.That (delegate {
-                test.initItems (new int[] { int.MinValue }, 0, 0);
+                test._InitMembers (new int[] { int.MinValue }, 0, 0);
             }, Throws.TypeOf<IndexOutOfRangeException> ());
             Assert.That (delegate {
-                test.initItems (new int[] { -1 }, -1, -1);
+                test._InitMembers (new int[] { -1 }, -1, -1);
             }, Throws.TypeOf<IndexOutOfRangeException> ());
             Assert.That (delegate {
-                test.initItems (new int[] { 2 }, 2, 2);
+                test._InitMembers (new int[] { 2 }, 2, 2);
             }, Throws.TypeOf<IndexOutOfRangeException> ());
             Assert.That (delegate {
-                test.initItems (new int[] { int.MaxValue }, 0, 0);
+                test._InitMembers (new int[] { int.MaxValue }, 0, 0);
             }, Throws.TypeOf<IndexOutOfRangeException> ());
 
             Assert.GreaterOrEqual (5, test.Length);
             Assert.That (delegate {
-                test.initItems (new int[] { 5 }, 5, 5);
+                test._InitMembers (new int[] { 5 }, 5, 5);
             }, Throws.TypeOf<IndexOutOfRangeException> ());
 
-            test.initItems (new int[] { 0 }, 0, 0);
+            test._InitMembers (new int[] { 0 }, 0, 0);
             Assert.AreNotEqual (0, test.Count);
             Assert.That (delegate {
-                test.initItems (new int[] { 0 }, 0, 0);
+                test._InitMembers (new int[] { 0 }, 0, 0);
             }, Throws.TypeOf<InvalidOperationException> ()); // Count != 0
 
 #endif
@@ -859,7 +859,7 @@ namespace DD.Collections.BitSetArrayTest {
             test.SetAll (false);
             Assert.That (test.Count == 0);
 
-            test.Set (0, true);
+            test.SetMember (0, true);
             test.SetAll (false);
             Assert.That (test.Count == 0);
         }

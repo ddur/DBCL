@@ -122,7 +122,7 @@ namespace DD.Collections.ICodeSet {
         private void populatePlaneBits (IEnumerable<int> bits, int offset) {
             var bitPlanes = createPlaneBits ();
             foreach (var item in bits) {
-                bitPlanes[(item >> 16) - this.startPlane]._Set (item & 0xFFFF);
+                bitPlanes[(item >> 16) - this.startPlane]._SetMember (item & 0xFFFF);
             }
             populatePlaneSets (bitPlanes, offset);
         }
@@ -130,7 +130,7 @@ namespace DD.Collections.ICodeSet {
         private void populatePlaneBits (IEnumerable<Code> codes) {
             var bitPlanes = createPlaneBits ();
             foreach (Code code in codes) {
-                bitPlanes[code.UnicodePlane () - this.startPlane]._Set (code & 0xFFFF);
+                bitPlanes[code.UnicodePlane () - this.startPlane]._SetMember (code & 0xFFFF);
             }
             populatePlaneSets (bitPlanes);
         }

@@ -260,7 +260,7 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
                 Assert.That (result is CodeSetFull);
 
                 var bits = BitSetArray.Size (result.Last+1);
-                bits.Set (func.ToIntCodes());
+                bits._SetMembers (func.ToIntCodes());
                 var compare = bits.ToICodeSet();
                 Assert.That (compare.SequenceEqual (result));
             }

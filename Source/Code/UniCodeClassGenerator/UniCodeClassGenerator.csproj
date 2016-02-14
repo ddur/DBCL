@@ -59,10 +59,9 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\DBCL.csproj">
+    <ProjectReference Include="..\DBCL.csproj">
       <Project>{ca42ddc3-d6a2-4a7c-9f5c-e3e8dc0de55e}</Project>
       <Name>DBCL</Name>
-      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

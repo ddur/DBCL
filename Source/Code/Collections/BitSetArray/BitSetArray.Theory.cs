@@ -1116,7 +1116,7 @@ namespace DD.Collections {
             public static bool IndexerGetItemValue (BitSetArray self, int item, bool getValue) {
                 Success success = true;
                 if (item.InRange (0, self.range - 1)) {
-                    success.Assert (getValue == self.Get (item));
+                    success.Assert (getValue == self._GetMember (item));
                 }
                 else {
                     success.Assert (getValue == false);
@@ -1158,7 +1158,7 @@ namespace DD.Collections {
             }
 
             [Pure]
-            public static bool Get (BitSetArray self, int item, bool getValue) {
+            public static bool GetMember (BitSetArray self, int item, bool getValue) {
                 Success success = true;
 
                 if (item.InRange (0, self.range - 1)) {
@@ -1172,7 +1172,7 @@ namespace DD.Collections {
             }
 
             [Pure]
-            public static bool Set (BitSetArray oldState, int item, bool setValue, BitSetArray newState, bool retValue) {
+            public static bool SetMember (BitSetArray oldState, int item, bool setValue, BitSetArray newState, bool retValue) {
                 Success success = true;
 
                 success.Assert (setValue == setValue.Bool ());

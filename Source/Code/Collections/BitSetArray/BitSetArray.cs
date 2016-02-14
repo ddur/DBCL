@@ -918,7 +918,7 @@ namespace DD.Collections {
             if (maxValue == int.MaxValue) { throw new IndexOutOfRangeException(); }
 
             var retValue = new BitSetArray (maxValue + 1);
-            retValue.initItems (items, minValue, maxValue);
+            retValue._InitMembers (items, minValue, maxValue);
             return retValue;
         }
 
@@ -1820,13 +1820,13 @@ namespace DD.Collections {
             [Pure]
             get {
                 Contract.Ensures (Theory.IndexerGetItemValue (this, item, Contract.Result<bool> ()));
-                return this._Get (item);
+                return this._GetMember (item);
             }
             set { // returns void, only way to return error is exception
                 Contract.Requires<IndexOutOfRangeException> (
                     (value.Bool () == true && this.InRange (item)) || value.Bool () == false);
                 Contract.Ensures (Theory.IndexerSetItemValue (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), item, value, this));
-                this._Set (item, value.Bool());
+                this._SetMember (item, value.Bool());
             }
         }
 
@@ -2595,11 +2595,11 @@ namespace DD.Collections {
         /// </summary>
         /// <param name="items"></param>
         /// <returns>Number of members added.</returns>
-        public int AddMembers (IEnumerable<int> items) {
+        public int Add (IEnumerable<int> items) {
             Contract.Requires<ArgumentNullException> (items.IsNot (null));
             Contract.Requires<ArgumentEmptyException> (!items.IsEmpty ());
 
-            // TODO? Contract.Ensures (Theory.ICollectionAdd (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), items, this));
+            // TODO? Contract.Ensures (Theory.Add (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), items, this));
 
             if (items.IsNullOrEmpty()) { return 0; }
             int start = int.MaxValue;
@@ -2617,7 +2617,7 @@ namespace DD.Collections {
             if (final >= this.range) {
                 this.Length = final + 1;
             }
-            return this._Set (items, true);
+            return this._SetMembers (items, true);
         }
 
         /// <summary>Removes IEnumerable&lt;int&gt; items where item is member
@@ -2625,27 +2625,25 @@ namespace DD.Collections {
         /// </summary>
         /// <param name="items">int</param>
         /// <returns>Number of items removed.</returns>
-        public int RemoveMembers (IEnumerable<int> items) {
+        public int Remove (IEnumerable<int> items) {
             Contract.Requires<ArgumentNullException> (items.IsNot (null));
             Contract.Requires<ArgumentEmptyException> (!items.IsEmpty ());
 
             // TODO? Contract.Ensures (Theory.Remove (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), item, this, Contract.Result<bool> ()));
 
-            return this._Set(items, false);
-        }
-
-        // TODO: Implement Add/Remove for range of items
-
-        [Pure]
-        public bool Get (int item) {
-            Contract.Ensures (Theory.Get (this, item, Contract.Result<bool> ()));
-
-            return _Get (item);
+            return this._SetMembers(items, false);
         }
 
         [Pure]
-        internal bool _Get (int item) {
-            Contract.Ensures (Theory.Get (this, item, Contract.Result<bool> ()));
+        public bool GetMember (int item) {
+            Contract.Ensures (Theory.GetMember (this, item, Contract.Result<bool> ()));
+
+            return _GetMember (item);
+        }
+
+        [Pure]
+        internal bool _GetMember (int item) {
+            Contract.Ensures (Theory.GetMember (this, item, Contract.Result<bool> ()));
 
             bool value = false;
             lock (SyncRoot) {
@@ -2663,20 +2661,21 @@ namespace DD.Collections {
         /// <param name="item"></param>
         /// <param name="value"></param>
         /// <returns>true if item set/cleared else returns false</returns>
-        public bool Set (int item, bool value = true) {
-            Contract.Ensures (Theory.Set (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), item, value, this, Contract.Result<bool>()));
+        public bool SetMember (int item, bool value = true) {
+            Contract.Ensures (Theory.SetMember (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), item, value, this, Contract.Result<bool>()));
 
-            return _Set (item, value);
+            return _SetMember (item, value);
         }
 
         /// <summary>
-        /// Set/Clear item if this.InRange(item) - internal
+        /// Set/Clear item if this.InRange(item)
         /// </summary>
+        /// <remarks>Internal - No contracts on release build</remarks>
         /// <param name="item"></param>
         /// <param name="value"></param>
         /// <returns>true if item set/cleared else returns false</returns>
-        internal bool _Set (int item, bool value = true) {
-            Contract.Ensures (Theory.Set (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), item, value, this, Contract.Result<bool>()));
+        internal bool _SetMember (int item, bool value = true) {
+            Contract.Ensures (Theory.SetMember (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), item, value, this, Contract.Result<bool>()));
 
             value = value.Bool ();
             bool isChanged = false;
@@ -2703,7 +2702,7 @@ namespace DD.Collections {
                             Contract.Assert (this.count > 0);
                             --this.count;
                         }
-                        Contract.Assert (_Get(item) == value);
+                        Contract.Assert (_GetMember(item) == value);
                         updateCache (oldVersion, oldCount, item, item, value);
                     }
                 }
@@ -2718,19 +2717,20 @@ namespace DD.Collections {
         /// <param name="items">IEnumerable&lt;int&gt;</param>
         /// <param name="value">bool, if true then set, else clear</param>
         /// <returns>number of members set/cleared</returns>
-        public int Set (IEnumerable<int> items, bool value = true) {
-            // TODO: Contract.Ensures (Theory.SetInRange (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), item, value, this));
-            return _Set(items, value);
+        public int SetMembers (IEnumerable<int> items, bool value = true) {
+            // TODO? Contract.Ensures (Theory.SetMembers (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), item, value, this));
+            return _SetMembers(items, value);
         }
 
         /// <summary>
-        /// Set/Clear IEnumerable&lt;int&gt; items where this.InRange (item) - internal
+        /// Set/Clear IEnumerable&lt;int&gt; items where this.InRange (item)
         /// </summary>
+        /// <remarks>Internal - No contracts on release build</remarks>
         /// <param name="items">IEnumerable&lt;int&gt;</param>
         /// <param name="value">bool, if true then set, else clear</param>
         /// <returns>number of members set/cleared</returns>
-        internal int _Set (IEnumerable<int> items, bool value = true) {
-            // TODO: Contract.Ensures (Theory.TrySet (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), item, value, this));
+        internal int _SetMembers (IEnumerable<int> items, bool value = true) {
+            // TODO: Contract.Ensures (Theory.SetMembers (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), item, value, this));
 
             lock (SyncRoot) {
                 if (items.IsNullOrEmpty()) { return 0; }
@@ -2771,29 +2771,29 @@ namespace DD.Collections {
         }
 
         /// <summary>
-        /// Set/Clear Range of items where this.InRange (item);
+        /// Set/Clear range of items where this.InRange (item)
         /// </summary>
-        /// <remarks>Use Add to add any valid item and exception on invalid range items.</remarks>
         /// <param name="start"></param>
         /// <param name="final"></param>
         /// <param name="value"></param>
-        /// <returns>number of members set/cleared</returns>
-        public int Set (int start, int final, bool value = true) {
-            // TODO: Contract.Ensures (Theory.Set (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), item, value, this));
+        /// <returns>Number of members set/cleared</returns>
+        public int SetMembersRange (int start, int final, bool value = true) {
+            // TODO? Contract.Ensures (Theory.SetMembersRange (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), item, value, this));
 
-            return _Set(start, final, value);
+            return _SetMembersRange(start, final, value);
 
         }
 
         /// <summary>
         /// Set/Clear Range of items where this.InRange (item);
         /// </summary>
+        /// <remarks>Internal - No contracts on release build</remarks>
         /// <param name="rangeStart"></param>
         /// <param name="rangeFinal"></param>
         /// <param name="value"></param>
-        /// <returns>true if changed</returns>
-        internal int _Set (int rangeStart, int rangeFinal, bool value = true) {
-            // TODO: Contract.Ensures (Theory.Set (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), item, value, this));
+        /// <returns>Number of members set/cleared</returns>
+        internal int _SetMembersRange (int rangeStart, int rangeFinal, bool value = true) {
+            // TODO? Contract.Ensures (Theory.SetMembersRange (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), item, value, this));
             // TODO: implement fast set/clear of array data when range index is larger than 2
 
             lock (SyncRoot) {
@@ -2866,7 +2866,7 @@ namespace DD.Collections {
                     if (this.startVersion == oldVersion) {
                         // start cache has not expired
                         Contract.Assume (this.startMemoize != null);
-                        if (_Get((int)this.startMemoize)) {
+                        if (_GetMember((int)this.startMemoize)) {
                             // start item is not cleared, cache is alive
                             this.startVersion = this.version;
                         }
@@ -2874,7 +2874,7 @@ namespace DD.Collections {
                     if (this.finalVersion == oldVersion) {
                         // final cache has not expired
                         Contract.Assume (this.finalMemoize != null);
-                        if (_Get((int)this.finalMemoize)) {
+                        if (_GetMember((int)this.finalMemoize)) {
                             // final item is not cleared, cache is alive
                             this.finalVersion = this.version;
                         }
@@ -2883,7 +2883,7 @@ namespace DD.Collections {
             }
         }
 
-        internal void initItems (IEnumerable<int> items, int minValue, int maxValue) {
+        internal void _InitMembers (IEnumerable<int> items, int minValue, int maxValue) {
             Contract.Requires<InvalidOperationException> (this.Length != 0);
             Contract.Requires<InvalidOperationException> (this.Count == 0);
             Contract.Requires<ArgumentNullException> (items.IsNot (null));
@@ -3188,7 +3188,7 @@ namespace DD.Collections {
             if (item >= this.range) {
                 this.Length = item + 1;
             }
-            this._Set (item, true);
+            this._SetMember (item, true);
         }
 
         /// <summary>Implements ICollection{int}.Remove
@@ -3200,7 +3200,7 @@ namespace DD.Collections {
             Contract.Ensures (Theory.Remove (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), item, this, Contract.Result<bool> ()));
 
             if (this[item]) {
-                return this._Set (item, false);
+                return this._SetMember (item, false);
             }
             return false; // not found
         }
@@ -3295,7 +3295,7 @@ namespace DD.Collections {
                         this.Length = item + 1;
                     }
                     Contract.Assert (this.InRange (item));
-                    return this._Set (item, true);
+                    return this._SetMember (item, true);
                 }
             }
             return false;
@@ -3324,7 +3324,7 @@ namespace DD.Collections {
             else {
                 // this will never ExceptWith(that) outside this.Length
                 // ExceptWith can simply ignore any value otside this.Length
-                this._Set (that, false); // -> this.AddVersion
+                this._SetMembers (that, false); // -> this.AddVersion
             }
         }
 
@@ -3353,7 +3353,7 @@ namespace DD.Collections {
                     }
                     else {
                         other = BitSetArray.Size (this.range);
-                        other._Set (that);
+                        other._SetMembers (that);
                         this.And (other);
                     }
                 }
