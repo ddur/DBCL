@@ -246,7 +246,7 @@ namespace DD.Collections.BitSetArrayTest.Interfaces.AsISet {
         public void IsProperSubsetOf (BitSetArray thisSet, IEnumerable<int> thatSet) {
             HashSet<int> hashThis = new HashSet<int> (thisSet);
             HashSet<int> hashThat = new HashSet<int> (thatSet);
-            if (thisSet.Count == 0 && thatSet.Count () != 0) {
+            if (thisSet.Count == 0 && thatSet.Any()) {
                 Assert.That (hashThis.IsProperSubsetOf (hashThat) != thisSet.IsProperSubsetOf (thatSet));
             }
             else {

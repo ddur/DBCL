@@ -790,48 +790,48 @@ namespace DD.Collections.BitSetArrayTest {
             // Because only public members have generated Contract.Require<Exception> tested here
             var test = BitSetArray.Size (2);
             Assert.That (delegate {
-                test._InitItems (new int[] { 0 });
+                test.initItems (new int[] { 0 }, 0, 0);
             }, Throws.Nothing);
 
             test = BitSetArray.Size (2);
             Assert.That (delegate {
-                test._InitItems (new int[] { 0, 1 });
+                test.initItems (new int[] { 0, 1 }, 0, 1);
             }, Throws.Nothing);
 
             test = BitSetArray.Size (2);
             Assert.That (delegate {
-                test._InitItems (new int[] { 1 });
+                test.initItems (new int[] { 1 }, 1, 1);
             }, Throws.Nothing);
 
             test = BitSetArray.Size (2);
             Assert.That (delegate {
-                test._InitItems (null);
+                test.initItems (null, 0, 0);
             }, Throws.TypeOf<ArgumentNullException> ());
             Assert.That (delegate {
-                test._InitItems (new int[0]);
+                test.initItems (new int[0], 0, 0);
             }, Throws.TypeOf<ArgumentEmptyException> ());
             Assert.That (delegate {
-                test._InitItems (new int[] { int.MinValue });
+                test.initItems (new int[] { int.MinValue }, 0, 0);
             }, Throws.TypeOf<IndexOutOfRangeException> ());
             Assert.That (delegate {
-                test._InitItems (new int[] { -1 });
+                test.initItems (new int[] { -1 }, -1, -1);
             }, Throws.TypeOf<IndexOutOfRangeException> ());
             Assert.That (delegate {
-                test._InitItems (new int[] { 2 });
+                test.initItems (new int[] { 2 }, 0, 0);
             }, Throws.TypeOf<IndexOutOfRangeException> ());
             Assert.That (delegate {
-                test._InitItems (new int[] { int.MaxValue });
+                test.initItems (new int[] { int.MaxValue }, 0, 0);
             }, Throws.TypeOf<IndexOutOfRangeException> ());
 
             Assert.GreaterOrEqual (5, test.Length);
             Assert.That (delegate {
-                test._InitItems (new int[] { 5 });
+                test.initItems (new int[] { 5 }, 5, 5);
             }, Throws.TypeOf<IndexOutOfRangeException> ());
 
-            test._InitItems (new int[] { 0 });
+            test.initItems (new int[] { 0 }, 0, 0);
             Assert.AreNotEqual (0, test.Count);
             Assert.That (delegate {
-                test._InitItems (new int[] { 0 });
+                test.initItems (new int[] { 0 }, 0, 0);
             }, Throws.TypeOf<InvalidOperationException> ()); // Count != 0
 
 #endif

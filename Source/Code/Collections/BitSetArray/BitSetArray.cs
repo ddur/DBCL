@@ -903,11 +903,11 @@ namespace DD.Collections {
         [Pure]
         public static BitSetArray From (IEnumerable<int> items) {
             Contract.Requires<ArgumentNullException> (items.IsNot (null));
-            Contract.Requires<ArgumentEmptyException> (!items.IsEmpty ());
 
             Contract.Ensures (Contract.Result<BitSetArray> ().IsNot (null));
             Contract.Ensures (Theory.From (Contract.Result<BitSetArray> (), items));
 
+            if (items.IsEmpty()) return BitSetArray.Empty();
             int minValue = int.MaxValue;
             int maxValue = int.MinValue;
             foreach (int item in items) {
@@ -915,10 +915,10 @@ namespace DD.Collections {
                 if (item > maxValue) maxValue = item;
             }
             if (minValue < 0) { throw new IndexOutOfRangeException(); }
-            if (maxValue == int.MinValue) { throw new IndexOutOfRangeException(); }
+            if (maxValue == int.MaxValue) { throw new IndexOutOfRangeException(); }
 
             var retValue = new BitSetArray (maxValue + 1);
-            retValue._InitItems (items);
+            retValue.initItems (items, minValue, maxValue);
             return retValue;
         }
 
@@ -2596,6 +2596,9 @@ namespace DD.Collections {
         /// <param name="items"></param>
         /// <returns>Number of members added.</returns>
         public int AddMembers (IEnumerable<int> items) {
+            Contract.Requires<ArgumentNullException> (items.IsNot (null));
+            Contract.Requires<ArgumentEmptyException> (!items.IsEmpty ());
+
             // TODO? Contract.Ensures (Theory.ICollectionAdd (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), items, this));
 
             if (items.IsNullOrEmpty()) { return 0; }
@@ -2623,8 +2626,12 @@ namespace DD.Collections {
         /// <param name="items">int</param>
         /// <returns>Number of items removed.</returns>
         public int RemoveMembers (IEnumerable<int> items) {
+            Contract.Requires<ArgumentNullException> (items.IsNot (null));
+            Contract.Requires<ArgumentEmptyException> (!items.IsEmpty ());
+
             // TODO? Contract.Ensures (Theory.Remove (Contract.OldValue<BitSetArray> (BitSetArray.Copy (this)), item, this, Contract.Result<bool> ()));
-            return items.IsNullOrEmpty() ? 0 : this._Set(items, false);
+
+            return this._Set(items, false);
         }
 
         // TODO: Implement Add/Remove for range of items
@@ -2876,7 +2883,7 @@ namespace DD.Collections {
             }
         }
 
-        internal void _InitItems (IEnumerable<int> items) {
+        internal void initItems (IEnumerable<int> items, int minValue, int maxValue) {
             Contract.Requires<InvalidOperationException> (this.Length != 0);
             Contract.Requires<InvalidOperationException> (this.Count == 0);
             Contract.Requires<ArgumentNullException> (items.IsNot (null));
@@ -2889,8 +2896,6 @@ namespace DD.Collections {
 
             lock (SyncRoot) {
                 this.AddVersion (); // (!items.IsEmpty() && this.Count == 0)
-                int minValue = int.MaxValue;
-                int maxValue = int.MinValue;
                 foreach (var item in items) {
                     if ((array[item >> log2of64] & 1L << (item & mask0x3F)) != 0) {
                         // no bit change
@@ -2898,19 +2903,13 @@ namespace DD.Collections {
                     else {
                         // set bit value
                         array[item >> log2of64] ^= 1L << (item & mask0x3F);
-                        Contract.Assert (this.count < this.range);
                         this.count += 1;
-                        if (item < minValue) {
-                            minValue = item;
-                        }
-                        if (item > maxValue) {
-                            maxValue = item;
-                        }
                     }
                 }
+                Contract.Assume (this.count > 0);
+                Contract.Assert (this.count <= this.range);
                 this.setCacheFirst (minValue);
                 this.setCacheLast (maxValue);
-                Contract.Assume (this.Count > 0);
             }
         }
 
