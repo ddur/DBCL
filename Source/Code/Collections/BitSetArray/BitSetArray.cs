@@ -2888,7 +2888,6 @@ namespace DD.Collections {
             Contract.Requires<InvalidOperationException> (this.Count == 0);
             Contract.Requires<ArgumentNullException> (items.IsNot (null));
             Contract.Requires<ArgumentEmptyException> (items.Any ());
-            Contract.Requires<IndexOutOfRangeException> (Contract.ForAll (items, item => this.InRange (item)));
 
             Contract.Ensures (this.Count > 0);
             Contract.Ensures (this.First.HasValue);
@@ -2897,15 +2896,19 @@ namespace DD.Collections {
             lock (SyncRoot) {
                 this.AddVersion (); // (!items.IsEmpty() && this.Count == 0)
                 foreach (var item in items) {
-                    if ((array[item >> log2of64] & 1L << (item & mask0x3F)) != 0) {
-                        // no bit change
-                    }
-                    else {
-                        // set bit value
-                        array[item >> log2of64] ^= 1L << (item & mask0x3F);
-                        this.count += 1;
-                    }
+                    if (item < 0) throw new IndexOutOfRangeException();
+                    if (item >= this.range) throw new IndexOutOfRangeException();
+                    array[item >> log2of64] |= 1L << (item & mask0x3F);
+//                    if ((array[item >> log2of64] & 1L << (item & mask0x3F)) != 0) {
+//                        // no bit change
+//                    }
+//                    else {
+//                        // set bit value
+//                        array[item >> log2of64] ^= 1L << (item & mask0x3F);
+//                        this.count += 1;
+//                    }
                 }
+                this.count = CountOnBits (this.array);
                 Contract.Assume (this.count > 0);
                 Contract.Assert (this.count <= this.range);
                 this.setCacheFirst (minValue);

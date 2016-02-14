@@ -786,8 +786,8 @@ namespace DD.Collections.BitSetArrayTest {
 
         [Test]
         public void Bit_InitItems () {
-#if DEBUG // _SetItems private to public.
-            // Because only public members have generated Contract.Require<Exception> tested here
+
+#if DEBUG // In Release build this internal method throws no contract exceptions
             var test = BitSetArray.Size (2);
             Assert.That (delegate {
                 test.initItems (new int[] { 0 }, 0, 0);
@@ -817,7 +817,7 @@ namespace DD.Collections.BitSetArrayTest {
                 test.initItems (new int[] { -1 }, -1, -1);
             }, Throws.TypeOf<IndexOutOfRangeException> ());
             Assert.That (delegate {
-                test.initItems (new int[] { 2 }, 0, 0);
+                test.initItems (new int[] { 2 }, 2, 2);
             }, Throws.TypeOf<IndexOutOfRangeException> ());
             Assert.That (delegate {
                 test.initItems (new int[] { int.MaxValue }, 0, 0);

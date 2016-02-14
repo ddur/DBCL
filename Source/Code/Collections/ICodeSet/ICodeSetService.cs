@@ -41,7 +41,7 @@ namespace DD.Collections.ICodeSet {
         /// <returns>IEnumerable&lt;Code&gt;</returns>
         public static IEnumerable<Code> ToCodes (this IEnumerable<int> self, int offset = 0) {
             Contract.Requires<ArgumentNullException> (self.IsNot (null));
-            Contract.Requires<ArgumentException> (Contract.ForAll (self, x => (x + offset).HasCodeValue ()));
+
             Contract.Ensures (Contract.Result<IEnumerable<Code>> ().IsNot (null));
 
             if (offset == 0) {
