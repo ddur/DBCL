@@ -61,10 +61,10 @@ namespace UniCodeClassGenerator
                     else if (bits.Count == 1) {
                         WriteLine ("(Code)" + bits.First + ";");
                     }
-                    else if (bits.Count == Service.PairCount) {
+                    else if (bits.Count == CodeSet.PairCount) {
                         WriteLine ("CodeSetPair.From (" + bits.First + ", " + bits.Last + ");");
                     }
-                    else if (bits.Count <= Service.ListMaxCount) {
+                    else if (bits.Count <= CodeSet.ListMaxCount) {
                         WriteLine ("CodeSetList.From (");
                         var firstItem = true;
                         foreach (var item in bits) {

@@ -19,14 +19,14 @@ namespace DD.Collections.ICodeSet {
         #region Ctor
 
         public static CodeSetFull From (Code first, Code last) {
-            Contract.Requires<ArgumentException> ((first + Service.PairCount) <= last);
+            Contract.Requires<ArgumentException> ((first + CodeSet.PairCount) <= last);
             Contract.Ensures (Contract.Result<CodeSetFull> ().IsNot (null));
 
             return new CodeSetFull (first, last);
         }
 
         internal CodeSetFull (Code first, Code last) {
-            Contract.Requires<ArgumentException> ((first + Service.PairCount) <= last);
+            Contract.Requires<ArgumentException> ((first + CodeSet.PairCount) <= last);
 
             // Input -> private
             Contract.Ensures (this.start == first);
@@ -101,7 +101,7 @@ namespace DD.Collections.ICodeSet {
         [Pure]
         public override bool IsReduced {
             get {
-                return Count > Service.PairCount;
+                return Count > CodeSet.PairCount;
             }
         }
 
@@ -120,7 +120,7 @@ namespace DD.Collections.ICodeSet {
         private void Invariant () {
             // private
             Contract.Invariant (this.start < this.final);
-            Contract.Invariant (this.final - this.start >= Service.PairCount);
+            Contract.Invariant (this.final - this.start >= CodeSet.PairCount);
             Contract.Invariant (this.count == 1 + this.final - this.start);
             Contract.Invariant (this.count.IsCodesCount ());
 
@@ -132,7 +132,7 @@ namespace DD.Collections.ICodeSet {
 
             // constraints
             Contract.Invariant (this.Count == this.Length);
-            Contract.Invariant (this.Count > Service.PairCount);
+            Contract.Invariant (this.Count > CodeSet.PairCount);
         }
 
         #endregion

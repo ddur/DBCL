@@ -10,7 +10,7 @@ using System.Linq;
 
 using NUnit.Framework;
 
-namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
+namespace DD.Collections.ICodeSet.ICodeSetExtendedTest.Members {
 
     [TestFixture]
     public class ToValues {

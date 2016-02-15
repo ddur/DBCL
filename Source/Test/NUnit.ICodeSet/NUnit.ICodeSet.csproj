@@ -7,7 +7,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>DD.Collections.ICodeSet</RootNamespace>
     <AssemblyName>NUnit.ICodeSet</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -46,6 +46,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodeSetAbstractTest\Constants.cs" />
     <Compile Include="CodeSetAbstractTest\Members.cs" />
     <Compile Include="CodeSetDiffTest\Constructors.cs" />
     <Compile Include="CodeSetDiffTest\Members.cs" />
@@ -62,7 +63,7 @@
     <Compile Include="CodeSetWideTest\Constructors.cs" />
     <Compile Include="CodeSetWideTest\Members.cs" />
     <Compile Include="CodeTest\AsICodeSet.cs" />
-    <Compile Include="CodeTest\AsICollectionOfCode.cs" />
+    <Compile Include="CodeTest\AsIReadOnlyCollectionOfCode.cs" />
     <Compile Include="CodeTest\AsIComparableOfICodeSet.cs" />
     <Compile Include="CodeTest\AsIEnumerableOfCode.cs" />
     <Compile Include="CodeTest\AsIEqualityComparerOfCode.cs" />
@@ -74,13 +75,17 @@
     <Compile Include="CodeTest\DataSource.cs" />
     <Compile Include="ICodeSetDictionaryTest\Constructors.cs" />
     <Compile Include="ICodeSetDictionaryTest\Members.cs" />
+    <Compile Include="ICodeSetExtendedTest\IsEmpty.cs" />
+    <Compile Include="ICodeSetExtendedTest\IsFull_ICodeSet.cs" />
+    <Compile Include="ICodeSetExtendedTest\IsNullOrEmpty_ICodeSet.cs" />
+    <Compile Include="ICodeSetExtendedTest\Span.cs" />
+    <Compile Include="ICodeSetExtendedTest\ToBitSetArray.cs" />
+    <Compile Include="ICodeSetExtendedTest\ToValues.cs" />
+    <Compile Include="ICodeSetExtendsTest\IsCodeCompactLast.cs" />
+    <Compile Include="ICodeSetExtendsTest\IsCompact.cs" />
+    <Compile Include="ICodeSetExtendsTest\ToCodes.cs" />
     <Compile Include="ICodeSetOperationsTest\Members.cs" />
     <Compile Include="ICodeSetReductionTest\Members.cs" />
-    <Compile Include="ICodeSetServiceTest\Members\IsCodeCompactLast.cs" />
-    <Compile Include="ICodeSetServiceTest\Members\IsEmpty.cs" />
-    <Compile Include="ICodeSetServiceTest\Members\Span.cs" />
-    <Compile Include="ICodeSetServiceTest\Members\ToCodes.cs" />
-    <Compile Include="ICodeSetServiceTest\Members\ToValues.cs" />
     <Compile Include="ICodeSetStaticFactoryTest\OpComplement.cs" />
     <Compile Include="ICodeSetStaticFactoryTest\OpDifference.cs" />
     <Compile Include="ICodeSetStaticFactoryTest\OpDisjunction.cs" />
@@ -96,12 +101,6 @@
     <Compile Include="ICodeSetRelationsTest\Members\Overlaps.cs" />
     <Compile Include="ICodeSetRelationsTest\Members\RangeEquals.cs" />
     <Compile Include="ICodeSetRelationsTest\Members\RangeOverlaps.cs" />
-    <Compile Include="ICodeSetServiceTest\Constants.cs" />
-    <Compile Include="ICodeSetServiceTest\Members\IsCompact.cs" />
-    <Compile Include="ICodeSetServiceTest\Members\IsFull_ICodeSet.cs" />
-    <Compile Include="ICodeSetServiceTest\Members\IsNullOrEmpty_ICodeSet.cs" />
-    <Compile Include="ICodeSetServiceTest\Members\ToBitSetArray.cs" />
-    <Compile Include="ICodeSetServiceTest\Members\ToCompact.cs" />
     <Compile Include="ICodeSetStaticFactoryTest\ConstructToICodeSet.cs" />
     <Compile Include="ICodeSetStaticFactoryTest\OpUnion.cs" />
     <Compile Include="ICodeSetUniqueFactoryTest\ConstructFrom.cs" />
@@ -121,6 +120,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ICodeSetExtendedTest" />
+    <Folder Include="ICodeSetExtendsTest" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

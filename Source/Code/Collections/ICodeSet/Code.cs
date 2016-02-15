@@ -152,7 +152,7 @@ namespace DD.Collections.ICodeSet {
 
         [Pure]
         int ICodeSet.Length {
-            get { return Service.UnitCount; }
+            get { return CodeSet.UnitCount; }
         }
 
         [Pure]
@@ -176,59 +176,12 @@ namespace DD.Collections.ICodeSet {
 
         #region ICodeSet Inherited
 
-        #region ICollection<Code>
+        #region IReadOnlyCollection<Code>
 
         [Pure]
-        bool ICollection<Code>.IsReadOnly {
-            get { return true; }
+        int IReadOnlyCollection<Code>.Count {
+            get { return CodeSet.UnitCount; }
         }
-
-        [Pure]
-        int ICollection<Code>.Count {
-            get { return Service.UnitCount; }
-        }
-
-        /// <summary> Returns True if collection Contains (IsSupersetOf) specified code
-        /// </summary>
-        /// <param name="code"></param>
-        /// <returns>bool</returns>
-        [Pure]
-        bool ICollection<Code>.Contains (Code code) {
-            return this.Value == code.Value;
-        }
-
-        /// <summary>Copies members from this collection into Code[]
-        /// </summary>
-        /// <param name="array"></param>
-        /// <param name="arrayIndex"></param>
-        [Pure]
-        [SuppressMessage ("Microsoft.Contracts", "CC1033", Justification = "Debug/Release exceptions not same")]
-        void ICollection<Code>.CopyTo (Code[] array, int arrayIndex) {
-            Contract.Requires<ArgumentNullException> (array.IsNot (null));
-            Contract.Requires<IndexOutOfRangeException> (arrayIndex >= 0);
-            Contract.Requires<IndexOutOfRangeException> (arrayIndex <= (array.Length - 1));
-            array[arrayIndex] = this;
-        }
-
-        /// <summary>Explicit interface implementation.<para>Operation not supported on Read-Only Collection</para>
-        /// </summary>
-        /// <param name="code"></param>
-        /// <exception cref="T:System.NotSupportedException"></exception>
-        [Pure]
-        void ICollection<Code>.Add (Code code) { throw new NotSupportedException (); }
-
-        /// <summary>Explicit interface implementation.<para>Operation not supported on Read-Only Collection</para>
-        /// </summary>
-        /// <exception cref="T:System.NotSupportedException"></exception>
-        [Pure]
-        void ICollection<Code>.Clear () { throw new NotSupportedException (); }
-
-        /// <summary>Explicit interface implementation.<para>Operation not supported on Read-Only Collection</para>
-        /// </summary>
-        /// <param name="code"></param>
-        /// <exception cref="T:System.NotSupportedException"></exception>
-        [Pure]
-        bool ICollection<Code>.Remove (Code code) { throw new NotSupportedException (); }
 
         #endregion
 
@@ -318,7 +271,7 @@ namespace DD.Collections.ICodeSet {
         [ContractInvariantMethod]
         private void Invariant () {
             Contract.Invariant (((ICodeSet)this).IsEmpty == false);
-            Contract.Invariant (((ICodeSet)this).Count == Service.UnitCount);
+            Contract.Invariant (((ICodeSet)this).Count == CodeSet.UnitCount);
             Contract.Invariant (((ICodeSet)this).Count == ((ICodeSet)this).Length);
             Contract.Invariant (((ICodeSet)this).First == ((ICodeSet)this).Last);
         }
@@ -385,6 +338,12 @@ namespace DD.Collections.ICodeSet {
             Contract.Requires<InvalidCastException> (value.InRange (Code.MinValue, Code.MaxValue));
 
             return new Code (value);
+        }
+
+        public static implicit operator Code (long value) {
+            Contract.Requires<InvalidCastException> (value.InRange (Code.MinValue, Code.MaxValue));
+
+            return new Code ((int)value);
         }
 
         #endregion

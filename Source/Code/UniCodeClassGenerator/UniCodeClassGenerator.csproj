@@ -8,9 +8,10 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>UniCodeClassGenerator</RootNamespace>
     <AssemblyName>UniCodeClassGenerator</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <TargetFrameworkProfile />
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
     <PlatformTarget>x86</PlatformTarget>

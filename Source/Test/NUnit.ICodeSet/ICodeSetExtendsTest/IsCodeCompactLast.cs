@@ -7,7 +7,7 @@
 using System;
 using NUnit.Framework;
 
-namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
+namespace DD.Collections.ICodeSet.ICodeSetExtendsTest.Members {
 
     [TestFixture]
     public class IsCodeCompactLast {

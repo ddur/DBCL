@@ -14,6 +14,8 @@ namespace DD.Collections.ICodeSet {
     /// </summary>
     public static class CodeExtended {
 
+        #region Category
+
         [Pure]
         public static bool HasCharValue (this Code self) {
             Contract.Ensures (Contract.Result<bool> () == (self.Value.InRange (0, 0xFFFF)));
@@ -116,5 +118,8 @@ namespace DD.Collections.ICodeSet {
         public static bool IsXml11Discouraged (this Code self) {
             return (self.Value.IsPermanentlyUndefined () || self.IsXml11Restricted ());
         }
+
+        #endregion
+
     }
 }

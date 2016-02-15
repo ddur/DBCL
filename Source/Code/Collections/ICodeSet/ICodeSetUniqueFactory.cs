@@ -96,7 +96,7 @@ namespace DD.Collections.ICodeSet {
             Contract.Ensures (Theory.From (bits, this, Contract.Result<ICodeSet> ()));
 
             // bits is created external to this class, it is not transient. Use safe copy of bits!
-            return bits.IsNullOrEmpty () ? CodeSetNone.Singleton : From ((ICodeSet)QuickWrap.From(BitSetArray.Copy(bits)));
+            return bits.IsNullOrEmpty () ? CodeSetNone.Singleton : From ((ICodeSet)QuickWrap.Safe(bits));
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace DD.Collections.ICodeSet {
             Contract.Ensures (Theory.Result (this, Contract.Result<ICodeSet> ()));
             Contract.Ensures (Theory.From (bits, this, Contract.Result<ICodeSet> ()));
 
-            return bits.IsNullOrEmpty () ? CodeSetNone.Singleton : From ((ICodeSet)QuickWrap.From (bits));
+            return bits.IsNullOrEmpty () ? CodeSetNone.Singleton : From ((ICodeSet)QuickWrap.Unsafe (bits));
         }
 
         public ICodeSet From (ICodeSet iset) {

@@ -293,7 +293,7 @@ namespace DD.Collections.ICodeSet {
         [Pure]
         public override bool IsReduced {
             get { // When more members than list, when not full and not wider than character range (16 bits/8KB)
-        		return Count > Service.ListMaxCount && Count < Length && Length <= char.MaxValue;
+        		return Count > CodeSet.ListMaxCount && Count < Length && Length <= char.MaxValue;
             }
         }
 

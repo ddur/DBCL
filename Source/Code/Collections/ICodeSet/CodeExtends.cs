@@ -21,6 +21,29 @@ namespace DD.Collections.ICodeSet {
         #region Extends int
 
         [Pure]
+        public static bool IsCodesCount (this int self) {
+            Contract.Ensures (Contract.Result<bool> () == (self.InRange (Code.MinCount, Code.MaxCount)));
+            return self.HasCodeValue () || self == Code.MaxCount;
+        }
+
+        [Pure]
+        public static bool HasCharValue (this int self) {
+            return self.HasCodeValue () && ((Code)self).HasCharValue ();
+        }
+
+        [Pure]
+        public static bool HasCodeValue (this int self) {
+            Contract.Ensures (Contract.Result<bool> () == (self.InRange (Code.MinValue, Code.MaxValue)));
+            return ((self & 0xFFFFF) == self || (self & 0x10FFFF) == self);
+        }
+
+        [Pure]
+        public static bool HasCodeValue (this int? self) {
+            Contract.Ensures (Contract.Result<bool> () == (self.IsNot (null) && ((int)self).InRange (Code.MinValue, Code.MaxValue)));
+            return (self.IsNot (null) && ((int)self).HasCodeValue ());
+        }
+
+        [Pure]
         public static bool IsSurrogate (this int self) {
             return self.HasCodeValue () && ((Code)self).IsSurrogate ();
         }
@@ -41,36 +64,12 @@ namespace DD.Collections.ICodeSet {
         }
 
         [Pure]
-        public static bool HasCharValue (this int self) {
-            return self.HasCodeValue () && ((Code)self).HasCharValue ();
-        }
-
-        [Pure]
-        public static bool HasCodeValue (this int self) {
-            Contract.Ensures (Contract.Result<bool> () == (self.InRange (Code.MinValue, Code.MaxValue)));
-            // self.InRange (0, 1114111)
-            return ((self & 0xFFFFF) == self || (self & 0x10FFFF) == self);
-        }
-
-        [Pure]
-        public static bool HasCodeValue (this int? self) {
-            Contract.Ensures (Contract.Result<bool> () == (self.IsNot (null) && ((int)self).InRange (Code.MinValue, Code.MaxValue)));
-            return (self.IsNot (null) && ((int)self).HasCodeValue ());
-        }
-
-        [Pure]
         public static int? UnicodePlane (this int? self) {
             Contract.Ensures (Contract.Result<int?> () == null || ((int)Contract.Result<int?> ()).InRange (0, 16));
             if (self.HasCodeValue ()) {
                 return (int)self >> 16;
             }
             return null;
-        }
-
-        [Pure]
-        public static bool IsCodesCount (this int self) {
-            Contract.Ensures (Contract.Result<bool> () == (self.InRange (Code.MinCount, Code.MaxCount)));
-            return self.HasCodeValue () || self == Code.MaxCount;
         }
 
         [Pure]
@@ -128,41 +127,6 @@ namespace DD.Collections.ICodeSet {
                 }
             }
             return true;
-        }
-
-        /// <summary>
-        /// Converts Predicate&lt;Code&gt; into IEnumerable&lt;Code&gt;
-        /// </summary>
-        /// <remarks>Use pure (functional) predicate only!</remarks>
-        /// <param name="extended">Predicate&lt;Code&gt;</param>
-        /// <returns>IEnumerable&lt;Code&gt;</returns>
-        [Pure]
-        public static IEnumerable<Code> ToCodes (this Predicate<Code> extended) {
-            if (extended != null) {
-                for (int item = Code.MinValue; item <= Code.MaxValue; item++) {
-                    if (extended (item)) {
-                        yield return item;
-                    }
-                }
-            }
-            yield break;
-        }
-
-        /// <summary>
-        /// Converts Predicate&lt;Code&gt; into IEnumerable&lt;Code&gt;
-        /// </summary>
-        /// <remarks>Use pure (functional) predicate only!</remarks>
-        /// <param name="extended">Predicate&lt;Code&gt;</param>
-        /// <returns>IEnumerable&lt;Code&gt;</returns>
-        public static IEnumerable<int> ToIntCodes (this Predicate<Code> extended) {
-            if (extended != null) {
-                for (int item = Code.MinValue; item <= Code.MaxValue; item++) {
-                    if (extended ((Code)item)) {
-                        yield return item;
-                    }
-                }
-            }
-            yield break;
         }
 
         #endregion

@@ -7,7 +7,7 @@
 using System;
 using NUnit.Framework;
 
-namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
+namespace DD.Collections.ICodeSet.ICodeSetExtendedTest.Members {
 
     [TestFixture]
     public class ToBitSetArray {
@@ -18,12 +18,14 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
 
             ICodeSet a = null;
             output = a.ToBitSetArray ();
+            output = a.ToBitSetArray (1);
 
             Assert.IsTrue (output.Count == 0);
             Assert.IsTrue (output.Length == 0);
 
             a = CodeSetNone.Singleton;
             output = a.ToBitSetArray ();
+            output = a.ToBitSetArray (1);
 
             Assert.IsTrue (output.Count == 0);
             Assert.IsTrue (output.Length == 0);
@@ -40,6 +42,20 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
             Assert.IsTrue (output.Length == a.Last + 1);
             Assert.IsTrue (output.First == a.First);
             Assert.IsTrue (output.Last == a.Last);
+
+            output = a.ToBitSetArray (1);
+
+            Assert.IsTrue (output.Count == a.Count);
+            Assert.IsTrue (output.Length == a.Last + 1 + 1);
+            Assert.IsTrue (output.First == a.First + 1);
+            Assert.IsTrue (output.Last == a.Last + 1);
+
+            output = a.ToBitSetArray (-1);
+
+            Assert.IsTrue (output.Count == a.Count);
+            Assert.IsTrue (output.Length == a.Last + 1 - 1);
+            Assert.IsTrue (output.First == a.First - 1);
+            Assert.IsTrue (output.Last == a.Last - 1);
 
             a = CodeSetPair.From (25, 90);
             output = a.ToBitSetArray ();
@@ -65,13 +81,28 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
             Assert.IsTrue (output.First == a.First);
             Assert.IsTrue (output.Last == a.Last);
 
-            a = QuickWrap.From (BitSetArray.From (11, 25, 90, 130, 132, 132, 133, 134, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160));
+            a = QuickWrap.Unsafe (BitSetArray.From (11, 25, 90, 130, 132, 132, 133, 134, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160));
+
             output = a.ToBitSetArray ();
 
             Assert.IsTrue (output.Count == a.Count);
             Assert.IsTrue (output.Length == a.Last + 1);
             Assert.IsTrue (output.First == a.First);
             Assert.IsTrue (output.Last == a.Last);
+
+            output = a.ToBitSetArray (1);
+
+            Assert.IsTrue (output.Count == a.Count);
+            Assert.IsTrue (output.Length == a.Last + 1 + 1);
+            Assert.IsTrue (output.First == a.First + 1);
+            Assert.IsTrue (output.Last == a.Last + 1);
+
+            output = a.ToBitSetArray (-1);
+
+            Assert.IsTrue (output.Count == a.Count);
+            Assert.IsTrue (output.Length == a.Last + 1 - 1);
+            Assert.IsTrue (output.First == a.First - 1);
+            Assert.IsTrue (output.Last == a.Last - 1);
         }
     }
 }

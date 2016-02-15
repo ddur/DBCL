@@ -30,7 +30,7 @@ namespace DD.Collections.ICodeSet
             return new QuickWrap (BitSetArray.Copy (bits));
         }
 
-        public static QuickWrap From (BitSetArray bits) {
+        internal static QuickWrap Unsafe (BitSetArray bits) {
             Contract.Requires<ArgumentNullException> (bits.IsNot (null));
             Contract.Requires<ArgumentException> (bits.Count != 0);
             Contract.Requires<ArgumentException> ((int)bits.Last <= Code.MaxValue);

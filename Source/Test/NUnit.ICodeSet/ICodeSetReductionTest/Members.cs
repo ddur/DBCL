@@ -30,9 +30,9 @@ namespace DD.Collections.ICodeSet.ICodeSetReductionTest {
             Assert.False (CodeSetMask.From (3, 7, 9, 15, 80).IsReduced);
             Assert.False (CodeSetMask.From (CodeSetFull.From (1, 80)).IsReduced);
 
-            Assert.False (QuickWrap.From (BitSetArray.From (3, 7, 9, 15, 80)).IsReduced);
-            Assert.False (QuickWrap.From (BitSetArray.From (3, 7, 9, 15, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93)).IsReduced);
-            Assert.False (QuickWrap.From (BitSetArray.Size (80000, true)).IsReduced);
+            Assert.False (QuickWrap.Unsafe (BitSetArray.From (3, 7, 9, 15, 80)).IsReduced);
+            Assert.False (QuickWrap.Unsafe (BitSetArray.From (3, 7, 9, 15, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93)).IsReduced);
+            Assert.False (QuickWrap.Unsafe (BitSetArray.Size (80000, true)).IsReduced);
         }
 
         [Test, TestCaseSource ("Expected")]

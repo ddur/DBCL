@@ -6,9 +6,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 
-namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
+namespace DD.Collections.ICodeSet.ICodeSetExtendsTest.Members {
 
     [TestFixture]
     public class ToCodes {
@@ -18,12 +19,12 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
             var arg = ((IEnumerable<int>)null);
             Assert.Throws<ArgumentNullException> (
                 delegate {
-                    arg.ToCodes ();
+                    arg.ToCodes ().All (x => true);
                 }
             );
             Assert.Throws<ArgumentNullException> (
                 delegate {
-                    arg.ToCodes (0);
+                    arg.ToCodes (0).All (x => true);
                 }
             );
         }
@@ -33,12 +34,12 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
             var arg = new int[0];
             Assert.That (
                 delegate {
-                    arg.ToCodes ();
+                    arg.ToCodes ().All (x => true);
                 }, Throws.Nothing
             );
             Assert.That (
                 delegate {
-                    arg.ToCodes (1000);
+                    arg.ToCodes (1000).All (x => true);
                 }, Throws.Nothing
             );
         }
@@ -48,12 +49,12 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
             var arg = new int[] { 0, 1, 2, 3 };
             Assert.That (
                 delegate {
-                    arg.ToCodes ();
+                    arg.ToCodes ().All (x => true);
                 }, Throws.Nothing
             );
             Assert.That (
                 delegate {
-                    arg.ToCodes (1000);
+                    arg.ToCodes (1000).All (x => true);
                 }, Throws.Nothing
             );
         }
@@ -61,27 +62,27 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
         [Test]
         public void WhenArgIEnumerableIsInvalidCodes () {
             var arg = new int[] { int.MinValue, int.MaxValue, 2, 3 };
-            Assert.Throws<ArgumentException> (
+            Assert.That (
                 delegate {
-                    arg.ToCodes ();
-                }
+                    arg.ToCodes ().All (x => true);
+                }, Throws.TypeOf<InvalidCastException>()
             );
-            Assert.Throws<ArgumentException> (
+            Assert.That (
                 delegate {
-                    arg.ToCodes (10);
-                }
+                    arg.ToCodes (10).All (x => true);
+                }, Throws.TypeOf<InvalidCastException>()
             );
 
 
             arg = new int[] { 0, 1, 2, 3 };
-            Assert.Throws<ArgumentException> (
+            Assert.Throws<InvalidCastException> (
                 delegate {
-                    arg.ToCodes (int.MinValue);
+                    arg.ToCodes (int.MinValue).All (x => true);
                 }
             );
-            Assert.Throws<ArgumentException> (
+            Assert.Throws<InvalidCastException> (
                 delegate {
-                    arg.ToCodes (int.MaxValue);
+                    arg.ToCodes (int.MaxValue).All (x => true);
                 }
             );
         }

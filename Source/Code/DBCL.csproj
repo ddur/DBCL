@@ -7,7 +7,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>DD</RootNamespace>
     <AssemblyName>DBCL</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -163,11 +163,12 @@
     <Compile Include="Collections\ICodeSet\ICode.cs" />
     <Compile Include="Collections\ICodeSet\ICodeSet.cs" />
     <Compile Include="Collections\ICodeSet\ICodeSetDictionary.cs" />
+    <Compile Include="Collections\ICodeSet\ICodeSetExtended.cs" />
+    <Compile Include="Collections\ICodeSet\ICodeSetExtends.cs" />
     <Compile Include="Collections\ICodeSet\ICodeSetStaticFactory.cs" />
     <Compile Include="Collections\ICodeSet\ICodeSetOperations.cs" />
     <Compile Include="Collections\ICodeSet\ICodeSetReduction.cs" />
     <Compile Include="Collections\ICodeSet\ICodeSetRelations.cs" />
-    <Compile Include="Collections\ICodeSet\ICodeSetService.cs" />
     <Compile Include="Collections\ICodeSet\ICodeSetUniqueFactory.cs" />
     <Compile Include="Collections\ICodeSet\QuickWrap.cs" />
     <Compile Include="Diagnostics\Success.cs" />

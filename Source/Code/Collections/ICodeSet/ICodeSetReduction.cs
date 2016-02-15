@@ -43,7 +43,7 @@ namespace DD.Collections.ICodeSet {
 
             #region Unit
 
-            if (self.Count == Service.UnitCount) {
+            if (self.Count == CodeSet.UnitCount) {
                 return (Code)((int)self.First + offset);
             }
 
@@ -51,7 +51,7 @@ namespace DD.Collections.ICodeSet {
 
             #region Pair
 
-            if (self.Count == Service.PairCount) {
+            if (self.Count == CodeSet.PairCount) {
                 return CodeSetPair.From ((int)self.First + offset, (int)self.Last + offset);
             }
 
@@ -67,8 +67,8 @@ namespace DD.Collections.ICodeSet {
 
             #region List
 
-            if (self.Count <= Service.ListMaxCount) {
-                Contract.Assert (self.Count > Service.PairCount);
+            if (self.Count <= CodeSet.ListMaxCount) {
+                Contract.Assert (self.Count > CodeSet.PairCount);
 
                 return CodeSetList.From (self.ToCodes (offset));
             }
@@ -77,7 +77,7 @@ namespace DD.Collections.ICodeSet {
 
             #region Mask
 
-            if (self.Span () <= Service.MaskMaxSpan) {
+            if (self.Span () <= CodeSet.MaskMaxSpan) {
                 return CodeSetMask.From (self.ToCodes (offset));
             }
 
@@ -85,8 +85,8 @@ namespace DD.Collections.ICodeSet {
 
             #endregion
 
-            Contract.Assert (self.Span () > Service.MaskMaxSpan);
-            Contract.Assert (self.Count > Service.ListMaxCount);
+            Contract.Assert (self.Span () > CodeSet.MaskMaxSpan);
+            Contract.Assert (self.Count > CodeSet.ListMaxCount);
 
             return null;
         }
@@ -94,7 +94,7 @@ namespace DD.Collections.ICodeSet {
         [Pure]
         private static ICodeSet ReducePartTwo (this BitSetArray self, int offset) {
             Contract.Requires<ArgumentNullException> (self.IsNot (null));
-            Contract.Requires<ArgumentException> (self.Count.InRange (Service.PairCount + 1, self.Span () - 1));	// not Null/Code/Pair/Full
+            Contract.Requires<ArgumentException> (self.Count.InRange (CodeSet.PairCount + 1, self.Span () - 1));	// not Null/Code/Pair/Full
             Contract.Requires<ArgumentException> (self.Length <= Code.MaxCount || self.Last <= Code.MaxValue);
             Contract.Requires<ArgumentException> (offset.InRange (0, Code.MaxValue - (int)self.Last));
 
@@ -140,8 +140,8 @@ namespace DD.Collections.ICodeSet {
             if (retSet.Is (null)) {
                 Contract.Assume (self.IsNot (null)); // not null
                 Contract.Assume (self.Span () != self.Count); // not Full
-                Contract.Assume (self.Count > Service.ListMaxCount); // not Code, not Pair, not List
-                Contract.Assume (self.Span () > Service.MaskMaxSpan); // not Mask
+                Contract.Assume (self.Count > CodeSet.ListMaxCount); // not Code, not Pair, not List
+                Contract.Assume (self.Span () > CodeSet.MaskMaxSpan); // not Mask
 
                 Contract.Assume (self.First.HasValue);
                 Contract.Assume (self.Last.HasValue);
@@ -183,32 +183,32 @@ namespace DD.Collections.ICodeSet {
             success.Assert (!self.IsNull ());
 
             switch (self.Count) {
-                case Service.NullCount:
+                case CodeSet.NullCount:
                     success.Assert (self is CodeSetNone);
                     break;
 
-                case Service.UnitCount:
+                case CodeSet.UnitCount:
                     success.Assert (self is Code);
                     break;
 
-                case Service.PairCount:
+                case CodeSet.PairCount:
                     success.Assert (self is CodeSetPair);
                     break;
 
                 default:
-                    success.Assert (self.Count > Service.PairCount);
+                    success.Assert (self.Count > CodeSet.PairCount);
 
                     if (self.Count == self.Length) {
                         success.Assert (self is CodeSetFull);
                     }
                     else if (self is CodeSetList) {
-                        success.Assert (self.Count <= Service.ListMaxCount);
+                        success.Assert (self.Count <= CodeSet.ListMaxCount);
                     }
                     else if (self is CodeSetMask) {
                         success.Assert (self.Length <= char.MaxValue);
                     }
                     else if (self is CodeSetDiff) {
-                        success.Assert (self.Length > Service.MaskMaxSpan);
+                        success.Assert (self.Length > CodeSet.MaskMaxSpan);
                     }
                     else {
                         success.Assert (self is CodeSetWide);

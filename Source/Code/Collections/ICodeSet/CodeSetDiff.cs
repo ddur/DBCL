@@ -34,7 +34,7 @@ namespace DD.Collections.ICodeSet {
             Contract.Requires<ArgumentException> (b.Last < a.Last);
 
             // Has more members than Service.ListMaxCount (>CodeSetList.MaxCount)
-            Contract.Requires<ArgumentException> ((a.Count - b.Count) > Service.ListMaxCount);
+            Contract.Requires<ArgumentException> ((a.Count - b.Count) > CodeSet.ListMaxCount);
 
             Contract.Ensures (Contract.Result<CodeSetDiff> ().IsNot (null));
 
@@ -60,7 +60,7 @@ namespace DD.Collections.ICodeSet {
             Contract.Requires<ArgumentException> (b.Last < a.Last);
 
             // this.count > Service.ListMaxCount (>CodeSetList.MaxCount)
-            Contract.Requires<ArgumentException> ((a.Count - b.Count) > Service.ListMaxCount);
+            Contract.Requires<ArgumentException> ((a.Count - b.Count) > CodeSet.ListMaxCount);
 
             Contract.Ensures (Theory.Construct (a, b, this));
 
@@ -169,7 +169,7 @@ namespace DD.Collections.ICodeSet {
                 success.Assert (a.Count == a.Length);
                 success.Assert (a.First < b.First);
                 success.Assert (b.Last < a.Last);
-                success.Assert ((a.Count - b.Count) > Service.PairCount);
+                success.Assert ((a.Count - b.Count) > CodeSet.PairCount);
 
                 // input -> private
                 success.Assert (self.aSet.Is (a));
@@ -190,7 +190,7 @@ namespace DD.Collections.ICodeSet {
                 success.Assert (self.aSet.Count == self.aSet.Length);
                 success.Assert (self.aSet.First < self.bSet.First);
                 success.Assert (self.bSet.Last < self.aSet.Last);
-                success.Assert ((self.aSet.Count - self.bSet.Count) > Service.PairCount);
+                success.Assert ((self.aSet.Count - self.bSet.Count) > CodeSet.PairCount);
 
                 // public <- private
                 success.Assert (self.Count == self.aSet.Count - self.bSet.Count);
@@ -199,7 +199,7 @@ namespace DD.Collections.ICodeSet {
                 success.Assert (self.Last == self.aSet.Last);
 
                 // constraints
-                success.Assert (self.Count > Service.PairCount);// not Pair
+                success.Assert (self.Count > CodeSet.PairCount);// not Pair
                 success.Assert (self.Count < self.Length);				// not Full
 
                 return success;

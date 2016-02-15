@@ -15,7 +15,7 @@ namespace DD.Collections.ICodeSet {
     /// <remarks>ICodeSet implementation requires sorted/ordered IEnumerable&lt;Code&gt;</remarks>
     /// </summary>
     public interface ICodeSet :
-        ICode, ICollection<Code>, IEnumerable<Code>, IEquatable<ICodeSet>,
+        ICode, IReadOnlyCollection<Code>, IEnumerable<Code>, IEquatable<ICodeSet>,
         IEqualityComparer<ICodeSet>, IComparable<ICodeSet> {
 
         [Pure]

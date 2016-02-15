@@ -8,9 +8,10 @@
     <OutputType>Library</OutputType>
     <RootNamespace>NUnit.Text</RootNamespace>
     <AssemblyName>NUnit.Text</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <TargetFrameworkProfile />
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>

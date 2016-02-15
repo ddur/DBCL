@@ -8,7 +8,7 @@ using System;
 using DD.Collections;
 using NUnit.Framework;
 
-namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
+namespace DD.Collections.ICodeSet.ICodeSetExtendsTest.Members {
 
     [TestFixture]
     public class IsCompact {

@@ -5,10 +5,9 @@
 // --------------------------------------------------------------------------------
 
 using System;
-using DD.Collections;
 using NUnit.Framework;
 
-namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
+namespace DD.Collections.ICodeSet.ICodeSetExtendedTest.Members {
 
     [TestFixture]
     public class Span {
@@ -29,6 +28,7 @@ namespace DD.Collections.ICodeSet.ICodeSetServiceTest.Members {
             Assert.AreEqual (10, CodeSetPair.From (1, 10).Span ());
             Assert.AreEqual (100, CodeSetMask.From (1, 20, 100).Span ());
             Assert.AreEqual (1000, CodeSetList.From (901, 1000, 1111, 1900).Span ());
+            Assert.AreEqual (1000, new Code[] {901, 1000, 1900, 1111}.Span ());
         }
     }
 }

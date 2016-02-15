@@ -18,6 +18,19 @@ namespace DD.Collections.ICodeSet {
     /// </summary>
     public abstract class CodeSet : ICodeSet {
 
+        public const int NullCount = 0;
+        public const int UnitCount = 1;
+        public const int PairCount = 2;
+
+        // NOTE: log(16) == 4 tests worst case
+        // TODO? compare speed on 32 and 64
+        public const int ListMaxCount = 16;
+
+        public const int MaskMaxSpan = 256;
+
+        public const int NoneStart = -1;
+        public const int NoneFinal = -2;
+
         #region Ctor
 
         protected CodeSet () { }
@@ -120,59 +133,10 @@ namespace DD.Collections.ICodeSet {
 
         #endregion
 
-        #region ICollection
+        #region IReadOnllyCollection
 
         [Pure]
         public abstract int Count { get; }
-
-        [Pure]
-        public bool IsReadOnly {
-            get {
-                return true;
-            }
-        }
-
-        /// <summary>Returns True if collection Contains (IsSupersetOf) specified code
-        /// </summary>
-        /// <param name="code"></param>
-        /// <returns>bool</returns>
-        [Pure]
-        public bool Contains (Code code) {
-            Contract.Ensures (Contract.Result<bool> () == this[code]);
-            return this[code];
-        }
-
-        /// <summary>Copies members from this collection into Code[]
-        /// </summary>
-        /// <param name="array"></param>
-        /// <param name="arrayIndex"></param>
-        [Pure]
-        [SuppressMessage ("Microsoft.Contracts", "CC1033", Justification = "Debug/Release exceptions not same")]
-        public void CopyTo (Code[] array, int arrayIndex) {
-            Contract.Requires<ArgumentNullException> (array.IsNot (null));
-            Contract.Requires<IndexOutOfRangeException> (arrayIndex >= 0);
-            Contract.Requires<IndexOutOfRangeException> (arrayIndex <= (array.Length - this.Count));
-            foreach (Code code in this) {
-                array[arrayIndex] = code;
-                ++arrayIndex;
-            }
-        }
-
-        /// <summary>Explicit interface implementation.<para>Operations not supported on Read-Only Collection</para>
-        /// </summary>
-        /// <param name="code"></param>
-        [Pure]
-        void ICollection<Code>.Add (Code code) { throw new NotSupportedException (); }
-
-        /// <summary>Explicit interface implementation.<para>Operations not supported on Read-Only Collection</para>
-        /// </summary>
-        [Pure]
-        void ICollection<Code>.Clear () { throw new NotSupportedException (); }
-
-        /// <summary>Explicit interface implementation.<para>Operations not supported on Read-Only Collection</para>
-        /// </summary>
-        [Pure]
-        bool ICollection<Code>.Remove (Code code) { throw new NotSupportedException (); }
 
         #endregion
     }

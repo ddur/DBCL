@@ -18,7 +18,7 @@ namespace DD.Collections.ICodeSet.QuickWrapTest
         {
             Assert.Throws ( typeof(ArgumentNullException),
                     delegate {
-                               QuickWrap.From ((BitSetArray)null);
+                               QuickWrap.Unsafe ((BitSetArray)null);
                     });
         }
 
@@ -27,7 +27,7 @@ namespace DD.Collections.ICodeSet.QuickWrapTest
         {
             Assert.Throws ( typeof(ArgumentException),
                     delegate {
-                               QuickWrap.From (BitSetArray.Empty());
+                               QuickWrap.Unsafe (BitSetArray.Empty());
                     });
         }
 
@@ -37,14 +37,14 @@ namespace DD.Collections.ICodeSet.QuickWrapTest
         {
             Assert.Throws ( typeof(ArgumentException),
                     delegate {
-                               QuickWrap.From (BitSetArray.From (1114112));
+                               QuickWrap.Unsafe (BitSetArray.From (1114112));
                     });
         }
 
         [Test]
         public void Valid()
         {
-            var quick = QuickWrap.From (BitSetArray.From (1, 5, 7));
+            var quick = QuickWrap.Unsafe (BitSetArray.From (1, 5, 7));
 
             Assert.True (quick[1] && quick[5] && quick[7]);
             Assert.False (quick[2] | quick[4] | quick[6]);
