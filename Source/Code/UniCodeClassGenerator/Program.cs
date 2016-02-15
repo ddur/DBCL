@@ -28,12 +28,14 @@ namespace UniCodeClassGenerator
                 var blockClassBuilder = new BlockBuilder ();
                 blockClassBuilder.Build (blocksTxt);
                 var blockClass = blockClassBuilder.ToString ();
+                File.WriteAllText ("Blocks.txt", blocksTxt, Encoding.UTF8);
                 File.WriteAllText ("Block.generated.cs", blockClass, Encoding.UTF8);
 
                 var categoriesTxt = GetInternetFile (UnicodeCategoriesUrl);
                 var categoryBuilder = new CategoryBuilder();
                 categoryBuilder.Build (categoriesTxt);
                 var categoryClass = categoryBuilder.ToString();
+                File.WriteAllText ("DerivedGeneralCategory.txt", categoriesTxt, Encoding.UTF8);
                 File.WriteAllText ("Category.generated.cs", categoryClass, Encoding.UTF8);
 
             } catch (Exception e) {

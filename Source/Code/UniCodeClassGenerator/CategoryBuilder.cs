@@ -26,6 +26,7 @@ namespace UniCodeClassGenerator
             var regexOptions = RegexOptions.Compiled | RegexOptions.ExplicitCapture;
             var categoryRegex = new Regex(@"^# General_Category=(?<name>.+)", regexOptions);
             var dataRegex = new Regex(@"^(?<start>[0123456789ABCDEF]{4,6})(\.{2}(?<final>[0123456789ABCDEF]{4,6}))?", regexOptions);
+            var sumRegex = new Regex(@"^# Total code points:\s(?<total>\d+)$", regexOptions);
 
             AddCopyright();
             WriteLine();
@@ -50,8 +51,23 @@ namespace UniCodeClassGenerator
                 var line = Regex.Replace (lineItem, @"[\n\r]", "");
 
                 // Group footer
-                if (line.StartsWith ("# Total code points", StringComparison.InvariantCulture)) {
+                if (line.StartsWith ("# Total code points:", StringComparison.InvariantCulture)) {
 
+                    var sumMatch = sumRegex.Match (line);
+                    if (sumMatch.Success) {
+                        var sumMachValue = sumMatch.Groups["total"].Value;
+                        int sumCheck;
+                        if (!string.IsNullOrEmpty(sumMachValue)
+                            && Int32.TryParse (sumMachValue, NumberStyles.Integer, null, out sumCheck)) {
+                            if (sumCheck != bits.Count) {
+                                throw new ArgumentException ("Total does not match: " + line);
+                            }
+                        } else {
+                            throw new ArgumentException ("Regex group failed: " + line);
+                        }
+                    } else {
+                        throw new ArgumentException ("Regex match failed: " + line);
+                    }
                     Console.Write (" OK");
 
                     // TODO compare bits.Count with Total code points

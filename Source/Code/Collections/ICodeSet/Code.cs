@@ -285,11 +285,11 @@ namespace DD.Collections.ICodeSet {
             if ((Value & 0xFF) == Value) {
                 char c = (char)Value;
                 if (char.IsControl (c)) {
-                    return "\\x" + Value.ToString ("X");
+                    return @"\x" + Value.ToString ("X");
                 }
-                return "" + c;
+                return c.ToString();
             }
-            return "\\x" + Value.ToString ("X");
+            return @"\x" + Value.ToString ("X");
         }
 
         #endregion
