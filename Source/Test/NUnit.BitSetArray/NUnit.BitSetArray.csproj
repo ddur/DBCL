@@ -55,6 +55,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BitSetArrayTest\ItemsAddRemoveSet.cs" />
     <Compile Include="BitSetArrayTest\AsICloneable.cs" />
     <Compile Include="BitSetArrayTest\AsICollection.cs" />
     <Compile Include="BitSetArrayTest\AsIComparable.cs" />
@@ -64,7 +65,7 @@
     <Compile Include="BitSetArrayTest\Constructors.cs" />
     <Compile Include="BitSetArrayTest\Extended.cs" />
     <Compile Include="BitSetArrayTest\Factory.cs" />
-    <Compile Include="BitSetArrayTest\GetSet.cs" />
+    <Compile Include="BitSetArrayTest\ItemGetSet.cs" />
     <Compile Include="BitSetArrayTest\Helpers.cs" />
     <Compile Include="BitSetArrayTest\Operations.cs" />
     <Compile Include="BitSetArrayTest\Operators.cs" />

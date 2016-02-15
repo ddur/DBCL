@@ -12,7 +12,7 @@ using NUnit.Framework;
 namespace DD.Collections.BitSetArrayTest {
 
     [TestFixture]
-    public class GetSet {
+    public class ItemGetSetSetAllTrimExcess {
 
         [Test]
         // index get is less restrictive than Get - no IndexOutOfRangeException thrown
@@ -145,7 +145,7 @@ namespace DD.Collections.BitSetArrayTest {
         }
 
         [Test]
-        public void BitGetMember () {
+        public void GetMember () {
             BitSetArray test = BitSetArray.Mask (new int[] { 1057 }, 11);
             Assert.That (delegate {
                 test.GetMember (int.MinValue);
@@ -200,320 +200,7 @@ namespace DD.Collections.BitSetArrayTest {
         }
 
         [Test]
-        public void BitSetMembers_Null () {
-
-            // arrange
-            var test = BitSetArray.Size (10);
-            int[] items = null;
-
-            // act
-            test.SetMembers (items);
-
-            // assert
-            Assert.That (test.Count == 0);
-        }
-
-
-        [Test]
-        public void BitSetMembers_Empty () {
-
-            // arrange
-            var test = BitSetArray.Size (10);
-            var items = new int[0];;
-
-            // act
-            test.SetMembers (items);
-
-            // assert
-            Assert.That (test.Count == 0);
-        }
-
-        [Test]
-        public void BitSetMembers_FromFalseToTrue () {
-
-            // arrange
-            var test = BitSetArray.Size (10);
-
-            // assert preconditions
-            Assert.That (test.Version == int.MaxValue);
-            Assert.That (test.CachedFirstItem_Version == null);
-            Assert.That (test.CachedLastItem_Version == null);
-            Assert.That (test.CachedFirstItem_Value == null);
-            Assert.That (test.CachedLastItem_Value == null);
-
-            // act
-            var items = new int [] {int.MinValue, -1, 2, 7, 2, 7, int.MaxValue};
-            test.SetMembers (items);
-
-            // assert postconditions
-            Assert.That (test.CachedFirstItem_Version == test.Version);
-            Assert.That (test.CachedLastItem_Version == test.Version);
-            Assert.That (test.CachedFirstItem_Value == 2);
-            Assert.That (test.CachedLastItem_Value == 7);
-
-            Assert.That (test.Count == 2);
-            Assert.False (test[0]);
-            Assert.False (test[1]);
-            Assert.True (test[2]);
-            Assert.False (test[3]);
-            Assert.False (test[4]);
-            Assert.False (test[5]);
-            Assert.False (test[6]);
-            Assert.True (test[7]);
-            Assert.False (test[8]);
-            Assert.False (test[9]);
-
-            // act
-            test.SetMembers (new int[] {4, 6}); // cache valid - no need to update value, update version
-
-            // assert postconditions
-            Assert.That (test.CachedFirstItem_Version == test.Version);
-            Assert.That (test.CachedLastItem_Version == test.Version);
-            Assert.That (test.CachedFirstItem_Value == 2);
-            Assert.That (test.CachedLastItem_Value == 7);
-
-            Assert.That (test.Count == 4);
-            Assert.False (test[0]);
-            Assert.False (test[1]);
-            Assert.True (test[2]);
-            Assert.False (test[3]);
-            Assert.True (test[4]);
-            Assert.False (test[5]);
-            Assert.True (test[6]);
-            Assert.True (test[7]);
-            Assert.False (test[8]);
-            Assert.False (test[9]);
-
-            // act
-            test.SetMembers (new int[] {0, 9}); // cache valid - update cache value and version
-
-            // assert postconditions
-            Assert.That (test.CachedFirstItem_Version == test.Version);
-            Assert.That (test.CachedLastItem_Version == test.Version);
-            Assert.That (test.CachedFirstItem_Value == 0);
-            Assert.That (test.CachedLastItem_Value == 9);
-
-            Assert.That (test.Count == 6);
-            Assert.True (test[0]);
-            Assert.False (test[1]);
-            Assert.True (test[2]);
-            Assert.False (test[3]);
-            Assert.True (test[4]);
-            Assert.False (test[5]);
-            Assert.True (test[6]);
-            Assert.True (test[7]);
-            Assert.False (test[8]);
-            Assert.True (test[9]);
-
-            // act
-            test.SetMembers (new int[] {0, 9}, false); // invalidates cache
-
-            // assert postconditions
-            Assert.That (test.CachedFirstItem_Version != test.Version);
-            Assert.That (test.CachedLastItem_Version != test.Version);
-            Assert.That (test.CachedFirstItem_Value == 0);
-            Assert.That (test.CachedLastItem_Value == 9);
-
-            Assert.That (test.Count == 4);
-            Assert.False (test[0]);
-            Assert.False (test[1]);
-            Assert.True (test[2]);
-            Assert.False (test[3]);
-            Assert.True (test[4]);
-            Assert.False (test[5]);
-            Assert.True (test[6]);
-            Assert.True (test[7]);
-            Assert.False (test[8]);
-            Assert.False (test[9]);
-
-            // act
-            test.SetMembers (new int[] {0, 9}); // cache invalidated - does not update cache
-
-            // assert postconditions
-            Assert.That (test.CachedFirstItem_Version != test.Version);
-            Assert.That (test.CachedLastItem_Version != test.Version);
-            Assert.That (test.CachedFirstItem_Value == 0);
-            Assert.That (test.CachedLastItem_Value == 9);
-
-            Assert.That (test.Count == 6);
-            Assert.True (test[0]);
-            Assert.False (test[1]);
-            Assert.True (test[2]);
-            Assert.False (test[3]);
-            Assert.True (test[4]);
-            Assert.False (test[5]);
-            Assert.True (test[6]);
-            Assert.True (test[7]);
-            Assert.False (test[8]);
-            Assert.True (test[9]);
-
-        }
-
-
-        [Test]
-        public void BitSetMembers_FromFalseToFalse () {
-
-            // arrange
-            var test = BitSetArray.Size (10);
-            var items = new int [] {int.MinValue, -1, 0, 8, 0, 8, int.MaxValue};
-
-            // act
-            test.SetMembers (items, false);
-
-            // assert
-            Assert.That (test.Count == 0);
-            Assert.False (test[0]);
-            Assert.False (test[1]);
-            Assert.False (test[7]);
-            Assert.False (test[8]);
-            Assert.False (test[9]);
-
-        }
-
-        [Test]
-        public void BitSetMembers_FromTrueToFalse () {
-
-            // arrange
-            var test = BitSetArray.Size (10, true);
-
-            // assert preconditions
-            Assert.That (test.Version == int.MaxValue);
-            Assert.That (test.CachedFirstItem_Version == int.MaxValue);
-            Assert.That (test.CachedLastItem_Version == int.MaxValue);
-            Assert.That (test.CachedFirstItem_Value == 0);
-            Assert.That (test.CachedLastItem_Value == 9);
-
-            // act
-            var items = new int [] {int.MinValue, -1, 2, 7, 2, 7, int.MaxValue};
-            test.SetMembers (items, false);
-
-            // assert postconditions
-            Assert.That (test.CachedFirstItem_Version == test.Version);
-            Assert.That (test.CachedLastItem_Version == test.Version);
-            Assert.That (test.CachedFirstItem_Value == 0);
-            Assert.That (test.CachedLastItem_Value == 9);
-
-            Assert.That (test.Count == 8);
-            Assert.That (test[0]);
-            Assert.That (test[1]);
-            Assert.False (test[2]);
-            Assert.That (test[3]);
-            Assert.That (test[4]);
-            Assert.That (test[5]);
-            Assert.That (test[6]);
-            Assert.False (test[7]);
-            Assert.That (test[8]);
-            Assert.That (test[9]);
-
-            // act
-            test.SetMembers (new int[] {4, 6}, false); // cache valid - no need to update value, update version
-
-            // assert postconditions
-            Assert.That (test.CachedFirstItem_Version == test.Version);
-            Assert.That (test.CachedLastItem_Version == test.Version);
-            Assert.That (test.CachedFirstItem_Value == 0);
-            Assert.That (test.CachedLastItem_Value == 9);
-
-            Assert.That (test.Count == 6);
-            Assert.That (test[0]);
-            Assert.That (test[1]);
-            Assert.False (test[2]);
-            Assert.That (test[3]);
-            Assert.False (test[4]);
-            Assert.That (test[5]);
-            Assert.False (test[6]);
-            Assert.False (test[7]);
-            Assert.That (test[8]);
-            Assert.That (test[9]);
-
-            // act
-            test.SetMembers (new int[] {0, 9}, false); // invalidates cache
-
-            // assert postconditions
-            Assert.That (test.CachedFirstItem_Version != test.Version);
-            Assert.That (test.CachedLastItem_Version != test.Version);
-            Assert.That (test.CachedFirstItem_Value == 0);
-            Assert.That (test.CachedLastItem_Value == 9);
-
-            Assert.That (test.Count == 4);
-            Assert.False (test[0]);
-            Assert.That (test[1]);
-            Assert.False (test[2]);
-            Assert.That (test[3]);
-            Assert.False (test[4]);
-            Assert.That (test[5]);
-            Assert.False (test[6]);
-            Assert.False (test[7]);
-            Assert.That (test[8]);
-            Assert.False (test[9]);
-
-            test.SetMembers (new int[] {3, 5}, false); // cache invalidated - does not update cache
-
-            // assert postconditions
-            Assert.That (test.CachedFirstItem_Version != test.Version);
-            Assert.That (test.CachedLastItem_Version != test.Version);
-            Assert.That (test.CachedFirstItem_Value == 0);
-            Assert.That (test.CachedLastItem_Value == 9);
-
-            Assert.That (test.Count == 2);
-            Assert.False (test[0]);
-            Assert.That (test[1]);
-            Assert.False (test[2]);
-            Assert.False (test[3]);
-            Assert.False (test[4]);
-            Assert.False (test[5]);
-            Assert.False (test[6]);
-            Assert.False (test[7]);
-            Assert.That (test[8]);
-            Assert.False (test[9]);
-
-            // set/update cache
-            Assert.That (test.First == 1);
-            Assert.That (test.Last == 8);
-
-            // act
-            test.SetMembers (new int[] {0, 9}); // cache valid - update cache value and version
-
-            // assert postconditions
-            Assert.That (test.CachedFirstItem_Version == test.Version);
-            Assert.That (test.CachedLastItem_Version == test.Version);
-            Assert.That (test.CachedFirstItem_Value == 0);
-            Assert.That (test.CachedLastItem_Value == 9);
-
-            Assert.That (test.Count == 4);
-            Assert.That (test[0]);
-            Assert.That (test[1]);
-            Assert.False (test[2]);
-            Assert.False (test[3]);
-            Assert.False (test[4]);
-            Assert.False (test[5]);
-            Assert.False (test[6]);
-            Assert.False (test[7]);
-            Assert.That (test[8]);
-            Assert.That (test[9]);
-        }
-
-        [Test]
-        public void BitSetMembers_FromTrueToTrue () {
-
-            // arrange
-            var test = BitSetArray.Size (10, true);
-            var items = new int [] {int.MinValue, -1, 0, 8, 0, 8, int.MaxValue};
-
-            // act
-            test.SetMembers (items);
-
-            // assert
-            Assert.That (test.Count == 10);
-            Assert.That (test[0]);
-            Assert.That (test[1]);
-            Assert.That (test[7]);
-            Assert.That (test[8]);
-            Assert.That (test[9]);
-        }
-
-        [Test]
-        public void BitSetMember () {
+        public void SetMember_CheckVersion () {
 
             var test = BitSetArray.Size (10);
 
@@ -641,7 +328,7 @@ namespace DD.Collections.BitSetArrayTest {
         }
 
         [Test]
-        public void BitSetMember_Random () {
+        public void SetMember_Random () {
             var r = new Random ();
             int random_item = 0;
             var test = BitSetArray.Size (1000);
@@ -658,7 +345,7 @@ namespace DD.Collections.BitSetArrayTest {
         }
 
         [Test]
-        public void BitSetMember_Throws () {
+        public void SetMember_Throws () {
             BitSetArray test = BitSetArray.From (5, 0, 10);
             Assert.That (delegate {
                 test.SetMember (int.MinValue, false);
@@ -784,59 +471,6 @@ namespace DD.Collections.BitSetArrayTest {
             Assert.False (test.SetMember (int.MaxValue, false));
         }
 
-        [Test]
-        public void BitInitMembers () {
-
-#if DEBUG // In Release build this internal method throws no contract exceptions
-            var test = BitSetArray.Size (2);
-            Assert.That (delegate {
-                test._InitMembers (new int[] { 0 }, 0, 0);
-            }, Throws.Nothing);
-
-            test = BitSetArray.Size (2);
-            Assert.That (delegate {
-                test._InitMembers (new int[] { 0, 1 }, 0, 1);
-            }, Throws.Nothing);
-
-            test = BitSetArray.Size (2);
-            Assert.That (delegate {
-                test._InitMembers (new int[] { 1 }, 1, 1);
-            }, Throws.Nothing);
-
-            test = BitSetArray.Size (2);
-            Assert.That (delegate {
-                test._InitMembers (null, 0, 0);
-            }, Throws.TypeOf<ArgumentNullException> ());
-            Assert.That (delegate {
-                test._InitMembers (new int[0], 0, 0);
-            }, Throws.TypeOf<ArgumentEmptyException> ());
-            Assert.That (delegate {
-                test._InitMembers (new int[] { int.MinValue }, 0, 0);
-            }, Throws.TypeOf<IndexOutOfRangeException> ());
-            Assert.That (delegate {
-                test._InitMembers (new int[] { -1 }, -1, -1);
-            }, Throws.TypeOf<IndexOutOfRangeException> ());
-            Assert.That (delegate {
-                test._InitMembers (new int[] { 2 }, 2, 2);
-            }, Throws.TypeOf<IndexOutOfRangeException> ());
-            Assert.That (delegate {
-                test._InitMembers (new int[] { int.MaxValue }, 0, 0);
-            }, Throws.TypeOf<IndexOutOfRangeException> ());
-
-            Assert.GreaterOrEqual (5, test.Length);
-            Assert.That (delegate {
-                test._InitMembers (new int[] { 5 }, 5, 5);
-            }, Throws.TypeOf<IndexOutOfRangeException> ());
-
-            test._InitMembers (new int[] { 0 }, 0, 0);
-            Assert.AreNotEqual (0, test.Count);
-            Assert.That (delegate {
-                test._InitMembers (new int[] { 0 }, 0, 0);
-            }, Throws.TypeOf<InvalidOperationException> ()); // Count != 0
-
-#endif
-        }
-
         private IEnumerable<BitSetArray> BitSetAllSource {
             get {
                 yield return BitSetArray.Empty ();
@@ -845,7 +479,8 @@ namespace DD.Collections.BitSetArrayTest {
         }
 
         [Test, TestCaseSource ("BitSetAllSource")]
-        public void BitSetAll (BitSetArray test) {
+        public void SetAll (BitSetArray test) {
+
             test.SetAll (true);
             Assert.That (test.Count == test.Length);
 

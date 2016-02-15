@@ -21,6 +21,11 @@ namespace DD.Collections.BitSetArrayTest {
             Assert.That (delegate {
                 BitSetArray.From ((IEnumerable<int>)null);
             }, Throws.TypeOf<ArgumentNullException> ());
+
+//            Assert.That (delegate {
+//               BitSetArray.From (new int[0]);
+//            }, Throws.TypeOf<ArgumentEmptyException> ());
+
             Assert.That (delegate {
                 BitSetArray.From ((IEnumerable<int>)new int[] { 0, -1 });
             }, Throws.TypeOf<IndexOutOfRangeException> ());
@@ -76,33 +81,16 @@ namespace DD.Collections.BitSetArrayTest {
             Assert.That (test.Last == 4);
 
             test = BitSetArray.From (test, 5);
-            Assert.That (test.Count != list.Count);
             Assert.That (test.Count == 4);
             Assert.That (test.Length == 5);
             Assert.That (test.First == 1);
             Assert.That (test.Last == 4);
 
             test = BitSetArray.From (test, 3);
-            Assert.That (test.Count != list.Count);
             Assert.That (test.Count == 2);
             Assert.That (test.Length == 3);
             Assert.That (test.First == 1);
             Assert.That (test.Last == 2);
-
-            list = new List<int> ();
-            test = BitSetArray.From (list);
-            Assert.That (test.Count == list.Count);
-            Assert.That (test.Count == 0);
-            Assert.That (test.Length == 0);
-            Assert.That (test.First == null);
-            Assert.That (test.Last == null);
-
-            test = BitSetArray.From (test, 20);
-            Assert.That (test.Count == list.Count);
-            Assert.That (test.Count == 0);
-            Assert.That (test.Length == 20);
-            Assert.That (test.First == null);
-            Assert.That (test.Last == null);
         }
 
         [Test]

@@ -42,7 +42,7 @@ namespace DD.Collections.BitSetArrayTest.Interfaces.AsISet {
 
         [Test, TestCaseSource ("ISetTestCases")]
         public void ExceptWith (BitSetArray thisSet, IEnumerable<int> thatSet) {
-            HashSet<int> hashResult = new HashSet<int> (thisSet);
+            var hashResult = new HashSet<int> (thisSet);
             hashResult.ExceptWith (new HashSet<int> (thatSet));
             thisSet.ExceptWith (thatSet);
             Assert.That (hashResult.SetEquals (thisSet));
@@ -61,7 +61,7 @@ namespace DD.Collections.BitSetArrayTest.Interfaces.AsISet {
 
         [Test, TestCaseSource ("ISetTestCases")]
         public void IntersectWith (BitSetArray thisSet, IEnumerable<int> thatSet) {
-            HashSet<int> hashResult = new HashSet<int> (thisSet);
+            var hashResult = new HashSet<int> (thisSet);
             hashResult.IntersectWith (new HashSet<int> (thatSet));
             thisSet.IntersectWith (thatSet);
             Assert.That (hashResult.SetEquals (thisSet));
@@ -80,7 +80,7 @@ namespace DD.Collections.BitSetArrayTest.Interfaces.AsISet {
 
         [Test, TestCaseSource ("ISetTestCases")]
         public void SymmetricExceptWith (BitSetArray thisSet, IEnumerable<int> thatSet) {
-            HashSet<int> hashResult = new HashSet<int> (thisSet);
+            var hashResult = new HashSet<int> (thisSet);
             hashResult.SymmetricExceptWith (new HashSet<int> (thatSet.Where (item => BitSetArray.ValidMember (item))));
             thisSet.SymmetricExceptWith (thatSet);
             Assert.That (hashResult.SetEquals (thisSet));
@@ -90,7 +90,7 @@ namespace DD.Collections.BitSetArrayTest.Interfaces.AsISet {
 
         [Test]
         public void SymmetricExceptWithNull () {
-            BitSetArray testSet = BitSetArray.From (1, 2, 3);
+            var testSet = BitSetArray.From (1, 2, 3);
             Assert.That (delegate {
                 testSet.SymmetricExceptWith ((int[])null);
             }, Throws.Nothing);
@@ -99,7 +99,7 @@ namespace DD.Collections.BitSetArrayTest.Interfaces.AsISet {
 
         [Test, TestCaseSource ("ISetTestCases")]
         public void UnionWith (BitSetArray thisSet, IEnumerable<int> thatSet) {
-            HashSet<int> hashResult = new HashSet<int> (thisSet);
+            var hashResult = new HashSet<int> (thisSet);
             hashResult.UnionWith (new HashSet<int> (thatSet.Where (item => BitSetArray.ValidMember (item))));
             thisSet.UnionWith (thatSet);
             Assert.That (hashResult.SetEquals (thisSet));
@@ -110,7 +110,7 @@ namespace DD.Collections.BitSetArrayTest.Interfaces.AsISet {
 
         [Test]
         public void UnionWithNull () {
-            BitSetArray testSet = BitSetArray.From (1, 2, 3);
+            var testSet = BitSetArray.From (1, 2, 3);
             Assert.That (delegate {
                 testSet.UnionWith ((int[])null);
             }, Throws.Nothing);
@@ -134,8 +134,8 @@ namespace DD.Collections.BitSetArrayTest.Interfaces.AsISet {
 
         [Test, TestCaseSource ("ISetTestCases")]
         public void SetEquals (BitSetArray thisSet, IEnumerable<int> thatSet) {
-            HashSet<int> hashThis = new HashSet<int> (thisSet);
-            HashSet<int> hashThat = new HashSet<int> (thatSet);
+            var hashThis = new HashSet<int> (thisSet);
+            var hashThat = new HashSet<int> (thatSet);
             Assert.That (hashThis.SetEquals (hashThat) == thisSet.SetEquals (thatSet));
             Assert.That (thisSet.SetEquals ((IEnumerable<int>)thisSet));
         }
@@ -150,8 +150,8 @@ namespace DD.Collections.BitSetArrayTest.Interfaces.AsISet {
 
         [Test, TestCaseSource ("ISetTestCases")]
         public void Overlaps (BitSetArray thisSet, IEnumerable<int> thatSet) {
-            HashSet<int> hashThis = new HashSet<int> (thisSet);
-            HashSet<int> hashThat = new HashSet<int> (thatSet);
+            var hashThis = new HashSet<int> (thisSet);
+            var hashThat = new HashSet<int> (thatSet);
             Assert.That (hashThis.Overlaps (hashThat) == thisSet.Overlaps (thatSet));
             if (thisSet.Count != 0) {
                 Assert.That (thisSet.Overlaps ((IEnumerable<int>)thisSet));
@@ -171,8 +171,8 @@ namespace DD.Collections.BitSetArrayTest.Interfaces.AsISet {
 
         [Test, TestCaseSource ("ISetTestCases")]
         public void IsSupersetOf (BitSetArray thisSet, IEnumerable<int> thatSet) {
-            HashSet<int> hashThis = new HashSet<int> (thisSet);
-            HashSet<int> hashThat = new HashSet<int> (thatSet);
+            var hashThis = new HashSet<int> (thisSet);
+            var hashThat = new HashSet<int> (thatSet);
             if (thatSet.Count () != 0) {
                 Assert.That (hashThis.IsSupersetOf (hashThat) == thisSet.IsSupersetOf (thatSet));
             }
@@ -197,8 +197,8 @@ namespace DD.Collections.BitSetArrayTest.Interfaces.AsISet {
 
         [Test, TestCaseSource ("ISetTestCases")]
         public void IsProperSupersetOf (BitSetArray thisSet, IEnumerable<int> thatSet) {
-            HashSet<int> hashThis = new HashSet<int> (thisSet);
-            HashSet<int> hashThat = new HashSet<int> (thatSet);
+            var hashThis = new HashSet<int> (thisSet);
+            var hashThat = new HashSet<int> (thatSet);
             if (thisSet.Count != 0 && thatSet.Count () == 0) {
                 Assert.That (hashThis.IsProperSupersetOf (hashThat) != thisSet.IsProperSupersetOf (thatSet));
             }
@@ -218,8 +218,8 @@ namespace DD.Collections.BitSetArrayTest.Interfaces.AsISet {
 
         [Test, TestCaseSource ("ISetTestCases")]
         public void IsSubsetOf (BitSetArray thisSet, IEnumerable<int> thatSet) {
-            HashSet<int> hashThis = new HashSet<int> (thisSet);
-            HashSet<int> hashThat = new HashSet<int> (thatSet);
+            var hashThis = new HashSet<int> (thisSet);
+            var hashThat = new HashSet<int> (thatSet);
             if (thisSet.Count == 0) {
                 Assert.That (hashThis.IsSubsetOf (hashThat) != thisSet.IsSubsetOf (thatSet));
             }
@@ -244,8 +244,8 @@ namespace DD.Collections.BitSetArrayTest.Interfaces.AsISet {
 
         [Test, TestCaseSource ("ISetTestCases")]
         public void IsProperSubsetOf (BitSetArray thisSet, IEnumerable<int> thatSet) {
-            HashSet<int> hashThis = new HashSet<int> (thisSet);
-            HashSet<int> hashThat = new HashSet<int> (thatSet);
+            var hashThis = new HashSet<int> (thisSet);
+            var hashThat = new HashSet<int> (thatSet);
             if (thisSet.Count == 0 && thatSet.Any()) {
                 Assert.That (hashThis.IsProperSubsetOf (hashThat) != thisSet.IsProperSubsetOf (thatSet));
             }
@@ -280,19 +280,19 @@ namespace DD.Collections.BitSetArrayTest.Interfaces.AsISet {
             get {
                 // empty set
                 yield return new TestCaseData (
-                    BitSetArray.From (new int[] { }),
+                    BitSetArray.Empty(),
                                         new int[] { }
                 );
                 yield return new TestCaseData (
-                    BitSetArray.From (new int[] { }),
+                    BitSetArray.Empty(),
                                         new int[] { int.MinValue, -1, int.MaxValue }
                 );
                 yield return new TestCaseData (
-                    BitSetArray.From (new int[] { }),
+                    BitSetArray.Empty(),
                                         new int[] { 3, 4, 5, 6, 7, 8, 9, 65 }
                 );
                 yield return new TestCaseData (
-                    BitSetArray.From (new int[] { }),
+                    BitSetArray.Empty(),
                                         new int[] { int.MinValue, -1, 3, 4, 5, 6, 7, 8, 9, 65, int.MaxValue }
                 );
                 yield return new TestCaseData (

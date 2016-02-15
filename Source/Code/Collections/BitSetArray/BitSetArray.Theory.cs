@@ -1172,7 +1172,7 @@ namespace DD.Collections {
             }
 
             [Pure]
-            public static bool SetMember (BitSetArray oldState, int item, bool setValue, BitSetArray newState, bool retValue) {
+            public static bool _SetMember (BitSetArray oldState, int item, bool setValue, BitSetArray newState, bool retValue) {
                 Success success = true;
 
                 success.Assert (setValue == setValue.Bool ());
@@ -1200,6 +1200,21 @@ namespace DD.Collections {
                     }
                 } else {
                     success.Assert (retValue == false);
+                }
+
+                return success;
+            }
+
+            [Pure]
+            public static bool _SetMembers (BitSetArray oldState, IEnumerable<int> items, bool setValue, BitSetArray newState, int retValue) {
+                Success success = true;
+
+                success.Assert (setValue == setValue.Bool ());
+                success.Assert (retValue <= items.Count());
+                if (setValue) {
+                    success.Assert (newState.Count - oldState.Count >= 0);
+                } else {
+                    success.Assert (newState.Count - oldState.Count <= 0);
                 }
 
                 return success;

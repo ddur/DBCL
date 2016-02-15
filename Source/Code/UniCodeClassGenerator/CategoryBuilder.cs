@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------
 
 using System;
-using System.Text;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Globalization;
 
@@ -178,7 +178,7 @@ namespace UniCodeClassGenerator
                         if (Int32.TryParse (startValue, NumberStyles.HexNumber, null, out startInt)) {
                             if (!string.IsNullOrWhiteSpace (finalValue)
                                 && Int32.TryParse (finalValue, NumberStyles.HexNumber, null, out finalInt)) {
-                                bits._SetMembersRange (startInt, finalInt);
+                                bits._SetMembers (Enumerable.Range(startInt, finalInt-startInt+1));
                             } else {
                                 bits._SetMember (startInt); 
                             }
