@@ -200,7 +200,6 @@ namespace DD.Collections.ICodeSet {
 
             Contract.Assume (bits.First.HasValue);
             Contract.Assume (bits.Last.HasValue);
-            Contract.Assume (bits.First <= bits.Last);
 
             this.start = ((int)bits.First) + offset;
             this.final = ((int)bits.Last) + offset;
