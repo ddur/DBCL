@@ -15,7 +15,7 @@ using System.Linq;
 namespace DD.Collections.ICodeSet {
 
     [Serializable]
-    public struct Code : ICode, ICodeSet, IEquatable<Code>, IEqualityComparer<Code>, IComparable<Code> {
+    public struct Code : ICodeSet, IEquatable<Code>, IEqualityComparer<Code>, IComparable<Code> {
 
         #region Ctor
 
@@ -25,7 +25,7 @@ namespace DD.Collections.ICodeSet {
 			this.b1 = 0;
 			this.b2 = 0;
 #else
-            this.val = value;
+            this.value = value;
 #endif
         }
 
@@ -35,7 +35,7 @@ namespace DD.Collections.ICodeSet {
 			this.b1 = (byte)((value>>8)&0xFF);
 			this.b2 = 0;
 #else
-            this.val = value;
+            this.value = value;
 #endif
         }
 
@@ -47,7 +47,7 @@ namespace DD.Collections.ICodeSet {
 			this.b1 = (byte)((value>>8)&0xFF);
 			this.b2 = (byte)((value>>16)&0xFF);
 #else
-            this.val = value;
+            this.value = value;
 #endif
         }
 
@@ -83,7 +83,7 @@ namespace DD.Collections.ICodeSet {
 		private readonly byte b1;
 		private readonly byte b2;
 #else
-        private readonly int val;
+        private readonly int value;
 #endif
 
         #endregion
@@ -96,7 +96,7 @@ namespace DD.Collections.ICodeSet {
 
         [Pure]
         public bool Equals (Code that) {
-            return this.Value == that.Value;
+            return this.value == that.value;
         }
 
         #endregion
@@ -105,7 +105,7 @@ namespace DD.Collections.ICodeSet {
 
         [Pure]
         public bool Equals (Code a, Code b) {
-            return a.Value == b.Value;
+            return a.value == b.value;
         }
 
         [Pure]
@@ -118,7 +118,7 @@ namespace DD.Collections.ICodeSet {
         #region IComparable<Code>
 
         public int CompareTo (Code that) {
-            return this.Value.CompareTo (that.Value);
+            return this.value.CompareTo (that.value);
         }
 
         #endregion
@@ -130,12 +130,12 @@ namespace DD.Collections.ICodeSet {
         #region ICode Interface
 
         [Pure]
-        bool ICode.this[int value] {
-            get { return this.Value == value; }
+        bool ICodeSet.this[int value] {
+            get { return this.value == value; }
         }
 
         [Pure]
-        bool ICode.IsEmpty {
+        bool ICodeSet.IsEmpty {
             get {
                 return false;
             }
@@ -147,7 +147,7 @@ namespace DD.Collections.ICodeSet {
 
         [Pure]
         bool ICodeSet.this[Code code] {
-            get { return this.Value == code.Value; }
+            get { return this.value == code.value; }
         }
 
         [Pure]
@@ -282,14 +282,14 @@ namespace DD.Collections.ICodeSet {
 
         [Pure]
         public override string ToString () {
-            if ((Value & 0xFF) == Value) {
-                char c = (char)Value;
+            if ((value & 0xFF) == value) {
+                char c = (char)value;
                 if (char.IsControl (c)) {
-                    return @"\x" + Value.ToString ("X");
+                    return @"\x" + value.ToString ("X");
                 }
                 return c.ToString();
             }
-            return @"\x" + Value.ToString ("X");
+            return @"\x" + value.ToString ("X");
         }
 
         #endregion
@@ -300,12 +300,12 @@ namespace DD.Collections.ICodeSet {
         public int Value {
             get {
 #if COMPACT
-				int v = this.b0;
-				v |= (this.b1<<8);
-				v |= (this.b2<<16);
-				return v;
+				int value = this.b0;
+				value |= (this.b1<<8);
+				value |= (this.b2<<16);
+				return value;
 #else
-                return this.val;
+                return this.value;
 #endif
             }
         }
@@ -323,7 +323,7 @@ namespace DD.Collections.ICodeSet {
         #region Cast Operators
 
         public static implicit operator int (Code code) {
-            return code.Value;
+            return code.value;
         }
 
         public static implicit operator Code (byte value) {

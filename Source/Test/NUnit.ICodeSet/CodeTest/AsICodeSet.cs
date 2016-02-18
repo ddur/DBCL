@@ -25,8 +25,8 @@ namespace DD.Collections.ICodeSet.CodeTest {
             Assert.True (iC[C]);
             Assert.False (iC[D]);
 
-            Assert.True (((ICode)iC)[C]);
-            Assert.False (((ICode)iC)[D]);
+            Assert.True (((ICodeSet)iC)[C]);
+            Assert.False (((ICodeSet)iC)[D]);
 
             Assert.True (iC.IsEmpty == false);
             Assert.True (iC.Count == 1);
