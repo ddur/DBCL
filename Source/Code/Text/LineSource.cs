@@ -5,81 +5,107 @@
 // --------------------------------------------------------------------------------
 
 using System;
+using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 
 namespace DD.Text
 {
-	public class LineSource : IReadOnlyCollection<string>
-	{
-		public struct LineInfo
-		{
-			public int Offset;
-			public int Length;
-		}
+    public class LineSource : IReadOnlyCollection<string> {
 
-		protected readonly string @string;
+        protected readonly string @string;
+        protected readonly IReadOnlyList<int> offsets;
 
-		protected readonly LineInfo[] lines;
+        public LineSource (string text)
+        {
+            @string = string.IsNullOrEmpty(text) ? string.Empty : text;
+            int vOffset = 0;
+            var vOffsets = new List<int>();
+            foreach (var line in @string.ToLines()) {
+                vOffsets.Add (vOffset);
+                vOffset += line.Length;
+            }
+            vOffsets.Add (vOffset);
+            vOffsets.TrimExcess();
+            offsets = vOffsets;
+            Contract.Assert (offsets.Last() == @string.Length);
+        }
 
-		public LineSource (string text)
-		{
-			@string = string.IsNullOrEmpty(text) ? string.Empty : text;
-			int offset = 0;
-			var tmpLines = new List<LineInfo>();
-			foreach (var line in @string.GetLineEnumerator()) {
-				tmpLines.Add(new LineInfo {
-					Offset = offset,
-					Length = line.Length
-				});
-				offset += line.Length;
-			}
-			lines = tmpLines.ToArray();
-		}
+        /// <summary>Return text line at lineNo</summary>
+        /// <remarks>Line counting starts at 1.</remarks>
+        /// <param name="lineNo"></param>
+        /// <returns></returns>
+        public string GetLine (int lineNo)
+        {
+            string returnValue = string.Empty;
+            lineNo -= 1; // convert to 0 based index
+            if (lineNo >= 0 && lineNo < Count) {
+                return @string.Substring(offsets[lineNo], offsets[lineNo+1] - offsets[lineNo]);
+            }
+            return returnValue;
+        }
 
-		/// <summary>Return text line at lineNo</summary>
-		/// <remarks>Line counting starts at 1.</remarks>
-		/// <param name="lineNo"></param>
-		/// <returns></returns>
-		public string GetLine(int lineNo)
-		{
-			string returnValue = string.Empty;
-			if (lineNo > 0 && lineNo <= lines.Length) {
-				LineInfo line = lines[lineNo - 1];
-				returnValue = @string.Substring(line.Offset, line.Length);
-			}
-			return returnValue;
-		}
+        public string GetLineAt (int position)
+        {
+            string returnValue = string.Empty;
+            position -= 1; // convert to 0 based index position
+            if (position >= 0 && position < offsets.Last()) {
+                // Binary search
+                int start = 0;
+                int final = offsets.Count - 1;
+                int guess = final / 2;
+                while (final - start > 4) // narrows linear search to 4 items or less
+                {
+                    if (position < offsets [guess]) {
+                        final = guess;
+                        guess = start + ((final - start) / 2);
+                    } else {
+                        start = guess;
+                        guess = start + ((final - start) / 2);
+                    }
+                }
+                for (int index = start; ; index++) {
+                    if (position < offsets[index]) {
+                        returnValue = @string.Substring(offsets[index-1], offsets[index] - offsets[index-1]);
+                        break;
+                    }
+                }
+            }
+            return returnValue;
+        }
 
-		public IEnumerator<string> GetEnumerator()
-		{
-			foreach (var line in lines) {
-				yield return @string.Substring(line.Offset, line.Length);
-			}
-		}
+        public IEnumerator<string> GetEnumerator()
+        {
+            foreach (var line in @string.ToLines()) {
+                yield return line;
+            }
+        }
 
-		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
-		/// <summary>
-		/// Number of lines in Source
-		/// </summary>
-		public int Count {
-			get {
-				return lines.Length;
-			}
-		}
+        /// <summary>
+        /// Number of lines in Source
+        /// </summary>
+        public int Count {
+            get {
+                return offsets.Count - 1;
+            }
+        }
 
-		/// <summary>
+        /// <summary>
         /// Get Source string
         /// </summary>
-        public string Source {
+        public string Source
+        {
             get {
                 return @string;
             }
         }
-	}
+    }
 }
 
 

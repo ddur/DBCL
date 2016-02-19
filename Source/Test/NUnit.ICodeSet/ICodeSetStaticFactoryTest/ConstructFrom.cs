@@ -88,38 +88,6 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
             }
         }
 
-        public class StringUtf16 {
-
-            [Test]
-            public void Null() {
-                const string Utf16 = null;
-                Assert.True (ReferenceEquals (CodeSetNone.Singleton, ICodeSetFactory.ToICodeSet(Utf16)));
-            }
-
-            [Test]
-            public void Empty() {
-                const string Utf16 = "";
-                Assert.True (ReferenceEquals (CodeSetNone.Singleton, ICodeSetFactory.ToICodeSet(Utf16)));
-            }
-
-            [Test]
-            public void Invalid_Throws() {
-                const string Utf16 = "abc\uDC00\uD800def";
-                Assert.Throws ( typeof(ArgumentException),
-                        delegate {
-                            ICodeSetFactory.ToICodeSet(Utf16);
-                        });
-            }
-
-            [Test]
-            public void ValidAndDoesDecode() {
-                const string Utf16 = "abc\uFFFF\u0000\uD801\uDC01def";
-                Assert.IsInstanceOf (typeof(ICodeSet), ICodeSetFactory.ToICodeSet(Utf16));
-                Assert.True (ICodeSetFactory.ToICodeSet(Utf16).IsReduced);
-                Assert.True (ICodeSetFactory.ToICodeSet(Utf16).Count == 9);
-            }
-        }
-
         public class Range {
 
             [Test]
@@ -207,62 +175,6 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
                         delegate {
                             ((Code)start).Range(final);
                         });
-            }
-        }
-
-        public class PredicateOfCode {
-
-            [Test]
-            public void Null () {
-
-                // arrange
-                Predicate<Code> func = null;
-
-                // act & assert
-                Assert.That (func.ToICodeSet() is CodeSetNone);
-            }
-
-            [Test]
-            public void Empty () {
-
-                // arrange
-                Predicate<Code> func = x => false;
-
-                // act & assert
-                Assert.That (func.ToICodeSet() is CodeSetNone);
-            }
-
-            [Test]
-            public void Valid () {
-
-                // arrange
-                int count = 0;
-                // disable once ConvertClosureToMethodGroup
-                Predicate<Code> func = x => x.IsHighSurrogate();
-
-                // act
-                var result = func.ToICodeSet();
-
-                // assert
-                count = 0;
-                for (int index = Code.MinValue; index <= Code.MaxValue; index++) {
-                    Assert.True (((Code)index).IsHighSurrogate() == result[index]);
-                    if (index.IsHighSurrogate()) count += 1;
-                }
-                Assert.True (count == result.Count);
-
-                count = 0;
-                for (Code index = result.First; index <= result.Last; index++) {
-                    Assert.True (index.IsHighSurrogate() == result[index]);
-                    if (index.IsHighSurrogate()) count += 1;
-                }
-                Assert.True (count == result.Count);
-                Assert.That (result is CodeSetFull);
-
-                var bits = BitSetArray.Size (result.Last+1);
-                bits._SetMembers (func.ToIntCodes());
-                var compare = bits.ToICodeSet();
-                Assert.That (compare.SequenceEqual (result));
             }
         }
 

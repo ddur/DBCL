@@ -22,10 +22,10 @@ namespace DD.Text
         public void GetLineEnumeratorTest()
         {
             // arrange & act
-            var e = "\r\r\r\n \r\n \r\n \r \n \n\n\n\r\n\n".GetLineEnumerator();
             var lines = new List<string> ();
-            foreach (var item in e) {
-                lines.Add (item);
+            var e = "\r\r\r\n \r\n \r\n \r \n \n\n\n\r\n\n".GetLineEnumerator();
+            while (e.MoveNext()) {
+                lines.Add (e.Current);
             }
 
             // assert
@@ -50,8 +50,8 @@ namespace DD.Text
             // arrange & act
             var result = new List<Code>();
             var e = data.GetCodeEnumerator();
-            foreach (var item in e) {
-                result.Add (item);
+            while (e.MoveNext()) {
+                result.Add (e.Current);
             }
 
             // assert
@@ -67,7 +67,7 @@ namespace DD.Text
             // act & assert
             Assert.That (
                 delegate {
-                    foreach (var item in e) {}
+                    while (e.MoveNext()) {}
                 }, Throws.ArgumentException);
         }
 
@@ -77,8 +77,8 @@ namespace DD.Text
             // arrange & act
             var result = new List<int>();
             var e = data.GetIntEnumerator();
-            foreach (var item in e) {
-                result.Add (item);
+            while (e.MoveNext()) {
+                result.Add (e.Current);
             }
 
             // assert
@@ -95,7 +95,7 @@ namespace DD.Text
             // arrange & act & assert
             Assert.That (
                 delegate {
-                    data.ToCodes();
+                    data.ToCodes().Count();
                 }, Throws.ArgumentException);
         }
 
@@ -115,7 +115,7 @@ namespace DD.Text
             // arrange & act & assert
             Assert.That (
                 delegate {
-                    data.ToIntCodes();
+                    data.ToIntCodes().Count();
                 }, Throws.ArgumentException);
         }
 
@@ -123,7 +123,7 @@ namespace DD.Text
         public void ToIntCodesValidTest (string data, IEnumerable<Code> code)
         {
             // arrange & act
-            int[] result = data.ToIntCodes();
+            int[] result = data.ToIntCodes().ToArray();
 
             // assert
             int index = 0;
@@ -141,7 +141,7 @@ namespace DD.Text
             var lines = input.ToLines();
 
             // assert
-            Assert.True (lines.Length == 12);
+            Assert.True (lines.Count() == 12);
         }
     }
 }

@@ -44,7 +44,7 @@ namespace DD.Text
             string line;
             bool argOutOfRange;
 
-            if (startLine==endLine && startLine > 0 && startLine <= lines.Length) {
+            if (startLine==endLine && startLine > 0 && startLine <= Count) {
 
                 #region One-Line request
                 line = GetLine(startLine);
@@ -58,7 +58,7 @@ namespace DD.Text
                 }
                 #endregion
 
-            } else if (startLine < endLine && startLine > 0 && endLine <= lines.Length) {
+            } else if (startLine < endLine && startLine > 0 && endLine <= Count) {
 
                 #region Multi-line request
 

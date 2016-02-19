@@ -70,7 +70,6 @@ namespace UniCodeClassGenerator
                     }
                     Console.Write (" OK");
 
-                    // TODO compare bits.Count with Total code points
                     if (bits.Count == 0) {
                         WriteLine ("CodeSetNone.Singleton;");
                     }

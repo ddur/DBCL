@@ -40,18 +40,6 @@ namespace DD.Collections.ICodeSet {
 
         #region From items To ICodeSet
 
-        public static ICodeSet ToICodeSet (this Predicate<Code> func) {
-            Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
-            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced);
-
-            if (func.Is(null) || func.ToCodes().IsEmpty()) {
-                return CodeSetNone.Singleton;
-            }
-            var bits = BitSetArray.Size (Code.MaxCount);
-            bits._SetMembers (func.ToIntCodes());
-            return bits.ToICodeSet();
-        }
-
         public static ICodeSet From (char req, params char[] opt) {
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced);
@@ -93,6 +81,10 @@ namespace DD.Collections.ICodeSet {
             return chars.IsNullOrEmpty () ? CodeSetNone.Singleton : BitSetArray.From (chars.ToValues ()).ToICodeSet ();
         }
 
+        public static ICodeSet ToICodeSet (this Code code) {
+            return (ICodeSet)code;
+        }
+
         public static ICodeSet ToICodeSet (this IEnumerable<Code> codes) {
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced);
@@ -107,6 +99,18 @@ namespace DD.Collections.ICodeSet {
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced);
 
             return bits.IsNullOrEmpty () ? CodeSetNone.Singleton : bits.Reduce ();
+        }
+
+        public static ICodeSet ToICodeSet (this Predicate<Code> func) {
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
+            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced);
+
+            if (func.Is(null) || func.ToCodes().IsEmpty()) {
+                return CodeSetNone.Singleton;
+            }
+            var bits = BitSetArray.Size (Code.MaxCount);
+            bits._SetMembers (func.ToIntCodes());
+            return bits.ToICodeSet();
         }
 
         #endregion

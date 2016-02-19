@@ -29,13 +29,31 @@ namespace DD.Text
             // arrange
             var source = new LineSource (input);
 
-            // assert
+            // assert per line
             Assert.True (source.Count == count);
             Assert.True (source.GetLine(0) == string.Empty);
             for (int i = 1; i <= count; i++) {
-                Assert.True (source.GetLine(i) != string.Empty);
+                Assert.True (source.GetLine(i) == expected [i-1]);
             }
             Assert.True (source.GetLine(count + 1) == string.Empty);
+
+            // assert per char
+            Assert.True (source.GetLineAt(0) == string.Empty);
+            if (!string.IsNullOrEmpty (input)) {
+                int expectedOffset = 0;
+                int expectedIndex = 0;
+                for (int position = 1; position <= input.Length; position++) {
+                    Assert.True (source.GetLineAt(position) != string.Empty);
+                    if ((position - expectedOffset) > expected [expectedIndex].Length) {
+                        expectedOffset += expected [expectedIndex].Length;
+                        expectedIndex += 1;
+                    }
+                    Assert.True (source.GetLineAt(position) == expected [expectedIndex]);
+                }
+                Assert.True (source.GetLineAt(input.Length + 1) == string.Empty);
+            } else {
+                Assert.True (source.GetLineAt(1) == string.Empty);
+            }
 
             // act
             var result = new List<string>();
@@ -43,10 +61,10 @@ namespace DD.Text
                 result.Add ((string)item);
             }
 
-            var te = input.GetLineEnumerator();
+            var e = input.GetLineEnumerator();
             var compare = new List<string>();
-            foreach (var item in te) {
-                compare.Add (item);
+            while (e.MoveNext()) {
+                compare.Add (e.Current);
             }
 
             // assert

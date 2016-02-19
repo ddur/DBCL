@@ -21,11 +21,8 @@ namespace DD.Text
         /// </summary>
         /// <param name="string"></param>
         /// <returns></returns>
-        public static IEnumerable<string>  GetLineEnumerator (this string @string) {
-            var lineEnumerator = new LineEnumerator (@string);
-            while (lineEnumerator.MoveNext()) {
-                yield return lineEnumerator.Current;
-            }
+        public static IEnumerator<string>  GetLineEnumerator (this string @string) {
+            return new LineEnumerator (@string);
         }
 
         /// <summary>
@@ -33,12 +30,11 @@ namespace DD.Text
         /// </summary>
         /// <param name="self"></param>
         /// <returns>string[]</returns>
-        public static string[] ToLines (this string self) {
-            var lines = new List<string>();
-            foreach (var line in self.GetLineEnumerator()) {
-                lines.Add(line);
+        public static IEnumerable<string> ToLines (this string self) {
+            var e = self.GetLineEnumerator();
+            while (e.MoveNext()) {
+                yield return e.Current;
             }
-            return lines.ToArray();
         }
 
         /// <summary>
@@ -46,7 +42,7 @@ namespace DD.Text
         /// </summary>
         /// <param name="string"></param>
         /// <returns></returns>
-        public static IEnumerable<Code> GetCodeEnumerator (this string @string) {
+        public static IEnumerator<Code> GetCodeEnumerator (this string @string) {
             if (!string.IsNullOrEmpty (@string)) {
                 char prev = (char)0;
                 Code code = 0;
@@ -67,14 +63,13 @@ namespace DD.Text
         /// <summary>
         /// Convert string to array of Codes
         /// </summary>
-        /// <param name="self"></param>
+        /// <param name="string"></param>
         /// <returns>string[]</returns>
-        public static Code[] ToCodes (this string self) {
-            var codes = new List<Code>();
-            foreach (var code in self.GetCodeEnumerator()) {
-                codes.Add(code);
+        public static IEnumerable<Code> ToCodes (this string @string) {
+            var e = @string.GetCodeEnumerator();
+            while (e.MoveNext()) {
+                yield return e.Current;
             }
-            return codes.ToArray();
         }
 
         /// <summary>
@@ -82,23 +77,23 @@ namespace DD.Text
         /// </summary>
         /// <param name="string"></param>
         /// <returns></returns>
-        public static IEnumerable<int> GetIntEnumerator (this string @string) {
-            foreach (Code c in @string.GetCodeEnumerator()) {
-                yield return c;
+        public static IEnumerator<int> GetIntEnumerator (this string @string) {
+            var e = @string.GetCodeEnumerator();
+            while (e.MoveNext()) {
+                yield return e.Current;
             }
         }
 
         /// <summary>
         /// Convert string to array of Int32
         /// </summary>
-        /// <param name="self"></param>
-        /// <returns>string[]</returns>
-        public static int[] ToIntCodes (this string self) {
-            var codes = new List<int>();
-            foreach (var code in self.GetCodeEnumerator()) {
-                codes.Add(code);
+        /// <param name="string"></param>
+        /// <returns>IEnumerableOf(int)</returns>
+        public static IEnumerable<int> ToIntCodes (this string @string) {
+            var e = @string.GetCodeEnumerator();
+            while (e.MoveNext()) {
+                yield return e.Current;
             }
-            return codes.ToArray();
         }
 
     }
