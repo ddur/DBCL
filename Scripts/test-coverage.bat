@@ -70,7 +70,7 @@
 
 :run-all-tests
 @call :run-single-test "BitSetArray" "+[DBCL]DD.Collections.BitSetArray*"
-@call :run-single-test "ICodeSet"    "+[DBCL]DD.Collections.ICodeSet*"
+@call :run-single-test "ICodeSet"    "+[DBCL]DD.Collections.ICodeSet* +[DBCL]DD.Collections.Generic*"
 @call :run-single-test "Extensions"  "+[DBCL]DD.Extends*"
 @call :run-single-test "Text"        "+[DBCL]DD.Text*"
 @exit /b

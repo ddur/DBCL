@@ -382,32 +382,32 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueTest {
             icsDict.Add (CodeSetFull.From (0, 4));
             icsDict.Add (CodeSetFull.From (0, 6));
 
-            foreach (var item in icsDict.Values) {
-                Console.WriteLine (item);
-            }
-            Console.WriteLine ();
+//            foreach (var item in icsDict.Values) {
+//                Console.WriteLine (item);
+//            }
+//            Console.WriteLine ();
 
             Assert.True (icsDict.Values.Count () == 3);
             Assert.True (icsDict.Values.Count () == 3);
 
-            foreach (var item in icsDict.Values) {
-                Console.WriteLine (item);
-            }
-            Console.WriteLine ();
+//            foreach (var item in icsDict.Values) {
+//                Console.WriteLine (item);
+//            }
+//            Console.WriteLine ();
 
             Assert.True (icsDict.Values.Contains (0));
 
-            foreach (var item in icsDict.Values) {
-                Console.WriteLine (item);
-            }
-            Console.WriteLine ();
+//            foreach (var item in icsDict.Values) {
+//                Console.WriteLine (item);
+//            }
+//            Console.WriteLine ();
 
             Assert.False (icsDict.Values.Contains (1));
 
-            foreach (var item in icsDict.Values) {
-                Console.WriteLine (item);
-            }
-            Console.WriteLine ();
+//            foreach (var item in icsDict.Values) {
+//                Console.WriteLine (item);
+//            }
+//            Console.WriteLine ();
 
             Assert.False (icsDict.Values.Contains (2));
 
