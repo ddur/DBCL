@@ -37,8 +37,8 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
         [Test]
         public void Equal2Sets()
         {
-            var ics_a = Factory.From('a');
-            var ics_b = Factory.From('a');
+            var ics_a = ICodeSetFactory.From('a');
+            var ics_b = ICodeSetFactory.From('a');
             var ics_difference = ics_a.Difference(ics_b);
 
             Assert.True (ReferenceEquals (CodeSetNone.Singleton, ics_difference));
@@ -47,9 +47,9 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
         [Test]
         public void Equal3Sets()
         {
-            var ics_a = Factory.From('a');
-            var ics_b = Factory.From('a');
-            var ics_c = Factory.From('a');
+            var ics_a = ICodeSetFactory.From('a');
+            var ics_b = ICodeSetFactory.From('a');
+            var ics_c = ICodeSetFactory.From('a');
             var ics_difference = ics_a.Difference(ics_b, ics_c);
 
             Assert.True (ReferenceEquals (CodeSetNone.Singleton, ics_difference));
@@ -58,9 +58,9 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
         [Test]
         public void Overlaps_Not()
         {
-            var ics_a = Factory.From('a');
-            var ics_b = Factory.From('b');
-            var ics_c = Factory.From('d');
+            var ics_a = ICodeSetFactory.From('a');
+            var ics_b = ICodeSetFactory.From('b');
+            var ics_c = ICodeSetFactory.From('d');
             var ics_difference = ics_a.Difference(ics_b, ics_c);
 
             Assert.True (ics_difference.Equals(ics_a));
@@ -69,12 +69,12 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
         [Test]
         public void Overlaps_Yes()
         {
-            var ics_a = Factory.From('a', 'b', 'c', 'd', 'e', 'f' );
-            var ics_b = Factory.From(          'c', 'd', 'e', 'f', 'g', 'h' );
-            var ics_c = Factory.From(               'd', 'e');
+            var ics_a = ICodeSetFactory.From('a', 'b', 'c', 'd', 'e', 'f' );
+            var ics_b = ICodeSetFactory.From(          'c', 'd', 'e', 'f', 'g', 'h' );
+            var ics_c = ICodeSetFactory.From(               'd', 'e');
             var ics_difference = ics_a.Difference(ics_b, ics_c);
 
-            Assert.True (ics_difference.Equals(Factory.From ('a', 'b')));
+            Assert.True (ics_difference.Equals(ICodeSetFactory.From ('a', 'b')));
         }
 
         [Test]
@@ -98,7 +98,7 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
         [Test]
         public void Throws_ArgumentException_WhenOneOperand()
         {
-            var ics_a = Factory.From('a', 'b', 'c', 'd', 'e', 'f' );
+            var ics_a = ICodeSetFactory.From('a', 'b', 'c', 'd', 'e', 'f' );
             Assert.Throws ( typeof(ArgumentException),
                     delegate {
                                (new List<ICodeSet>() {ics_a}).Difference();

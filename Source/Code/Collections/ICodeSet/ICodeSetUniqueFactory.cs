@@ -14,7 +14,7 @@ using DD.Text;
 
 namespace DD.Collections.ICodeSet {
 
-    public class Distinct {
+    public class DistinctICodeSet {
 
         #region Fields
 
@@ -271,7 +271,7 @@ namespace DD.Collections.ICodeSet {
         private static class Theory {
 
             [Pure]
-            public static bool Result (Distinct self, ICodeSet result) {
+            public static bool Result (DistinctICodeSet self, ICodeSet result) {
                 Success success = true;
 
                 success.Assert (result.IsNot (null));
@@ -286,7 +286,7 @@ namespace DD.Collections.ICodeSet {
             }
 
             [Pure]
-            public static bool From (IEnumerable<char> chars, Distinct self, ICodeSet result) {
+            public static bool From (IEnumerable<char> chars, DistinctICodeSet self, ICodeSet result) {
                 Success success = true;
 
                 if (!chars.IsNullOrEmpty ()) {
@@ -301,7 +301,7 @@ namespace DD.Collections.ICodeSet {
             }
 
             [Pure]
-            public static bool From (IEnumerable<Code> codes, Distinct self, ICodeSet result) {
+            public static bool From (IEnumerable<Code> codes, DistinctICodeSet self, ICodeSet result) {
                 Success success = true;
 
                 if (!codes.IsNullOrEmpty ()) {
@@ -314,7 +314,7 @@ namespace DD.Collections.ICodeSet {
             }
 
             [Pure]
-            public static bool From (BitSetArray bits, Distinct self, ICodeSet result) {
+            public static bool From (BitSetArray bits, DistinctICodeSet self, ICodeSet result) {
                 Success success = true;
 
                 if (!bits.IsNullOrEmpty ()) {

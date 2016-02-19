@@ -1,5 +1,5 @@
 # In development
-/Source/Code/Par[Ll]an/*
+Par[Ll]an*
 
 # Test Reports
 /reports/*
@@ -15,7 +15,7 @@ cov-int*
 /Source/Test/**/[Oo]pen[Cc]over/
 
 #Source Monitor projects http://www.campwoodsw.com/sourcemonitor.html
-/Projects/*.smproj
+/**/*.smproj
 
 # Build Folders (you can keep bin if you'd like, to store dlls and pdbs)
 [Bb]in/

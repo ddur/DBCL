@@ -91,7 +91,6 @@
     <Compile Include="ICodeSetStaticFactoryTest\OpDisjunction.cs" />
     <Compile Include="ICodeSetStaticFactoryTest\ConstructFrom.cs" />
     <Compile Include="ICodeSetStaticFactoryTest\OpIntersection.cs" />
-    <Compile Include="ICodeSetStaticFactoryTest\Members.cs" />
     <Compile Include="ICodeSetRelationsTest\Members\Compare.cs" />
     <Compile Include="ICodeSetRelationsTest\Members\Equals.cs" />
     <Compile Include="ICodeSetRelationsTest\Members\HashCode.cs" />

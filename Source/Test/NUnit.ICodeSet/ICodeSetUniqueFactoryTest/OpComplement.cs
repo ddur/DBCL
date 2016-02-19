@@ -12,7 +12,7 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
     [TestFixture]
     public class OpComplement
     {
-        readonly Distinct distinct = new Distinct();
+        readonly DistinctICodeSet distinct = new DistinctICodeSet();
 
         [Test]
         public void OfNull()

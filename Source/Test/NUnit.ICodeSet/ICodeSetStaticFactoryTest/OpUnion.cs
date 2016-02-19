@@ -37,9 +37,9 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
         [Test]
         public void EqualSets()
         {
-            var ics_a = Factory.From('a');
-            var ics_b = Factory.From('a');
-            var ics_c = Factory.From('a');
+            var ics_a = ICodeSetFactory.From('a');
+            var ics_b = ICodeSetFactory.From('a');
+            var ics_c = ICodeSetFactory.From('a');
             var ics_union = ics_a.Union(ics_b, ics_c);
 
             Assert.True (ics_union.SequenceEqual(new Code('a')));
@@ -48,9 +48,9 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
         [Test]
         public void Other()
         {
-            var ics_a = Factory.From('a');
-            var ics_b = Factory.From('b');
-            var ics_c = Factory.From('d');
+            var ics_a = ICodeSetFactory.From('a');
+            var ics_b = ICodeSetFactory.From('b');
+            var ics_c = ICodeSetFactory.From('d');
             var ics_union = ics_a.Union(ics_b, ics_c);
 
             Assert.True (ics_union.SequenceEqual("abd".ToICodeSet()));

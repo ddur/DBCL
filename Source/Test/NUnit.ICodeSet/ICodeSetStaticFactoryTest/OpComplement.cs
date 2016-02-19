@@ -66,7 +66,7 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
         [Test]
         public void OfOther()
         {
-            var ics = Factory.From('a', 'b', 'e', 'f', 'g', 'h', 'j');
+            var ics = ICodeSetFactory.From('a', 'b', 'e', 'f', 'g', 'h', 'j');
             var icsComplement = ics.Complement();
             Assert.False (ReferenceEquals (CodeSetNone.Singleton, icsComplement));
             Assert.True (icsComplement.SequenceEqual("cdi".ToICodeSet()));

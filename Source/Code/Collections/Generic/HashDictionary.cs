@@ -11,16 +11,16 @@ using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
-namespace DD.Collections.ICodeSet {
-
-    /// <summary>Stores ICodeSet's where (Value)Equals == SetEquals == SequenceEqual == ReferenceEquals
+namespace DD.Collections.Generic
+{
+    /// <summary>Stores K's where (Value)Equals == SetEquals == SequenceEqual == ReferenceEquals
     /// </summary>
-    public class Dictionary<T> : IDictionary<ICodeSet, T> {
+    public class HashDictionary<K, T> : IDictionary<K, T> {
 
         #region Ctor
 
-        public Dictionary () {
-            unique = new C5.HashDictionary<ICodeSet, T> ();
+        public HashDictionary () {
+            unique = new C5.HashDictionary<K, T> ();
         }
 
         #endregion
@@ -28,13 +28,13 @@ namespace DD.Collections.ICodeSet {
         #region Fields
 
         /// <summary>C5.Hash(Set/Dictionary) has ability to return stored key reference</summary>
-        private readonly C5.HashDictionary<ICodeSet, T> unique;
+        protected readonly C5.HashDictionary<K, T> unique;
 
         #endregion
 
         #region C5 Find Wrapper
 
-        public bool Find (ref ICodeSet key) {
+        public bool Find (ref K key) {
             T val = default (T);
             return this.unique.Find (ref key, out val);
         }
@@ -43,18 +43,18 @@ namespace DD.Collections.ICodeSet {
 
         #region Interfaces
 
-        #region IDictionary<ICodeSet, T>
+        #region IDictionary<K, T>
 
-        public virtual T this[ICodeSet codeSet] {
+        public virtual T this[K key] {
             get {
-                return this.unique[codeSet];
+                return this.unique[key];
             }
             set {
-                this.unique[codeSet] = value;
+                this.unique[key] = value;
             }
         }
 
-        public ICollection<ICodeSet> Keys {
+        public ICollection<K> Keys {
             get {
                 return this.unique.Keys.ToList ();
             }
@@ -62,15 +62,15 @@ namespace DD.Collections.ICodeSet {
 
         public ICollection<T> Values {
             get {
-                return this.unique.Values.ToList ();
+                return this.unique.Values.ToArray();
             }
         }
 
-        public bool ContainsKey (ICodeSet key) {
+        public bool ContainsKey (K key) {
             return this.unique.Contains (key);
         }
 
-        public virtual void Add (ICodeSet key, T value) {
+        public virtual void Add (K key, T value) {
             try {
                 this.unique.Add (key, value);
             }
@@ -79,11 +79,11 @@ namespace DD.Collections.ICodeSet {
             }
         }
 
-        public bool Remove (ICodeSet key) {
+        public bool Remove (K key) {
             return this.unique.Remove (key);
         }
 
-        public bool TryGetValue (ICodeSet key, out T value) {
+        public bool TryGetValue (K key, out T value) {
             return this.unique.Find (ref key, out value);
         }
 
@@ -91,7 +91,7 @@ namespace DD.Collections.ICodeSet {
 
         #region Inherited Interface Methods
 
-        #region ICollection<KeyValuePair<ICodeSet, T>>
+        #region ICollection<KeyValuePair<K, T>>
 
         public int Count {
             get {
@@ -105,7 +105,7 @@ namespace DD.Collections.ICodeSet {
             }
         }
 
-        public virtual void Add (KeyValuePair<ICodeSet, T> item) {
+        public virtual void Add (KeyValuePair<K, T> item) {
             try {
                 this.unique.Add (item.Key, item.Value);
             }
@@ -118,24 +118,24 @@ namespace DD.Collections.ICodeSet {
             this.unique.Clear ();
         }
 
-        public bool Contains (KeyValuePair<ICodeSet, T> item) {
-            return unique.Contains (new C5.KeyValuePair<ICodeSet, T> (item.Key, item.Value));
+        public bool Contains (KeyValuePair<K, T> item) {
+            return unique.Contains (new C5.KeyValuePair<K, T> (item.Key, item.Value));
         }
 
         [Pure]
         [SuppressMessage ("Microsoft.Contracts", "CC1033", Justification = "Debug/Release exceptions not same")]
-        public void CopyTo (KeyValuePair<ICodeSet, T>[] array, int arrayIndex) {
+        public void CopyTo (KeyValuePair<K, T>[] array, int arrayIndex) {
             Contract.Requires<ArgumentNullException> (array.IsNot (null));
             Contract.Requires<IndexOutOfRangeException> (arrayIndex >= 0);
             Contract.Requires<IndexOutOfRangeException> (arrayIndex <= (array.Length - this.Count));
             int index = arrayIndex;
             foreach (var item in unique) {
-                array[index] = new KeyValuePair<ICodeSet, T> (item.Key, item.Value);
+                array[index] = new KeyValuePair<K, T> (item.Key, item.Value);
                 ++index;
             }
         }
 
-        public virtual bool Remove (KeyValuePair<ICodeSet, T> item) {
+        public virtual bool Remove (KeyValuePair<K, T> item) {
             var key = item.Key;
             var value = item.Value;
             if (this.unique.Find (ref key, out value)) {
@@ -148,66 +148,21 @@ namespace DD.Collections.ICodeSet {
 
         #endregion
 
-        #region IEnumerable<KeyValuePair<ICodeSet, T>>
+        #region IEnumerable<KeyValuePair<K, T>>
 
-        public IEnumerator<KeyValuePair<ICodeSet, T>> GetEnumerator () {
+        public IEnumerator<KeyValuePair<K, T>> GetEnumerator () {
             foreach (var item in unique) {
-                yield return new KeyValuePair<ICodeSet, T> (item.Key, item.Value);
+                yield return new KeyValuePair<K, T> (item.Key, item.Value);
             }
         }
 
         IEnumerator IEnumerable.GetEnumerator () {
-            return ((IEnumerable<KeyValuePair<ICodeSet, T>>)this).GetEnumerator ();
+            return ((IEnumerable<KeyValuePair<K, T>>)this).GetEnumerator ();
         }
 
         #endregion
 
         #endregion
-
-        #endregion
-    }
-
-    public sealed class ICodeSetDictionary : Dictionary<int> {
-
-        #region Fields
-
-        private int ID = 0;
-
-        #endregion
-
-        #region new members
-
-        public void Add (ICodeSet iset) {
-            Contract.Requires (iset.IsNot (null));
-            base.Add (iset, ID);
-            ++ID;
-        }
-
-        #endregion
-
-        #region Overrides
-
-        public override int this[ICodeSet codeSet] {
-            get {
-                return base[codeSet];
-            }
-            set {
-                throw new NotSupportedException ();
-            }
-        }
-
-        public override void Add (ICodeSet key, int value) {
-            throw new NotSupportedException ();
-        }
-
-        public override void Add (KeyValuePair<ICodeSet, int> item) {
-            Contract.Requires (!item.IsNull ());
-            throw new NotSupportedException ();
-        }
-
-        public override bool Remove (KeyValuePair<ICodeSet, int> item) {
-            throw new NotSupportedException ();
-        }
 
         #endregion
     }

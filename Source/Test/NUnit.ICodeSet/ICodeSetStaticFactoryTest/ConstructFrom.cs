@@ -21,22 +21,22 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
                 var opt_none = new char[0];
                 var opt_one = new char[] {'b'};
 
-                var result = Factory.From(req);
+                var result = ICodeSetFactory.From(req);
                 Assert.IsInstanceOf (typeof(ICodeSet), result);
                 Assert.True (result.IsReduced);
                 Assert.True (result.Count == 1);
 
-                result = Factory.From(req, opt_null);
+                result = ICodeSetFactory.From(req, opt_null);
                 Assert.IsInstanceOf (typeof(ICodeSet), result);
                 Assert.True (result.IsReduced);
                 Assert.True (result.Count == 1);
 
-                result = Factory.From(req, opt_none);
+                result = ICodeSetFactory.From(req, opt_none);
                 Assert.IsInstanceOf (typeof(ICodeSet), result);
                 Assert.True (result.IsReduced);
                 Assert.True (result.Count == 1);
 
-                result = Factory.From(req, opt_one);
+                result = ICodeSetFactory.From(req, opt_one);
                 Assert.IsInstanceOf (typeof(ICodeSet), result);
                 Assert.True (result.IsReduced);
                 Assert.True (result.Count == 2);
@@ -47,7 +47,7 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
                 const char req = 'a';
                 var opt = new char[] {'\uD800', '\uDC07'};
 
-                var result = Factory.From(req, opt);
+                var result = ICodeSetFactory.From(req, opt);
                 Assert.IsInstanceOf (typeof(ICodeSet), result);
                 Assert.True (result.IsReduced);
                 Assert.True (result.Count == 3);
@@ -58,22 +58,22 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
 
             [Test]
             public void Valid() {
-                var result = Factory.From(2);
+                var result = ICodeSetFactory.From(2);
                 Assert.IsInstanceOf (typeof(ICodeSet), result);
                 Assert.True (result.IsReduced);
                 Assert.True (result.Count == 1);
 
-                result = Factory.From(2, null);
+                result = ICodeSetFactory.From(2, null);
                 Assert.IsInstanceOf (typeof(ICodeSet), result);
                 Assert.True (result.IsReduced);
                 Assert.True (result.Count == 1);
 
-                result = Factory.From(2, new Code[0]);
+                result = ICodeSetFactory.From(2, new Code[0]);
                 Assert.IsInstanceOf (typeof(ICodeSet), result);
                 Assert.True (result.IsReduced);
                 Assert.True (result.Count == 1);
 
-                result = Factory.From(2, new Code[] {3});
+                result = ICodeSetFactory.From(2, new Code[] {3});
                 Assert.IsInstanceOf (typeof(ICodeSet), result);
                 Assert.True (result.IsReduced);
                 Assert.True (result.Count == 2);
@@ -81,7 +81,7 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
             
             [Test]
             public void ValidAndDoesNotDecode() {
-                var result = Factory.From(2, new Code[] {0xD800, 0xDC07});
+                var result = ICodeSetFactory.From(2, new Code[] {0xD800, 0xDC07});
                 Assert.IsInstanceOf (typeof(ICodeSet), result);
                 Assert.True (result.IsReduced);
                 Assert.True (result.Count == 3);
@@ -93,13 +93,13 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
             [Test]
             public void Null() {
                 const string Utf16 = null;
-                Assert.True (ReferenceEquals (CodeSetNone.Singleton, Factory.From(Utf16)));
+                Assert.True (ReferenceEquals (CodeSetNone.Singleton, ICodeSetFactory.ToICodeSet(Utf16)));
             }
 
             [Test]
             public void Empty() {
                 const string Utf16 = "";
-                Assert.True (ReferenceEquals (CodeSetNone.Singleton, Factory.From(Utf16)));
+                Assert.True (ReferenceEquals (CodeSetNone.Singleton, ICodeSetFactory.ToICodeSet(Utf16)));
             }
 
             [Test]
@@ -107,16 +107,16 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
                 const string Utf16 = "abc\uDC00\uD800def";
                 Assert.Throws ( typeof(ArgumentException),
                         delegate {
-                            Factory.From(Utf16);
+                            ICodeSetFactory.ToICodeSet(Utf16);
                         });
             }
 
             [Test]
             public void ValidAndDoesDecode() {
                 const string Utf16 = "abc\uFFFF\u0000\uD801\uDC01def";
-                Assert.IsInstanceOf (typeof(ICodeSet), Factory.From(Utf16));
-                Assert.True (Factory.From(Utf16).IsReduced);
-                Assert.True (Factory.From(Utf16).Count == 9);
+                Assert.IsInstanceOf (typeof(ICodeSet), ICodeSetFactory.ToICodeSet(Utf16));
+                Assert.True (ICodeSetFactory.ToICodeSet(Utf16).IsReduced);
+                Assert.True (ICodeSetFactory.ToICodeSet(Utf16).Count == 9);
             }
         }
 
@@ -219,7 +219,7 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
                 Predicate<Code> func = null;
 
                 // act & assert
-                Assert.That (func.From() is CodeSetNone);
+                Assert.That (func.ToICodeSet() is CodeSetNone);
             }
 
             [Test]
@@ -229,7 +229,7 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
                 Predicate<Code> func = x => false;
 
                 // act & assert
-                Assert.That (func.From() is CodeSetNone);
+                Assert.That (func.ToICodeSet() is CodeSetNone);
             }
 
             [Test]
@@ -241,7 +241,7 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
                 Predicate<Code> func = x => x.IsHighSurrogate();
 
                 // act
-                var result = func.From();
+                var result = func.ToICodeSet();
 
                 // assert
                 count = 0;
@@ -276,7 +276,7 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
                 // act & assert
                 Assert.That (
                     delegate {
-                        result = Factory.From ((ICodeSet)null);
+                        result = ICodeSetFactory.From ((ICodeSet)null);
                     }, Throws.Nothing
                 );
 
@@ -289,7 +289,7 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
                 ICodeSet result = null;
                 Assert.That (
                     delegate {
-                        result = Factory.From (arg);
+                        result = ICodeSetFactory.From (arg);
                     }, Throws.Nothing
                 );
 

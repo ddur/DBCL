@@ -16,7 +16,7 @@ namespace DD.Collections.ICodeSet {
     /// <summary>Produces Reduced ICodeSet's</summary>
     /// <remarks>By default do not allow producing empty set</remarks>
     /// <remarks>Empty set is required evil, produced by some of set operations</remarks>
-    public static class Factory {
+    public static class ICodeSetFactory {
 
         #region Range To ICodeSet
 
@@ -40,7 +40,7 @@ namespace DD.Collections.ICodeSet {
 
         #region From items To ICodeSet
 
-        public static ICodeSet From (this Predicate<Code> func) {
+        public static ICodeSet ToICodeSet (this Predicate<Code> func) {
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced);
 
@@ -52,16 +52,7 @@ namespace DD.Collections.ICodeSet {
             return bits.ToICodeSet();
         }
 
-        public static ICodeSet From (this string utf16) {
-            Contract.Requires<ArgumentException> (utf16.IsNullOrEmpty () || utf16.CanDecode ());
-
-            Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
-            Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced);
-
-            return utf16.IsNullOrEmpty () ? CodeSetNone.Singleton : utf16.ToICodeSet ();
-        }
-
-        public static ICodeSet From (this char req, params char[] opt) {
+        public static ICodeSet From (char req, params char[] opt) {
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced);
 
@@ -70,7 +61,7 @@ namespace DD.Collections.ICodeSet {
             return args.ToICodeSet ();
         }
 
-        public static ICodeSet From (this Code req, params Code[] opt) {
+        public static ICodeSet From (Code req, params Code[] opt) {
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced);
 
@@ -92,7 +83,7 @@ namespace DD.Collections.ICodeSet {
             Contract.Ensures (Contract.Result<ICodeSet> ().IsNot (null));
             Contract.Ensures (Contract.Result<ICodeSet> ().IsReduced);
 
-            return utf16.IsNullOrEmpty () ? CodeSetNone.Singleton : utf16.Decode().ToICodeSet ();
+            return utf16.IsNullOrEmpty () ? CodeSetNone.Singleton : utf16.Decode ().ToICodeSet ();
         }
 
         public static ICodeSet ToICodeSet (this IEnumerable<char> chars) {

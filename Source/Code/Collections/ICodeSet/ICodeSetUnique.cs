@@ -5,20 +5,11 @@
 // --------------------------------------------------------------------------------
 
 using System;
-
 using DD.Collections.Generic;
 
-using NUnit.Framework;
+namespace DD.Collections.ICodeSet {
 
-namespace DD.Collections.ICodeSet.ICodeSetUniqueTest {
+    public sealed class ICodeSetUnique : EnumeratedSet<ICodeSet> {
 
-    [TestFixture]
-    public class Constructors {
-
-        [Test]
-        public void Construct () {
-            var icsDict = new ICodeSetUnique ();
-            var icsDictTyped = new HashDictionary<ICodeSet, Code> ();
-        }
     }
 }

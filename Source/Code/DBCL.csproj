@@ -148,6 +148,8 @@
     <Compile Include="Collections\BitSetArray\BitSetArray.cs" />
     <Compile Include="Collections\BitSetArray\BitSetArray.Theory.cs" />
     <Compile Include="Collections\BitSetArray\BitSetArrayExtended.cs" />
+    <Compile Include="Collections\Generic\HashDictionary.cs" />
+    <Compile Include="Collections\Generic\EnumeratedSet.cs" />
     <Compile Include="Collections\ICodeSet\Code.cs" />
     <Compile Include="Collections\ICodeSet\CodeSetMask.cs" />
     <Compile Include="Collections\ICodeSet\CodeExtended.cs" />
@@ -161,7 +163,7 @@
     <Compile Include="Collections\ICodeSet\CodeSetWide.cs" />
     <Compile Include="Collections\ICodeSet\CompactBitMask.cs" />
     <Compile Include="Collections\ICodeSet\ICodeSet.cs" />
-    <Compile Include="Collections\ICodeSet\ICodeSetDictionary.cs" />
+    <Compile Include="Collections\ICodeSet\ICodeSetUnique.cs" />
     <Compile Include="Collections\ICodeSet\ICodeSetExtended.cs" />
     <Compile Include="Collections\ICodeSet\ICodeSetExtends.cs" />
     <Compile Include="Collections\ICodeSet\ICodeSetStaticFactory.cs" />
@@ -197,6 +199,7 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Collections\Generic" />
     <Folder Include="IO" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

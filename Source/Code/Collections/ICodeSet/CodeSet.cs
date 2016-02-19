@@ -139,5 +139,8 @@ namespace DD.Collections.ICodeSet {
         public abstract int Count { get; }
 
         #endregion
+
+        #region Cast
+        #endregion
     }
 }

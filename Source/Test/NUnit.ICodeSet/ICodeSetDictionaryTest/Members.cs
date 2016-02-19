@@ -8,18 +8,21 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+
+using DD.Collections.Generic;
+
 using NUnit.Framework;
 
-namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest {
+namespace DD.Collections.ICodeSet.ICodeSetUniqueTest {
 
     [TestFixture]
     public class Members {
-        private ICodeSetDictionary icsDict;
-        private Dictionary<long> icsDictLong;
+        private ICodeSetUnique icsDict;
+        private HashDictionary<ICodeSet,long> icsDictLong;
 
         [Test]
         public void Add_Key () {
-            icsDict = new ICodeSetDictionary ();
+            icsDict = new ICodeSetUnique ();
             icsDict.Add (CodeSetFull.From (0, 5));
             icsDict.Add (CodeSetList.From (new Code[] { 0, 2, 4, 6, 8, 10 }));
             Assert.True (icsDict[CodeSetFull.From (0, 5)] == 0);
@@ -27,21 +30,13 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest {
             Assert.True (icsDict[CodeSetMask.From (new Code[] { 0, 2, 4, 6, 8, 10 })] == 1);
 
             // add duplicate
-            Assert.Throws<ArgumentException> (
-                delegate {
-                    icsDict.Add (CodeSetFull.From (0, 5));
-                }
-            );
-            Assert.Throws<ArgumentException> (
-                delegate {
-                    icsDict.Add (CodeSetMask.From (new Code[] { 0, 2, 4, 6, 8, 10 }));
-                }
-            );
+            Assert.That ( icsDict.Add (CodeSetFull.From (0, 5)).Equals (false));
+            Assert.That ( icsDict.Add (CodeSetMask.From (new Code[] { 0, 2, 4, 6, 8, 10 })).Equals (false));
         }
 
         [Test]
         public void Add_KeyAndValue_NotSupported () {
-            icsDict = new ICodeSetDictionary ();
+            icsDict = new ICodeSetUnique ();
             var icsIDictAsIDictionary = icsDict as IDictionary<ICodeSet, int>;
             Assert.NotNull (icsIDictAsIDictionary);
             Assert.Throws<NotSupportedException> (
@@ -53,7 +48,7 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest {
 
         [Test]
         public void Add_KeyAndValue_Typed () {
-            icsDictLong = new Dictionary<long> ();
+            icsDictLong = new HashDictionary<ICodeSet, long> ();
             Assert.That (
                 delegate {
                     icsDictLong.Add (CodeSetFull.From (0, 5), 8);
@@ -70,7 +65,7 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest {
 
         [Test]
         public void Add_KeyValuePair_NotSupported () {
-            icsDict = new ICodeSetDictionary ();
+            icsDict = new ICodeSetUnique ();
             var icsDictAsKvpCollection = (ICollection<KeyValuePair<ICodeSet, int>>)icsDict;
             Assert.NotNull (icsDictAsKvpCollection);
             Assert.Throws<NotSupportedException> (
@@ -80,7 +75,7 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest {
 
         [Test]
         public void Add_KeyValuePair_Typed () {
-            icsDictLong = new Dictionary<long> ();
+            icsDictLong = new HashDictionary<ICodeSet, long> ();
             Assert.That (
                 delegate {
                     icsDictLong.Add (new KeyValuePair<ICodeSet, long> (CodeSetFull.From (0, 5), 8));
@@ -97,7 +92,7 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest {
 
         [Test]
         public void Clear () {
-            icsDict = new ICodeSetDictionary ();
+            icsDict = new ICodeSetUnique ();
             Assert.True (icsDict.Count == 0);
             icsDict.Add (CodeSetFull.From (0, 5));
             Assert.True (icsDict.Count == 1);
@@ -109,14 +104,14 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest {
 
         [Test]
         public void ContainsKey () {
-            icsDict = new ICodeSetDictionary ();
+            icsDict = new ICodeSetUnique ();
             icsDict.Add (CodeSetFull.From (0, 5));
             Assert.True (icsDict.ContainsKey (CodeSetFull.From (0, 5)));
         }
 
         [Test]
         public void Count () {
-            icsDict = new ICodeSetDictionary ();
+            icsDict = new ICodeSetUnique ();
             Assert.True (icsDict.Count == 0);
             icsDict.Add (CodeSetFull.From (0, 5));
             Assert.True (icsDict.Count == 1);
@@ -130,7 +125,7 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest {
 
         [Test]
         public void Find () {
-            icsDict = new ICodeSetDictionary ();
+            icsDict = new ICodeSetUnique ();
             icsDict.Add (CodeSetFull.From (0, 5));
             icsDict.Add (CodeSetFull.From (0, 4));
             ICodeSet findSet = CodeSetFull.From (0, 5);
@@ -139,13 +134,13 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest {
 
         [Test]
         public void IsReadOnly () {
-            icsDict = new ICodeSetDictionary ();
+            icsDict = new ICodeSetUnique ();
             Assert.False (icsDict.IsReadOnly);
         }
 
         [Test]
         public void Item_Get () {
-            icsDict = new ICodeSetDictionary ();
+            icsDict = new ICodeSetUnique ();
             icsDict.Add (CodeSetFull.From (0, 4));
             icsDict.Add (CodeSetFull.From (0, 5));
             Assert.True (icsDict[CodeSetFull.From (0, 4)] == 0);
@@ -154,7 +149,7 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest {
 
         [Test]
         public void Item_Set_NotSupported () {
-            icsDict = new ICodeSetDictionary ();
+            icsDict = new ICodeSetUnique ();
             icsDict.Add (CodeSetFull.From (0, 4));
             Assert.Throws<NotSupportedException> (
                 delegate {
@@ -165,7 +160,7 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest {
 
         [Test]
         public void Item_Set_Typed () {
-            icsDictLong = new Dictionary<long> ();
+            icsDictLong = new HashDictionary<ICodeSet, long> ();
             Assert.That (
                 delegate {
                     icsDictLong.Add (new KeyValuePair<ICodeSet, long> (CodeSetFull.From (0, 5), 8));
@@ -179,7 +174,7 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest {
 
         [Test]
         public void Keys_Get () {
-            icsDict = new ICodeSetDictionary ();
+            icsDict = new ICodeSetUnique ();
             ICodeSet set1 = CodeSetFull.From (0, 4);
             ICodeSet set2 = CodeSetFull.From (0, 5);
             icsDict.Add (set1);
@@ -192,7 +187,7 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest {
 
         [Test]
         public void Remove_Key () {
-            icsDict = new ICodeSetDictionary ();
+            icsDict = new ICodeSetUnique ();
             icsDict.Add (CodeSetFull.From (0, 5));
             icsDict.Add (CodeSetFull.From (0, 4));
             Assert.False (icsDict.Remove (CodeSetFull.From (0, 6)));
@@ -202,7 +197,7 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest {
 
         [Test]
         public void Remove_KeyValuePair_NotSupported () {
-            icsDict = new ICodeSetDictionary ();
+            icsDict = new ICodeSetUnique ();
             icsDict.Add (CodeSetFull.From (0, 5));
             var kvp = new KeyValuePair<ICodeSet, int> (CodeSetFull.From (0, 5), 0);
             Assert.Throws<NotSupportedException> (
@@ -214,7 +209,7 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest {
 
         [Test]
         public void Remove_KeyValuePair_Typed () {
-            icsDictLong = new Dictionary<long> ();
+            icsDictLong = new HashDictionary<ICodeSet, long> ();
             Assert.That (
                 delegate {
                     icsDictLong.Add (new KeyValuePair<ICodeSet, long> (CodeSetFull.From (0, 5), 8));
@@ -250,7 +245,7 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest {
 
         [Test]
         public void Contains () {
-            icsDict = new ICodeSetDictionary ();
+            icsDict = new ICodeSetUnique ();
             icsDict.Add (CodeSetFull.From (0, 5));
             var icsDictAsKvpCollection = (ICollection<KeyValuePair<ICodeSet, int>>)icsDict;
             Assert.NotNull (icsDictAsKvpCollection);
@@ -260,7 +255,7 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest {
 
         [Test]
         public void CopyTo () {
-            icsDict = new ICodeSetDictionary ();
+            icsDict = new ICodeSetUnique ();
             ICodeSet a = CodeSetFull.From (0, 5);
             icsDict.Add (a);
             var icsDictAsKvpCollection = (ICollection<KeyValuePair<ICodeSet, int>>)icsDict;
@@ -291,7 +286,7 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest {
 
         [Test]
         public void GetEnumerator_Of_KeyValuePairs () {
-            icsDict = new ICodeSetDictionary ();
+            icsDict = new ICodeSetUnique ();
             icsDict.Add (CodeSetFull.From (0, 5));
             var icsDictAsKvpCollection = (ICollection<KeyValuePair<ICodeSet, int>>)icsDict;
             Assert.NotNull (icsDictAsKvpCollection);
@@ -304,7 +299,7 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest {
 
         [Test]
         public void GetEnumerator_Of_Objects () {
-            icsDict = new ICodeSetDictionary ();
+            icsDict = new ICodeSetUnique ();
             icsDict.Add (CodeSetFull.From (0, 5));
             var icsDictAsIEnumerable = (IEnumerable)icsDict;
             Assert.NotNull (icsDictAsIEnumerable);
@@ -318,7 +313,7 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest {
 
         [Test]
         public void TryGetValue () {
-            icsDict = new ICodeSetDictionary ();
+            icsDict = new ICodeSetUnique ();
             icsDict.Add (CodeSetFull.From (0, 5));
             icsDict.Add (CodeSetFull.From (0, 4));
             int value = int.MinValue;
@@ -348,15 +343,77 @@ namespace DD.Collections.ICodeSet.ICodeSetDictionaryTest {
         }
 
         [Test]
-        public void Values_Get () {
-            icsDict = new ICodeSetDictionary ();
+        public void Values_AddGet () {
+            icsDict = new ICodeSetUnique ();
+            
+            Assert.True (icsDict.Add (CodeSetFull.From (0, 5)));
+            Assert.True (icsDict.Add (CodeSetFull.From (0, 4)));
+            Assert.True (icsDict.Add (CodeSetFull.From (0, 6)));
+
+            Assert.False (icsDict.Add (CodeSetFull.From (0, 5)));
+            Assert.False (icsDict.Add (CodeSetFull.From (0, 4)));
+            Assert.False (icsDict.Add (CodeSetFull.From (0, 6)));
+
+            var values = icsDict.Values;
+
+            Assert.True (values.Count () == 3);
+            Assert.True (values.Contains (0));
+            Assert.True (values.Contains (1));
+            Assert.True (values.Contains (2));
+
+            // From here below Bug in C5 2.4.5891.40110
+            Assert.True (icsDict.Values.Count () == 3);
+            Assert.True (icsDict.Values.Contains (0));
+            Assert.False (icsDict.Values.Contains (1));
+            Assert.False (icsDict.Values.Contains (2));
+
+            Assert.True (icsDict.Values.Any());
+            Assert.True (icsDict.Values.Contains (0));
+            Assert.True (!icsDict.Values.Contains (1));
+            Assert.True (!icsDict.Values.Contains (2));
+        }
+
+        [Test]
+        public void Values_Bug () {
+
+            // Bug in C5 2.4.5891.40110
+            icsDict = new ICodeSetUnique ();
             icsDict.Add (CodeSetFull.From (0, 5));
             icsDict.Add (CodeSetFull.From (0, 4));
             icsDict.Add (CodeSetFull.From (0, 6));
-            Assert.True (icsDict.Values.Distinct ().Count () == 3);
+
+            foreach (var item in icsDict.Values) {
+                Console.WriteLine (item);
+            }
+            Console.WriteLine ();
+
+            Assert.True (icsDict.Values.Count () == 3);
+            Assert.True (icsDict.Values.Count () == 3);
+
+            foreach (var item in icsDict.Values) {
+                Console.WriteLine (item);
+            }
+            Console.WriteLine ();
+
             Assert.True (icsDict.Values.Contains (0));
-            Assert.True (icsDict.Values.Contains (1));
-            Assert.True (icsDict.Values.Contains (2));
+
+            foreach (var item in icsDict.Values) {
+                Console.WriteLine (item);
+            }
+            Console.WriteLine ();
+
+            Assert.False (icsDict.Values.Contains (1));
+
+            foreach (var item in icsDict.Values) {
+                Console.WriteLine (item);
+            }
+            Console.WriteLine ();
+
+            Assert.False (icsDict.Values.Contains (2));
+
+            Assert.True (icsDict.Values.Contains (0));
+            Assert.True (!icsDict.Values.Contains (1));
+            Assert.True (!icsDict.Values.Contains (2));
         }
     }
 }

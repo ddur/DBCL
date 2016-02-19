@@ -17,7 +17,7 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
     {
         public class CharAndParamsChar {
 
-            readonly Distinct distinct = new Distinct();
+            readonly DistinctICodeSet distinct = new DistinctICodeSet();
 
             [Test]
             public void Valid() {
@@ -61,7 +61,7 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
 
         public class ParamsCode {
 
-            readonly Distinct distinct = new Distinct();
+            readonly DistinctICodeSet distinct = new DistinctICodeSet();
 
             [Test]
             public void Valid() {
@@ -97,7 +97,7 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
 
         public class StringUtf16 {
 
-            readonly Distinct distinct = new Distinct();
+            readonly DistinctICodeSet distinct = new DistinctICodeSet();
 
             [Test]
             public void Null() {
@@ -133,7 +133,7 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
 
             [Test]
             public void Null() {
-                var distinct = new Distinct();
+                var distinct = new DistinctICodeSet();
                 Assert.True (ReferenceEquals (CodeSetNone.Singleton, distinct.From((List<char>)null)));
 
                 Assert.False (distinct.Contains(CodeSetNone.Singleton));
@@ -142,7 +142,7 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
 
             [Test]
             public void Empty() {
-                var distinct = new Distinct();
+                var distinct = new DistinctICodeSet();
                 Assert.True (ReferenceEquals (CodeSetNone.Singleton, distinct.From(new List<char>())));
 
                 Assert.False (distinct.Contains(CodeSetNone.Singleton));
@@ -155,7 +155,7 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
 
             [Test]
             public void Null() {
-                var distinct = new Distinct();
+                var distinct = new DistinctICodeSet();
                 Assert.True (ReferenceEquals (CodeSetNone.Singleton, distinct.From((List<Code>)null)));
 
                 Assert.False (distinct.Contains(CodeSetNone.Singleton));
@@ -164,7 +164,7 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
 
             [Test]
             public void Empty() {
-                var distinct = new Distinct();
+                var distinct = new DistinctICodeSet();
                 Assert.True (ReferenceEquals (CodeSetNone.Singleton, distinct.From(new List<Code>())));
 
                 Assert.False (distinct.Contains(CodeSetNone.Singleton));
@@ -176,7 +176,7 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
 
             [Test]
             public void Null() {
-                var distinct = new Distinct();
+                var distinct = new DistinctICodeSet();
                 Assert.True (ReferenceEquals (CodeSetNone.Singleton, distinct.From((ICodeSet)null)));
 
                 Assert.False (distinct.Contains(CodeSetNone.Singleton));
@@ -185,7 +185,7 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
 
             [Test]
             public void Empty() {
-                var distinct = new Distinct();
+                var distinct = new DistinctICodeSet();
                 Assert.True (ReferenceEquals (CodeSetNone.Singleton, distinct.From("")));
                 Assert.True (ReferenceEquals (CodeSetNone.Singleton, distinct.From(new char[0])));
                 Assert.True (ReferenceEquals (CodeSetNone.Singleton, distinct.From(new List<Code>())));
@@ -199,7 +199,7 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
             [Test]
             public void Valid() {
 
-                var distinct = new Distinct();
+                var distinct = new DistinctICodeSet();
 
                 var result = distinct.From(2, new Code[] {0xD800, 0xDC07});
                 Assert.IsInstanceOf (typeof(ICodeSet), result);
@@ -209,7 +209,7 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
                 Assert.True (distinct.Contains (result));
                 Assert.True (distinct.Count == 1);
 
-                var result2 = Factory.From(2, new Code[] {0xD800, 0xDC07});
+                var result2 = ICodeSetFactory.From(2, new Code[] {0xD800, 0xDC07});
                 var result3 = distinct.From (result2);
 
                 Assert.True (distinct.Contains (result));
@@ -226,7 +226,7 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
 
             [Test]
             public void Null() {
-                var distinct = new Distinct();
+                var distinct = new DistinctICodeSet();
                 Assert.True (ReferenceEquals (CodeSetNone.Singleton, distinct.From((BitSetArray)null)));
 
                 Assert.False (distinct.Contains(CodeSetNone.Singleton));
@@ -235,7 +235,7 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
 
             [Test]
             public void Empty() {
-                var distinct = new Distinct();
+                var distinct = new DistinctICodeSet();
                 Assert.True (ReferenceEquals (CodeSetNone.Singleton, distinct.From(BitSetArray.Empty ())));
 
                 Assert.False (distinct.Contains(CodeSetNone.Singleton));
@@ -245,7 +245,7 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
             [Test]
             public void Valid() {
 
-                var distinct = new Distinct();
+                var distinct = new DistinctICodeSet();
 
                 var result = distinct.From(BitSetArray.From (2, 3, 4, 5));
                 Assert.IsInstanceOf (typeof(ICodeSet), result);
@@ -273,7 +273,7 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
 
         public class Range {
 
-            Distinct distinct = new Distinct();
+            DistinctICodeSet distinct = new DistinctICodeSet();
 
             [Test]
             public void OneMember () {

@@ -37,9 +37,9 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
         [Test]
         public void EqualSets()
         {
-            var ics_a = Factory.From('a');
-            var ics_b = Factory.From('a');
-            var ics_c = Factory.From('a');
+            var ics_a = ICodeSetFactory.From('a');
+            var ics_b = ICodeSetFactory.From('a');
+            var ics_c = ICodeSetFactory.From('a');
             var ics_intersection = ics_a.Intersection(ics_b, ics_c);
 
             Assert.True (ics_intersection.SequenceEqual(new Code('a')));
@@ -48,9 +48,9 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
         [Test]
         public void Overlaps_Not()
         {
-            var ics_a = Factory.From('a');
-            var ics_b = Factory.From('b');
-            var ics_c = Factory.From('d');
+            var ics_a = ICodeSetFactory.From('a');
+            var ics_b = ICodeSetFactory.From('b');
+            var ics_c = ICodeSetFactory.From('d');
             var ics_intersection = ics_a.Intersection(ics_b, ics_c);
 
             Assert.True (ReferenceEquals (CodeSetNone.Singleton, ics_intersection));
@@ -59,9 +59,9 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
         [Test]
         public void Overlaps_Yes()
         {
-            var ics_a = Factory.From('a', 'b', 'c', 'd', 'e', 'f' );
-            var ics_b = Factory.From(          'c', 'd', 'e', 'f', 'g', 'h' );
-            var ics_c = Factory.From(               'd', 'e');
+            var ics_a = ICodeSetFactory.From('a', 'b', 'c', 'd', 'e', 'f' );
+            var ics_b = ICodeSetFactory.From(          'c', 'd', 'e', 'f', 'g', 'h' );
+            var ics_c = ICodeSetFactory.From(               'd', 'e');
             var ics_intersection = ics_a.Intersection(ics_b, ics_c);
 
             Assert.True (ics_intersection.Equals(ics_c));

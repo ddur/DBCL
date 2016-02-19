@@ -16,7 +16,7 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
         [Test]
         public void OfNullSets()
         {
-            var distinct = new Distinct();
+            var distinct = new DistinctICodeSet();
 
             var ics_a = distinct.From ((ICodeSet) null);
             var ics_b = distinct.From ((ICodeSet) null);
@@ -32,7 +32,7 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
         [Test]
         public void EmptySets()
         {
-            var distinct = new Distinct();
+            var distinct = new DistinctICodeSet();
 
             var ics_a = distinct.From (CodeSetNone.Singleton);
             var ics_b = distinct.From (CodeSetNone.Singleton);
@@ -48,7 +48,7 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
         [Test]
         public void Equal2Sets()
         {
-            var distinct = new Distinct();
+            var distinct = new DistinctICodeSet();
 
             var ics_a = distinct.From('a');
             var ics_b = distinct.From('a');
@@ -66,7 +66,7 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
         [Test]
         public void Equal3Sets()
         {
-            var distinct = new Distinct();
+            var distinct = new DistinctICodeSet();
 
             var ics_a = distinct.From('a');
             var ics_b = distinct.From('a');
@@ -87,7 +87,7 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
         [Test]
         public void Overlaps_Not()
         {
-            var distinct = new Distinct();
+            var distinct = new DistinctICodeSet();
 
             var ics_a = distinct.From('a');
             var ics_b = distinct.From('b');
@@ -109,7 +109,7 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
         [Test]
         public void Overlaps_Yes()
         {
-            var distinct = new Distinct();
+            var distinct = new DistinctICodeSet();
 
             var ics_a = distinct.From('a', 'b', 'c', 'd', 'e', 'f' );
             var ics_b = distinct.From(          'c', 'd', 'e', 'f', 'g', 'h' );
@@ -131,7 +131,7 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
         [Test]
         public void Throws_ArgumentNullException_WhenNullOperands()
         {
-            var distinct = new Distinct();
+            var distinct = new DistinctICodeSet();
 
             Assert.Throws ( typeof(ArgumentNullException),
                     delegate {
@@ -142,7 +142,7 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
         [Test]
         public void Throws_ArgumentException_WhenNoOperands()
         {
-            var distinct = new Distinct();
+            var distinct = new DistinctICodeSet();
 
             Assert.Throws ( typeof(ArgumentException),
                     delegate {
@@ -153,7 +153,7 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
         [Test]
         public void Throws_ArgumentException_WhenOneOperand()
         {
-            var distinct = new Distinct();
+            var distinct = new DistinctICodeSet();
             var ics_a = distinct.From('a', 'b', 'c', 'd', 'e', 'f' );
 
             Assert.Throws ( typeof(ArgumentException),

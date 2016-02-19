@@ -23,7 +23,7 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
 
             Assert.False (ReferenceEquals (iCodeSet1, iCodeSet2));
 
-            var distinct = new Distinct();
+            var distinct = new DistinctICodeSet();
             var iCodeSetDistinct1 = distinct.From (code1);
             var iCodeSetDistinct2 = distinct.From (code2);
 
@@ -40,7 +40,7 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueFactoryTest
             var iCodeSet = (ICodeSet)codeSetPair;
             Assert.True (ReferenceEquals (iCodeSet, codeSetPair));
 
-            var distinct = new Distinct();
+            var distinct = new DistinctICodeSet();
             var iCodeSetDistinct = distinct.From (codeSetPair);
             Assert.True (ReferenceEquals (iCodeSet, iCodeSetDistinct));
         }
