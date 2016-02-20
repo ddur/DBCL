@@ -13,20 +13,23 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
 
         public class FromBitSetArray {
 
-            // TODO! Test to do
             [Test]
             public void Null () {
-                
+                Assert.True (ReferenceEquals (CodeSetNone.Singleton, ((BitSetArray)null).ToICodeSet()));
             }
             
             [Test]
             public void Empty () {
-                
+                Assert.True (ReferenceEquals (CodeSetNone.Singleton, BitSetArray.Empty().ToICodeSet()));
             }
             
             [Test]
             public void Valid () {
-                
+                Assert.False (ReferenceEquals (CodeSetNone.Singleton, BitSetArray.From(100).ToICodeSet()));
+                Assert.True (BitSetArray.From(100).ToICodeSet() is Code);
+                Assert.True (BitSetArray.From(100, 101).ToICodeSet() is CodeSetPair);
+                Assert.True (BitSetArray.From(100, 101, 102).ToICodeSet() is CodeSetFull);
+                Assert.True (BitSetArray.From(100, 101, 120).ToICodeSet() is CodeSetList);
             }
             
         }
@@ -59,20 +62,24 @@ namespace DD.Collections.ICodeSet.ICodeSetStaticFactoryTest
 
 		public class FromIEnumerableOfCode {
 
-            // TODO! Test to do
 			[Test]
 			public void Null () {
-				
+			    Assert.True (ReferenceEquals (CodeSetNone.Singleton, ((Code[])null).ToICodeSet()));
 			}
 			
 			[Test]
 			public void Empty () {
-				
+                Assert.True (ReferenceEquals (CodeSetNone.Singleton, new Code[0].ToICodeSet()));
 			}
 			
 			[Test]
 			public void Valid () {
-				
+			    Assert.False (ReferenceEquals (CodeSetNone.Singleton, new Code[] {100}.ToICodeSet()));
+                Assert.True (new Code[] {100}.ToICodeSet() is Code);
+                Assert.True (new Code[] {100, 101}.ToICodeSet() is CodeSetPair);
+                Assert.True (new Code[] {100, 101, 100, 101}.ToICodeSet() is CodeSetPair);
+                Assert.True (new Code[] {100, 101, 102, 100, 101, 102}.ToICodeSet() is CodeSetFull);
+                Assert.True (new Code[] {100, 101, 120, 100, 101, 120}.ToICodeSet() is CodeSetList);
 			}
 			
 		}
