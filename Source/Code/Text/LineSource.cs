@@ -17,9 +17,9 @@ namespace DD.Text
         protected readonly string @string;
         protected readonly IReadOnlyList<int> offsets;
 
-        public LineSource (string text)
+        public LineSource (string source)
         {
-            @string = string.IsNullOrEmpty(text) ? string.Empty : text;
+            @string = string.IsNullOrEmpty(source) ? string.Empty : source;
             int vOffset = 0;
             var vOffsets = new List<int>();
             foreach (var line in @string.ToLines()) {
@@ -39,9 +39,8 @@ namespace DD.Text
         public string GetLine (int lineNo)
         {
             string returnValue = string.Empty;
-            lineNo -= 1; // convert to 0 based index
-            if (lineNo >= 0 && lineNo < Count) {
-                return @string.Substring(offsets[lineNo], offsets[lineNo+1] - offsets[lineNo]);
+            if (lineNo >= 1 && lineNo <= Count) {
+                return @string.Substring(offsets[lineNo-1], offsets[lineNo] - offsets[lineNo-1]);
             }
             return returnValue;
         }
@@ -99,7 +98,7 @@ namespace DD.Text
         /// <summary>
         /// Get Source string
         /// </summary>
-        public string Source
+        public string StringSource
         {
             get {
                 return @string;

@@ -71,9 +71,9 @@ namespace DD.Text
             Assert.True (result.SequenceEqual (compare));
             Assert.True (result.SequenceEqual (expected));
             if (string.IsNullOrEmpty (input)) {
-                Assert.True (source.Source == string.Empty);
+                Assert.True (source.StringSource == string.Empty);
             } else {
-                Assert.True (source.Source == input);
+                Assert.True (source.StringSource == input);
             }
         }
     }
