@@ -148,6 +148,7 @@
     <Compile Include="Collections\BitSetArray\BitSetArray.cs" />
     <Compile Include="Collections\BitSetArray\BitSetArray.Theory.cs" />
     <Compile Include="Collections\BitSetArray\BitSetArrayExtended.cs" />
+    <Compile Include="Collections\Generic\DistinctSet.cs" />
     <Compile Include="Collections\Generic\HashDictionary.cs" />
     <Compile Include="Collections\Generic\EnumeratedSet.cs" />
     <Compile Include="Collections\ICodeSet\Code.cs" />

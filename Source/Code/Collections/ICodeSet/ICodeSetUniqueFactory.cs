@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
+using DD.Collections.Generic;
 using DD.Diagnostics;
 using DD.Text;
 
@@ -18,7 +19,7 @@ namespace DD.Collections.ICodeSet {
 
         #region Fields
 
-        private readonly C5.HashSet<ICodeSet> distinct = new C5.HashSet<ICodeSet> ();
+        private readonly DistinctSet<ICodeSet> distinct = new DistinctSet<ICodeSet> ();
 
         #endregion
 
@@ -122,8 +123,8 @@ namespace DD.Collections.ICodeSet {
             }
             ICodeSet key = iset;
             if (!distinct.Find (ref key)) {
-                var qset = iset as QuickWrap;
-                key = qset.IsNull () ? iset.Reduce () : qset.ToBitSetArray ().Reduce ();
+                var quickSet = iset as QuickWrap;
+                key = quickSet.IsNull () ? iset.Reduce () : quickSet.ToBitSetArray ().Reduce ();
                 distinct.Add (key);
             }
             return key;

@@ -362,6 +362,14 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueTest {
             Assert.True (values.Contains (2));
 
             // From here below Bug in C5 2.4.5891.40110
+            // Second call to values exposes bug
+            values = icsDict.Values;
+
+            Assert.True (values.Count () == 3);
+            Assert.True (values.Contains (0));
+            Assert.False (values.Contains (1));
+            Assert.False (values.Contains (2));
+
             Assert.True (icsDict.Values.Count () == 3);
             Assert.True (icsDict.Values.Contains (0));
             Assert.False (icsDict.Values.Contains (1));
