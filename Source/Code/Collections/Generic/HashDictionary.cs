@@ -28,11 +28,12 @@ namespace DD.Collections.Generic
         #region Fields
 
         /// <summary>C5.Hash(Set/Dictionary) has ability to return stored key reference</summary>
+        [CLSCompliant (false)]
         protected readonly C5.HashDictionary<K, T> unique;
 
         #endregion
 
-        #region C5 Find Wrapper
+        #region new-members (Use C5 extra functions)
 
         public bool Find (ref K key) {
             T val = default (T);

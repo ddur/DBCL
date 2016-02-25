@@ -133,6 +133,30 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueTest {
         }
 
         [Test]
+        public void Distinct () {
+            icsDict = new ICodeSetUnique ();
+            var codeSetA = CodeSetFull.From (0, 5);
+            var codeSetB = CodeSetFull.From (0, 4);
+            var codeSetC = CodeSetFull.From (0, 5);
+            var codeSetD = CodeSetFull.From (0, 7);
+            Assert.False (ReferenceEquals (codeSetA, codeSetC));
+
+            icsDict.Add (codeSetA);
+            icsDict.Add (codeSetB);
+
+            Assert.False (ReferenceEquals (codeSetC, icsDict.Distinct(codeSetC)));
+            Assert.True (ReferenceEquals (codeSetA, icsDict.Distinct(codeSetC)));
+
+            Assert.True (ReferenceEquals (codeSetD, icsDict.Distinct(codeSetD)));
+            Assert.That (
+                delegate {
+                    icsDict.Distinct((ICodeSet)null);
+                },
+                Throws.TypeOf<ArgumentNullException> ()
+            );
+        }
+
+        [Test]
         public void IsReadOnly () {
             icsDict = new ICodeSetUnique ();
             Assert.False (icsDict.IsReadOnly);
@@ -147,16 +171,17 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueTest {
             Assert.True (icsDict[CodeSetFull.From (0, 5)] == 1);
         }
 
-        [Test]
-        public void Item_Set_NotSupported () {
-            icsDict = new ICodeSetUnique ();
-            icsDict.Add (CodeSetFull.From (0, 4));
-            Assert.Throws<NotSupportedException> (
-                delegate {
-                    icsDict[CodeSetFull.From (0, 4)] = 5;
-                }
-            );
-        }
+//        This cannot compile anymore (set removed)
+//        [Test]
+//        public void Item_Set_NotSupported () {
+//            icsDict = new ICodeSetUnique ();
+//            icsDict.Add (CodeSetFull.From (0, 4));
+//            Assert.Throws<NotSupportedException> (
+//                delegate {
+//                    icsDict[CodeSetFull.From (0, 4)] = 5;
+//                }
+//            );
+//        }
 
         [Test]
         public void Item_Set_Typed () {
@@ -361,6 +386,38 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueTest {
             Assert.True (values.Contains (1));
             Assert.True (values.Contains (2));
 
+            // Second call to values will expose C5 2.4.5891.40110 bug
+            values = icsDict.Values;
+
+            Assert.True (values.Count () == 3);
+            Assert.True (values.Contains (0));
+            Assert.True (values.Contains (1));
+            Assert.True (values.Contains (2));
+
+        }
+
+        [Test, Ignore]
+        public void Values_Bug () {
+
+            // Bug in C5 2.4.5891.40110
+
+            icsDict = new ICodeSetUnique ();
+            icsDict.Add (CodeSetFull.From (0, 5));
+            icsDict.Add (CodeSetFull.From (0, 4));
+            icsDict.Add (CodeSetFull.From (0, 6));
+
+            var values = icsDict.Values;
+
+            Assert.True (values.Count () == 3);
+            Assert.True (values.Contains (0));
+            Assert.True (values.Contains (1));
+            Assert.True (values.Contains (2));
+
+//            foreach (var item in icsDict.Values) {
+//                Console.WriteLine (item);
+//            }
+//            Console.WriteLine ();
+
             // From here below Bug in C5 2.4.5891.40110
             // Second call to values exposes bug
             values = icsDict.Values;
@@ -370,58 +427,11 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueTest {
             Assert.False (values.Contains (1));
             Assert.False (values.Contains (2));
 
-            Assert.True (icsDict.Values.Count () == 3);
-            Assert.True (icsDict.Values.Contains (0));
-            Assert.False (icsDict.Values.Contains (1));
-            Assert.False (icsDict.Values.Contains (2));
-
-            Assert.True (icsDict.Values.Any());
-            Assert.True (icsDict.Values.Contains (0));
-            Assert.True (!icsDict.Values.Contains (1));
-            Assert.True (!icsDict.Values.Contains (2));
-        }
-
-        [Test]
-        public void Values_Bug () {
-
-            // Bug in C5 2.4.5891.40110
-            icsDict = new ICodeSetUnique ();
-            icsDict.Add (CodeSetFull.From (0, 5));
-            icsDict.Add (CodeSetFull.From (0, 4));
-            icsDict.Add (CodeSetFull.From (0, 6));
-
 //            foreach (var item in icsDict.Values) {
 //                Console.WriteLine (item);
 //            }
 //            Console.WriteLine ();
 
-            Assert.True (icsDict.Values.Count () == 3);
-            Assert.True (icsDict.Values.Count () == 3);
-
-//            foreach (var item in icsDict.Values) {
-//                Console.WriteLine (item);
-//            }
-//            Console.WriteLine ();
-
-            Assert.True (icsDict.Values.Contains (0));
-
-//            foreach (var item in icsDict.Values) {
-//                Console.WriteLine (item);
-//            }
-//            Console.WriteLine ();
-
-            Assert.False (icsDict.Values.Contains (1));
-
-//            foreach (var item in icsDict.Values) {
-//                Console.WriteLine (item);
-//            }
-//            Console.WriteLine ();
-
-            Assert.False (icsDict.Values.Contains (2));
-
-            Assert.True (icsDict.Values.Contains (0));
-            Assert.True (!icsDict.Values.Contains (1));
-            Assert.True (!icsDict.Values.Contains (2));
         }
     }
 }

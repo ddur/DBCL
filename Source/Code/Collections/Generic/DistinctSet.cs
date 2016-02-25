@@ -12,6 +12,7 @@ namespace DD.Collections.Generic
     /// <summary>
     /// Distinct T
     /// </summary>
+    [CLSCompliant (false)]
     public class DistinctSet<T> : C5.HashSet<T>
     {
 

@@ -25,8 +25,18 @@ namespace DD.Collections.Generic
 
         #region new members
 
+        public K Distinct (K key) {
+            Contract.Requires<ArgumentNullException> (key.IsNot (null));
+            K reference = key;
+            if (!Find (ref reference)) {
+                Add (key);
+                reference = key;
+            }
+            return reference;
+        }
+
         public bool Add (K key) {
-            Contract.Requires (key.IsNot (null));
+            Contract.Requires<ArgumentNullException> (key.IsNot (null));
             try {
                 base.Add (key, ID);
                 ++ID;
@@ -40,12 +50,9 @@ namespace DD.Collections.Generic
 
         #region Overrides
 
-        public override int this[K key] {
+        public new int this[K key] {
             get {
                 return base[key];
-            }
-            set {
-                throw new NotSupportedException ();
             }
         }
 
