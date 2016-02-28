@@ -25,7 +25,7 @@ namespace DD.Collections.Generic
 
         #region new members
 
-        public K Distinct (K key) {
+        public K GetDistinct (K key) {
             Contract.Requires<ArgumentNullException> (key.IsNot (null));
             K reference = key;
             if (!Find (ref reference)) {
@@ -33,6 +33,10 @@ namespace DD.Collections.Generic
                 reference = key;
             }
             return reference;
+        }
+
+        public bool Contains (K key) {
+            return base.ContainsKey (key);
         }
 
         public bool Add (K key) {
@@ -48,7 +52,7 @@ namespace DD.Collections.Generic
 
         #endregion
 
-        #region Overrides
+        #region Hide KeyValuePair methods
 
         public new int this[K key] {
             get {
@@ -56,15 +60,24 @@ namespace DD.Collections.Generic
             }
         }
 
-        public override void Add (K key, int value) {
+        // Hide KeyValuePair
+        internal new bool Contains (KeyValuePair<K, int> item) {
             throw new NotSupportedException ();
         }
 
-        public override void Add (KeyValuePair<K, int> item) {
+        internal new bool ContainsKey (K key) {
             throw new NotSupportedException ();
         }
 
-        public override bool Remove (KeyValuePair<K, int> item) {
+        internal new void Add (K key, int value) {
+            throw new NotSupportedException ();
+        }
+
+        internal new void Add (KeyValuePair<K, int> item) {
+            throw new NotSupportedException ();
+        }
+
+        internal new bool Remove (KeyValuePair<K, int> item) {
             throw new NotSupportedException ();
         }
 

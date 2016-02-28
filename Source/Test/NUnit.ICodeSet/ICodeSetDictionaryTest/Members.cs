@@ -144,13 +144,13 @@ namespace DD.Collections.ICodeSet.ICodeSetUniqueTest {
             icsDict.Add (codeSetA);
             icsDict.Add (codeSetB);
 
-            Assert.False (ReferenceEquals (codeSetC, icsDict.Distinct(codeSetC)));
-            Assert.True (ReferenceEquals (codeSetA, icsDict.Distinct(codeSetC)));
+            Assert.False (ReferenceEquals (codeSetC, icsDict.GetDistinct(codeSetC)));
+            Assert.True (ReferenceEquals (codeSetA, icsDict.GetDistinct(codeSetC)));
 
-            Assert.True (ReferenceEquals (codeSetD, icsDict.Distinct(codeSetD)));
+            Assert.True (ReferenceEquals (codeSetD, icsDict.GetDistinct(codeSetD)));
             Assert.That (
                 delegate {
-                    icsDict.Distinct((ICodeSet)null);
+                    icsDict.GetDistinct((ICodeSet)null);
                 },
                 Throws.TypeOf<ArgumentNullException> ()
             );

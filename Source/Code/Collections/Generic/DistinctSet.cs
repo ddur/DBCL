@@ -27,7 +27,7 @@ namespace DD.Collections.Generic
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public T Distinct (T item) {
+        public T GetDistinct (T item) {
             Contract.Requires <ArgumentNullException> (!ReferenceEquals (item, null));
 
             T key = item;
