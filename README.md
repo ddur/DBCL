@@ -1,7 +1,7 @@
 DBCL
 ====
 
-Dragon Base Class Library 
+Dragan Base Class Library 
 
 [![MIT Licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/ddur/DBCL/blob/master/LICENSE)
 
